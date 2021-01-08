@@ -1,0 +1,151 @@
+//==========================================================
+// NetServiceManager 테스트
+//==========================================================
+public class MainActivityDB extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_d_b);
+
+        //인트로
+        NetServiceManager.getinstance().init();
+
+
+        //NetServiceManager.getinstance().recvContents();
+
+
+        NetServiceManager.getinstance().setOnRecvValProfileListener(new NetServiceManager.OnRecvValProfileListener() {
+            @Override
+            public void onRecvValProfile(boolean validate) {
+                Toast.makeText(getApplicationContext(),"success db",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button button1 = (Button) findViewById(R.id.button) ;
+        button1.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO : click event
+//                UserProfile profile = new UserProfile();
+//                profile.uid = "abcdefgsssss";
+//                profile.nickname = "bisss";
+//                NetServiceManager.getinstance().sendValProfile(profile);
+
+                UserProfile profile2 = new UserProfile();
+                profile2.uid = "abc2";
+                profile2.nickname = "rupa";
+                NetServiceManager.getinstance().sendValProfile(profile2);
+
+
+                UserProfile profile3 = new UserProfile();
+                profile3.uid = "abc3";
+                profile3.nickname = "kasy";
+                NetServiceManager.getinstance().sendValProfile(profile3);
+
+                UserProfile profile4 = new UserProfile();
+                profile4.uid = "abc4";
+                profile4.nickname = "kasy4";
+                NetServiceManager.getinstance().sendValProfile(profile4);
+            }
+        });
+
+
+        NetServiceManager.getinstance().setOnRecvValNickNameListener(new NetServiceManager.OnRecvValNickNameListener() {
+            @Override
+            public void onRecvValNickName(boolean validate)
+            {
+                if(validate == true){
+                    Toast.makeText(getApplicationContext(),"success get nickname",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(),"failure get nickname",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        Button button2 = (Button) findViewById(R.id.chkbtn) ;
+        button2.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO : click event
+                //NetServiceManager.getinstance().sendValNickName("rupa");
+                NetServiceManager.getinstance().sendValNickName("rupassss");
+            }
+        });
+
+
+        // recv
+        NetServiceManager.getinstance().setOnRecvContetnsListener(new NetServiceManager.OnRecvContetnsListener() {
+            @Override
+            public void onRecvContetns(boolean validate) {
+                if(validate == true){
+                    MeditationShowCategorys mNewType = NetServiceManager.getinstance().reqMediationType(1);
+                    Toast.makeText(getApplicationContext(),"success get movie list",Toast.LENGTH_SHORT).show();
+
+                    int num = mNewType.showcategorys.size();
+                    for(int i = 0; i < num ; i++){
+                        MeditationCategory entity = mNewType.showcategorys.get(i);
+                        int subnum = entity.contests.size();
+                        for(int j = 0; j < subnum; j++){
+                            MediationShowContents subentity = entity.contests.get(j);
+                            Log.d("stringdata","value dated : "+j);
+                        }
+
+                        // delete showcontents
+                        for (Iterator<MediationShowContents> iter = entity.contests.iterator(); iter.hasNext(); ) {
+                            MediationShowContents letter = iter.next();
+                            iter.remove();
+                        }
+                    }
+
+                    //
+                    for (Iterator<MeditationCategory> iter = mNewType.showcategorys.iterator(); iter.hasNext(); ) {
+                        MeditationCategory letter = iter.next();
+                        iter.remove();
+                    }
+
+                    int finavval = NetServiceManager.getinstance().mContentsList.size();
+                    int k = 10;
+                }else{
+                    Toast.makeText(getApplicationContext(),"failure get movie list",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        Button moviebtn = (Button) findViewById(R.id.moviebtn) ;
+        moviebtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO : click event
+                //NetServiceManager.getinstance().sendValNickName("rupa");
+                NetServiceManager.getinstance().recvContents();
+            }
+        });
+
+        NetServiceManager.getinstance().setOnRecvProfileListener(new NetServiceManager.OnRecvProfileListener() {
+            @Override
+            public void onRecvProfile(boolean validate,int errorcode)
+            {
+                if(validate == true){
+                    Toast.makeText(getApplicationContext(),"success user profile",Toast.LENGTH_SHORT).show();
+                }else{
+                    if(errorcode == 0){
+                        Toast.makeText(getApplicationContext(),"no exist user profile",Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(),"error user profile",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        Button recvProfilebtn = (Button) findViewById(R.id.recvProfile) ;
+        recvProfilebtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO : click event
+                NetServiceManager.getinstance().recvUserProfile("abc222");
+            }
+        });
+
+    }
+}

@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="PsychologyColorTestBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.PsychologyColorTestViewModel">
+
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/test_feeling_bg"
+        tools:context=".view.PsychologyColorTestActivity">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="43dp"
+
+            android:gravity="center_horizontal"
+
+            android:letterSpacing="-0.01"
+            android:lineSpacingExtra="9sp"
+            android:text="@string/psychology_color_title"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/font_notosanskr_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_title_contents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+
+            android:gravity="center_horizontal"
+
+            android:letterSpacing="-0.01"
+            android:lineSpacingExtra="8sp"
+            android:text="@={viewModel.title}"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/font_notosanskr_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+<!--        android:text="@={viewModel.title}"-->
+<!--        android:text="@string/psychology_color_quest"-->
+
+        <FrameLayout
+            android:id="@+id/ic_close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="31dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="11.4dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:gravity="center_horizontal"
+                android:textColor="@color/white"
+                android:clickable="false"
+                app:srcCompat="@drawable/back_btn" />
+
+        </FrameLayout>
+
+
+<!--        <ImageView-->
+<!--            android:id="@+id/ic_close"-->
+<!--            android:layout_width="11.4dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:layout_marginTop="46dp"-->
+<!--            android:gravity="center_horizontal"-->
+<!--            android:lineSpacingExtra="8sp"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="16sp"-->
+<!--            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:srcCompat="@drawable/back_btn" />-->
+
+        <GridLayout
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="191dp"
+            android:columnCount="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_1"
+                    android:layout_width="154dp"
+                    android:layout_height="160dp"
+                    android:background="@drawable/color_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+
+                    <TextView
+                        android:id="@+id/tv_text1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="35dp"
+
+                        android:gravity="center_horizontal|center_vertical"
+
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/font_notosanskr_regular"
+                        android:text="@={viewModel.text_1}"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+<!--                    android:text="@string/color_contents_1"-->
+
+                    <ImageView
+                        android:id="@+id/iv_icon_1"
+                        android:layout_width="68dp"
+                        android:layout_height="68dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="67dp"
+                        android:background="@drawable/color_01" />
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_2"
+                    android:layout_width="154dp"
+                    android:layout_height="160dp"
+                    android:background="@drawable/color_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+
+                    <TextView
+                        android:id="@+id/tv_text2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="35dp"
+
+                        android:gravity="center_horizontal|center_vertical"
+
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/font_notosanskr_regular"
+                        android:text="@={viewModel.text_2}"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+<!--                    android:text="@string/color_contents_2"-->
+
+                    <ImageView
+                        android:id="@+id/iv_icon_2"
+                        android:layout_width="68dp"
+                        android:layout_height="68dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="67dp"
+                        android:background="@drawable/color_01" />
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:layout_weight="0.2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_3"
+                    android:layout_width="154dp"
+                    android:layout_height="160dp"
+                    android:background="@drawable/color_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <TextView
+                        android:id="@+id/tv_text3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="35dp"
+
+                        android:gravity="center_horizontal|center_vertical"
+
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/font_notosanskr_regular"
+                        android:text="@={viewModel.text_3}"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+<!--                    android:text="@string/color_contents_3"-->
+
+                    <ImageView
+                        android:id="@+id/iv_icon_3"
+                        android:layout_width="68dp"
+                        android:layout_height="68dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="67dp"
+                        android:background="@drawable/color_01" />
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_4"
+                    android:layout_width="154dp"
+                    android:layout_height="160dp"
+                    android:background="@drawable/color_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <TextView
+                        android:id="@+id/tv_text4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="35dp"
+
+                        android:gravity="center_horizontal|center_vertical"
+
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@={viewModel.text_4}"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/font_notosanskr_regular"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+<!--                    android:text="@string/color_contents_4"-->
+
+                    <ImageView
+                        android:id="@+id/iv_icon_4"
+                        android:layout_width="68dp"
+                        android:layout_height="68dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="67dp"
+                        android:background="@drawable/color_01" />
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+
+            </LinearLayout>
+
+
+        </GridLayout>
+
+        <Button
+            android:id="@+id/bt_result"
+            android:layout_width="320dp"
+            android:layout_height="54dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/btn_colcr_disable"
+            app:backgroundTint="@null"
+            android:textColor="@color/white"
+
+            android:textSize="16sp"
+            android:includeFontPadding="false"
+            android:text="@{viewModel.strButtontext}"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

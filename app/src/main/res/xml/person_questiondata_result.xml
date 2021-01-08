@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<personquestiondatas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<personquestiondata>
+		<id>1</id>
+		<page>1</page>
+		<question>1. 모임에 갔을 때</question>
+		<questionfile>per_q_01</questionfile>
+		<answer1_id>1</answer1_id>
+		<answer1_text>A.분위기나 대화를 이끌어 간다</answer1_text>
+		<answer2_id>3</answer2_id>
+		<answer2_text>B.뒤에서 사람들을 챙긴다</answer2_text>
+		<answer3_id>2</answer3_id>
+		<answer3_text>C.어울리기 보단 딴 생각을 많이 한다</answer3_text>
+	</personquestiondata>
+	<personquestiondata>
+		<id>2</id>
+		<page>2</page>
+		<question>2. 친구들과 여행 계획을 짤 때</question>
+		<questionfile>per_q_02</questionfile>
+		<answer1_id>1</answer1_id>
+		<answer1_text>A.내가 가고 싶은 곳과 하고 싶은 것을 표현한다</answer1_text>
+		<answer2_id>2</answer2_id>
+		<answer2_text>B.그냥 결정되는 대로 따라 간다</answer2_text>
+		<answer3_id>3</answer3_id>
+		<answer3_text>C.안전하고 효율적인 일정에 대해 고민한다</answer3_text>
+	</personquestiondata>
+	<personquestiondata>
+		<id>3</id>
+		<page>3</page>
+		<question>3. 사람들과 일을 할 때 의견 충돌이 일어난다면</question>
+		<questionfile>per_q_03</questionfile>
+		<answer1_id>2</answer1_id>
+		<answer1_text>A.복잡해지는 게 싫어 상대의 의견을 수긍한다</answer1_text>
+		<answer2_id>1</answer2_id>
+		<answer2_text>B.내 생각을 충분히 표현하려 한다</answer2_text>
+		<answer3_id>3</answer3_id>
+		<answer3_text>C.원리 원칙에 맞는지 의견들을 따져 본다</answer3_text>
+	</personquestiondata>
+	<personquestiondata>
+		<id>4</id>
+		<page>4</page>
+		<question>4. 당신이 가장 스트레스를 받을 때는</question>
+		<questionfile>per_q_04</questionfile>
+		<answer1_id>3</answer1_id>
+		<answer1_text>A.해야 할 일들이나 의무를 다하지 못했다고 느낄 때</answer1_text>
+		<answer2_id>2</answer2_id>
+		<answer2_text>B.사람들 앞에 나서야 하는 분위기 속에 있을 때</answer2_text>
+		<answer3_id>1</answer3_id>
+		<answer3_text>C.당신의 의견이 무시된 채 시키는 일만 해야 할 때</answer3_text>
+	</personquestiondata>
+	<personquestiondata>
+		<id>5</id>
+		<page>5</page>
+		<question>5. 속상한 일이 생겼을 때</question>
+		<questionfile>per_q_05</questionfile>
+		<answer1_id>4</answer1_id>
+		<answer1_text>A.다른 사람들에게 알리고 싶지 않아 밝게 행동한다</answer1_text>
+		<answer2_id>5</answer2_id>
+		<answer2_text>B.주위에서 알아서 내 감정을 읽어주고 위로해주길 바란다</answer2_text>
+		<answer3_id>6</answer3_id>
+		<answer3_text>C.논리적으로 상황을 판단하고 쉽게 반응하지 않는다</answer3_text>
+	</personquestiondata>
+	<personquestiondata>
+		<id>6</id>
+		<page>6</page>
+		<question>6. 친구가 고민을 털어 놓을 때</question>
+		<questionfile>per_q_06</questionfile>
+		<answer1_id>5</answer1_id>
+		<answer1_text>A.함께 화를 내주거나 공감해준다 </answer1_text>
+		<answer2_id>6</answer2_id>
+		<answer2_text>B.문제를 이성적으로 파악하고 해결책을 제시해 준다 </answer2_text>
+		<answer3_id>4</answer3_id>
+		<answer3_text>C.유머나 격려를 하며 기분이 좋아지도록 돕는다 </answer3_text>
+	</personquestiondata>
+	<personquestiondata>
+		<id>7</id>
+		<page>7</page>
+		<question>7. 여행을 갔는데 숙소가 생각보다 마음에 들지 않을 때</question>
+		<questionfile>per_q_07</questionfile>
+		<answer1_id>4</answer1_id>
+		<answer1_text>A.'이런 게 여행이지'하며 그냥 묵는다</answer1_text>
+		<answer2_id>5</answer2_id>
+		<answer2_text>B.'이건 너무 하잖아'하며 주인에게 화를 낸다</answer2_text>
+		<answer3_id>6</answer3_id>
+		<answer3_text>C.문제를 나열해서 보상받거나 가격에 맞는 숙소로 옮긴다</answer3_text>
+	</personquestiondata>
+	<personquestiondata>
+		<id>8</id>
+		<page>8</page>
+		<question>8. 모임을 갔는데 사람들끼리 시비가 붙었을 때</question>
+		<questionfile>per_q_08</questionfile>
+		<answer1_id>6</answer1_id>
+		<answer1_text>A.개입하지 않고 상황을 지켜 본다</answer1_text>
+		<answer2_id>4</answer2_id>
+		<answer2_text>B.사람들을 중재하고 화해시키려 노력한다</answer2_text>
+		<answer3_id>5</answer3_id>
+		<answer3_text>C.옳다고 생각하는 사람들 편에 서서 힘을 보탠다</answer3_text>
+	</personquestiondata>
+</personquestiondatas>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<chardatas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<chardata>
+		<id>1</id>
+		<charstring>A</charstring>
+	</chardata>
+	<chardata>
+		<id>2</id>
+		<charstring>B</charstring>
+	</chardata>
+	<chardata>
+		<id>3</id>
+		<charstring>C</charstring>
+	</chardata>
+	<chardata>
+		<id>4</id>
+		<charstring>X</charstring>
+	</chardata>
+	<chardata>
+		<id>5</id>
+		<charstring>Y</charstring>
+	</chardata>
+	<chardata>
+		<id>6</id>
+		<charstring>Z</charstring>
+	</chardata>
+</chardatas>

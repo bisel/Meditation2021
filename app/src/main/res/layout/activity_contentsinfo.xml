@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="ContentsinfoBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.ContentsinfoViewModel">
+
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#303948"
+        tools:context=".view.ContentsinfoActivity">
+
+        <FrameLayout
+            android:id="@+id/iv_close"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:clickable="false"
+                app:srcCompat="@drawable/close_btn" />
+        </FrameLayout>
+
+        <!--        <ImageView-->
+        <!--            android:id="@+id/iv_close"-->
+        <!--            android:layout_width="18dp"-->
+        <!--            android:layout_height="18dp"-->
+        <!--            android:layout_marginTop="47dp"-->
+        <!--            android:layout_marginRight="27dp"-->
+        <!--            android:textColor="@color/white"-->
+        <!--            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:srcCompat="@drawable/close_btn" />-->
+    <TextView
+
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="110dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/font_notosanskr_medium"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="@={viewModel.title}"
+ 
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+<TextView
+            android:id="@+id/tv_contents"
+            android:layout_width="280dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+        
+            android:gravity="center"        
+	    android:lineSpacingExtra="4sp"
+            android:includeFontPadding="false"
+            android:textColor="#ccffffff"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:text="@={viewModel.intro}"
+	   
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+        <!--        android:text="@string/contents_contents"-->
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_marginTop="56dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_contents">
+
+            <ImageView
+                android:id="@+id/iv_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bookmark_btn" />
+
+            <TextView
+                android:id="@+id/iv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:includeFontPadding="false"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:gravity="center_horizontal|center_vertical"
+                
+                android:text="@={viewModel.publisher}"/>        
+                 
+            <!--            android:text="@string/contents_publisher"-->
+
+        </LinearLayout>
+        <!--        android:text="@string/contents_title"-->
+
+        
+
+        <TextView
+            android:id="@+id/iv_contents_2"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="@string/contents_pb_contens"
+            android:textColor="#ccffffff"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+        <!--        android:text="@string/contents_pb_contens"-->
+        <!--        android:text="@={viewModel.publisherintro}"-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,72 @@
+{
+  "project_info": {
+    "project_number": "600574443753",
+    "firebase_url": "https://meditation-m.firebaseio.com",
+    "project_id": "meditation-m",
+    "storage_bucket": "meditation-m.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:600574443753:android:18e08520f4c817f0edb078",
+        "android_client_info": {
+          "package_name": "com.soulfriends.meditation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "600574443753-cqi6l6grogcf7n2kukmfpjeltqb9ioa4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soulfriends.meditation",
+            "certificate_hash": "779b094f8e75de1d244490662c9a5ba973e47e93"
+          }
+        },
+        {
+          "client_id": "600574443753-i0h1b14nonave4pn9h1a10khrji9l3om.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soulfriends.meditation",
+            "certificate_hash": "7b5d8807c161725e485443301600fdba14a7eaa1"
+          }
+        },
+        {
+          "client_id": "600574443753-l879sq8jug703u3gsonf7fkfihko72g5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soulfriends.meditation",
+            "certificate_hash": "bc703cbe081b9b533320b757dd59400d54b07b0d"
+          }
+        },
+        {
+          "client_id": "600574443753-n3tq6jr1sb8du3mo8vkuit40h6hn4kqp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soulfriends.meditation",
+            "certificate_hash": "ad5947b784d00bb48feb12202bcb4cef98b4bf7b"
+          }
+        },
+        {
+          "client_id": "600574443753-8r8b718p2fm30soliuv03m91psf6t0f6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBafgogezu4m8LIdCgx6EoWBjr0lH3GuVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "600574443753-8r8b718p2fm30soliuv03m91psf6t0f6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

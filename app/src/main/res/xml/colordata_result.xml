@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<colordatas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<colordata>
+		<id>1</id>
+		<colorsphere>1번 칼라</colorsphere>
+		<emotion>우울한</emotion>
+		<emotionid>8</emotionid>
+		<score>55</score>
+	</colordata>
+	<colordata>
+		<id>2</id>
+		<colorsphere>2번 칼라</colorsphere>
+		<emotion>기쁨</emotion>
+		<emotionid>1</emotionid>
+		<score>45</score>
+	</colordata>
+	<colordata>
+		<id>3</id>
+		<colorsphere>3번 칼라</colorsphere>
+		<emotion>우울한</emotion>
+		<emotionid>8</emotionid>
+		<score>68</score>
+	</colordata>
+	<colordata>
+		<id>4</id>
+		<colorsphere>4번 칼라</colorsphere>
+		<emotion>극도의 스트레스</emotion>
+		<emotionid>5</emotionid>
+		<score>80</score>
+	</colordata>
+	<colordata>
+		<id>5</id>
+		<colorsphere>5번 칼라</colorsphere>
+		<emotion>불안한</emotion>
+		<emotionid>9</emotionid>
+		<score>48</score>
+	</colordata>
+	<colordata>
+		<id>6</id>
+		<colorsphere>6번 칼라</colorsphere>
+		<emotion>화남</emotion>
+		<emotionid>14</emotionid>
+		<score>55</score>
+	</colordata>
+	<colordata>
+		<id>7</id>
+		<colorsphere>7번 칼라</colorsphere>
+		<emotion>두려운</emotion>
+		<emotionid>13</emotionid>
+		<score>55</score>
+	</colordata>
+	<colordata>
+		<id>8</id>
+		<colorsphere>8번 칼라</colorsphere>
+		<emotion>공격적인</emotion>
+		<emotionid>15</emotionid>
+		<score>54</score>
+	</colordata>
+	<colordata>
+		<id>9</id>
+		<colorsphere>9번 칼라</colorsphere>
+		<emotion>극도의 스트레스</emotion>
+		<emotionid>5</emotionid>
+		<score>88</score>
+	</colordata>
+	<colordata>
+		<id>10</id>
+		<colorsphere>10번 칼라</colorsphere>
+		<emotion>짜증</emotion>
+		<emotionid>12</emotionid>
+		<score>79</score>
+	</colordata>
+	<colordata>
+		<id>11</id>
+		<colorsphere>11번 칼라</colorsphere>
+		<emotion>에너지넘치는</emotion>
+		<emotionid>3</emotionid>
+		<score>60</score>
+	</colordata>
+	<colordata>
+		<id>12</id>
+		<colorsphere>12번 칼라</colorsphere>
+		<emotion>스트레스</emotion>
+		<emotionid>6</emotionid>
+		<score>75</score>
+	</colordata>
+	<colordata>
+		<id>13</id>
+		<colorsphere>13번 칼라</colorsphere>
+		<emotion>초조한</emotion>
+		<emotionid>10</emotionid>
+		<score>80</score>
+	</colordata>
+	<colordata>
+		<id>14</id>
+		<colorsphere>14번 칼라</colorsphere>
+		<emotion>불만족스러운</emotion>
+		<emotionid>7</emotionid>
+		<score>96</score>
+	</colordata>
+	<colordata>
+		<id>15</id>
+		<colorsphere>15번 칼라</colorsphere>
+		<emotion>불쾌한</emotion>
+		<emotionid>11</emotionid>
+		<score>72</score>
+	</colordata>
+	<colordata>
+		<id>16</id>
+		<colorsphere>16번 칼라</colorsphere>
+		<emotion>화남</emotion>
+		<emotionid>14</emotionid>
+		<score>50</score>
+	</colordata>
+	<colordata>
+		<id>17</id>
+		<colorsphere>17번 칼라</colorsphere>
+		<emotion>분노</emotion>
+		<emotionid>16</emotionid>
+		<score>66</score>
+	</colordata>
+	<colordata>
+		<id>18</id>
+		<colorsphere>18번 칼라</colorsphere>
+		<emotion>기쁨</emotion>
+		<emotionid>1</emotionid>
+		<score>40</score>
+	</colordata>
+	<colordata>
+		<id>19</id>
+		<colorsphere>19번 칼라</colorsphere>
+		<emotion>차분함</emotion>
+		<emotionid>4</emotionid>
+		<score>40</score>
+	</colordata>
+	<colordata>
+		<id>20</id>
+		<colorsphere>20번 칼라</colorsphere>
+		<emotion>에너지넘치는</emotion>
+		<emotionid>3</emotionid>
+		<score>28</score>
+	</colordata>
+	<colordata>
+		<id>21</id>
+		<colorsphere>21번 칼라</colorsphere>
+		<emotion>차분함</emotion>
+		<emotionid>4</emotionid>
+		<score>33</score>
+	</colordata>
+	<colordata>
+		<id>22</id>
+		<colorsphere>22번 칼라</colorsphere>
+		<emotion>공격적인</emotion>
+		<emotionid>15</emotionid>
+		<score>35</score>
+	</colordata>
+	<colordata>
+		<id>23</id>
+		<colorsphere>23번 칼라</colorsphere>
+		<emotion>의욕적인</emotion>
+		<emotionid>2</emotionid>
+		<score>25</score>
+	</colordata>
+	<colordata>
+		<id>24</id>
+		<colorsphere>24번 칼라</colorsphere>
+		<emotion>초조한</emotion>
+		<emotionid>10</emotionid>
+		<score>66</score>
+	</colordata>
+	<colordata>
+		<id>25</id>
+		<colorsphere>25번 칼라</colorsphere>
+		<emotion>의욕적인</emotion>
+		<emotionid>2</emotionid>
+		<score>33</score>
+	</colordata>
+	<colordata>
+		<id>26</id>
+		<colorsphere>26번 칼라</colorsphere>
+		<emotion>불안한</emotion>
+		<emotionid>9</emotionid>
+		<score>65</score>
+	</colordata>
+	<colordata>
+		<id>27</id>
+		<colorsphere>27번 칼라</colorsphere>
+		<emotion>두려운</emotion>
+		<emotionid>13</emotionid>
+		<score>70</score>
+	</colordata>
+	<colordata>
+		<id>28</id>
+		<colorsphere>28번 칼라</colorsphere>
+		<emotion>불만족스러운</emotion>
+		<emotionid>7</emotionid>
+		<score>75</score>
+	</colordata>
+	<colordata>
+		<id>29</id>
+		<colorsphere>29번 칼라</colorsphere>
+		<emotion>초조한</emotion>
+		<emotionid>10</emotionid>
+		<score>50</score>
+	</colordata>
+	<colordata>
+		<id>30</id>
+		<colorsphere>30번 칼라</colorsphere>
+		<emotion>스트레스</emotion>
+		<emotionid>6</emotionid>
+		<score>90</score>
+	</colordata>
+	<colordata>
+		<id>31</id>
+		<colorsphere>31번 칼라</colorsphere>
+		<emotion>짜증</emotion>
+		<emotionid>12</emotionid>
+		<score>70</score>
+	</colordata>
+	<colordata>
+		<id>32</id>
+		<colorsphere>32번 칼라</colorsphere>
+		<emotion>불안한</emotion>
+		<emotionid>9</emotionid>
+		<score>88</score>
+	</colordata>
+	<colordata>
+		<id>33</id>
+		<colorsphere>33번 칼라</colorsphere>
+		<emotion>불쾌한</emotion>
+		<emotionid>11</emotionid>
+		<score>90</score>
+	</colordata>
+	<colordata>
+		<id>34</id>
+		<colorsphere>34번 칼라</colorsphere>
+		<emotion>차분함</emotion>
+		<emotionid>4</emotionid>
+		<score>40</score>
+	</colordata>
+	<colordata>
+		<id>35</id>
+		<colorsphere>35번 칼라</colorsphere>
+		<emotion>초조한</emotion>
+		<emotionid>10</emotionid>
+		<score>50</score>
+	</colordata>
+	<colordata>
+		<id>36</id>
+		<colorsphere>36번 칼라</colorsphere>
+		<emotion>우울한</emotion>
+		<emotionid>8</emotionid>
+		<score>55</score>
+	</colordata>
+</colordatas>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id = "@+id/home_fragment"
+        android:icon="@drawable/selector_home"
+        android:includeFontPadding="false"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:title="@string/menu_home"
+        />
+    <item
+        android:id="@+id/meditation_fragment"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:icon="@drawable/selector_meditation_button"
+        android:includeFontPadding="false"
+        android:title="@string/menu_meditation" />
+    <item
+        android:id = "@+id/sleep_fragment"
+        android:icon="@drawable/selector_sleep_button"
+        android:includeFontPadding="false"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:title="@string/menu_sleep"
+        />
+    <item
+        android:id = "@+id/music_fragment"
+        android:icon="@drawable/selector_music_button"
+        android:includeFontPadding="false"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:title="@string/menu_music"
+        />
+    <item
+        android:id = "@+id/profile_fragment"
+        android:icon="@drawable/selector_profile_button"
+        android:includeFontPadding="false"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:title="@string/menu_sns"
+        />
+</menu>

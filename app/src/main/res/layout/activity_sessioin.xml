@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="SessionBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.SessionViewModel">
+
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#303948"
+        tools:context=".view.SessioinActivity">
+
+        <!--        <ImageView-->
+        <!--            android:id="@+id/iv_close"-->
+        <!--            android:layout_width="36dp"-->
+        <!--            android:layout_height="36dp"-->
+        <!--            android:scaleX="0.5"-->
+        <!--            android:scaleY="0.5"-->
+        <!--            android:layout_marginTop="47dp"-->
+        <!--            android:layout_marginEnd="27dp"-->
+        <!--            android:layout_marginRight="27dp"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            android:onClick="@{(v)-> viewModel.OnClick_Close(v)}"-->
+        <!--            android:background="@drawable/close_btn" />-->
+
+        <FrameLayout
+            android:id="@+id/iv_close"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="@drawable/close_btn"
+                android:clickable="false" />
+        </FrameLayout>
+
+        <!--        <ImageView-->
+        <!--            android:id="@+id/iv_close"-->
+        <!--            android:layout_width="18dp"-->
+        <!--            android:layout_height="18dp"-->
+        <!--            android:layout_marginTop="47dp"-->
+        <!--            android:layout_marginRight="27dp"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"-->
+        <!--            android:background="@drawable/close_btn" />-->
+
+        <TextView
+            android:id="@+id/tv_tiitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="130dp"
+            android:fontFamily="@font/font_notosanskr_medium"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:lines="3"
+            android:maxLines="3"
+            android:text="@string/session_title"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="1dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/guideline9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_tiitle">
+
+            <ImageView
+                android:id="@+id/iv_contents_image"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/session_profile_img" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_contents_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/grading_text_bg" />
+
+            <TextView
+                android:id="@+id/tv_contents_title"
+                android:layout_width="145dp"
+                android:layout_height="28dp"
+                android:layout_marginBottom="4dp"
+                android:ellipsize="end"
+                android:ems="7"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:gravity="center_horizontal|center_vertical"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="6sp"
+                android:maxEms="7"
+                android:maxLines="1"
+                android:text="@{viewModel.title}"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+<!--            android:text="@string/session_center_contents"-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_evaluation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="33dp"
+            android:fontFamily="@font/font_notosanskr_medium"
+            android:includeFontPadding="false"
+            android:text="@string/session_please"
+
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tv_evaluation">
+
+            <ImageView
+                android:id="@+id/iv_good_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/grading_like_disabled"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}" />
+
+            <TextView
+                android:id="@+id/tv_good"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:text="@string/session_good"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tv_evaluation">
+
+            <ImageView
+                android:id="@+id/iv_bad_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/grading_dislike_abled"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                tools:layout_editor_absoluteX="242dp"
+                tools:layout_editor_absoluteY="397dp" />
+
+            <TextView
+                android:id="@+id/tv_bad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="6dp"
+	        android:fontFamily="@font/font_notosanskr_regular"
+		android:includeFontPadding="false"
+                android:text="@string/session_bad"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                tools:layout_editor_absoluteX="242dp"
+                tools:layout_editor_absoluteY="433dp" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="383dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="100dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="100dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

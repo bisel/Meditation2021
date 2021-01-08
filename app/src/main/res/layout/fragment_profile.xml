@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.ProfileFragment">
+
+    <data class="ProfileBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.ProfileViewModel"></variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/setting_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/my_bg"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!--                android:layout_height="860dp"-->
+
+
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="43dp"
+                        android:fontFamily="@font/font_notosanskr_regular"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="9sp"
+                        android:text="@string/profile"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/iv_profile_thumb"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="110dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/my_profile_img" />
+
+                    <TextView
+                        android:id="@+id/tv_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="8sp"
+                        android:text="@{viewModel.nickname}"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_profile_thumb" />
+                    <!--        android:text="@string/nickname"-->
+
+                    <LinearLayout
+                        android:layout_width="140dp"
+                        android:layout_height="88dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/session_bg"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                        app:layout_constraintTop_toTopOf="@+id/guideline5">
+
+                        <TextView
+                            android:id="@+id/tv_total_session"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/font_notosanskr_medium"
+                            android:includeFontPadding="false"
+
+
+                            android:text="@{viewModel.totalSession}"
+                            android:textColor="@color/mindspaceprofiletext"
+                            android:textSize="20sp" />
+                        <!--            android:text="@string/total_session_number"-->
+
+                        <TextView
+                            android:id="@+id/textView_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="@string/total_session"
+                            android:textColor="#99ffffff"
+                            android:textSize="12sp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="140dp"
+                        android:layout_height="88dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="30dp"
+                        android:background="@drawable/session_bg"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="vertical"
+                        app:layout_constraintStart_toStartOf="@+id/guideline4"
+                        app:layout_constraintTop_toTopOf="@+id/guideline5">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/maid_total_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:fontFamily="@font/font_notosanskr_medium"
+                                android:includeFontPadding="false"
+                                android:text="@{viewModel.hour}"
+
+                                android:textColor="@color/mindspaceprofiletext"
+                                android:textSize="20sp" />
+                            <!--                android:text="999"-->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/font_notosanskr_regular"
+                                android:includeFontPadding="false"
+                                android:text="시간 "
+
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:fontFamily="@font/font_notosanskr_medium"
+                                android:includeFontPadding="false"
+                                android:text="@{viewModel.minute}"
+
+                                android:textColor="@color/mindspaceprofiletext"
+                                android:textSize="20sp" />
+                            <!--                android:text="40"-->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+
+                                android:fontFamily="@font/font_notosanskr_regular"
+                                android:includeFontPadding="false"
+                                android:text="분"
+
+
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:id="@+id/textView10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="@string/mind_checktime"
+                            android:textColor="#99ffffff"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.5" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_begin="232dp" />
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="166dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_profile_thumb">
+
+
+                        <TextView
+                            android:id="@+id/tv_state_quest"
+                            android:layout_width="182dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:fontFamily="@font/font_notosanskr_medium"
+                            android:gravity="center"
+
+                            android:includeFontPadding="false"
+                            android:letterSpacing="-0.01"
+                            android:text="@string/feel_state_quest"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:visibility="visible" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/lay_feel"
+                            android:layout_width="300dp"
+                            android:layout_height="146dp"
+                            android:layout_marginTop="14dp"
+                            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_state_quest">
+
+                            <ImageView
+                                android:id="@+id/imageView6"
+                                android:layout_width="300dp"
+                                android:layout_height="106dp"
+                                android:src="@drawable/profile_feelingarea"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <!--        android:text="@string/profile_feeling_quest"-->
+
+
+                            <TextView
+                                android:id="@+id/tv_my_state"
+                                android:layout_width="272dp"
+                                android:layout_height="43dp"
+                                android:layout_marginTop="1dp"
+                                android:layout_marginBottom="10dp"
+                                android:fontFamily="@font/font_notosanskr_medium"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:includeFontPadding="false"
+                                android:lineSpacingExtra="2sp"
+                                android:text="@{viewModel.feelstate}"
+                                android:textColor="@color/black"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/iv_icon" />
+
+                            <!--        android:text="@string/profile_feeling_state"-->
+
+
+                            <ImageView
+                                android:id="@+id/iv_icon"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/emoti_04"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/imageView6" />
+
+                            <ImageView
+                                android:id="@+id/imageView14"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:src="@drawable/profile_feelingbtn"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent" />
+
+                            <TextView
+                                android:id="@+id/textView3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/font_notosanskr_regular"
+                                android:includeFontPadding="false"
+                                android:text="@string/feel_state_detail_view"
+                                android:textColor="#ffffff"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/imageView14"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tv_state_char_quest"
+                            android:layout_width="182dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:fontFamily="@font/font_notosanskr_medium"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:letterSpacing="-0.01"
+                            android:text="@string/feel_state_char_quest"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/lay_character"
+                            android:layout_width="300dp"
+                            android:layout_height="184dp"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginBottom="20dp"
+                            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_state_char_quest">
+
+                            <ImageView
+                                android:id="@+id/iv_char_bg"
+                                android:layout_width="300dp"
+                                android:layout_height="144dp"
+                                android:src="@drawable/profile_chrctrarea"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <!--        android:text="@string/profile_feeling_quest"-->
+
+
+                            <TextView
+                                android:id="@+id/tv_my_char_state"
+                                android:layout_width="271dp"
+                                android:layout_height="51dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="10dp"
+                                android:fontFamily="@font/font_notosanskr_medium"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:includeFontPadding="false"
+                                android:lineSpacingExtra="2sp"
+                                android:text="@{viewModel.charstate}"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_char_bg"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/iv_char_icon" />
+
+                            <!--        android:text="@string/profile_feeling_state"-->
+
+
+                            <ImageView
+                                android:id="@+id/iv_char_icon"
+                                android:layout_width="100dp"
+                                android:layout_height="64dp"
+                                android:layout_marginTop="23dp"
+                                android:background="@drawable/profile_chrctr_icon_area"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/iv_char_bg" />
+
+                            <ImageView
+                                android:id="@+id/imageView15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:src="@drawable/profile_feelingbtn"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent" />
+
+                            <TextView
+                                android:id="@+id/textView6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/font_notosanskr_regular"
+                                android:includeFontPadding="false"
+                                android:text="@string/feel_state_detail_view"
+                                android:textColor="#ffffff"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/iv_char_bg" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

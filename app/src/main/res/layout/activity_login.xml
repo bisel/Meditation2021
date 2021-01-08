@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="LoginBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.LoginViewModel">
+
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
+        tools:context=".view.LoginActivity">
+
+        <ImageView
+            android:id="@+id/iv_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/login_bg" />
+
+        <ImageView
+            android:id="@+id/iv_dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bg_dark" />
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Close(v)}"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_close" />
+
+        <!--        <RelativeLayout-->
+        <!--            android:id="@+id/iv_password_balloon"-->
+        <!--            android:layout_width="200dp"-->
+        <!--            android:layout_height="35dp"-->
+        <!--            android:layout_centerHorizontal="true"-->
+        <!--            android:background="@drawable/player_alert_bg"-->
+        <!--            android:gravity="center_horizontal"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent">-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_centerHorizontal="true"-->
+        <!--                android:layout_marginTop="7dp"-->
+        <!--                android:letterSpacing="-0.01"-->
+        <!--                android:lineSpacingExtra="10sp"-->
+        <!--                android:text="@string/login_email_available"-->
+        <!--                android:textColor="#000000"-->
+        <!--                android:textSize="10sp" />-->
+        <!--        </RelativeLayout>-->
+
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/iv_password_find_balloon"-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="35dp"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_marginTop="100dp"-->
+<!--            android:background="@drawable/player_alert_bg"-->
+<!--            android:gravity="center_horizontal"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:layout_marginTop="7dp"-->
+<!--                android:letterSpacing="-0.01"-->
+<!--                android:lineSpacingExtra="10sp"-->
+<!--                android:text="@string/login_email_available"-->
+<!--                android:textColor="#000000"-->
+<!--                android:textSize="10sp" />-->
+<!--        </RelativeLayout>-->
+
+        <ScrollView
+
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RelativeLayout
+                android:id="@+id/con"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/headerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/mainLayout"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginTop="-1dp"
+                    android:layout_marginBottom="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView27"
+                            android:layout_width="94dp"
+                            android:layout_height="58dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/sof_logo_basic_titlecase" />
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/iv_email_balloon"
+                        android:layout_width="200dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/player_alert_bg"
+                        android:gravity="center_horizontal"
+                        android:visibility="gone"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/font_notosanskr_regular"
+                            android:letterSpacing="-0.01"
+                            android:lineSpacingExtra="10sp"
+                            android:text="@string/login_email_balloon"
+                            android:textColor="#000000"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/iv_email_error_balloon"
+                        android:layout_width="200dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/player_alert_bg"
+                        android:gravity="center_horizontal"
+                        android:visibility="gone"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/font_notosanskr_regular"
+                            android:letterSpacing="-0.01"
+                            android:lineSpacingExtra="10sp"
+                            android:text="@string/login_error"
+                            android:textColor="#000000"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/iv_account_error_balloon"
+                        android:layout_width="200dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/player_alert_bg"
+                        android:gravity="center_horizontal"
+                        android:visibility="gone"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/font_notosanskr_regular"
+                            android:letterSpacing="-0.01"
+                            android:lineSpacingExtra="10sp"
+                            android:text="@string/account_error"
+                            android:textColor="#000000"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/mainLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true">
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline14"
+                            android:layout_width="66dp"
+                            android:layout_height="30dp"
+                            android:orientation="vertical" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent">
+
+                            <ImageView
+                                android:id="@+id/iv_email_bg"
+                                android:layout_width="300dp"
+                                android:layout_height="40dp"
+                                android:alpha="0.4"
+
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/email_field_edit" />
+
+                            <ImageView
+                                android:id="@+id/iv_email_icon"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginLeft="15dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/iv_email_bg"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/email_icon" />
+
+                            <EditText
+                                android:id="@+id/email"
+                                android:layout_width="240dp"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@android:color/transparent"
+                                android:gravity="center_vertical"
+                                android:hint="@string/email"
+                                android:inputType="textEmailAddress"
+                                android:maxLines="1"
+                                android:textColor="#99ffffff"
+                                android:onFocusChange="@{(v, hasFocus)-> viewModel.onFocusChange_Email(v, hasFocus)}"
+                                android:text="@={viewModel.email}"
+                                android:onTextChanged="@{viewModel::onTextChanged_Email}"
+                                android:textSize="14sp"
+                                android:includeFontPadding="false"
+                                android:fontFamily="@font/font_notosanskr_regular"
+                                app:flow_lastHorizontalBias="0"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_email_bg"
+                                app:layout_constraintHorizontal_bias="0"
+                                app:layout_constraintStart_toEndOf="@+id/iv_email_icon"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.0" />
+
+                            <ImageView
+                                android:id="@+id/iv_email_check"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginRight="8dp"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_email_bg"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/icon_true" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="12dp">
+
+                            <ImageView
+                                android:id="@+id/iv_pw_bg"
+                                android:layout_width="300dp"
+                                android:layout_height="40dp"
+                                android:alpha="0.4"
+
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/email_field" />
+
+                            <ImageView
+                                android:id="@+id/iv_pw_icon"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginLeft="15dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/iv_pw_bg"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.454"
+                                app:srcCompat="@drawable/pw_icon" />
+
+
+                            <EditText
+                                android:id="@+id/password"
+                                android:layout_width="240dp"
+                                android:layout_height="40dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="@android:color/transparent"
+                                android:hint="@string/password"
+                                android:textColor="#99ffffff"
+                                android:inputType="textPassword"
+                                android:maxLines="1"
+                                android:includeFontPadding="false"
+				                android:fontFamily="@font/font_notosanskr_regular"
+                                android:onFocusChange="@{(v, hasFocus)-> viewModel.onFocusChange_Password(v, hasFocus)}"
+                                android:text="@={viewModel.password}"
+
+                                android:textSize="14sp"
+                                android:onTextChanged="@{viewModel::onTextChanged_Password}"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_pw_bg"
+                                app:layout_constraintHorizontal_bias="0"
+                                app:layout_constraintStart_toEndOf="@+id/iv_pw_icon"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.0" />
+
+                            <ImageView
+                                android:id="@+id/iv_password_check"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginRight="8dp"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/iv_pw_bg"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/icon_true" />
+
+                            <androidx.constraintlayout.widget.Guideline
+                                android:id="@+id/guideline3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tv_passwordFind"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/white"
+                            android:fontFamily="@font/font_notosanskr_regular"
+
+                            android:onClick="@{(v)-> viewModel.OnClick_FindPassword(v)}"
+                            android:text="@string/password_find"
+
+                            android:textSize="12sp" />
+
+                        <RelativeLayout
+                            android:id="@+id/bt_account"
+                            android:layout_width="300dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/register_btn"
+                            android:onClick="@{(v)-> viewModel.OnClick_Login(v)}">
+
+                            <TextView
+                                android:id="@+id/tv_account"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                android:fontFamily="@font/font_notosanskr_regular"
+                                android:includeFontPadding="false"
+                                android:text="@string/login_account"
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/iv_password_balloon"
+                        android:layout_width="200dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentTop="false"
+                        android:layout_alignParentBottom="false"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp"
+
+                        android:background="@drawable/player_alert_bg"
+                        android:gravity="center_horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:fontFamily="@font/font_notosanskr_regular"
+                            android:letterSpacing="-0.01"
+                            android:textColor="#000000"
+                            android:lineSpacingExtra="10sp"
+                            android:text="@string/login_password_balloon"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/iv_password_find_balloon"
+                        android:layout_width="200dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="80dp"
+                        android:background="@drawable/player_alert_bg"
+                        android:gravity="center_horizontal"
+                        android:visibility="gone"
+                        >
+
+                        <TextView
+                            android:id="@+id/tv_password_find_balloon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:letterSpacing="-0.01"
+                            android:fontFamily="@font/font_notosanskr_regular"
+                            android:lineSpacingExtra="10sp"
+                            android:text="@string/login_passwordfind_balloon"
+                            android:textColor="#000000"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/footerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mainLayout"
+                    android:layout_alignParentBottom="true"
+                    android:fitsSystemWindows="true">
+
+                    <LinearLayout
+                        android:id="@+id/bottom_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="false"
+                        android:orientation="vertical">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone"
+                            android:layout_marginTop="30dp">
+
+                            <View
+                                android:id="@+id/view2"
+                                android:layout_width="100dp"
+                                android:layout_height="2px"
+
+                                android:background="#66ffffff"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/tv_or"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_or"
+                                android:layout_width="30dp"
+                                android:layout_height="wrap_content"
+
+                                android:gravity="center"
+                                android:text="@string/login_or"
+                                android:lineSpacingExtra="6sp"
+
+
+                                android:textSize="12sp"
+                                android:includeFontPadding="false"
+                                android:textColor="@color/white"
+                                android:fontFamily="@font/font_notosanskr_regular"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <View
+                                android:id="@+id/view"
+                                android:layout_width="100dp"
+                                android:layout_height="2px"
+                                android:background="#66ffffff"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/tv_or"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        <RelativeLayout
+                            android:id="@+id/bt_login"
+                            android:layout_width="300dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:background="@drawable/login_btn"
+                            android:onClick="@{(v)-> viewModel.OnClick_Login(v)}"
+                            >
+                            <TextView
+                                android:id="@+id/tv_login"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                android:text="@string/login"
+                                android:includeFontPadding="false"
+                                android:fontFamily="@font/font_notosanskr_regular"
+                                android:textSize="14sp" />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="300dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_marginTop="20dp"
+
+                            android:gravity="center_horizontal|center_vertical">
+
+
+                            <ImageView
+                                android:id="@+id/sign_in_google"
+                                android:layout_width="300dp"
+                                android:layout_height="40dp"
+                                android:onClick="@{(v)-> viewModel.OnClick_Google(v)}"
+                                android:scaleType="centerCrop"
+                                app:srcCompat="@drawable/google_btn" />
+
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerInParent="true"
+                                android:layout_marginStart="70dp"
+                                android:layout_marginLeft="82dp"
+                                app:srcCompat="@drawable/google_logo" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_centerVertical="true"
+                                android:gravity="center"
+                                android:lineSpacingExtra="2sp"
+                                android:fontFamily="@font/font_roboto_regular"
+                                android:text="@string/login_google"
+                                android:textColor="#000000"
+                                android:textSize="14sp" />
+
+                            <!--                            <com.google.android.gms.common.SignInButton-->
+                            <!--                                android:id="@+id/sign_in_google"-->
+                            <!--                                android:layout_width="wrap_content"-->
+                            <!--                                android:layout_height="wrap_content"-->
+                            <!--                                android:layout_centerHorizontal="true"-->
+
+                            <!--                                android:paddingTop="10dp">-->
+
+                            <!--                            </com.google.android.gms.common.SignInButton>-->
+                            <!--                                android:onClick="@{(v)-> viewModel.OnClick_Google(v)}"-->
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center|bottom"
+            android:visibility="gone"
+            android:indeterminateDrawable="@drawable/progress_rotate"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

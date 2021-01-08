@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<resultdatas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<resultdata>
+		<id>0</id>
+		<animal>검사전</animal>
+		<miniimg>없음</miniimg>
+		<img>personality_0</img>
+		<title>성격 검사 하기</title>
+	</resultdata>
+	<resultdata>
+		<id>1</id>
+		<animal>호랑이</animal>
+		<miniimg>mini_personality_1</miniimg>
+		<img>personality_1</img>
+		<title>이상과 완벽을 추구하는 호랑이</title>
+		<desc>당신은 높은 이상을 위해서라면 안락한 삶도
+버릴 수 있는 이상주의자이며 세상을 
+개선시키거나 유용한 사람이 되고자 하는 
+개혁가이기도 합니다
+원칙적이며 목표가 분명하고 자신을 잘 
+통제하는 완벽주의 성향을 갖고 있습니다
+
+긍정적인 상태에서는 객관적이면서도 
+수용적이고 희망적인 태도를 갖지만 
+부정적인 상태에서는 독선적이며 
+주변을 통제하려 하고 강박에 시달리기도 
+합니다</desc>
+	</resultdata>
+	<resultdata>
+		<id>2</id>
+		<animal>코끼리</animal>
+		<miniimg>mini_personality_2</miniimg>
+		<img>personality_2</img>
+		<title>사려 깊고 사랑이 많은 코끼리</title>
+		<desc>당신은 사랑, 가족, 우정 등과 같은 것에 
+관심이 많고 사람들을 위해 무언가 할 때 
+삶이 의미 있고 풍요롭게 느껴집니다
+언제나 주위 사람들을 기꺼이 도와 줄 
+준비가 되어 있습니다
+
+긍정적인 상태에서는 자신의 감정과 욕구도 잘 살피면서 조건 없는 사랑을 베풀지만
+부정적인 상태에서는 희생되었다고 느끼며 사람들을 자신의 뜻대로 통제하려 합니다</desc>
+	</resultdata>
+	<resultdata>
+		<id>3</id>
+		<animal>낙타</animal>
+		<miniimg>mini_personality_3</miniimg>
+		<img>personality_3</img>
+		<title>매력 넘치는 야망가 낙타</title>
+		<desc>당신은 자신을 개발하고 세상 속에서 
+적응하는 능력이 뛰어납니다
+다른 사람들을 격려하고 칭찬하며 그들 안의 능력과 재능을 끌어 내어 주기도 하고 자신의
+이미지도 매력적으로 만들어 갈 줄 압니다
+
+긍정적인 상태에서는 사람들의 칭찬에서 
+벗어나 진정한 자기 정체성을 찾고 사람들
+에게 진실하고 너그러운 모습을 보이지만
+부정적인 상태에서는 사람들의 관심과 칭찬을 받기 위해 거짓된 이미지를 만들고 
+불안과 편집증세를 보이기도 합니다</desc>
+	</resultdata>
+	<resultdata>
+		<id>4</id>
+		<animal>사슴</animal>
+		<miniimg>mini_personality_4</miniimg>
+		<img>personality_4</img>
+		<title>예술과 낭만을 즐기는 사슴</title>
+		<desc>당신은 다른 사람들과 자신이 다르다고 
+느끼며 표현력이 뛰어나고 감성이 
+풍부합니다
+혼자 있는 것을 좋아하면서도 자신의 감정을 
+이해하는 사람들과 깊은 관계를 맺길 
+원합니다 
+민감하고 자신만의 세상 속에 있는것을 
+즐깁니다
+
+긍정적인 상태에서는 자신의 감정을 그대로 받아들이고 다른 사람과 감정, 생각을 나누며 자신을 발전시켜 가지만 부정적인 상태에
+서는 이해 받지 못한다는 분노와 우울로 
+더욱더 사람들과 분리되려 합니다</desc>
+	</resultdata>
+	<resultdata>
+		<id>5</id>
+		<animal>독수리</animal>
+		<miniimg>mini_personality_5</miniimg>
+		<img>personality_5</img>
+		<title>지혜로운 사색가 독수리</title>
+		<desc>당신은 항상 무언가를 배우고 세상에 대한 
+정보를 탐색하는 것을 즐기는 탐구가입니다
+관찰한 새로운 정보들을 조합하고 지식을 
+내면화하면서 자신감을 얻습니다
+혼자 떨어져 사색하는 것을 좋아하고 
+사람들에게 자신의 마음을 잘 드러내지 
+않는 편입니다
+
+긍정적인 상태에서는 세상 안에서 자신감 
+있게 능력을 펼치며 독창적이고 혁신적인 
+아이디어와 작품들을 만들어 내지만
+부정적인 상태에서는 허무주의에 빠지거나 
+괴팍한 태도로 사람들을 대합니다</desc>
+	</resultdata>
+	<resultdata>
+		<id>6</id>
+		<animal>토끼</animal>
+		<miniimg>mini_personality_6</miniimg>
+		<img>personality_6</img>
+		<title>성실하고 책임감 강한 토끼</title>
+		<desc>당신은 친구나 옳다고 믿는 신념에 매우 
+충실한 사람입니다
+자기 자신보다 가족이나 자신이 속한 
+공동체를 보호하려는 마음이 큰 편이며 
+책임감이 강하고 성실해서 사람들에게 
+호감을 주는 편입니다
+
+긍정적인 상태에서는 내면의 소리에 귀 
+기울이며 자신을 신뢰하고 사람들에게 
+친절하지만
+부정적인 상태에서는 안전에 대한 불안으로 
+우울해지거나 공격적인 성향을 보입니다</desc>
+	</resultdata>
+	<resultdata>
+		<id>7</id>
+		<animal>원숭이</animal>
+		<miniimg>mini_personality_7</miniimg>
+		<img>personality_7</img>
+		<title>쾌활하고 자유로운 원숭이</title>
+		<desc>당신은 열정적이며 경험하는 것들에 대해 
+아이와 같은 호기심과 모험심을 가집니다
+대담하고 쾌활하며 자신이 원하는 것이 
+무엇인지 잘 알고 추구합니다
+아이디어가 넘치고 즉흥적이어서 한가지 
+주제에 깊이 집중하기 어려운 점이 있습니다
+
+긍정적인 상태에서는 모든 경험에 대해 
+감사하고 자발적이며 실질적이고 
+생산적이지만
+부정적인 상태에서는 충동적이고 
+무책임하며 불안을 벗어나기 위해 
+탐욕스러운 모습을 보입니다</desc>
+	</resultdata>
+	<resultdata>
+		<id>8</id>
+		<animal>사자</animal>
+		<miniimg>mini_personality_8</miniimg>
+		<img>personality_8</img>
+		<title>도전적인 행동 대장 사자</title>
+		<desc>당신은 자신도, 남들도 도전을 통해 능력 
+이상의 일을 해내게 하는 것을 즐깁니다
+높은 의지력과 활동력으로 세상에서 능력을
+펼칠 때 활력을 느끼며 다른 사람에게 
+의존하는 것을 매우 싫어하는 
+독립적인 사람입니다
+
+긍정적인 상태에서는 관대하고 용기 있으며
+사람들을 용서할 줄 알며 열정적이지만
+부정적인 상태에서는 냉혹하고 지시적이며
+배신감을 많이 느끼고 공격적이 됩니다</desc>
+	</resultdata>
+	<resultdata>
+		<id>9</id>
+		<animal>기린</animal>
+		<miniimg>mini_personality_9</miniimg>
+		<img>personality_9</img>
+		<title>평화를 추구하는 친절한 기린</title>
+		<desc>당신은 사람들이 무엇을 좋아하며 어떤 마음
+상태인지를 궁금해하는 사람입니다
+느긋하고 사람들의 이야기를 잘 들어주며 
+내 요구보다는 사람들의 요구를 우선시하는
+편입니다
+조화와 평화를 중시하다 보니 삶의 어두운 
+면 보는 것을 거부할 때도 있습니다
+
+긍정적인 상태에서는 몽상에 빠지지 않고 
+현재에 존재하며 역동적이면서도 침착하지만
+부정적인 상태에서는 스스로를 억압하거나
+자신의 문제를 회피하고 환상 속에 머물려고
+합니다</desc>
+	</resultdata>
+</resultdatas>

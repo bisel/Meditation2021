@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="TimerBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.TimerViewModel">
+
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        tools:context=".view.TimerActivity">
+
+        <TextView
+            android:id="@+id/textView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="43dp"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="9sp"
+            android:text="@string/time_title"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/iv_close"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="@drawable/close_btn"
+                android:clickable="false" />
+        </FrameLayout>
+
+        <ImageView
+            android:layout_width="11dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/timer_timericn"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_curtimer"
+            app:layout_constraintEnd_toStartOf="@+id/tv_curtimer"
+            app:layout_constraintTop_toTopOf="@+id/tv_curtimer" />
+
+        <TextView
+            android:id="@+id/tv_curtimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="54dp"
+            android:fontFamily="@font/font_notosanskr_medium"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="@string/time_curtimer"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_title" />
+
+        <TextView
+            android:id="@+id/tv_hourminute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/font_notosanskr_medium"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="@{viewModel.strCurTime}"
+            android:textColor="#000000"
+            android:textSize="50sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_curtimer" />
+
+<!--        android:text="@string/time_hourminute"-->
+
+
+        <TextView
+            android:id="@+id/textView_context"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:lines="2"
+            android:maxLines="4"
+            android:text="@string/time_context"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_hourminute" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_context">
+
+            /
+
+            <NumberPicker
+                android:id="@+id/np_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/AppTheme.NumberPicker" />
+
+            <TextView
+                android:id="@+id/textView_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/time_hour"
+                android:textSize="24sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/textView_dummy"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="ddd"
+                android:visibility="invisible" />
+
+            <NumberPicker
+                android:id="@+id/np_minute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/AppTheme.NumberPicker" />
+
+            <TextView
+                android:id="@+id/textView_minute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/time_minute"
+                android:textSize="24sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.5">
+
+            <Button
+                android:id="@+id/button_timer_end_activity"
+                android:layout_width="154dp"
+                android:layout_height="54dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp"
+
+                android:background="@drawable/timer_quit_btn"
+                android:backgroundTint="@null"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                android:text="@string/time_timer_end"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/button_timer_end_deactivity"
+                android:layout_width="154dp"
+                android:layout_height="54dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp"
+
+
+                android:background="@drawable/timer_quit_btn_disabled"
+                android:backgroundTint="@null"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                android:text="@string/time_timer_end"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="visible"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/button_timer_new"
+                android:layout_width="154dp"
+                android:layout_height="54dp"
+                android:layout_marginLeft="10dp"
+
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/timer_new_btn"
+                android:backgroundTint="@null"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                android:text="@string/time_timer_new"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="visible"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/button_timer_start"
+                android:layout_width="154dp"
+                android:layout_height="54dp"
+                android:layout_marginLeft="10dp"
+
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/timer_new_btn"
+                android:backgroundTint="@null"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                android:text="@string/time_timer_start"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:backgroundTint="@null" />
+        </LinearLayout>
+
+        <!--    <TimePicker-->
+        <!--        android:id="@+id/timePicker1"-->
+        <!--        android:layout_width="317dp"-->
+        <!--        android:layout_height="219dp"-->
+        <!--        android:timePickerMode="spinner"-->
+        <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--        app:layout_constraintEnd_toEndOf="parent"-->
+        <!--        app:layout_constraintStart_toStartOf="parent"-->
+        <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

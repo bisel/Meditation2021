@@ -1,0 +1,236 @@
+<resources>
+
+    <!--app -->
+    <string name="app_name">SoulFriends</string>
+
+    <!--common -->
+    <string name="ok">확인</string>
+
+    <!--login -->
+    <string name="email">이메일</string>
+    <string name="password">비밀번호</string>
+    <string name="login_1">로그인&amp;가입</string>
+    <string name="login_account">회원가입</string>
+    <string name="login">이메일로 로그인</string>
+    <string name="login_error">로그인에 실패 했습니다.</string>
+
+    <string name="account_error">회원가입에 실패 했습니다.</string>
+    <string name="login_google">구글계정으로 로그인</string>
+    <string name="failed">Authentication failed</string>
+    <string name="image">image</string>
+    <string name="create_a_new_account">Create a new Account!</string>
+    <string name="facebook_app_id">1588659374676179</string>
+    <string name="fb_login_protocol_scheme">fb1588659374676179</string>
+    <string name="error_login">로그인 정보가 잘못되었습니다.</string>
+    <string name="login_email_balloon">유효한 이메일 주소를 입력해주세요.</string>
+    <string name="login_password_balloon">비밀번호는 6-12자리로 입력해주세요.</string>
+    <string name="login_passwordfind_balloon">메일로 비밀번호가 발송되었습니다.</string>
+    <string name="login_or">또는</string>
+    <string name="password_find">비밀번호를 잊으셨나요? <u>여기를 클릭하세요.</u></string>
+    <string name="password_find_yestono">먼저 유효한 이메일 입력해주세요.</string>
+    <string name="password_find_no">회원가입을 진행주세요.</string>
+    <string name="password_find_retry">다시 시도해주세요.</string>
+
+
+    <!-- user info  -->
+    <string name="nickname">닉네임</string>
+    <string name="nickname_input">닉네임 입력하세요</string>
+    <string name="double_check">중복검사</string>
+    <string name="gender">성별</string>
+    <string name="gender_man">남성</string>
+    <string name="gender_woman">여성</string>
+    <string name="age">나이</string>
+    <string name="age_input">나이를 입력하세요</string>
+    <string name="introduction">소개글</string>
+    <string name="introduction_input">안녕하세요</string>
+    <string name="error_nickname">닉네임을 입력해주세요.</string>
+    <string name="used_nickname">이미 사용중인 닉네임 입니다.</string>
+    <string name="use_ok_nickname">사용 가능한 닉네임 입니다.</string>
+    <string name="gender_select">성별을 선택하세요.</string>
+    <string name="member_info">회원정보</string>
+    <string name="member_info_save">회원정보 저장</string>
+    <string name="excep_nickname">국문, 영문, 숫자를 조합하여 최대6글자 이내로 입력해주세요.</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- mini player  -->
+    <string name="miniplayer_time">6:34</string>
+
+    <!-- fragment  -->
+    <string name="feel_state_quest"> 님의 현재 감정은?</string>
+    <string name="feel_state_char_quest"> 님의 성격은?</string>
+    <string name="feel_state_detail_view">자세히 보기</string>
+
+    <!-- bottom menu  -->
+    <string name="menu_home">홈</string>
+    <string name="menu_sleep">수면</string>
+    <string name="menu_meditation">명상</string>
+    <string name="menu_music">음악</string>
+    <string name="menu_sns">프로필</string>
+
+    <!-- time activity  -->
+    <string name="time_title">타이머</string>
+    <string name="time_curtimer">현재 타이머</string>
+    <string name="time_hourminute">00 : 00</string>
+    <string name="time_context">콘텐츠 재생을 언제 멈출까요?</string>
+    <string name="time_hour">시</string>
+    <string name="time_minute">분</string>
+    <string name="time_timer_new">새 타이머 설정</string>
+    <string name="time_timer_start">시작</string>
+    <string name="time_timer_end">타이머 종료</string>
+
+    <string name="live_broadcast">On Air</string>
+
+    <!-- dialog  -->
+    <string name="dialog_notification">알림</string>
+    <string name="dialog_psychology_test">심리검사하기</string>
+
+    <!-- profile  -->
+    <string name="profile">프로필</string>
+    <string name="total_session">총 세션수</string>
+    <string name="total_session_number">999+</string>
+    <string name="mind_checktime">마음점검시간</string>
+    <string name="mind_checktime_time">999시간 52분</string>
+    <string name="profile_feeling_quest"> 님의 현재 감정은?</string>
+    <string name="profile_feeling_state">편안하고 차분한 상태</string>
+
+    <!-- psychologyFeelingTest  -->
+    <string name="psychology_feel_nickname"> 님의 \n현재 감정은?</string>
+
+    <!-- psychologyCharacterResult  -->
+    <string name="psychology_character_result">성격 검사 결과</string>
+    <string name="psychology_character_nickname"> 님의 성격은?</string>
+    <string name="psychology_character_next">다음</string>
+    <string name="psychology_character_resultview">결과보기</string>
+
+    <!-- psychologyResult  -->
+    <string name="psychology_result">심리 검사 결과</string>
+    <string name="psychology_nickname"> 님의 \n현재 감정은?</string>
+    <string name="psychology_state">편안하고 차분한 상태</string>
+    <string name="psychology_state_contents">타인을 만났을 때 어느 정도 경계해야 하는지, 어느 정도 마음을 열어야 하는지를 자연스럽게 파악하고 조절하는 정도’를 의미합니다.
+타인과 나 사이에 적당한 선과 균형을 유지하여 건강한 관계를 유지할 수 있는 능력이 안정적인 것으로 나타났습니다.</string>
+    <string name="retry">다시하기</string>
+    <string name="contents_recommand">콘텐츠 추천받기</string>
+    <string name="retry_test">다시하기</string>
+
+    <!-- psychologyList  -->
+    <string name="psychology_list">심리상태 검사</string>
+
+    <!-- psychologyCharacterList  -->
+    <string name="psychology_Character_list">성격 검사</string>
+
+    <!-- psychologyCharacter  -->
+    <string name="psychology_CharacterTest">나의 성격검사</string>
+
+    <!-- psychologyVoice  -->
+    <string name="psychology_voice">목소리 분석</string>
+    <string name="psychology_voice_guide1">녹음버튼을 누르고 글을 읽어주세요.</string>
+    <string name="psychology_voice_guide_time">0 : 49</string>
+    <string name="psychology_voice_guide3">녹음한 내용을 전송 중입니다.</string>
+
+
+    <string name="psychology_voice_ing">목소리 감정 분석 중</string>
+    <string name="psychology_voice_ing2">녹음하신 목소리를 바탕으로\n 감정을 분석중입니다</string>
+
+    <!-- psychologyColortext  -->
+    <string name="psychology_color_title">컬러 심리검사</string>
+    <string name="psychology_color_quest">Q1. 다음 중 어떤 씨앗을 심겠습니까?</string>
+    <string name="number_1">1.</string>
+    <string name="number_2">2.</string>
+    <string name="number_3">3.</string>
+    <string name="number_4">4.</string>
+
+    <string name="psychology_next">다음</string>
+
+    <string name="color_contents_1">단단한 줄무늬 씨앗</string>
+    <string name="color_contents_2">털이 난 가벼운 씨앗</string>
+    <string name="color_contents_3">커다랗고 통통한 버섯</string>
+    <string name="color_contents_4">빛나는 황금빛 씨앗</string>
+
+    <!-- psychologyFeeling  -->
+    <string name="psychology_feeling_hi">좋은 아침입니다.</string>
+    <string name="psychology_feeling_quest">지금 기분은 어떤신가요?</string>
+    <string name="psychology_feeling_result">결과보기</string>
+
+    <string name="emoticon_01">기쁨</string>
+    <string name="emoticon_02">의욕적인</string>
+    <string name="emoticon_03">에너지넘치는</string>
+    <string name="emoticon_04">차분함</string>
+    <string name="emoticon_05">극도의\n스트레스</string>
+    <string name="emoticon_06">스트레스</string>
+    <string name="emoticon_07">불만족스러운</string>
+    <string name="emoticon_08">우울한</string>
+    <string name="emoticon_09">불안한</string>
+    <string name="emoticon_10">초조한</string>
+    <string name="emoticon_11">불괘한</string>
+    <string name="emoticon_12">짜증</string>
+    <string name="emoticon_13">두려운</string>
+    <string name="emoticon_14">화남</string>
+    <string name="emoticon_15">공격적인</string>
+    <string name="emoticon_16">분노</string>
+
+    <!-- session  -->
+    <string name="session_title">훌륭해요!\n세션을 완료했습니다.</string>
+    <string name="session_please">이 세션을 평가해 주세요</string>
+    <string name="session_good">좋아요</string>
+    <string name="session_bad">별로예요</string>
+    <string name="session_center_contents">스튜어트 섬으로 떠나는 나라 별로입니다.</string>
+
+    <!-- password change  -->
+    <string name="password_change_title">비밀번호 변경</string>
+    <string name="password_change_cur">현재 비밀번호</string>
+    <string name="password_change_cur_error">현재 비밀번호와 일치하지 않습니다.</string>
+    <string name="password_change_new">새 비밀번호</string>
+    <string name="password_change_new_error">비밀번호가 일치하지 않습니다.</string>
+    <string name="password_change_do">변경하기</string>
+
+    <!-- setting  -->
+    <string name="setting_title">설정</string>
+    <string name="setting_change">비밀번호 변경</string>
+    <string name="setting_notification">알림</string>
+    <string name="setting_sound">사운드</string>
+    <string name="setting_logout">로그아웃</string>
+    <string name="setting_email_balloon"> 으로 이메일이 발송되었습니다.</string>
+    <string name="setting_google_balloon">소셜로그인은 여기서 비밀번호 변경을 할 수 없습니다.</string>
+
+    <!-- player  -->
+    <string name="player_title">환상적인 별자리 여행</string>
+    <string name="player_narrrator">내레이터</string>
+    <string name="player_artist">아티스트</string>
+    <string name="player_narrrator_name">이명진</string>
+    <string name="player_author">저자</string>
+    <string name="player_author_name">Tamara Levitt</string>
+    <string name="player_balloon_favorites">즐겨찾기에 추가했습니다.</string>
+    <string name="player_balloon_like">좋아요를 눌렀습니다.</string>
+    <string name="player_balloon_dislike">별로예요를 눌렀습니다.</string>
+    <string name="player_balloon_timer">수면타이머를 설정할 수 있습니다.</string>
+
+    <!-- contentsinfo  -->
+    <string name="contents_title">스튜어트섬으로  \n떠나는 환상적인별자리 여행</string>
+    <string name="contents_contents">Tamara Levitt이 직접 쓴 일일 세션을 통해 하루하루 새롭게 수행을 이어 나가세요. 수행을 강화하고 영감을 주는 새로운 주제와 교육적인 내용을 매일 만나보실 수 있습니다.</string>
+    <string name="contents_publisher">제작사명</string>
+    <string name="contents_pb_contens">25년 이상 경력의 명상가 Tamara는 Calm의 마음챙김 리더로, 2014년부터 Calm의 명상 콘텐츠를 제작하고 내레이션을 해 왔습니다.</string>
+    <string name="publisher_soulfriends">소울프렌즈</string>
+    <string name="publisher_deep">깊은 산속 옹달샘</string>
+    <string name="publisher_carensia">케렌시아</string>
+
+    <!-- alert dialog  -->
+    <!-- alert dialog  -->
+    <string name="alert_title">No connection</string>
+    <string name="alert_contents">No network connection, please check \nyour network connection!</string>
+    <string name="alert_cancel">CANCEL</string>
+    <string name="alert_open_setting">OPEN SETTING</string>
+    <string name="alert_ok">OK</string>
+
+    <!-- timer dialog  -->
+    <string name="dialog_timer_title">타이머 종료</string>
+    <string name="dialog_timer_warning">타이머가 종료되었습니다. \n모든 컨텐츠의 재생이 정지됩니다.</string>
+    <string name="dialog_timer_ok">확인</string>
+
+    <!-- voice dialog  -->
+    <string name="dialog_voice_warning">녹음이 완료되지 않았습니다. \n처음부터 다시 진행해주세요.</string>
+    <string name="dialog_voice_analysis_warning">목소리 분석이 완료되지 않았습니다. \n처음부터 다시 진행해주세요.</string>
+
+</resources>

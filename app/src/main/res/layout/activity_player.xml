@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="PlayerBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.PlayerViewModel">
+
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.PlayerActivity">
+
+        <!--        <Button-->
+<!--            android:id="@+id/bt_close"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="25dp"-->
+<!--            android:scaleX="0.5"-->
+<!--            android:scaleY="0.5"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:layout_marginTop="53.4dp"-->
+<!--            android:background="@drawable/mini_btn"-->
+<!--            android:text="Button"-->
+<!--            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"-->
+<!--            app:backgroundTint="@null"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+        <ImageView
+            android:id="@+id/iv_bg1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_img"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <FrameLayout
+            android:id="@+id/bt_close"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="27dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="11.4dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="@drawable/mini_btn"
+                android:clickable="false" />
+
+        </FrameLayout>
+
+        <!--        <Button-->
+<!--            android:id="@+id/bt_close"-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="11.4dp"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:layout_marginTop="51dp"-->
+<!--            android:background="@drawable/mini_btn"-->
+<!--            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"-->
+<!--            app:backgroundTint="@null"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        android:text="Button"-->
+<!--        <Button-->
+<!--            android:id="@+id/bt_download"-->
+<!--            android:layout_width="48dp"-->
+<!--            android:layout_height="36dp"-->
+<!--            android:scaleX="0.5"-->
+<!--            android:scaleY="0.5"-->
+<!--            android:layout_marginTop="47dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_marginRight="20dp"-->
+<!--            android:background="@drawable/upload_btn"-->
+<!--            android:text="Button"-->
+<!--            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"-->
+<!--            app:backgroundTint="@null"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+
+        <FrameLayout
+            android:id="@+id/bt_info"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintBottom_toTopOf="@+id/textView5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:background="@drawable/info_btn" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="false"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline6">
+
+            <TextView
+                android:id="@+id/tv_artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:text="@string/player_artist"
+                android:textColor="#ccffffff"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_artist_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:includeFontPadding="false"
+                android:text="@={viewModel.artist}"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+            <!--                android:text="@={viewModel.narrtor}"-->
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_text_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.439"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline6">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="false"
+                android:layout_marginStart="68dp"
+                android:layout_marginLeft="68dp"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_narrator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="@font/font_notosanskr_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/player_narrrator"
+                    android:textColor="#ccffffff"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_narrator_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="@font/font_notosanskr_medium"
+                    android:includeFontPadding="false"
+                    android:text="@={viewModel.narrtor}"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+                <!--                android:text="@={viewModel.narrtor}"-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="79dp"
+                android:layout_marginRight="79dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="@font/font_notosanskr_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/player_author"
+                    android:textColor="#ccffffff"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_author_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="@font/font_notosanskr_medium"
+                    android:includeFontPadding="false"
+                    android:text="@={viewModel.author}"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <!--                android:text="@={viewModel.author}"-->
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+<!--        인포 처리를 해야 한다.-->
+<!--        <Button-->
+<!--            android:id="@+id/bt_info"-->
+<!--            android:layout_width="42dp"-->
+<!--            android:layout_height="42dp"-->
+<!--            android:visibility="gone"-->
+<!--            android:layout_marginEnd="30dp"-->
+<!--            android:layout_marginRight="30dp"-->
+<!--            android:layout_marginBottom="200dp"-->
+<!--            android:background="@drawable/info_btn"-->
+<!--            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"-->
+<!--            app:backgroundTint="@null"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/bt_bookmark" />-->
+
+        <Button
+            android:id="@+id/bt_timer"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="200dp"
+            android:background="@drawable/timer_btn"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/bt_bookmark" />
+
+        <TextView
+            android:id="@+id/tv_timer_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp"
+            android:fontFamily="@font/font_notosanskr_medium"
+            android:includeFontPadding="false"
+            android:text="@{viewModel.timer_time}"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/bt_timer"
+            app:layout_constraintHorizontal_bias="0.476"
+            app:layout_constraintStart_toStartOf="@+id/bt_timer"
+            app:layout_constraintTop_toBottomOf="@+id/bt_timer" />
+
+        <Button
+            android:id="@+id/bt_bookmark"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginBottom="200dp"
+            android:background="@drawable/bookmark_btn"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent=" 0.5" />
+
+        <Button
+            android:id="@+id/bt_like"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="200dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            android:background="@drawable/like_btn"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bt_bookmark" />
+
+<!--        <ProgressBar-->
+<!--            android:id="@+id/progress_bar"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--        </ProgressBar>-->
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="140dp"
+            android:text="@={viewModel.title}"
+            android:textColor="@color/white"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/font_notosanskr_medium"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="230dp" />
+
+<!--        <include  android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            android:id="@+id/player_view1"-->
+<!--            layout="@layout/player_controller_e"-->
+<!--            app:layout_constraintStart_toStartOf="parent">-->
+<!--        </include>-->
+
+        <com.google.android.exoplayer2.ui.PlayerControlView
+            android:id="@+id/player_view"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:visibility="visible"
+            app:controller_layout_id="@layout/player_controller"
+            app:fastforward_increment="10000"
+            app:hide_on_touch="false"
+            app:show_buffering="always"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:resize_mode="fit"
+            app:rewind_increment="10000"
+            app:show_timeout="0"
+            app:surface_type="surface_view"
+            app:use_controller="true">
+
+            <!--            app:use_artwork="true"-->
+            <!--            app:default_artwork="@drawable/image_tran_test_2"-->
+
+        </com.google.android.exoplayer2.ui.PlayerControlView>
+
+        <RelativeLayout
+            android:id="@+id/layout_timer_balloon"
+            android:layout_width="160dp"
+            android:layout_height="35dp"
+            android:background="@drawable/player_alert_bg"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/bt_timer"
+            app:layout_constraintEnd_toEndOf="@+id/bt_timer"
+            app:layout_constraintStart_toStartOf="@+id/bt_timer">
+
+            <TextView
+                android:id="@+id/tv_timer_balloon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="5sp"
+                android:text="@string/player_balloon_timer"
+                android:textColor="#ffffffff"
+                android:textSize="10sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_favorite_balloon"
+            android:layout_width="160dp"
+            android:layout_height="35dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/bt_bookmark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/player_alert_bg"
+            >
+
+            <TextView
+                android:id="@+id/tv_favorite_balloon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:lineSpacingExtra="5sp"
+                android:includeFontPadding="false"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:layout_marginTop="8dp"
+                android:text="@string/player_balloon_favorites"
+                android:textColor="#000000"
+                android:textSize="10sp" />
+        </RelativeLayout>
+
+        <!-- 좋아요 -->
+
+        <!-- 별로예요 -->
+
+        <RelativeLayout
+            android:id="@+id/layout_like_balloon"
+            android:layout_width="160dp"
+            android:layout_height="35dp"
+            android:background="@drawable/player_alert_bg"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/bt_like"
+            app:layout_constraintEnd_toEndOf="@+id/bt_like"
+            app:layout_constraintStart_toStartOf="@+id/bt_like">
+
+            <TextView
+                android:id="@+id/tv_like_balloon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="5sp"
+                android:text="@string/player_balloon_like"
+                android:textColor="#000000"
+                android:textSize="10sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_dislike_balloon"
+            android:layout_width="160dp"
+            android:layout_height="35dp"
+            android:background="@drawable/player_alert_bg"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/bt_like"
+            app:layout_constraintEnd_toEndOf="@+id/bt_like"
+            app:layout_constraintStart_toStartOf="@+id/bt_like">
+
+            <TextView
+                android:id="@+id/tv_dislike_balloon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="5sp"
+                android:text="@string/player_balloon_dislike"
+                android:textColor="#000000"
+                android:textSize="10sp" />
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="PsychologyVoiceTestBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.PsychologyVoiceTestViewModel">
+
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.PsychologyVoiceTestActivity">
+
+        <ImageView
+            android:id="@+id/iv_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/test_voice_bg" />
+
+        <FrameLayout
+            android:id="@+id/ic_close"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="26dp"
+            android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="11.4dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:clickable="false"
+                app:srcCompat="@drawable/back_btn" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="200dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="43dp"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="9sp"
+            android:text="@string/psychology_voice"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_voice_audio"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title">
+
+            <ScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="90dp"
+                android:background="#202933"
+                android:overScrollMode="never"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_notosanskr_regular"
+                        android:gravity="center_horizontal"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="6sp"
+                        android:text="@{viewModel.strSentence}"
+                        android:textColor="#ffffff"
+                        android:textSize="14sp" />
+
+                    <!--                    android:text="TextView"-->
+
+                </LinearLayout>
+            </ScrollView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scrollView2">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_voice_step_1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <ImageView
+                        android:id="@+id/iv_bg1"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="28dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.07"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@color/transparent" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar1"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:progress="0"
+                        android:max="100"
+                        android:progressDrawable="@drawable/progressbar_states"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_bg1"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_bg1"
+                        app:layout_constraintStart_toStartOf="@+id/iv_bg1"
+                        app:layout_constraintTop_toTopOf="@+id/iv_bg1" />
+
+                    <ImageView
+                        android:id="@+id/iv_voice_button1"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                        android:layout_marginBottom="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/iv_bg1"
+                        app:srcCompat="@drawable/test_voice_mikebtn" />
+
+                    <TextView
+                        android:id="@+id/tv_contents1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/psychology_voice_guide1"
+                        android:textSize="12sp"
+                        android:textColor="#ffffff"
+                        android:fontFamily="@font/font_notosanskr_regular"
+                        android:includeFontPadding="false"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_bg1"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_bg1"
+                        app:layout_constraintStart_toStartOf="@+id/iv_bg1"
+                        app:layout_constraintTop_toTopOf="@+id/iv_bg1" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_voice_step_2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_bg2"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="28dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.07"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@color/transparent" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar2"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:progress="0"
+                        android:max="100"
+                        android:progressDrawable="@drawable/progressbar_states"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_bg2"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_bg2"
+                        app:layout_constraintStart_toStartOf="@+id/iv_bg2"
+                        app:layout_constraintTop_toTopOf="@+id/iv_bg2" />
+
+                    <ImageView
+                        android:id="@+id/iv_voice_x_button2"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                        android:layout_marginBottom="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/iv_bg2"
+                        app:srcCompat="@drawable/test_voice_cancelbtn" />
+
+                    <TextView
+                        android:id="@+id/tv_contents2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@{viewModel.strTimer}"
+                        android:textSize="14sp"
+                        android:textColor="#ffffff"
+                        android:fontFamily="@font/font_notosanskr_regular"
+                        android:includeFontPadding="false"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_bg2"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_bg2"
+                        app:layout_constraintStart_toStartOf="@+id/iv_bg2"
+                        app:layout_constraintTop_toTopOf="@+id/iv_bg2" />
+
+<!--                    android:text="@string/psychology_voice_guide_time"-->
+
+                    <ImageView
+                        android:id="@+id/imageView16"
+                        android:layout_width="11dp"
+                        android:layout_height="12dp"
+                        android:layout_marginEnd="14dp"
+                        android:layout_marginRight="14dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_bg2"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_bg2"
+                        app:layout_constraintTop_toTopOf="@+id/iv_bg2"
+                        app:srcCompat="@drawable/test_voice_recordingicon" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_voice_step_3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_bg3"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="28dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.07"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@color/transparent"  />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar3"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:max="100"
+                        android:progress="100"
+                        android:progressDrawable="@drawable/progressbar_states"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_bg3"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_bg3"
+                        app:layout_constraintStart_toStartOf="@+id/iv_bg3"
+                        app:layout_constraintTop_toTopOf="@+id/iv_bg3" />
+
+                    <ImageView
+                        android:id="@+id/iv_voice_x_button3"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginBottom="20dp"
+                        android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/iv_bg3"
+                        app:srcCompat="@drawable/test_voice_cancelbtn" />
+
+                    <TextView
+                        android:id="@+id/tv_contents3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/psychology_voice_guide3"
+                        android:textSize="12sp"
+                        android:textColor="#ffffff"
+                        android:fontFamily="@font/font_notosanskr_regular"
+                        android:includeFontPadding="false"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_bg3"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_bg3"
+                        app:layout_constraintStart_toStartOf="@+id/iv_bg3"
+                        app:layout_constraintTop_toTopOf="@+id/iv_bg3" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar_icon"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="11dp"
+                        android:layout_height="12dp"
+                        android:layout_marginEnd="14dp"
+                        android:layout_marginRight="14dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_bg3"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_bg3"
+                        app:layout_constraintTop_toTopOf="@+id/iv_bg3"
+                        android:indeterminateDrawable="@drawable/progress_voice_rotate"
+                         />
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/iv_icon1"-->
+<!--                        android:layout_width="11dp"-->
+<!--                        android:layout_height="12dp"-->
+<!--                        android:layout_marginEnd="14dp"-->
+<!--                        android:layout_marginRight="14dp"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/iv_bg3"-->
+<!--                        app:layout_constraintEnd_toEndOf="@+id/iv_bg3"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/iv_bg3"-->
+<!--                        app:srcCompat="@drawable/voice_loading">-->
+
+<!--                    </ImageView>-->
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_voice_analysis"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintVertical_bias="1.0">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="9sp"
+                android:text="@string/psychology_voice_ing"
+                android:textColor="#333333"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:letterSpacing="-0.01"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/psychology_voice_ing2"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+            <ImageView
+                android:id="@+id/iv_anim_analysis"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/anim_voice_analysis"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

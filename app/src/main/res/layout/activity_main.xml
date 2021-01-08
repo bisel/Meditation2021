@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="MainBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.MainViewModel">
+
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainactivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:orientation="vertical"
+        tools:context=".view.MainActivity">
+
+        <ImageView
+            android:id="@+id/imageView12"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/home_bg" />
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+        </FrameLayout>
+
+        <!--        android:layout_marginBottom="60dp"-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mini_layout"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:background="@color/transparent"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent">
+            <!--            android:visibility="gone"-->
+
+            <ImageView
+                android:id="@+id/iv_Minibg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+
+                app:srcCompat="@drawable/miniplay_bg" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_mini_title_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/miniplay_music_profile" />
+
+            </androidx.cardview.widget.CardView>
+
+            <FrameLayout
+                android:id="@+id/iv_close"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/iv_Minibg"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:clickable="false"
+                    app:srcCompat="@drawable/miniplay_close_btn" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/iv_playcontroler"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="4dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_close"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_play"
+                    android:layout_width="16dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:background="@drawable/miniplay_play_btn"
+                    android:clickable="false" />
+            </FrameLayout>
+
+            <!--            <ImageView-->
+            <!--                android:id="@+id/iv_playcontroler"-->
+            <!--                android:layout_width="16dp"-->
+            <!--                android:layout_height="20dp"-->
+            <!--                android:layout_marginEnd="26dp"-->
+            <!--                android:layout_marginRight="26dp"-->
+            <!--                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toStartOf="@+id/iv_close"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                android:background="@drawable/miniplay_play_btn" />-->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_playcontroler"
+                app:layout_constraintStart_toEndOf="@+id/cardView2"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:ems="7"
+                    android:lineSpacingExtra="6sp"
+                    android:maxEms="7"
+                    android:maxLines="1"
+                    android:text="@={viewModel.title}"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+                <!--                android:text="@string/session_center_contents"-->
+
+                <!--                <TextView-->
+                <!--                    android:id="@+id/textView6"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginTop="2dp"-->
+                <!--                    android:lineSpacingExtra="0sp"-->
+                <!--                    android:text="@string/miniplayer_time"-->
+                <!--                    android:textColor="@color/white"-->
+                <!--                    android:textSize="10sp" />-->
+            </LinearLayout>
+
+
+            <!--            <ImageView-->
+            <!--                android:id="@+id/iv_progressbg"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="4dp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="@+id/iv_Minibg"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                android:background="@drawable/miniplay_play_line" />-->
+
+            <ProgressBar
+                android:id="@+id/mini_progressBar"
+
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:progress="0"
+                android:progressDrawable="@drawable/progress"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/iv_Minibg"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/meun_btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:clickable="false"
+                android:src="@drawable/menu_btn" />
+
+        </FrameLayout>
+
+<!--        <ImageView-->
+<!--            android:id="@+id/meun_btn"-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:layout_marginTop="48dp"-->
+<!--            android:layout_marginEnd="26dp"-->
+<!--            android:layout_marginRight="26dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"-->
+<!--            android:src="@drawable/menu_btn"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/gnb_bg"
+            android:textColorSecondary="#99ffffff"
+            android:theme="@style/BottomNavigationTheme"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_menu" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
