@@ -15,8 +15,8 @@ android {
         applicationId "com.soulfriends.meditation"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 16
-        versionName "1.16"
+        versionCode 17
+        versionName "1.17"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
