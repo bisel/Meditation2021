@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bgtagdatas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<bgtagdata>
+		<id>1</id>
+		<tag>명상</tag>
+		<file>med_wall</file>
+	</bgtagdata>
+	<bgtagdata>
+		<id>2</id>
+		<tag>수면명상</tag>
+		<file>sleep_md_wall</file>
+	</bgtagdata>
+	<bgtagdata>
+		<id>3</id>
+		<tag>북수면</tag>
+		<file>bsleep_wall</file>
+	</bgtagdata>
+	<bgtagdata>
+		<id>4</id>
+		<tag>음악</tag>
+		<file>music_wall</file>
+	</bgtagdata>
+	<bgtagdata>
+		<id>5</id>
+		<tag>수면음악</tag>
+		<file>sleep_ms_wall</file>
+	</bgtagdata>
+	<bgtagdata>
+		<id>6</id>
+		<tag>자연소리</tag>
+		<file>nature_wall</file>
+	</bgtagdata>
+</bgtagdatas>

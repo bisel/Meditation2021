@@ -30,7 +30,7 @@ public class MeditationContents {
 
     // 2021.01.23
     public int contentskind = 0; // 콘튼츠종류  1 : 명상, 2 : 수면 명상, 3 : 북수면, 4 : 음악  5. :수면음악  6: 자연소리
-    public int isfree = 0;       //  0이면 rock 1: free
+    public int paid = 0;       //  0이면 rock 1: free
     public int ismycontents = 0; //  0 : 기본 제공  1 : 소셜 콘텐츠
     public int isRecordSndFile = 0;  // 0 : 음악파일로  1 : 녹음한 걸로 소셜 콘텐츠 만듬
     public int isReported= 0;  // 0 : 음악파일로  1 : 신고된 콘텐츠
