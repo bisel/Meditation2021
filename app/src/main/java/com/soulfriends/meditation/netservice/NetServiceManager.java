@@ -3537,6 +3537,7 @@ public class NetServiceManager {
     }
 
     //  3. 녹음 취소 후 반드시 delMyContentsRecordFile을 통해서 파일 삭제 해야 한다.
+
     public void cancelMyContensRecord()
     {
         mMycContentsRecorder.stop();
@@ -3546,6 +3547,7 @@ public class NetServiceManager {
     }
 
     // 4.  반드시 파일은 지워주어야 한다.
+
     public boolean delMyContentsRecordFile()
     {
         File delFile = new File(mMyContentsPath);
