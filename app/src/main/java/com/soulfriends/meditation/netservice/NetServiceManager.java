@@ -3386,7 +3386,7 @@ public class NetServiceManager {
 
         mMyContentsPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+curimgName;
 
-        Log.d(TAG, "file path is " + mMyContentsPath);
+        Log.d("TAG", "file path is " + mMyContentsPath);
         mMycContentsRecorder.setOutputFile(mMyContentsPath);
         try {
             mMycContentsRecorder.prepare();
@@ -3460,7 +3460,7 @@ public class NetServiceManager {
             if(newContents){
                 mfbDBRef.child(socialContentsInfoString).child(infoData.uid).updateChildren(updateMap)
                         .addOnCompleteListener(task ->
-                                Log.d(TAG, "update infoData.uid : " + task.isSuccessful())
+                                Log.d("TAG", "update infoData.uid : " + task.isSuccessful())
                 );
             }else{
                 mfbDBRef.child(socialContentsInfoString).child(infoData.uid).setValue(infoData);
@@ -3511,6 +3511,7 @@ public class NetServiceManager {
                 infoData.ismycontents = 1;
                 infoData.author = mUserProfile.nickname;
                 infoData.uid = curdetialdate+mUserProfile.uid;  // uid를 키를 해야 한다.
+                socialcontents.authoruid = mUserProfile.uid;
                 newContents = true;
             }
 
@@ -3740,7 +3741,7 @@ public class NetServiceManager {
         Map<String, Object> updateMap = new HashMap<>();
         updateMap.put("isReported", 1);
         mfbDBRef.child(socialContentsInfoString).child(reportedSocialContents.uid).updateChildren(updateMap)
-                .addOnCompleteListener(task -> Log.d(TAG, "update reportedSocialContents : " + task.isSuccessful()));
+                .addOnCompleteListener(task -> Log.d("TAG", "update reportedSocialContents : " + task.isSuccessful()));
 
     }
 
