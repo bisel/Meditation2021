@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,16 +18,22 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.ContentsMakeBinding;
+import com.soulfriends.meditation.dlg.AlertLineTwoPopup;
+import com.soulfriends.meditation.model.MeditationContents;
+import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.viewmodel.ContentsMakeViewModel;
 import com.soulfriends.meditation.viewmodel.ContentsMakeViewModelFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ContentsMakeActivity extends PhotoBaseActivity implements ResultListener {
 
@@ -53,6 +60,16 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
     private boolean bCheck_NextActive = false;
 
     private boolean bPlayerImage_ButtonState = true;
+
+
+    private String Upload_Audio_filePath = "";
+
+    private int playtime_sec_audio = 0;
+
+    private boolean bComplete_Audio_Record = false; // 녹음 완료 여부
+
+    ArrayList<Integer> list_background = new ArrayList<>();
+    ArrayList<String> list_background_string = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +104,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                     hideKeyBoard();
                     binding.editTitle.clearFocus();
 
-                    if(binding.editTitle.getText().length() > 0)
+                    if(viewModel.title.getValue().length() > 0)
                     {
                         bCheck_TitleName = true;
                     }
@@ -131,16 +148,27 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
             binding.layoutBackgroundImage.setVisibility(View.VISIBLE);
 
-            ArrayList<Integer> list = new ArrayList<>();
 
-            // 추후 음악 bg 넣도록 한다.
-            list.add(R.drawable.bg_1);
-            list.add(R.drawable.mask_group_8);
-            list.add(R.drawable.music_wall);
-            list.add(R.drawable.nature_wall);
-            list.add(R.drawable.sleep_ms_wall);
 
-            binding.ivBackgroundImage.setImageResource(list.get(UtilAPI.s_id_background_image));
+            // 음악 bg 넣도록 한다.
+            list_background.clear();
+
+            list_background.add(R.drawable.bsleep_wall);
+            list_background.add(R.drawable.med_wall);
+            list_background.add(R.drawable.music_wall);
+            list_background.add(R.drawable.nature_wall);
+            list_background.add(R.drawable.sleep_md_wall);
+            list_background.add(R.drawable.sleep_ms_wall);
+
+            // string
+            list_background_string.add("bsleep_wall");
+            list_background_string.add("med_wall");
+            list_background_string.add("music_wall");
+            list_background_string.add("nature_wall");
+            list_background_string.add("sleep_md_wall");
+            list_background_string.add("sleep_ms_wall");
+
+            binding.ivBackgroundImage.setImageResource(list_background.get(UtilAPI.s_id_background_image));
 
             bCheck_Background = true;
         }
@@ -155,9 +183,14 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
     }
 
     @Override
-    public void OnSuccess_SelectAudioFile(int duration) {
+    public void OnSuccess_SelectAudioFile(String path_file, int duration) {
 
         // 오디오 파일 선택해서 파일 시간 표시하기
+        Upload_Audio_filePath = path_file;
+
+        bCheck_Audio = true;
+
+        playtime_sec_audio = (int)(duration / 1000);
 
         // 시간단위
         String hour = String.valueOf(duration / (60 * 60 * 1000));
@@ -216,6 +249,12 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
     public void onSuccess(Integer id, String message) {
 
         switch (id) {
+
+            case R.id.ic_close:
+            {
+                onBackPressed();
+            }
+            break;
             case R.id.iv_backgroundbt: {
 
                 // 배경 이미지 버튼 선택시
@@ -266,11 +305,19 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             case R.id.iv_audio:
             {
                 // 녹음
+                NetServiceManager.getinstance().startMyContentsRecord();
 
                 SetState_Audio(eAudioState.ing);
 
+                // 녹음을 하면 업로드 파일명 초기화 처리
+                Upload_Audio_filePath = "";
+
                 // 타이머 시작
                 StartTimer();
+
+                bCheck_Audio = false;
+
+                Check_NextButton();
 
             }
             break;
@@ -305,7 +352,9 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                     // 이미지는 플레이 이미지
                     UtilAPI.setImage(this, binding.ivAudio2, R.drawable.social_create_play);
                     
-                    // 사운드 음악 플레이 
+                    // 오디오 플레이
+
+                    Play_Audio(NetServiceManager.getinstance().mMyContentsPath);
                 }
                 else
                 {
@@ -314,7 +363,8 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                     // 이미지는 정지 이미지
                     UtilAPI.setImage(this, binding.ivAudio2, R.drawable.social_create_stop);
                     
-                    // 사운드 정지
+                    // 오디오 정지
+                    Stop_Audio();
                 }
                 //SetState_Audio(eAudioState.play);
 
@@ -327,6 +377,15 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             case R.id.iv_re_audiobt:
             {
                 // 다시녹음
+
+                bCheck_Audio = false;
+
+                Check_NextButton();
+
+                // 기존 파일을 삭제 처리한다.
+                NetServiceManager.getinstance().delMyContentsRecordFile();
+
+                bComplete_Audio_Record = false;
 
                 SetState_Audio(eAudioState.ing);
 
@@ -342,11 +401,42 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 }
                 // 다음 이동
 
+                // 현재 설정된 값을 다음 액티비티에 정보를 넘겨줘야 한다.
+
                 // 제작 - 치유 감정 선택 화면 이동
-                this.startActivity(new Intent(this, ContentsEmotionSelActivity.class));
+                Intent intent = new Intent(this, ContentsEmotionSelActivity.class);
+
+                // String titleName, String thumnailImgName,String playtime, int IsSndFile, String SndFileName, String releasedate, String backgrroundImgName, String genre,String emotion){
+
+                // 타이틀
+                intent.putExtra("titleName", viewModel.title.getValue());
+                intent.putExtra("thumnailImgName", mCurrentPhotoPath);
+                intent.putExtra("playtime", playtime_sec_audio);
+
+                if(Upload_Audio_filePath.length() == 0)
+                {
+                    // 녹음 파일 이고
+                    intent.putExtra("IsSndFile", 1);
+                    intent.putExtra("SndFileName", NetServiceManager.getinstance().mMyContentsPath);
+                }
+                else
+                {
+                    // 파일에서
+                    intent.putExtra("IsSndFile", 0);
+                    intent.putExtra("SndFileName", Upload_Audio_filePath);
+                }
+
+                SimpleDateFormat format_date = new SimpleDateFormat ( "yyyy-MM-dd" );
+                Date date_now = new Date(System.currentTimeMillis());
+                String curdate = format_date.format(date_now);
+
+                intent.putExtra("releasedate", curdate);
+
+                intent.putExtra("backgrroundImgName", list_background_string.get(UtilAPI.s_id_background_image));
+
+                this.startActivity(intent);
                 this.overridePendingTransition(0, 0);
                 finish();
-
 
             }
             break;
@@ -382,6 +472,12 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
         // 녹음 완료 할 경우
         SetState_Audio(eAudioState.play);
         StopTimer();
+
+        playtime_sec_audio = (int)(accum_time_milisecond / 1000);
+
+        bComplete_Audio_Record = true;
+
+        NetServiceManager.getinstance().doneMyContentsRecord();
     }
 
     private void SetState_Audio(eAudioState state)
@@ -641,6 +737,79 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             }
         }
     };
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // 녹음 중일 경우
+        if(NetServiceManager.getinstance().isMyContentsRecording)
+        {
+            // 녹음 시작 진행 중이라면
+            // 녹음 취소해야 한다.
+            NetServiceManager.getinstance().cancelMyContensRecord();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        // 콘텐츠 제작 메인에서 정보를 입력한 상태에서
+        // back 하면 안내 팝업 제공
+        // - 한번 더 back 하거나 ‘예’ 선택 시 이전 화면(소셜)으로 이동
+
+        if (bCheck_TitleName || bCheck_Thumb || bCheck_Audio || bCheck_Background) {
+
+            // 팝업을 띄워준다.
+            AlertLineTwoPopup alertDlg = new AlertLineTwoPopup(this, this, AlertLineTwoPopup.Dlg_Type.regiter_cancel);
+
+            alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            alertDlg.show();
+
+            // 팝업에서 예를 누르면 소셜로 이동 처리
+            alertDlg.iv_ok.setOnClickListener(v -> {
+
+                // 녹음 중일 경우
+                if(NetServiceManager.getinstance().isMyContentsRecording)
+                {
+                    // 녹음 시작 진행 중이라면
+                    // 녹음 취소해야 한다.
+                    NetServiceManager.getinstance().cancelMyContensRecord();
+                }
+
+                // 있으면 녹음 파일 삭제
+                NetServiceManager.getinstance().delMyContentsRecordFile();
+
+                // 마이 콘텐츠로 이동
+                Intent intent = new Intent(this, MyContentsActivity.class);
+                startActivity(intent);
+                this.overridePendingTransition(0, 0);
+                finish();
+
+                alertDlg.dismiss();
+            });
+        }
+        else
+        {
+            // 마이 콘텐츠로 이동
+
+            // 있으면 녹음 파일 삭제
+            NetServiceManager.getinstance().delMyContentsRecordFile();
+
+            // 녹음 중일 경우
+            if(NetServiceManager.getinstance().isMyContentsRecording)
+            {
+                // 녹음 시작 진행 중이라면
+                // 녹음 취소해야 한다.
+                NetServiceManager.getinstance().cancelMyContensRecord();
+            }
+
+            Intent intent = new Intent(this, MyContentsActivity.class);
+            startActivity(intent);
+            this.overridePendingTransition(0, 0);
+            finish();
+        }
+    }
 
 
 }

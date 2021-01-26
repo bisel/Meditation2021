@@ -17,7 +17,9 @@ import com.soulfriends.meditation.databinding.ContentsEmotionSelBinding;
 import com.soulfriends.meditation.databinding.FriendEditBinding;
 import com.soulfriends.meditation.dlg.AlertLineTwoPopup;
 import com.soulfriends.meditation.dlg.CopyrightDialog;
+import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ResultListener;
+import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.viewmodel.ContentsEmotionSelViewModel;
 import com.soulfriends.meditation.viewmodel.ContentsEmotionSelViewModelFactory;
 import com.soulfriends.meditation.viewmodel.FriendEditViewModel;
@@ -40,6 +42,15 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
 
     private boolean bCheck_Result = false;
 
+    // value
+    private String titleName = "";
+    private String thumnailImgName = "";
+    private int playtime = 0;
+    private int IsSndFile = 0;
+    private String SndFileName = "";
+    private String releasedate = "";
+    private String backgrroundImgName = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +63,17 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
         }
         viewModel = new ViewModelProvider(this.getViewModelStore(), contentsEmotionSelViewModelFactory).get(ContentsEmotionSelViewModel.class);
         binding.setViewModel(viewModel);
+
+        // 정보 받기
+        Intent intent = getIntent();
+
+        titleName = intent.getStringExtra("titleName");
+        thumnailImgName = intent.getStringExtra("thumnailImgName");
+        playtime = intent.getIntExtra("playtime", 0);
+        IsSndFile = intent.getIntExtra("IsSndFile", 0);
+        SndFileName = intent.getStringExtra("SndFileName");
+        releasedate = intent.getStringExtra("releasedate");
+        backgrroundImgName = intent.getStringExtra("backgrroundImgName");
     }
 
     @Override
@@ -73,14 +95,39 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                 if(bCheck_Result) {
 
                     // 선택된 인덱스
-                    // select_emoticon_id
-                    // select_kind_id
-                    
+
+                    String str_kind_id = "select_kind_id";
+                    String str_emoticon_id = "select_emoticon_id";
+
                     // 등록 시 저작권 정보 안내 팝업 노출 후 확인 시 업로드 진행 함
                     CopyrightDialog alertDlg = new CopyrightDialog(this, this);
 
                     alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                     alertDlg.show();
+
+                    alertDlg.iv_ok.setOnClickListener(v -> {
+
+                        // 업로드 이동
+                        Intent intent = new Intent(this, ContentsUploadActivity.class);
+
+                        // 전달
+                        intent.putExtra("titleName", titleName);
+                        intent.putExtra("thumnailImgName", thumnailImgName);
+                        intent.putExtra("playtime", playtime);
+                        intent.putExtra("IsSndFile", IsSndFile);
+                        intent.putExtra("SndFileName", SndFileName);
+                        intent.putExtra("releasedate", releasedate);
+                        intent.putExtra("backgrroundImgName", backgrroundImgName);
+
+                        intent.putExtra("genre", str_kind_id); // 장르
+                        intent.putExtra("emotion", str_emoticon_id);
+
+                        this.startActivity(intent);
+                        this.overridePendingTransition(0, 0);
+                        finish();
+
+                        alertDlg.dismiss();
+                    });
                 }
 
             }
@@ -91,11 +138,11 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
             }
             break;
             case R.id.iv_item2: {
-                SelectKind(id,1);
+                SelectKind(id,2);
             }
             break;
             case R.id.iv_item3: {
-                SelectKind(id,1);
+                SelectKind(id,3);
             }
             break;
             case R.id.lay_1: {

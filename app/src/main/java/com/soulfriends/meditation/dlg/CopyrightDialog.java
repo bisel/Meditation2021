@@ -20,6 +20,8 @@ public class CopyrightDialog extends Dialog {
     private Activity activity;
     private Context context;
 
+    public ImageView iv_ok;
+
     public CopyrightDialog(@NonNull Context context, Activity activity) {
         super(context);
         this.context = context;
@@ -32,17 +34,19 @@ public class CopyrightDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_copyright);
 
-        // ok
-        ImageView iv_ok = findViewById(R.id.iv_ok);
-        iv_ok.setOnClickListener(v -> {
+        iv_ok = findViewById(R.id.iv_ok);
 
-            Intent intent = new Intent(activity, ContentsUploadActivity.class);
-            activity.startActivity(intent);
-
-            activity.finish();
-            this.dismiss();
-
-        });
+//        // ok
+//        ImageView iv_ok = findViewById(R.id.iv_ok);
+//        iv_ok.setOnClickListener(v -> {
+//
+//            Intent intent = new Intent(activity, ContentsUploadActivity.class);
+//            activity.startActivity(intent);
+//
+//            activity.finish();
+//            this.dismiss();
+//
+//        });
 
         // no
         ImageView iv_no = findViewById(R.id.iv_no);

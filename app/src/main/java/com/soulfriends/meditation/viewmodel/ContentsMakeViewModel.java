@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.view.View;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.soulfriends.meditation.util.ResultListener;
@@ -15,6 +16,16 @@ public class ContentsMakeViewModel extends ViewModel {
     private Context context;
 
     private long mLastClickTime = 0;
+
+    public MutableLiveData<String> getTitle() {
+        return title;
+    }
+
+    public void setTitle(MutableLiveData<String> title) {
+        this.title = title;
+    }
+
+    public MutableLiveData<String> title = new MutableLiveData<>();
 
     public ContentsMakeViewModel(Context mContext, ResultListener listener) {
         this.context = mContext;

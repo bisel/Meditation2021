@@ -75,6 +75,7 @@
             android:imeOptions="actionDone"
             android:includeFontPadding="false"
             android:inputType="text"
+            android:text="@={viewModel.title}"
             android:lineSpacingExtra="6sp"
             android:textColor="@color/white"
             android:textSize="14sp"
@@ -427,7 +428,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/social_btn_disable" />
+            android:background="@drawable/social_btn_disable" />
 
 
 

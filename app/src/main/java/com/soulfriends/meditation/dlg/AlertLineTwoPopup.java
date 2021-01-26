@@ -26,6 +26,8 @@ public class AlertLineTwoPopup extends Dialog {
 
     private Dlg_Type dlg_type;
 
+    public ImageView iv_ok;
+
     public AlertLineTwoPopup(@NonNull Context context, Activity activity, Dlg_Type dlg_type) {
         super(context);
         this.context = context;
@@ -56,24 +58,24 @@ public class AlertLineTwoPopup extends Dialog {
         textView.setText(context.getResources().getString(text_id));
 
         // ok
-        ImageView iv_ok = findViewById(R.id.iv_ok);
-        iv_ok.setOnClickListener(v -> {
-
-            switch(dlg_type) {
-                case contents_existing_delete: {
-
-
-                }
-                break;
-                case regiter_cancel: {
-
-                }
-                break;
-            }
-
-            this.dismiss();
-
-        });
+        iv_ok = findViewById(R.id.iv_ok);
+//        iv_ok.setOnClickListener(v -> {
+//
+//            switch(dlg_type) {
+//                case contents_existing_delete: {
+//
+//
+//                }
+//                break;
+//                case regiter_cancel: {
+//
+//                }
+//                break;
+//            }
+//
+//            this.dismiss();
+//
+//        });
 
         // no
         ImageView iv_no = findViewById(R.id.iv_no);

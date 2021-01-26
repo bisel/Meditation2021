@@ -36,6 +36,11 @@ public class MyContentsAdapter extends RecyclerView.Adapter{
         this.listener = listener;
     }
 
+    public void SetList(List list)
+    {
+        this.list = list;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

@@ -49,6 +49,8 @@ public class PhotoBaseActivity extends BaseActivity {
     Uri imageUri;
     Uri photoURI, albumURI;
 
+    String Thumb_FilePath = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +147,6 @@ public class PhotoBaseActivity extends BaseActivity {
         mediaScanIntent.setData(contentUri);
         sendBroadcast(mediaScanIntent);
         Toast.makeText(this, "사진이 앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show();
-
 
     }
 
@@ -266,7 +267,7 @@ public class PhotoBaseActivity extends BaseActivity {
 
                     int duration = mediaPlayer.getDuration();
 
-                    OnSuccess_SelectAudioFile(duration);
+                    OnSuccess_SelectAudioFile(path, duration);
 
                     mediaPlayer.release();
 
@@ -278,7 +279,7 @@ public class PhotoBaseActivity extends BaseActivity {
         }
     }
 
-    public void OnSuccess_SelectAudioFile(int duration) {
+    public void OnSuccess_SelectAudioFile(String path_file, int duration) {
 
     }
 
@@ -404,5 +405,36 @@ public class PhotoBaseActivity extends BaseActivity {
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns._ID);
         cursor.moveToFirst();
         return cursor.getString(column_index);
+    }
+
+    //----------------------------------------------------------
+    // 오디오 파일 재생
+    //----------------------------------------------------------
+
+    private MediaPlayer mediaPlayer = null;
+
+    public void Play_Audio(String path_file)  {
+
+        if(mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer();
+        }
+
+        try {
+
+            mediaPlayer.setDataSource(path_file);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void Stop_Audio()
+    {
+        if(mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
     }
 }

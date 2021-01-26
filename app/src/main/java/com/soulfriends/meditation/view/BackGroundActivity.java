@@ -40,7 +40,7 @@ public class BackGroundActivity extends BaseActivity implements ResultListener {
 
         ArrayList<Integer> list = new ArrayList<>();
 
-        // 추후 음악 bg 넣도록 한다.
+        // 음악 bg 넣도록 한다.
         list.add(R.drawable.bsleep_wall);
         list.add(R.drawable.med_wall);
         list.add(R.drawable.music_wall);

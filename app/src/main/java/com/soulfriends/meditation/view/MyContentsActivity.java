@@ -31,6 +31,7 @@ import com.soulfriends.meditation.model.MediationShowContents;
 import com.soulfriends.meditation.model.MeditationCategory;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.MeditationShowCategorys;
+import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ItemClickListener;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
@@ -58,6 +59,9 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
 
     private MeditationShowCategorys meditationShowCategorys; // test
 
+    private List list_contents = new ArrayList<>();
+    private MyContentsAdapter myContentsAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +80,8 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2, GridLayoutManager.VERTICAL, false);
 
-        MyContentsAdapter myContentsAdapter = new MyContentsAdapter(MyContentsItemList(), this, this);
+        MyContentsItemList();
+        myContentsAdapter = new MyContentsAdapter(list_contents, this, this);
 
         binding.recyclerview.setAdapter(myContentsAdapter);
         binding.recyclerview.setLayoutManager(gridLayoutManager);
@@ -97,45 +102,48 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
         viewModel.setTitle(strTitle);
     }
 
+    private void Update_Recyclerview()
+    {
+        myContentsAdapter.SetList(list_contents);
+        // 리사이클 데이터 변경에따른 ui 업데이트
+        myContentsAdapter.notifyDataSetChanged();
+    }
+
     private List<MyContentsItemViewModel> MyContentsItemList()
     {
-        List list = new ArrayList<>();
 
+        list_contents.clear();
 
-        MeditationCategory entity = meditationShowCategorys.showcategorys.get(10);
+        // 정보 요청
+        UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
 
-//        for (MediationShowContents data : entity.contests) {
-//
-//            MyContentsItemViewModel myContentsItemViewModel = new MyContentsItemViewModel(data.entity, 1, this);
-//            list.add(myContentsItemViewModel);
-//        }
-
+        ArrayList<String> contentslist = userProfile.mycontentslist;
 
         // 내가 만든 갯수
         int total_count = 10;
 
-        int my_make_count = 5;
+        int my_make_count = contentslist.size();
 
         // 내가 만든 콘텐츠 개수
         for (int i = 0; i < my_make_count; i++) {
 
-            MediationShowContents data = entity.contests.get(i);
+            //MediationShowContents data = entity.contests.get(i);
+            MeditationContents data = NetServiceManager.getinstance().getSocialContents(contentslist.get(i));
 
-            MyContentsItemViewModel myContentsItemViewModel = new MyContentsItemViewModel(data.entity, 1, this);
-            list.add(myContentsItemViewModel);
+            MyContentsItemViewModel myContentsItemViewModel = new MyContentsItemViewModel(data, 1, this);
+            list_contents.add(myContentsItemViewModel);
         }
 
         // 추가할 개수
         int add_count = total_count - my_make_count;
-        for (int i = 0; i < my_make_count; i++) {
+        for (int i = 0; i < add_count; i++) {
 
             MyContentsItemViewModel myContentsItemViewModel = new MyContentsItemViewModel(null, 2, this);
-            list.add(myContentsItemViewModel);
+            list_contents.add(myContentsItemViewModel);
 
         }
 
-
-        return list;
+        return list_contents;
     }
 
 
@@ -176,6 +184,8 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
             }
             break;
             case R.id.iv_modify: {
+
+                MeditationContents meditationContents = (MeditationContents) obj;
 
                 Toast.makeText(getApplicationContext(), "iv_modify", Toast.LENGTH_SHORT).show();
 
@@ -219,7 +229,11 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
 
                                 int index_id =  Integer.parseInt((String)obj);
 
+                                OnEvent_Delete_Contents(meditationContents);
                                 Toast.makeText(MyContentsActivity.this,"삭제",Toast.LENGTH_SHORT).show();
+
+
+
 
                                 alertDlg.dismiss();
                             });
@@ -263,6 +277,37 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
             break;
         }
 
+    }
+
+    public void OnEvent_Delete_Contents(MeditationContents meditationContents)
+    {
+        NetServiceManager.getinstance().setOnDelMyContentsListener(new NetServiceManager.OnDelMyContentsListener() {
+            @Override
+            public void onDelMyContentsListener(boolean validate) {
+
+                if(validate)
+                {
+                    // 삭제 성공
+
+                    NetServiceManager.getinstance().delLocalMyContents(meditationContents.uid);
+
+                    NetServiceManager.getinstance().delUserProfileMyContents(meditationContents.uid);
+
+                    Update_Recyclerview();
+
+                    Toast.makeText(getApplicationContext(),"삭제 성공",Toast.LENGTH_SHORT).show();
+
+                }
+                else
+                {
+                    // 삭제 실패
+
+                    Toast.makeText(getApplicationContext(),"삭제 실패",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        NetServiceManager.getinstance().delMyContents(meditationContents);
     }
 
     @Override

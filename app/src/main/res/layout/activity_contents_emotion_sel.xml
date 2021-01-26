@@ -72,7 +72,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/iv_item2"
             app:layout_constraintEnd_toStartOf="@+id/iv_item2"
             app:layout_constraintTop_toTopOf="@+id/iv_item2"
-            app:srcCompat="@drawable/social_ctgr_btn_selected" />
+            android:background="@drawable/social_ctgr_btn" />
 
         <ImageView
             android:id="@+id/iv_item2"
@@ -83,7 +83,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
-            app:srcCompat="@drawable/social_ctgr_btn" />
+            android:background="@drawable/social_ctgr_btn" />
 
         <ImageView
             android:id="@+id/iv_item3"
@@ -96,7 +96,7 @@
             app:layout_constraintStart_toEndOf="@+id/iv_item2"
             app:layout_constraintTop_toTopOf="@+id/iv_item2"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/social_ctgr_btn" />
+            android:background="@drawable/social_ctgr_btn" />
 
         <ImageView
             android:id="@+id/iv_registerbg"

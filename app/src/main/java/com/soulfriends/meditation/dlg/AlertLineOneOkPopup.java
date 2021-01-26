@@ -25,11 +25,22 @@ public class AlertLineOneOkPopup extends Dialog {
 
     private Dlg_Type dlg_type;
 
+    public ImageView iv_ok;
+
+    private boolean bUse_ButtonOk = true;
+
     public AlertLineOneOkPopup(@NonNull Context context, Activity activity, Dlg_Type dlg_type) {
         super(context);
         this.context = context;
         this.activity = activity;
         this.dlg_type = dlg_type;
+
+        bUse_ButtonOk = true;
+
+        if(dlg_type == Dlg_Type.contents_upload_failed)
+        {
+            bUse_ButtonOk = false;
+        }
     }
 
     @Override
@@ -63,12 +74,15 @@ public class AlertLineOneOkPopup extends Dialog {
         textView.setText(context.getResources().getString(text_id));
 
         // ok
-        ImageView iv_ok = findViewById(R.id.iv_ok);
-        iv_ok.setOnClickListener(v -> {
+        iv_ok = findViewById(R.id.iv_ok);
 
-            this.dismiss();
+        if(bUse_ButtonOk) {
+            iv_ok.setOnClickListener(v -> {
 
-        });
+                this.dismiss();
+
+            });
+        }
 
     }
 }
