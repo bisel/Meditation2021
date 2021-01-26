@@ -134,9 +134,9 @@ public class NetServiceManager {
     private AudioTrack mAudioTrack = null;
     private ByteArrayList fArrayList = null;
     private FileOutputStream fos = null;
-    private String contentsInfoString = "meditationext_mind"; //
-    private String socialContentsInfoString = "social_meditationext_mind"; //
-    private String contentsCharInfoString = "meditationchartag_mind";//
+    private String contentsInfoString = "meditationext"; //
+    private String socialContentsInfoString = "social_meditationext"; //
+    private String contentsCharInfoString = "meditationchartag";//
 
     public ArrayList<MeditationContents> mContentsList = new ArrayList<MeditationContents>();
     public ArrayList<MeditationContents> mSocialContentsList = new ArrayList<MeditationContents>();
