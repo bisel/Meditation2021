@@ -52,6 +52,8 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
     private boolean bCheck_NextActive = false;
 
+    private boolean bPlayerImage_ButtonState = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -294,8 +296,27 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             //  재생 / 다시녹음
             case R.id.iv_audio_2:
             {
-                // 재생
-                SetState_Audio(eAudioState.play);
+                // 재생 / 정지 =>
+
+                bPlayerImage_ButtonState = !bPlayerImage_ButtonState;
+                if(bPlayerImage_ButtonState)
+                {
+                    // 플레이 정지가 되어야 한다.
+                    // 이미지는 플레이 이미지
+                    UtilAPI.setImage(this, binding.ivAudio2, R.drawable.social_create_play);
+                    
+                    // 사운드 음악 플레이 
+                }
+                else
+                {
+
+                    // 플레이 재생되어야 한다.
+                    // 이미지는 정지 이미지
+                    UtilAPI.setImage(this, binding.ivAudio2, R.drawable.social_create_stop);
+                    
+                    // 사운드 정지
+                }
+                //SetState_Audio(eAudioState.play);
 
                 // 타이머 시작
                 StartTimer();
@@ -377,7 +398,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 binding.layoutAudioPlay.setVisibility(View.GONE);
 
                 // 초기화 stop 비활성화
-                UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop_disable);
+                UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop_disabled);
             }
             break;
             case ing:
@@ -450,6 +471,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 // 30초 경과 후에는
                 // 정지 버튼 활성화 하도록 한다.
                 if(accum_time_milisecond > 30 * 1000) {
+
                     UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop);
 
                     bStopButtonActive = true;

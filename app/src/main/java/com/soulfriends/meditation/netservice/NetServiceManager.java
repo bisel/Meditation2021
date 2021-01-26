@@ -369,6 +369,7 @@ public class NetServiceManager {
     // 2021.01.21
     // 기존 prevProfile에 새롭게 입력하려는 것
     // 수정일 경우 nickname, intro, profileImageURI 중에서 수정안하는 것은 null로 준다.
+    // 초기 : sendValNewProfileExt( profile, null, null, fullpath);
     public void sendValNewProfileExt(UserProfile profile, String nickName, String intro, String profileImageURI){
         // 1. 기존 NickName있으면 삭제
         if(nickName != null){
@@ -385,48 +386,51 @@ public class NetServiceManager {
         }
 
         // 3. profileImageURI 확인
-        File upfile = new File(profileImageURI);
-        if(upfile != null){
-            SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMdd" );
-            Date date_now = new Date(System.currentTimeMillis());
-            String curdate = format_date.format(date_now);
+        if(profileImageURI != null){
+            File upfile = new File(profileImageURI);
+            if(upfile != null){
+                SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMdd" );
+                Date date_now = new Date(System.currentTimeMillis());
+                String curdate = format_date.format(date_now);
 
-            Uri profileUri = Uri.fromFile(upfile);
-            String curimgName = profile.uid + "_" + curdate + ".jpg";
+                Uri profileUri = Uri.fromFile(upfile);
+                String curimgName = profile.uid + "_" + curdate + ".jpg";
 
-            StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(profieimgdir).child(profileUri.getLastPathSegment());
-            UploadTask task = storageRef.putFile(profileUri);
+                StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(profieimgdir).child(profileUri.getLastPathSegment());
+                UploadTask task = storageRef.putFile(profileUri);
 
-            task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> uriTask = task.getResult().getStorage().getDownloadUrl();
-                    if(!uriTask.isSuccessful()){
-                        try {
-                            throw uriTask.getException();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            mRecvValProfileListener.onRecvValProfile(false);
+                task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask = task.getResult().getStorage().getDownloadUrl();
+                        if(!uriTask.isSuccessful()){
+                            try {
+                                throw uriTask.getException();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                mRecvValProfileListener.onRecvValProfile(false);
+                            }
                         }
+
+                        Uri downloadUri=uriTask.getResult();
+                        String download_url = downloadUri.toString();
+                        profile.profileimg = curimgName;
+
+                        // 성공한 후에 보내야 한다.
+                        sendValProfile(profile);
                     }
-
-                    Uri downloadUri=uriTask.getResult();
-                    String download_url = downloadUri.toString();
-                    profile.profileimg = curimgName;
-
-                    // 성공한 후에 보내야 한다.
-                    sendValProfile(profile);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(mCurApplicationContext,"fail upload",Toast.LENGTH_SHORT).show();
-                    mRecvValProfileListener.onRecvValProfile(false);
-                }
-            });
-        }else{
-            sendValProfile(profile);
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(mCurApplicationContext,"fail upload",Toast.LENGTH_SHORT).show();
+                        mRecvValProfileListener.onRecvValProfile(false);
+                    }
+                });
+            }else{
+                sendValProfile(profile);
+            }
         }
+
     }
 
     //==============================================================================
@@ -3351,8 +3355,8 @@ public class NetServiceManager {
     //  1. 녹음 시작
     //    Thread mMyContentsRecordThread;
     MediaRecorder mMycContentsRecorder = null;
-    String mMyContentsPath = null;
-    boolean isMyContentsRecording = false;
+    public String mMyContentsPath = null;
+    public boolean isMyContentsRecording = false;
 
 //    public void callMyContentsRecordThread() {
 //        mMyContentsRecordThread = new Thread(new Runnable() {
