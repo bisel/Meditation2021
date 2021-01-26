@@ -229,12 +229,15 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- 보이스 가능 -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_3"
+            android:id="@+id/layout_voice_enable"
             android:layout_width="154dp"
             android:layout_height="200dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/guideline15"
             app:layout_constraintTop_toBottomOf="@+id/layout_1">
 
@@ -242,10 +245,78 @@
                 android:id="@+id/iv_voice_button"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@drawable/test_voice"
+                android:background="@drawable/test_voice_enble"
                 android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 보이스 잠금 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_voice_lock"
+            android:layout_width="154dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/guideline15"
+            app:layout_constraintTop_toBottomOf="@+id/layout_1">
+
+            <ImageView
+                android:id="@+id/iv_voice_button_lock"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/test_voice_lock"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 1일 한번 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_voice_1day"
+            android:layout_width="154dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/guideline15"
+            app:layout_constraintTop_toBottomOf="@+id/layout_1">
+
+            <ImageView
+                android:id="@+id/iv_voice_button_1day"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/test_voice_com"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_voice_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="110dp"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/psychology_llst_voice_day"
+                android:textColor="@color/white"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

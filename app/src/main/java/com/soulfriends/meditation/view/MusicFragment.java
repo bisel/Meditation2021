@@ -24,10 +24,18 @@ import com.soulfriends.meditation.view.nested.ParentItemAdapter;
 import com.soulfriends.meditation.view.nested.ParentItemViewModel;
 import com.soulfriends.meditation.view.nested.ParentMiddleItemViewModel;
 import com.soulfriends.meditation.view.nested.ParentTopItemViewModel;
+import com.soulfriends.meditation.view.nestedext.ParentBottomItemExtViewModel;
+import com.soulfriends.meditation.view.nestedext.ParentItemExtAdapter;
+import com.soulfriends.meditation.view.nestedext.ParentItemExtViewModel;
+import com.soulfriends.meditation.view.nestedext.ParentMiddleItemExtViewModel;
+import com.soulfriends.meditation.view.nestedext.ParentTopItemExtViewModel;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 public class MusicFragment extends Fragment implements ItemClickListener {
 

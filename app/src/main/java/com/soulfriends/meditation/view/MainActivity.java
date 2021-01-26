@@ -174,7 +174,8 @@ public class MainActivity extends BaseActivity implements ResultListener {
             case UtilAPI.FRAGMENT_SLEEP:
             case UtilAPI.FRAGMENT_MEDITATION:
             case UtilAPI.FRAGMENT_MUSIC:
-            case UtilAPI.FRAGMENT_PROFILE: {
+            case UtilAPI.FRAGMENT_PROFILE:
+            {
                 changeFragment(homeFragment, "HomeFragment");
                 bottomNavigationView.setSelectedItemId(R.id.home_fragment);
             }
@@ -261,6 +262,7 @@ public class MainActivity extends BaseActivity implements ResultListener {
                     case R.id.profile_fragment:
                         changeFragment(profileFragment, "ProfileFragment");
                         return true;
+
                 }
                 return false;
             }
@@ -329,14 +331,33 @@ public class MainActivity extends BaseActivity implements ResultListener {
 
         if (tagFragmentName.equals("HomeFragment")) {
             binding.imageView12.setImageResource(R.drawable.home_bg);
+
+            binding.notiBtn.setVisibility(View.VISIBLE);
+            binding.profileBtn.setVisibility(View.GONE);
+
         } else if (tagFragmentName.equals("MeditationFragment")) {
             binding.imageView12.setImageResource(R.drawable.meditation_bg);
+
+            binding.notiBtn.setVisibility(View.VISIBLE);
+            binding.profileBtn.setVisibility(View.GONE);
+
         } else if (tagFragmentName.equals("SleepFragment")) {
             binding.imageView12.setImageResource(R.drawable.sleep_bg);
+
+            binding.notiBtn.setVisibility(View.VISIBLE);
+            binding.profileBtn.setVisibility(View.GONE);
+
         } else if (tagFragmentName.equals("MusicFragment")) {
             binding.imageView12.setImageResource(R.drawable.music_bg);
+
+            binding.notiBtn.setVisibility(View.VISIBLE);
+            binding.profileBtn.setVisibility(View.GONE);
+
         } else if (tagFragmentName.equals("ProfileFragment")) {
             binding.imageView12.setImageResource(R.drawable.my_bg);
+
+            binding.notiBtn.setVisibility(View.GONE);
+            binding.profileBtn.setVisibility(View.VISIBLE);
         }
     }
 
@@ -415,11 +436,36 @@ public class MainActivity extends BaseActivity implements ResultListener {
             }
             break;
             case R.id.meun_btn: {
-                this.startActivity(new Intent(this, SettingActivity.class));
 
+//                this.startActivity(new Intent(this, SettingActivity.class));
+//                this.overridePendingTransition(0, 0);
+//                finish();
+
+                // 테스트
+
+                this.startActivity(new Intent(this, UserinfoExtActivity.class));
                 this.overridePendingTransition(0, 0);
-
                 finish();
+//
+//                this.startActivity(new Intent(this, MyContentsActivity.class));
+//                //this.startActivity(new Intent(this, FriendEditActivity.class));
+//                //this.startActivity(new Intent(this, NotiActivity.class));
+//
+//                //this.startActivity(new Intent(this, FriendFindActivity.class));
+//                //this.startActivity(new Intent(this, ProfileActivity.class));
+//
+//                //this.startActivity(new Intent(this, UserinfoExtActivity.class));
+//
+//                //this.startActivity(new Intent(this, InAppActivity.class));
+//                this.overridePendingTransition(0, 0);
+//
+//                finish();
+            }
+            break;
+            case R.id.noti_btn: {
+
+                this.startActivity(new Intent(this, NotiActivity.class));
+                this.overridePendingTransition(0, 0);
             }
             break;
         }

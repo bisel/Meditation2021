@@ -125,6 +125,18 @@
                     android:layout_marginBottom="-10dp"
                     app:srcCompat="@drawable/main_icn_played" />
 
+
+                <ImageView
+                    android:id="@+id/iv_state"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_above="@+id/iv_text_bar"
+                    android:layout_alignRight="@id/child_item_title"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@drawable/ctgr_sleep_ms" />
+
                 <!--                android:text="@={viewModel.entity.title}"-->
 
             </RelativeLayout>

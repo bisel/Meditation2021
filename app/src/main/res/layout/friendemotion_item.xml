@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="FriendEmotionItemBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.view.friend.FriendEmotionItemViewModel">
+
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp">
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/social_profileimg"
+            android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="6sp"
+            android:text="TextView"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 감정상태-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_basebt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+
+            android:layout_marginRight="15dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_basebt"
+                android:layout_width="94dp"
+                android:layout_height="30dp"
+                android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ic_close"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/social_status_btn" />
+
+            <TextView
+                android:id="@+id/tv_emotionstate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+
+                android:layout_marginRight="8dp"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/friendemotion_emotionstate"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_emoticon"
+                app:layout_constraintEnd_toStartOf="@+id/iv_emoticon"
+                app:layout_constraintTop_toTopOf="@+id/iv_emoticon" />
+
+            <ImageView
+                android:id="@+id/iv_emoticon"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+
+                android:layout_marginEnd="14dp"
+                android:layout_marginRight="14dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/iv_basebt"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/social_emoji" />
+
+            <FrameLayout
+                android:id="@+id/ic_close"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:clickable="false"
+                    app:srcCompat="@drawable/del_btn" />
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!-- 감정 공유 요청중 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_requestingbt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+
+            android:layout_marginRight="15dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_ingbt"
+                android:layout_width="94dp"
+                android:layout_height="30dp"
+                android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ic_close_ing"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/social_requested_btn" />
+
+            <TextView
+                android:id="@+id/tv_emotioning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/friendemotion_emotionrequesting"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_ingbt"
+                app:layout_constraintEnd_toEndOf="@+id/iv_ingbt"
+                app:layout_constraintStart_toStartOf="@+id/iv_ingbt"
+                app:layout_constraintTop_toTopOf="@+id/iv_ingbt" />
+
+            <FrameLayout
+                android:id="@+id/ic_close_ing"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:clickable="false"
+                    app:srcCompat="@drawable/del_btn" />
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!-- 감정 공유 요청 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_requestbt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+
+            android:layout_marginRight="15dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_requestbt"
+                android:layout_width="94dp"
+                android:layout_height="30dp"
+                android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ic_close_req"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/social_share_btn" />
+
+            <TextView
+                android:id="@+id/tv_emotionreq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/friendemotion_emotionrequest"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_requestbt"
+                app:layout_constraintEnd_toEndOf="@+id/iv_requestbt"
+                app:layout_constraintStart_toStartOf="@+id/iv_requestbt"
+                app:layout_constraintTop_toTopOf="@+id/iv_requestbt" />
+
+            <FrameLayout
+                android:id="@+id/ic_close_req"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:clickable="false"
+                    app:srcCompat="@drawable/share_btn" />
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

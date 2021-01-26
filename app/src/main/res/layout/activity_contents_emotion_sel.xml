@@ -1,0 +1,973 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="ContentsEmotionSelBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.ContentsEmotionSelViewModel">
+
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.ContentsEmotionSelActivity">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/test_feeling_bg"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/ic_close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="31dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="11.4dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:clickable="false"
+                android:gravity="center_horizontal"
+                android:textColor="@color/white"
+                app:srcCompat="@drawable/back_btn" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="76dp"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="2sp"
+            android:text="@string/contents_emotionsel_title"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_item1"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_item2"
+            app:layout_constraintEnd_toStartOf="@+id/iv_item2"
+            app:layout_constraintTop_toTopOf="@+id/iv_item2"
+            app:srcCompat="@drawable/social_ctgr_btn_selected" />
+
+        <ImageView
+            android:id="@+id/iv_item2"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="14dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            app:srcCompat="@drawable/social_ctgr_btn" />
+
+        <ImageView
+            android:id="@+id/iv_item3"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_item2"
+            app:layout_constraintStart_toEndOf="@+id/iv_item2"
+            app:layout_constraintTop_toTopOf="@+id/iv_item2"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/social_ctgr_btn" />
+
+        <ImageView
+            android:id="@+id/iv_registerbg"
+            android:layout_width="320dp"
+            android:layout_height="54dp"
+            android:layout_marginTop="30dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gridLayout"
+            android:background="@drawable/social_content_upload" />
+
+        <TextView
+            android:id="@+id/tv_text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="8sp"
+            android:text="@string/contents_emotionsel_text1"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_item1"
+            app:layout_constraintEnd_toEndOf="@+id/iv_item1"
+            app:layout_constraintStart_toStartOf="@+id/iv_item1"
+            app:layout_constraintTop_toTopOf="@+id/iv_item1" />
+
+        <TextView
+            android:id="@+id/tv_text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="8sp"
+            android:text="@string/contents_emotionsel_text2"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_item2"
+            app:layout_constraintEnd_toEndOf="@+id/iv_item2"
+            app:layout_constraintStart_toStartOf="@+id/iv_item2"
+            app:layout_constraintTop_toTopOf="@+id/iv_item2" />
+
+        <TextView
+            android:id="@+id/tv_text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="8sp"
+            android:text="@string/contents_emotionsel_text3"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_item3"
+            app:layout_constraintEnd_toEndOf="@+id/iv_item3"
+            app:layout_constraintStart_toStartOf="@+id/iv_item3"
+            app:layout_constraintTop_toTopOf="@+id/iv_item3" />
+
+        <TextView
+            android:id="@+id/tv_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="8sp"
+            android:text="@string/contents_emotionsel_register"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_registerbg"
+            app:layout_constraintEnd_toEndOf="@+id/iv_registerbg"
+            app:layout_constraintStart_toStartOf="@+id/iv_registerbg"
+            app:layout_constraintTop_toTopOf="@+id/iv_registerbg" />
+
+
+        <GridLayout
+            android:id="@+id/gridLayout"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="178dp"
+            android:columnCount="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_1"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_01" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_01"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_2"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_02" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_02"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_3"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_03" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_03"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_4"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_04" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_04"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:layout_weight="0.2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_5"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_05" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="0dp"
+                        android:fontFamily="@font/font_notosanskr_medium"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="-4dp"
+                        android:text="@string/emoticon_05"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_6"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_06" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_06"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_7"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_07" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_07"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_8"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_08" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_08"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:layout_weight="0.2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_9"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_09" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_09"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_10"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_10" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_10"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_11"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_11" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_11"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_12"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_12" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_12"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:layout_weight="0.2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_13"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_13" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_13"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_14"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_14" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_14"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_15"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_15" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_15"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+
+                <RelativeLayout
+                    android:id="@+id/lay_16"
+                    android:layout_width="76dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/feeling_bg"
+                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="22dp"
+                        android:layout_marginRight="22dp"
+                        app:srcCompat="@drawable/emoti_16" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+
+                        android:fontFamily="@font/font_notosanskr_medium"
+
+                        android:gravity="center_horizontal|center_vertical"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="-0.01"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/emoticon_16"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2" />
+            </LinearLayout>
+
+        </GridLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

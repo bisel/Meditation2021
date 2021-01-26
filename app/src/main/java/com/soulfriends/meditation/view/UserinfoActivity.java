@@ -14,9 +14,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.soulfriends.meditation.R;
-import com.soulfriends.meditation.databinding.ActivityUserinfoBinding;
+import com.soulfriends.meditation.databinding.UserinfoBinding;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.PreferenceManager;
@@ -26,9 +27,9 @@ import com.soulfriends.meditation.viewmodel.UserinfoViewModel;
 import com.soulfriends.meditation.viewmodel.UserinfoViewModelFactory;
 
 
-public class UserinfoActivity extends AppCompatActivity implements ResultListener {
+public class UserinfoActivity extends PhotoBaseActivity implements ResultListener {
 
-    private ActivityUserinfoBinding binding;
+    private UserinfoBinding binding;
     private UserinfoViewModel viewModel;
     private ViewModelStore viewModelStore = new ViewModelStore();
     private UserinfoViewModelFactory userinfoViewModelFactory;
@@ -315,43 +316,36 @@ public class UserinfoActivity extends AppCompatActivity implements ResultListene
                 userProfile.uid = mAuth.getCurrentUser().getUid();
                 userProfile.nickname = viewModel.getNickname().getValue();
                 NetServiceManager.getinstance().sendValProfile(userProfile);
-                //myRef.setValue(userProfile);
 
-                //this.startActivity(new Intent(this, LoadingActivity.class));
+            }
+            break;
+            case R.id.iv_picture: {
 
-               // int xx = 0;
+                // 썹네일 이미지 선택시
 
-//                FirebaseDatabase.getInstance()
-//                                    .getReference("images")
-//                                    .child(imageUid)
-//                                    .child("comments")
-//                                    .push()
-//                                    .setValue(comment);
+                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+                bottomSheetDialog.setContentView(R.layout.layout_photo_sheetdialog);
+                bottomSheetDialog.show();
 
-//                databaseReference
-//                        .child("users")
-//                        .child(firebaseUser.getUid())
-//                        .setValue(User.fromFirebaseUser(application.firebaseUser))
-//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void aVoid) {
-//                                startActivity(MainActivity.createIntent(SplashActivity.this));
-//                                finish();
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                showSnackbar(R.string.error_user_registration_failed);
-//                            }
-//                        })
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                Log.d(TAG, "complete");
-//                            }
-//                        });
+                View view_gallery = bottomSheetDialog.findViewById(R.id.layer_gallery);
 
+                view_gallery.setOnClickListener(v -> {
+
+                    getAlbum();
+
+                    bottomSheetDialog.dismiss();
+
+                });
+
+                View view_photo = bottomSheetDialog.findViewById(R.id.layer_photo);
+
+                view_photo.setOnClickListener(v -> {
+
+                    captureCamera();
+
+                    bottomSheetDialog.dismiss();
+
+                });
             }
             break;
         }
@@ -370,4 +364,15 @@ public class UserinfoActivity extends AppCompatActivity implements ResultListene
             break;
         }
     }
+
+    @Override
+    public void OnSuccess_ImageCrop()
+    {
+        // 썹네일 성공시
+        // 이미지 show
+
+        binding.ivPicture.setImageURI(albumURI);
+
+    }
+
 }

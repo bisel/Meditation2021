@@ -3,17 +3,29 @@ package com.soulfriends.meditation.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.text.Layout;
+import android.text.SpannableString;
+import android.text.style.AlignmentSpan;
+import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
@@ -86,6 +98,34 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
         // bg
         UtilAPI.load_image(this, meditationContents.bgimg, binding.ivBg1);
+
+        // 제작 , 마이, 친구 분리
+
+        UtilAPI.s_playerMode = UtilAPI.PlayerMode.friend;
+        switch(UtilAPI.s_playerMode)
+        {
+            case base:
+            {
+                binding.layoutBase.setVisibility(View.VISIBLE);
+                binding.layoutBaseMy.setVisibility(View.GONE);
+                binding.layoutBaseFriend.setVisibility(View.GONE);
+            }
+            break;
+            case my:
+            {
+                binding.layoutBase.setVisibility(View.GONE);
+                binding.layoutBaseMy.setVisibility(View.VISIBLE);
+                binding.layoutBaseFriend.setVisibility(View.GONE);
+            }
+            break;
+            case friend:
+            {
+                binding.layoutBase.setVisibility(View.GONE);
+                binding.layoutBaseMy.setVisibility(View.GONE);
+                binding.layoutBaseFriend.setVisibility(View.VISIBLE);
+            }
+            break;
+        }
 
         // 플레이 화면에서 "나레이터 저자"순으로 보이면 1, "아티스트"만 보이면 2, 아무것도 안보이면 ,0
         if (meditationContents.showtype == 1) {
@@ -321,6 +361,84 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             }
         }
 
+
+        //-----------------------------------------------------------------------------
+        // 친구 플레이어
+        //-----------------------------------------------------------------------------
+        findViewById(R.id.iv_friend_report).setOnClickListener(v -> {
+
+            Context c = PlayerActivity.this;
+
+            c.setTheme(R.style.PopupMenu);
+            //PopupMenu popupMenu = new PopupMenu(c,view);
+            PopupMenu popupMenu = new PopupMenu(c, v, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
+            getMenuInflater().inflate(R.menu.popup_friendplayer, popupMenu.getMenu());
+
+            Menu menu = popupMenu.getMenu();
+            {
+                MenuItem item = menu.findItem(R.id.action_menu1);
+                SpannableString s = new SpannableString(PlayerActivity.this.getResources().getString(R.string.popup_menu_report));
+                s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
+                s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
+                item.setTitle(s);
+            }
+
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    if (menuItem.getItemId() == R.id.action_menu1) {
+                        Toast.makeText(PlayerActivity.this, "수정하기 클릭", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(PlayerActivity.this, "삭제하기 클릭", Toast.LENGTH_SHORT).show();
+                    }
+
+                    return false;
+                }
+            });
+            popupMenu.show();
+        });
+        //-----------------------------------------------------------------------------
+        // 마이 플레이어
+        //-----------------------------------------------------------------------------
+
+        findViewById(R.id.iv_modify_my).setOnClickListener(v -> {
+
+            Context c = PlayerActivity.this;
+
+            c.setTheme(R.style.PopupMenu);
+            //PopupMenu popupMenu = new PopupMenu(c,view);
+            PopupMenu popupMenu = new PopupMenu(c, v, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
+            getMenuInflater().inflate(R.menu.popup_myplayer, popupMenu.getMenu());
+
+            Menu menu = popupMenu.getMenu();
+            {
+                MenuItem item = menu.findItem(R.id.action_menu1);
+                SpannableString s = new SpannableString(PlayerActivity.this.getResources().getString(R.string.popup_menu_modify));
+                s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
+                s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
+                item.setTitle(s);
+
+                MenuItem item1 = menu.findItem(R.id.action_menu2);
+                SpannableString s1 = new SpannableString(PlayerActivity.this.getResources().getString(R.string.popup_menu_delete));
+                s1.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s1.length(), 0);
+                s1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s1.length(), 0);
+                item1.setTitle(s1);
+            }
+
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    if (menuItem.getItemId() == R.id.action_menu1) {
+                        Toast.makeText(PlayerActivity.this, "수정하기 클릭", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(PlayerActivity.this, "삭제하기 클릭", Toast.LENGTH_SHORT).show();
+                    }
+
+                    return false;
+                }
+            });
+            popupMenu.show();
+        });
     }
 
     @Override

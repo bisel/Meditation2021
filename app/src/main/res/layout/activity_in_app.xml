@@ -1,0 +1,354 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="InAppBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.InAppViewModel">
+
+        </variable>
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1b1e2c"
+    tools:context=".view.InAppActivity">
+
+    <FrameLayout
+        android:id="@+id/iv_close"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:background="@drawable/close_btn"
+        android:clickable="false" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="@string/inapp_title"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:includeFontPadding="false"
+        android:textColor="#c4d2ff"
+        android:lineSpacingExtra="8sp"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:text="@string/inapp_text1"
+        android:fontFamily="@font/font_notosanskr_regular"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="6sp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+    <TextView
+        android:id="@+id/tv_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/inapp_text2"
+        android:fontFamily="@font/font_notosanskr_regular"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="6sp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_text1" />
+
+    <TextView
+        android:id="@+id/tv_text3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/inapp_text3"
+        android:fontFamily="@font/font_notosanskr_regular"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="6sp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_text2" />
+
+    <TextView
+        android:id="@+id/tv_text4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/inapp_text4"
+        android:fontFamily="@font/font_notosanskr_regular"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="6sp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_text3" />
+
+    <ImageView
+        android:id="@+id/imageView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_text1"
+        app:layout_constraintEnd_toStartOf="@+id/tv_text1"
+        app:layout_constraintTop_toTopOf="@+id/tv_text1"
+        app:srcCompat="@drawable/membership_heart" />
+
+    <ImageView
+        android:id="@+id/imageView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_text2"
+        app:layout_constraintEnd_toStartOf="@+id/tv_text2"
+        app:layout_constraintTop_toTopOf="@+id/tv_text2"
+        app:srcCompat="@drawable/membership_heart" />
+
+    <ImageView
+        android:id="@+id/imageView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_text3"
+        app:layout_constraintEnd_toStartOf="@+id/tv_text3"
+        app:layout_constraintTop_toTopOf="@+id/tv_text3"
+        app:srcCompat="@drawable/membership_heart" />
+
+    <ImageView
+        android:id="@+id/imageView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_text4"
+        app:layout_constraintEnd_toStartOf="@+id/tv_text4"
+        app:layout_constraintTop_toTopOf="@+id/tv_text4"
+        app:srcCompat="@drawable/membership_heart" />
+
+    <TextView
+        android:id="@+id/tv_free"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/inapp_free"
+        android:fontFamily="@font/font_notosanskr_regular"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="9sp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_text4" />
+
+    <TextView
+        android:id="@+id/tv_freeauto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/inapp_freeauto"
+        android:fontFamily="@font/font_notosanskr_regular"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="6sp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_free" />
+
+    <ImageView
+        android:id="@+id/iv_bt12"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+        android:layout_marginTop="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_freeauto"
+        android:background="@drawable/membership_12_mon" />
+
+    <ImageView
+        android:id="@+id/iv_bt1"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="6dp"
+        android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_bt12"
+        android:background="@drawable/membership_1_mon" />
+
+    <ImageView
+        android:id="@+id/iv_startbg"
+        android:layout_width="300dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="58dp"
+        android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_bt1"
+        app:srcCompat="@drawable/startmembership_btn" />
+
+    <TextView
+        android:id="@+id/tv_12mon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginLeft="26dp"
+        android:text="@string/inapp_12mon"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="8sp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_bt12"
+        app:layout_constraintStart_toStartOf="@+id/iv_bt12"
+        app:layout_constraintTop_toTopOf="@+id/iv_bt12" />
+
+    <ImageView
+        android:id="@+id/iv_salebg"
+        android:layout_width="60dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_12mon"
+        app:layout_constraintStart_toEndOf="@+id/tv_12mon"
+        app:layout_constraintTop_toTopOf="@+id/tv_12mon"
+        app:srcCompat="@drawable/membership_50_per" />
+
+    <TextView
+        android:id="@+id/tv_money_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:text="@string/inapp_money_year"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:includeFontPadding="false"
+        android:textColor="#c1fffa"
+        android:lineSpacingExtra="8sp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_bt12"
+        app:layout_constraintTop_toTopOf="@+id/iv_bt12" />
+
+    <TextView
+        android:id="@+id/tv_money_mon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/inapp_money_mon"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="6sp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_money_year"
+        app:layout_constraintTop_toBottomOf="@+id/tv_money_year" />
+
+    <TextView
+        android:id="@+id/tv_sale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/inapp_sale50"
+        android:fontFamily="@font/font_notosanskr_regular"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="-2sp"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_salebg"
+        app:layout_constraintEnd_toEndOf="@+id/iv_salebg"
+        app:layout_constraintStart_toEndOf="@+id/tv_12mon"
+        app:layout_constraintTop_toTopOf="@+id/iv_salebg" />
+
+    <TextView
+        android:id="@+id/tv_1mon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="31dp"
+        android:layout_marginLeft="31dp"
+        android:text="@string/inapp_1mon"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="8sp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_bt1"
+        app:layout_constraintStart_toStartOf="@+id/iv_bt1"
+        app:layout_constraintTop_toTopOf="@+id/iv_bt1" />
+
+    <TextView
+        android:id="@+id/tv_money_mon1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginRight="26dp"
+        android:text="@string/inapp_money_mon1"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:includeFontPadding="false"
+        android:textColor="#b7d3ff"
+        android:lineSpacingExtra="8sp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_bt1"
+        app:layout_constraintEnd_toEndOf="@+id/iv_bt1"
+        app:layout_constraintTop_toTopOf="@+id/iv_bt1"
+        app:layout_constraintVertical_bias="0.137" />
+
+    <TextView
+        android:id="@+id/tv_money_monper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/inapp_money_monper"
+        android:fontFamily="@font/font_notosanskr_medium"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="6sp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_money_mon1"
+        app:layout_constraintTop_toBottomOf="@+id/tv_money_mon1" />
+
+    <TextView
+        android:id="@+id/tv_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/inapp_start"
+        android:fontFamily="@font/font_notosanskr_regular"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:lineSpacingExtra="8sp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_startbg"
+        app:layout_constraintEnd_toEndOf="@+id/iv_startbg"
+        app:layout_constraintStart_toStartOf="@+id/iv_startbg"
+        app:layout_constraintTop_toTopOf="@+id/iv_startbg" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </layout>

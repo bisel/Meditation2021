@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
+        android:background="#1e2839"
         tools:context=".view.TimerActivity">
 
         <TextView
@@ -28,7 +28,7 @@
             android:includeFontPadding="false"
             android:lineSpacingExtra="9sp"
             android:text="@string/time_title"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +73,7 @@
             android:gravity="center"
             android:includeFontPadding="false"
             android:text="@string/time_curtimer"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +88,7 @@
             android:gravity="center"
             android:includeFontPadding="false"
             android:text="@{viewModel.strCurTime}"
-            android:textColor="#000000"
+            android:textColor="#88baff"
             android:textSize="50sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +109,7 @@
             android:lines="2"
             android:maxLines="4"
             android:text="@string/time_context"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -131,6 +131,7 @@
                 android:id="@+id/np_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:theme="@style/AppTheme.NumberPicker" />
 
             <TextView
@@ -139,6 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/time_hour"
+                android:textColor="@color/white"
                 android:textSize="24sp"
                 android:visibility="gone" />
 
@@ -155,6 +157,7 @@
                 android:id="@+id/np_minute"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:theme="@style/AppTheme.NumberPicker" />
 
             <TextView
@@ -165,6 +168,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/time_minute"
+                android:textColor="@color/white"
                 android:textSize="24sp"
                 android:visibility="gone" />
 

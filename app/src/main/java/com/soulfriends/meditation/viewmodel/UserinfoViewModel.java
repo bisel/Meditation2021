@@ -15,6 +15,8 @@ public class UserinfoViewModel extends ViewModel {
 
     public MutableLiveData<String> nickname = new MutableLiveData<>();
 
+    public MutableLiveData<String> introduction = new MutableLiveData<>();
+
     private ResultListener listener;
 
     private Context context;
@@ -28,32 +30,13 @@ public class UserinfoViewModel extends ViewModel {
         nickname.setValue("");
     }
 
-//    public void OnNicknameDoubleClicked(View view)
-//    {
-//        if (!TextUtils.isEmpty(nickname.getValue())) {
-//            this.listener.onSuccess(view.getId(),"Success!");
-//        }
-//        else
-//        {
-//            this.listener.onFailure(view.getId(), "Failure!");
-//        }
-//    }
+    public MutableLiveData<String> getIntroduction() {
+        return introduction;
+    }
 
     public MutableLiveData<String> getNickname() {
         return nickname;
     }
-
-//    public void OnClick_Man(View view) {
-//        this.listener.onSuccess(view.getId(), "Success!");
-//    }
-//
-//    public void OnClick_Woman(View view) {
-//        this.listener.onSuccess(view.getId(), "Success!");
-//    }
-//
-//    public void OnOKClicked(View view) {
-//        this.listener.onSuccess(view.getId(), "Success!");
-//    }
 
     public void OnClick_Select(View view) {
 

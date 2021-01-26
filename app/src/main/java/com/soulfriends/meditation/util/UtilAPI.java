@@ -43,6 +43,9 @@ public class UtilAPI {
     public static boolean s_bEvent_service_player_stop = false;
     public static boolean s_bEvent_service_player_timer_stop = false;
 
+    // 백그라운드 이미지 아이디
+    public static int s_id_background_image = -1;
+
     public static final String FRAGMENT_HOME = "HomeFragment";
     public static final String FRAGMENT_SLEEP = "SleepFragment";
     public static final String FRAGMENT_MEDITATION = "MeditationFragment";
@@ -50,6 +53,7 @@ public class UtilAPI {
     public static final String FRAGMENT_PROFILE = "ProfileFragment";
 
     public static String s_StrMainFragment = FRAGMENT_HOME;
+
 
 
     public static boolean s_bShowTimerPopup = false;
@@ -93,6 +97,16 @@ public class UtilAPI {
     public static void ClearActivityInPlayerList() {
         s_activityInPlayerList.clear();
     }
+
+
+    public enum PlayerMode
+    {
+        base,
+        my,
+        friend,
+    }
+
+    public static PlayerMode s_playerMode = PlayerMode.base;
 
     public static void SetFullScreen(android.view.Window window) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -225,6 +239,9 @@ public class UtilAPI {
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
+
+
+
     public static void Init()
     {
         s_bEvent_service = false;
@@ -247,5 +264,9 @@ public class UtilAPI {
         s_bShowTimerPopup = false;
 
         s_psychology_state = -1;
+
+        s_id_background_image = -1;
+
+        s_playerMode = PlayerMode.base;
     }
 }

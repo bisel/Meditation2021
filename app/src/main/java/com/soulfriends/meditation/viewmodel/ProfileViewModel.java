@@ -22,6 +22,9 @@ public class ProfileViewModel extends ViewModel {
     public MutableLiveData<String> feelstate = new MutableLiveData<>();
     public MutableLiveData<String> charstate = new MutableLiveData<>();  // 2020.12.24
 
+    // 3 / 10
+    public MutableLiveData<String> contents_make_number = new MutableLiveData<>();
+
     private ResultListener listener;
 
     private Context context;

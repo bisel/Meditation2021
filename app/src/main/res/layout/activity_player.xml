@@ -94,140 +94,291 @@
 <!--            app:layout_constraintEnd_toEndOf="parent"-->
 <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-
-        <FrameLayout
-            android:id="@+id/bt_info"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
-            app:layout_constraintBottom_toTopOf="@+id/textView5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:background="@drawable/info_btn" />
-
-        </FrameLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_artist"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="false"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline6">
-
-            <TextView
-                android:id="@+id/tv_artist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:fontFamily="@font/font_notosanskr_regular"
-                android:includeFontPadding="false"
-                android:text="@string/player_artist"
-                android:textColor="#ccffffff"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tv_artist_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:fontFamily="@font/font_notosanskr_medium"
-                android:includeFontPadding="false"
-                android:text="@={viewModel.artist}"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-            <!--                android:text="@={viewModel.narrtor}"-->
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/layout_text_two"
+        <!-- 친구  ui-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_base_friend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.439"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline6">
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/iv_profile_icon"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginEnd="8dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                android:layout_marginRight="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_nickname"
+                app:layout_constraintEnd_toStartOf="@+id/tv_nickname"
+                app:layout_constraintTop_toTopOf="@+id/tv_nickname"
+                app:srcCompat="@drawable/player_profileimg" />
+
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="69dp"
+                android:text="TextView"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_friend" />
+
+            <ImageView
+                android:id="@+id/iv_friend_state"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_nickname"
+                app:layout_constraintStart_toEndOf="@+id/tv_nickname"
+                app:layout_constraintTop_toTopOf="@+id/tv_nickname"
+                app:srcCompat="@drawable/friend_add_1" />
+
+            <TextView
+                android:id="@+id/tv_title_friend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="140dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:includeFontPadding="false"
+                android:text="@={viewModel.title}"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:id="@+id/iv_friend_report"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="76dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="16dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:gravity="center_horizontal"
+                    app:srcCompat="@drawable/player_more" />
+
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 플레이어 my ui-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_base_my"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_modify_my"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_my"
+                app:srcCompat="@drawable/player_edit" />
+
+            <TextView
+                android:id="@+id/tv_title_my"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="140dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:includeFontPadding="false"
+                android:text="@={viewModel.title}"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 제공 ui-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="140dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:includeFontPadding="false"
+                android:text="@={viewModel.title}"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:id="@+id/bt_info"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintBottom_toTopOf="@+id/tv_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteX="150dp"
+                tools:layout_editor_absoluteY="75dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:background="@drawable/info_btn" />
+
+            </FrameLayout>
 
             <LinearLayout
+                android:id="@+id/layout_artist"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="false"
-                android:layout_marginStart="68dp"
-                android:layout_marginLeft="68dp"
                 android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline_88">
 
                 <TextView
-                    android:id="@+id/tv_narrator"
+                    android:id="@+id/tv_artist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:fontFamily="@font/font_notosanskr_regular"
                     android:includeFontPadding="false"
-                    android:text="@string/player_narrrator"
+                    android:text="@string/player_artist"
                     android:textColor="#ccffffff"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/tv_narrator_name"
+                    android:id="@+id/tv_artist_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:fontFamily="@font/font_notosanskr_medium"
                     android:includeFontPadding="false"
-                    android:text="@={viewModel.narrtor}"
+                    android:text="@={viewModel.artist}"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
                 <!--                android:text="@={viewModel.narrtor}"-->
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
+                android:id="@+id/layout_text_two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.439"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline_88">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="false"
+                    android:layout_marginStart="68dp"
+                    android:layout_marginLeft="68dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_narrator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/font_notosanskr_regular"
+                        android:includeFontPadding="false"
+                        android:text="@string/player_narrrator"
+                        android:textColor="#ccffffff"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_narrator_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/font_notosanskr_medium"
+                        android:includeFontPadding="false"
+                        android:text="@={viewModel.narrtor}"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                    <!--                android:text="@={viewModel.narrtor}"-->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="79dp"
+                    android:layout_marginRight="79dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/font_notosanskr_regular"
+                        android:includeFontPadding="false"
+                        android:text="@string/player_author"
+                        android:textColor="#ccffffff"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_author_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/font_notosanskr_medium"
+                        android:includeFontPadding="false"
+                        android:text="@={viewModel.author}"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <!--                android:text="@={viewModel.author}"-->
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_88"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginEnd="79dp"
-                android:layout_marginRight="79dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="230dp" />
 
-                <TextView
-                    android:id="@+id/tv_author"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:fontFamily="@font/font_notosanskr_regular"
-                    android:includeFontPadding="false"
-                    android:text="@string/player_author"
-                    android:textColor="#ccffffff"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tv_author_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:fontFamily="@font/font_notosanskr_medium"
-                    android:includeFontPadding="false"
-                    android:text="@={viewModel.author}"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
-
-                <!--                android:text="@={viewModel.author}"-->
-            </LinearLayout>
-
-
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 <!--        인포 처리를 해야 한다.-->
 <!--        <Button-->
@@ -266,7 +417,7 @@
             android:fontFamily="@font/font_notosanskr_medium"
             android:includeFontPadding="false"
             android:text="@{viewModel.timer_time}"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@+id/bt_timer"
             app:layout_constraintHorizontal_bias="0.476"
@@ -310,28 +461,16 @@
 
 <!--        </ProgressBar>-->
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="140dp"
-            android:text="@={viewModel.title}"
-            android:textColor="@color/white"
-            android:includeFontPadding="false"
-            android:fontFamily="@font/font_notosanskr_medium"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
 
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="230dp" />
+
+<!--        <androidx.constraintlayout.widget.Guideline-->
+<!--            android:id="@+id/guideline6"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            app:layout_constraintGuide_begin="230dp" />-->
 
 <!--        <include  android:layout_width="match_parent"-->
 <!--            android:layout_height="wrap_content"-->
@@ -386,7 +525,7 @@
                 android:includeFontPadding="false"
                 android:lineSpacingExtra="5sp"
                 android:text="@string/player_balloon_timer"
-                android:textColor="#ffffffff"
+                android:textColor="@color/black"
                 android:textSize="10sp" />
         </RelativeLayout>
 
@@ -467,6 +606,8 @@
                 android:textColor="#000000"
                 android:textSize="10sp" />
         </RelativeLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

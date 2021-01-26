@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
@@ -65,10 +66,10 @@ public class SettingActivity extends BaseActivity implements ResultListener {
         // switch 초기값 설정
         binding.switchSound.setChecked(!sound_off);
 
-        switch_scale_x = binding.switchSound.getScaleX();
-        switch_scale_y = binding.switchSound.getScaleY();
+        //switch_scale_x = binding.switchSound.getScaleX();
+        //switch_scale_y = binding.switchSound.getScaleY();
 
-       // binding.switchNoti.setOnCheckedChangeListener(new noti_SwitchListener());
+        binding.switchNoti2.setOnCheckedChangeListener(new noti_SwitchListener());
         binding.switchSound.setOnCheckedChangeListener(new sound_SwitchListener());
     }
 
@@ -76,8 +77,8 @@ public class SettingActivity extends BaseActivity implements ResultListener {
     protected void onStart() {
         super.onStart();
 
-        binding.switchSound.setScaleX(switch_scale_x * 0.5f);
-        binding.switchSound.setScaleY(switch_scale_y * 0.5f);
+        //binding.switchSound.setScaleX(switch_scale_x * 0.5f);
+        //binding.switchSound.setScaleY(switch_scale_y * 0.5f);
 
     }
 
@@ -189,9 +190,14 @@ public class SettingActivity extends BaseActivity implements ResultListener {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if(isChecked) {
                 PreferenceManager.setBoolean(buttonView.getContext(),"bool_noti", true);
+
+                Toast.makeText(getApplicationContext(),"noti true",Toast.LENGTH_SHORT).show();
             }
             else {
                 PreferenceManager.setBoolean(buttonView.getContext(),"bool_noti", false);
+
+                Toast.makeText(getApplicationContext(),"noti false",Toast.LENGTH_SHORT).show();
+
             }
         }
     }
