@@ -21,13 +21,23 @@ public class UserProfile {
     public int  myemotiontype = 0;
     public int  donefirstpopup = 0;    // 처음 팝업여부
 
+    public int  donevoicetermpopup = 0;    // 목소리 분석 약관 동의 여부 -> 2021.01.22
+    public int  isPayUser = 0; // 1 : 결제한 사람 , 로그인할때 검증 -> 2021.01.22
+
     public String finaltestdate;       // 심리 검사 시간
     public String finalchartestdate;   // 성격 검사 시간     // 2020.12.21
     public String finalvoicetestdate;  // 목소리 분석 시간   // 2020.12.21
+
+
     public boolean mIsDoneTest = false;
+
+    //public String profileImgURI;   // 이미지 프로필 이미지 위치. 2021.01.21
+    public String profileIntro;    // 프로필 Intro . 2021.01.21
 
     public Map<String, Boolean> favoriteslist = new HashMap<>(); // 2020.11.25 처리
     public ArrayList<String> recentplaylist = new ArrayList<String>(); // 2020.12.21
+
+    public ArrayList<String> mycontentslist = new ArrayList<String>(); // 2021.01.22
 
     public void allClear()
     {

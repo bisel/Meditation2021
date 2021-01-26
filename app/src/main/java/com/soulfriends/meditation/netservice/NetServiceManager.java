@@ -9,13 +9,30 @@ import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.model.MediationShowContents;
 import com.soulfriends.meditation.model.MeditationCategory;
@@ -37,15 +54,6 @@ import com.soulfriends.meditation.parser.VoiceAnalysisData;
 import com.soulfriends.meditation.parser.VoiceData;
 import com.soulfriends.meditation.util.PreferenceManager;
 import com.soulfriends.meditation.util.UtilAPI;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,6 +62,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,6 +82,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.soulfriends.meditation.netservice.NetServiceUtility.mycontentsaudiodir;
+import static com.soulfriends.meditation.netservice.NetServiceUtility.mycontentsthumnaildir;
+import static com.soulfriends.meditation.netservice.NetServiceUtility.profieimgdir;
 import static java.util.Arrays.asList;
 
 public class NetServiceManager {
@@ -123,9 +135,11 @@ public class NetServiceManager {
     private ByteArrayList fArrayList = null;
     private FileOutputStream fos = null;
     private String contentsInfoString = "meditationext_mind"; //
+    private String socialContentsInfoString = "social_meditationext_mind"; //
     private String contentsCharInfoString = "meditationchartag_mind";//
 
     public ArrayList<MeditationContents> mContentsList = new ArrayList<MeditationContents>();
+    public ArrayList<MeditationContents> mSocialContentsList = new ArrayList<MeditationContents>();
     public ArrayList<MeditationContentsCharInfo> mContentsCharinfoList = new ArrayList<MeditationContentsCharInfo>();
 
     private DatabaseReference mfbDBRef;
@@ -321,6 +335,7 @@ public class NetServiceManager {
     {
        mContentsList.clear();
        mContentsCharinfoList.clear();
+       mSocialContentsList.clear();
     }
 
     //========================================================
@@ -348,6 +363,69 @@ public class NetServiceManager {
                     mRecvValProfileListener.onRecvValProfile(false);
                 }
             });
+        }
+    }
+
+    // 2021.01.21
+    // 기존 prevProfile에 새롭게 입력하려는 것
+    // 수정일 경우 nickname, intro, profileImageURI 중에서 수정안하는 것은 null로 준다.
+    public void sendValNewProfileExt(UserProfile profile, String nickName, String intro, String profileImageURI){
+        // 1. 기존 NickName있으면 삭제
+        if(nickName != null){
+            DatabaseReference prevRef = mfbDBRef.child("nick").child(profile.nickname);
+            if(prevRef != null){
+                prevRef.removeValue();
+                profile.nickname = nickName;
+            }
+        }
+
+        // 2. intro 확인
+        if(intro != null){
+            profile.profileIntro = intro;
+        }
+
+        // 3. profileImageURI 확인
+        File upfile = new File(profileImageURI);
+        if(upfile != null){
+            SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMdd" );
+            Date date_now = new Date(System.currentTimeMillis());
+            String curdate = format_date.format(date_now);
+
+            Uri profileUri = Uri.fromFile(upfile);
+            String curimgName = profile.uid + "_" + curdate + ".jpg";
+
+            StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(profieimgdir).child(profileUri.getLastPathSegment());
+            UploadTask task = storageRef.putFile(profileUri);
+
+            task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> uriTask = task.getResult().getStorage().getDownloadUrl();
+                    if(!uriTask.isSuccessful()){
+                        try {
+                            throw uriTask.getException();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            mRecvValProfileListener.onRecvValProfile(false);
+                        }
+                    }
+
+                    Uri downloadUri=uriTask.getResult();
+                    String download_url = downloadUri.toString();
+                    profile.profileimg = curimgName;
+
+                    // 성공한 후에 보내야 한다.
+                    sendValProfile(profile);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(mCurApplicationContext,"fail upload",Toast.LENGTH_SHORT).show();
+                    mRecvValProfileListener.onRecvValProfile(false);
+                }
+            });
+        }else{
+            sendValProfile(profile);
         }
     }
 
@@ -438,6 +516,64 @@ public class NetServiceManager {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 mRecvContentsListener.onRecvContents(false);
+            }
+        });
+    }
+
+
+    //==============================================================================
+    // 해당 콘텐츠 정보를 서버에게 받아야 한다. (로그인할때에만 받아야 한다. 하루 기준)
+    // 해당 정보를 다 받을떄까지 콜백처리 해야 함.
+    // 2021.01.24
+    //==============================================================================
+    private OnSocialRecvContentsListener mSocialRecvContentsListener = null;
+    public interface OnSocialRecvContentsListener {
+        void onSocialRecvContents(boolean validate);
+    }
+    public void setOnSocialRecvContentsListener(OnSocialRecvContentsListener listenfunc){
+        mSocialRecvContentsListener = listenfunc;
+    }
+
+    public void recvSocialContentsExt(){
+        mfbDBRef.child(socialContentsInfoString).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot meditationSnapshot: snapshot.getChildren()) {
+                        MeditationContents contentsdata = meditationSnapshot.getValue(MeditationContents.class);
+
+                        // audio
+                        contentsdata.audio =   NetServiceUtility.audiofiledir + contentsdata.audio + NetServiceUtility.audioextenstion;
+
+                        // thumnail
+                        contentsdata.thumbnail = NetServiceUtility.mycontentsthumnaildir + contentsdata.thumbnail  + NetServiceUtility.imgextenstion;
+
+                        // bg image -> bg는 이미지
+                        // contentsdata.bgimg =   NetServiceUtility.bgimgdir + contentsdata.bgimg + NetServiceUtility.imgextenstion;
+
+                        // showtype결정
+                        if(contentsdata.artist.equals("0")){
+                            if(!contentsdata.author.equals("0")){
+                                contentsdata.showtype = 1;
+                            }else{
+                                contentsdata.showtype = 0;
+                            }
+                        }else{
+                            contentsdata.showtype = 2;
+                        }
+
+                        mSocialContentsList.add(contentsdata);
+                    }
+                    mSocialRecvContentsListener.onSocialRecvContents(true);
+                }
+                else{
+                    mSocialRecvContentsListener.onSocialRecvContents(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                mSocialRecvContentsListener.onSocialRecvContents(false);
             }
         });
     }
@@ -1646,6 +1782,16 @@ public class NetServiceManager {
         for(int i = 0; i < dataNum; i++){
             if(mContentsList.get(i).uid.equals(contentid))
                 return mContentsList.get(i);
+        }
+        return null;
+    }
+
+    // func contents를 얻기 위해서 사용. 그런데 문제는 부모일경우의 처리 후에 필요.  2021.01.22
+    public MeditationContents getSocialContents(String contentid){
+        int dataNum = mSocialContentsList.size();
+        for(int i = 0; i < dataNum; i++){
+            if(mSocialContentsList.get(i).uid.equals(contentid))
+                return mSocialContentsList.get(i);
         }
         return null;
     }
@@ -3084,6 +3230,551 @@ public class NetServiceManager {
         // 중간에 멈쳐야 할 경우 처리
         playVoiceAnalysis = false;
         mVoiceAnalysisThraed.interrupt();
+    }
+
+
+    //==========================================================================================================
+    //  유저 콘텐츠 등록 : 음원파일명, 녹음,파일인지 여부, 생성날짜, 힐링Tag, 저자, 기존 콘텐츠 정보 이용. 콘텐츠 UID
+    //  1. 파일을 먼저 Firebasestorage에 올리고 그 다음에 콘텐츠를 올려야 한다.
+    //==========================================================================================================
+
+    //   현재 알림데서 보았는지 안보았는지에 대한 처리를 해야 한다.
+
+    //=============================================================================================
+    // 콘텐츠 등록
+    //=============================================================================================
+
+    //=============================================================================================
+    // 친구 검색 , 일반친구 신청, 감정친구 신청,  현재 요청중이라는 것이 나와야 하는데 이것은 어떻게???
+    // 1. 특정 사람 검색  : 사람의 프로필 이미지도 보여주어야 한다. 따라서 Profile에 이미지 URL이 있어야 한다.
+    // 2. 친구 List보여주기 : 친구 프로필 이미지도 보여주어야 한다.
+    // 3. 일반 친구 신청
+    // 4. 감정 친구 신청
+    // 5. 친구 해제
+    // 6. 친구 요청중이라는 것
+    // 7. 친구 삭제
+    // 8. 친구 요청 수락과 거절
+    //=============================================================================================
+
+    // 1.사람 검색
+    //   사람의 NickName을 통해서 확인한다. 그리고 Profile정보도 확인해야 한다.
+    //
+    //   현재 감정상태는 UserProfile에 있어야 한다.
+    //   감정고유친구인지, 일반친구인지 확인 , 아닌상태인지.
+    //
+    //   자신의 친구요청, 감정공유 요청 중 정보를 바탕으로 정보.
+    //
+    //   - 파이어베이스에서 해당 Name을 가진 사람들 리스트 검색한다. Profile정보를 받아온다.
+    //   - 자신의 Name은 제거,
+    //
+    //   1) 자신이 친구요청한 리스트, 친구감정공유 리스트를 얻는다.
+    //   2) 나의 친구 리스트 얻어야 한다.(UserProfile)
+
+    //   1. Thumnail 이미지 올리기, 콘텐츠 정보 올리기 img만 그냥 올리자 콘텐츠는 jpg로 하자.
+    //      콘텐츠 정보를 올려야 한다.
+
+
+
+
+    // 요청 리스트를 얻는다. -> 요청리스트를 친구요청과 감정고유 요청을 둘로 나눈다. 아니면 하나로 처리
+    // uid는 아는데 친구정보를 얻어야 한느데.....
+    // https://cionman.tistory.com/72
+
+
+
+    //==============================================================================
+    // 요구사항 1 : 친구의 UID를 통해서 친구 UserProfile 정보를 얻는다. : 함수 필요.
+    //==============================================================================
+    // 1. 친구리스트를 먼저 언어야 한다. uid만 만들어 온다.
+    // 자신의 정보를 이용해서 다른 정보들을 모두 가져온다. join
+    //
+    // 2. 친구 요청, 감정 친구 요청 리스틀 얻어야 한다.
+    //
+    // 3. 핵심은 해당 List의 실시간 여부처리
+    //
+    // 참고사항 : https://m.blog.naver.com/PostView.nhn?blogId=kkrdiamond77&logNo=221305647401&categoryNo=68&proxyReferer=https:%2F%2Fwww.google.com%2F
+    //==============================================================================
+    public void getFriendList() {
+    }
+
+    //public UserProfile OtherUserProfile = new UserProfile();
+
+    private OnRecvOtherProfileListener mRecvOtherProfileListener = null;
+    public interface OnRecvOtherProfileListener {
+        void onRecvOtherProfileListener(boolean validate,UserProfile otherUser);
+    }
+    public void setOnRecvOtherProfileListener(OnRecvOtherProfileListener listenfunc){
+        mRecvOtherProfileListener = listenfunc;
+    }
+
+    public void getOtherUserProfile(String uid) {
+        mfbDBRef.child("users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    UserProfile OtherUserProfile = (UserProfile)snapshot.getValue(UserProfile.class);
+                    mRecvOtherProfileListener.onRecvOtherProfileListener(true,OtherUserProfile);
+                }
+                else{
+                    // 없는 경우 데이터가 올라가지 않음, false이지만 errcode 0
+                    mRecvOtherProfileListener.onRecvOtherProfileListener(false,null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Error처리도 해야 한다.
+                //mRecvContentsListener.onRecvContents(false);
+                mRecvOtherProfileListener.onRecvOtherProfileListener(false,null);
+            }
+        });
+    }
+
+    //==============================================================================
+    // 요구사항 2 : 친구 리스트 보여줄떄 자체 모델 하나 만들기
+    //             1 : 감정진구 2: 감정요청중 3: 일반친구       -> 친구리스트
+    //             11 : 친구추가 12 : 친구  13 : 친구요청중    -> 검색힌 사람 리스트
+    //
+    //             아래 6개 인터페이스 input UID
+    //             1) 친구 추가 요청
+    //             2) 친구 추가 취소
+    //             3) 친구 삭제
+    //             3) 감정 공유 요청
+    //             4) 감정 공유 요청을 취소
+    //             5) 감정 공유 친구 삭제
+    //==============================================================================
+
+    //======================================================================================
+    // 요구사항 3
+    //
+    //  * 콘텐츠 생성
+    //  1. 녹음 시작
+    //    Thread mMyContentsRecordThread;
+    MediaRecorder mMycContentsRecorder = null;
+    String mMyContentsPath = null;
+    boolean isMyContentsRecording = false;
+
+//    public void callMyContentsRecordThread() {
+//        mMyContentsRecordThread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    mMycContentsRecorder.start();
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
+
+
+    private void initMyContentsRecord()
+    {
+        mMycContentsRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        //mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
+        mMycContentsRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        //mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mMycContentsRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mMycContentsRecorder.setAudioEncodingBitRate(16*44100);
+        mMycContentsRecorder.setAudioSamplingRate(44100);
+
+        SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMdd" );
+        Date date_now = new Date(System.currentTimeMillis());
+        String curdate = format_date.format(date_now);
+        String curimgName = mUserProfile.uid + "_" + curdate + ".aac";
+
+        mMyContentsPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+curimgName;
+
+        Log.d(TAG, "file path is " + mMyContentsPath);
+        mMycContentsRecorder.setOutputFile(mMyContentsPath);
+        try {
+            mMycContentsRecorder.prepare();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 녹음 시작
+    public void startMyContentsRecord()
+    {
+        initMyContentsRecord();
+        mMycContentsRecorder.start();
+        isMyContentsRecording = true;
+    }
+
+    //  2. 녹음 완료
+    public void doneMyContentsRecord()
+    {
+        mMycContentsRecorder.stop();
+        mMycContentsRecorder.release();
+        mMycContentsRecorder = null;
+        isMyContentsRecording = false;
+    }
+
+    //  3. 녹음 취소 후 반드시 delMyContentsRecordFile을 통해서 파일 삭제 해야 한다.
+    public void cancelMyContensRecord()
+    {
+        mMycContentsRecorder.stop();
+        mMycContentsRecorder.release();
+        mMycContentsRecorder = null;
+        isMyContentsRecording = false;
+    }
+
+    // 4.  반드시 파일은 지워주어야 한다.
+    public boolean delMyContentsRecordFile()
+    {
+        File delFile = new File(mMyContentsPath);
+        if(delFile.exists()){
+            delFile.delete();
+            mMyContentsPath = "";
+            return true;
+        }
+
+        mMyContentsPath = "";
+        return false;
+    }
+
+
+    //  5. 콘텐츠 올리기 function : sendValMeditationContents
+    private OnRecvValMeditationContentsListener mOnRecvValMeditationContentsListener  = null;
+    public interface OnRecvValMeditationContentsListener {
+        void onRecvValMeditationContentsListener (boolean validate, MeditationContents successContents);
+    }
+    public void setOnRecvValMeditationContentsListener (OnRecvValMeditationContentsListener listenfunc){
+        mOnRecvValMeditationContentsListener = listenfunc;
+    }
+
+    private boolean doneUploadContentsThumnailImg = false;
+    private boolean doneUploadContentsSnd = false;
+
+    private void notifyDoneUpload(MeditationContents infoData,int successtype, Map<String, Object> updateMap,boolean newContents){
+        if(successtype == 1){
+            doneUploadContentsThumnailImg = true;
+        }else {
+            doneUploadContentsSnd = true;
+        }
+
+        // 완료되었을때의 처리
+        if(doneUploadContentsThumnailImg && doneUploadContentsSnd){
+            if(newContents){
+                mfbDBRef.child(socialContentsInfoString).child(infoData.uid).updateChildren(updateMap)
+                        .addOnCompleteListener(task ->
+                                Log.d(TAG, "update infoData.uid : " + task.isSuccessful())
+                );
+            }else{
+                mfbDBRef.child(socialContentsInfoString).child(infoData.uid).setValue(infoData);
+            }
+
+            mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(true, infoData);
+
+            doneUploadContentsThumnailImg = false;
+            doneUploadContentsSnd = false;
+        }
+    }
+
+    //  중복이 안되어 있으면 해당 NickName은 허용 가능하므로 true, 이미 있으면 false를 반환, 저자는 userpofile의 nickname
+    //  backgrroundImgName 파일 확장자까지 넣어주세요. fullpath
+    //  해당 내용이 null이면 관련 처리 안하고 업데이트
+    //
+    //  thumnailImgName 은 fullpath가 들어와야 File을 접근해서 처리 가능
+    //  SndFileName 도 fullppath가 들어와야 File을 접근해서 처리 가능
+    //
+    //  없는 것은 -1, null로 처리
+    //
+    //  성공하면 Profile에 자신이 만든 콘텐츠를 업데이트 해 주어야 한다.  UID는 시간을 반드시 처리해서 넣어주어야 한다.
+    //  성공이 유저의 정보에서 playerlist도 업데이트해야 한다.
+    //
+    //  emotion에 따라서 healing Tag을 업데이트 해야 한다.
+    public void sendValSocialMeditationContents(MeditationContents socialcontents, String titleName, String thumnailImgName,String playtime, int IsSndFile,String SndFileName, String releasedate, String backgrroundImgName,String genre,String emotion){
+        if(this.mOnRecvValMeditationContentsListener != null){
+            SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMdd" );
+            Date date_now = new Date(System.currentTimeMillis());
+            String curdate = format_date.format(date_now);
+
+            SimpleDateFormat format_detail_date =new SimpleDateFormat("yyyyMMddHHmmss");
+            Date date_detail_now = new Date(System.currentTimeMillis());
+            String curdetialdate = format_date.format(date_detail_now);
+
+            boolean newContents = false;
+            doneUploadContentsThumnailImg = false;
+            doneUploadContentsSnd = false;
+            MeditationContents infoData = null;
+
+            // updateMap
+            Map<String, Object> updateMap = new HashMap<>();
+
+            if(socialcontents != null){
+                infoData = socialcontents;  // UID가 문제
+            }else{
+                infoData = new MeditationContents();
+                infoData.ismycontents = 1;
+                infoData.author = mUserProfile.nickname;
+                infoData.uid = curdetialdate+mUserProfile.uid;  // uid를 키를 해야 한다.
+                newContents = true;
+            }
+
+            // title 처리 
+            if(titleName != null){
+                infoData.title = titleName;
+                updateMap.put("title", titleName);
+            }
+            
+            // backgrroundImgName 처리
+            if(backgrroundImgName !=null){
+                infoData.bgimg = backgrroundImgName;
+                updateMap.put("bgimg", backgrroundImgName);
+            }
+
+            // 저장된 사운드 파일인지 확인
+            if(IsSndFile != -1){
+                infoData.isRecordSndFile = IsSndFile;
+                updateMap.put("isRecordSndFile", IsSndFile);
+            }
+
+            // 장르 처리
+            if(genre != null){
+                infoData.genre = genre;
+                updateMap.put("genre", genre);
+            }
+
+            if(emotion != null){
+                infoData.emotion = emotion;
+                updateMap.put("emotion", emotion);
+
+               //=======================================================
+               // 해당 감정에 따른 healing Tag를 바꿔야 한다.
+               //=======================================================
+            }
+
+            // 현재 올린 Date를 기준으로 갱신한다.
+            if(releasedate != null) {
+                infoData.releasedate = releasedate;
+                updateMap.put("releasedate", releasedate);
+            }
+
+            if(playtime != null){
+                infoData.playtime = playtime;
+                updateMap.put("playtime", playtime);
+            }
+
+
+            // thumnail 처리
+            if(thumnailImgName != null){
+                MeditationContents finalInfoData = infoData;
+                boolean finalNewContents = newContents;
+
+                // 1. 기존 Thumnail을 지워야 한다.
+                StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(infoData.thumbnail);
+
+                // Delete the file
+                delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        File upfile = new File(thumnailImgName);
+                        Uri thumbnailImgUri = Uri.fromFile(upfile);
+                        String curimgName = mUserProfile.uid + "_" + curdate + "_" + thumbnailImgUri.getLastPathSegment(); // uploadimageName
+
+                        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(curimgName);
+                        UploadTask task = storageRef.putFile(thumbnailImgUri);
+
+                        task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                finalInfoData.thumbnail = curimgName;
+                                notifyDoneUpload(finalInfoData,1,updateMap, finalNewContents);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                            }
+                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                                        double progress = (100 * snapshot.getBytesTransferred()) /  snapshot.getTotalByteCount();
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Uh-oh, an error occurred!
+                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false, null);
+                    }
+                });
+            }else{
+                // 이미 있기 때문에 success를 보낸다.
+                notifyDoneUpload(infoData,1,updateMap,newContents);
+            }
+
+
+            if(SndFileName != null){
+                // 기존의 사운드 파일 삭제
+                StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(infoData.audio);
+                MeditationContents finalInfoData1 = infoData;
+                boolean finalNewContents1 = newContents;
+
+                // Delete the file
+                delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        File upSoundfile = new File(SndFileName);
+                        Uri SoundUri = Uri.fromFile(upSoundfile);
+                        String curSndName = mUserProfile.uid + "_" + curdate + "_" + SoundUri.getLastPathSegment();
+
+                        StorageReference sndStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(curSndName);
+                        UploadTask sndTask = sndStorageRef.putFile(SoundUri);
+                        sndTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                finalInfoData1.audio = curSndName;
+                                notifyDoneUpload(finalInfoData1,2,updateMap, finalNewContents1);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                            }
+                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                                        double progress = (100 * snapshot.getBytesTransferred()) /  snapshot.getTotalByteCount();
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Uh-oh, an error occurred!
+                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                    }
+                });
+            }else{
+                notifyDoneUpload(infoData,2,updateMap, newContents);
+            }
+        }
+    }
+
+    //===================================================================================================
+    // 요구사항 4
+    // 1. 내가 만든 콘텐츠 삭제하고 UserProfile을 받아서 처리 (ContentsUID만 input에서 처리)
+    //    내가 재생한 콘텐츠 지워진 콘텐츠가 있을수 도 있다. 이것에 대한 처리 지워진것은 소셜 콘텐츠에 대해서 예외처리 할 수 밖에 없다.
+    //    UserProfile의 자기 Player에서도 지워야 한다.
+    //===================================================================================================
+    private OnDelMyContentsListener mDelMyContentsListener = null;
+    public interface OnDelMyContentsListener {
+        void onDelMyContentsListener(boolean validate);
+    }
+    public void setOnDelMyContentsListener(OnDelMyContentsListener listenfunc){
+        mDelMyContentsListener = listenfunc;
+    }
+
+    public void delMyContents(MeditationContents delMyContents){
+
+        // 1. 기존 Thumnail을 지워야 한다.
+        StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(delMyContents.thumbnail);
+
+        // Delete the file
+        delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+
+            }
+        });
+
+        // 2. 기존 Sound File을 지운다.
+        StorageReference delAudioStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(delMyContents.audio);
+
+        // Delete the file
+        delAudioStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+
+            }
+        });
+
+        // 3. 기존 Contents를 지운다. -> 내가 재생한 콘텐츠 지워진 콘텐츠가 있을수 도 있다. 이것에 대한 처리 지워진것은 소셜 콘텐츠에 대해서 예외처리 할 수 밖에 없다.
+        mfbDBRef.child(socialContentsInfoString).child(delMyContents.uid).setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mDelMyContentsListener.onDelMyContentsListener(true);
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mDelMyContentsListener.onDelMyContentsListener(false);
+            }
+        });;
+    }
+
+    // local social Contents도 지워야 한다.
+    public void delLocalMyContents(String uid){
+        mSocialContentsList.remove(getSocialContents(uid));
+    }
+
+    // playerlist의 social Contents도 지워야 한다. 그리고 UserProfile을 업데이트 해야 한다.
+    public void delUserProfileMyContents(String uid){
+        mUserProfile.mycontentslist.remove(uid);
+        sendValProfile(mUserProfile);
+    }
+
+    //===================================================================================================
+    // 요구사항 5
+    // 2. 소셜 콘텐츠 신고하기 인터페이스 추가. (ContentsUID받아서 처리 : isReported)
+    //===================================================================================================
+    public void reportedSocialContents(MeditationContents reportedSocialContents){
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("isReported", 1);
+        mfbDBRef.child(socialContentsInfoString).child(reportedSocialContents.uid).updateChildren(updateMap)
+                .addOnCompleteListener(task -> Log.d(TAG, "update reportedSocialContents : " + task.isSuccessful()));
+
+    }
+
+    //===================================================================================================
+    // 요구사항 6 . 알림
+    // type : 1 : 간단 알람  2 : 수락,거절 알람
+    //
+    //  1.  친구 신청 수락
+    //  2.  친구 신청 거절 (상대방이 거절)
+    //  3.  감정 공유 수락
+    //  4.  감정 공유 거절
+    //
+    //  1 . 친구 신청 시청
+    //  2.  감정 공유 신청
+    //===================================================================================================
+
+
+
+
+
+
+
+
+    //=========================================================================================================
+    // 요구사항 7. 인앱 : 참고 https://it-highjune.tistory.com/4
+    //  1 12개월 시작, 1개월 인앱 요구 function
+    //=========================================================================================================
+    public void purchaseBilling(String productuid){
+
+    }
+
+    //  2.현재 유저가 유료 사용자인지 구글에 검증해야 함. 그리고 판단 function (로그인)
+    public boolean checkBilling(){
+        return true;
     }
 }
 
