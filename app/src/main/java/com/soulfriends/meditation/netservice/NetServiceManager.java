@@ -40,12 +40,14 @@ import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.MeditationContentsCharInfo;
 import com.soulfriends.meditation.model.MeditationShowCategorys;
 import com.soulfriends.meditation.model.UserProfile;
+import com.soulfriends.meditation.parser.BgTagData;
 import com.soulfriends.meditation.parser.CategoryData;
 import com.soulfriends.meditation.parser.CharData;
 import com.soulfriends.meditation.parser.CharListData;
 import com.soulfriends.meditation.parser.ColorData;
 import com.soulfriends.meditation.parser.DetermineCharData;
 import com.soulfriends.meditation.parser.EmotionListData;
+import com.soulfriends.meditation.parser.HealingTagData;
 import com.soulfriends.meditation.parser.PersonQuestionData;
 import com.soulfriends.meditation.parser.PersonResultData;
 import com.soulfriends.meditation.parser.QuestionData;
@@ -256,6 +258,14 @@ public class NetServiceManager {
     private ArrayList<VoiceAnalysisData> mVoiceAnalysisDataList;
     public ArrayList<VoiceAnalysisData> getVoiceAnalysisDataList() {return mVoiceAnalysisDataList;}
 
+    // 힐링태그
+    private ArrayList<HealingTagData> mHealingTagDataList;
+    public ArrayList<HealingTagData> getHealingTagDataList() {return mHealingTagDataList;}
+
+    // 배경태그
+    private ArrayList<BgTagData> mBgTagDataList;
+    public ArrayList<BgTagData> getBgTagDataList() {return mBgTagDataList;}
+
 
     // 초기화 관련 변수 초기화
     public void init(Resources AppRes,Context applicationContext) {
@@ -283,8 +293,11 @@ public class NetServiceManager {
         mCharListMeditationDataList = xmlCharListDataParser(R.xml.char_meditation_data_result,AppRes);
         mCharListSleepDataList = xmlCharListDataParser(R.xml.char_sleep_data_result,AppRes);
         mCharListMusicDataList = xmlCharListDataParser(R.xml.char_music_data_result,AppRes);
-
         mVoiceAnalysisDataList = xmlVoiceAnalysisDataParser(R.xml.voiceanalysis_data_result,AppRes);
+
+        // 힐링태그와 배경태그 내용
+        mHealingTagDataList = xmlHealingTagDataParser(R.xml.healingtagdata_result,AppRes);
+        mBgTagDataList = xmlBgTagDataParser(R.xml.bgtagdata_result,AppRes);
 
         mCurApplicationContext = applicationContext;
         mAppRes = AppRes;
@@ -1802,6 +1815,91 @@ public class NetServiceManager {
 
     private XmlResourceParser parser;
 
+    public ArrayList<HealingTagData> xmlHealingTagDataParser(int res_id,Resources res) {
+        ArrayList<HealingTagData> arrayList = new ArrayList<HealingTagData>();
+        parser = res.getXml(res_id);
+        try {
+            int eventType = parser.getEventType();
+            HealingTagData data = null;
+
+            while(eventType != XmlPullParser.END_DOCUMENT) {
+                switch (eventType) {
+                    case XmlPullParser.START_TAG:
+                        String startTag = parser.getName();
+                        if(startTag.equals("healingtagdata")) {
+                            data = new HealingTagData();
+                        }
+                        if(startTag.equals("id")) {
+                            data.id = parser.nextText();
+                        }
+                        if(startTag.equals("tag")) {
+                            data.tag = parser.nextText();
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        String endTag = parser.getName();
+                        if(endTag.equals("healingtagdata")) {
+                            arrayList.add(data);
+                        }
+                        break;
+                }
+                eventType = parser.next();
+            }
+        }catch(XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return arrayList;
+    }
+
+    public ArrayList<BgTagData> xmlBgTagDataParser(int res_id,Resources res) {
+        ArrayList<BgTagData> arrayList = new ArrayList<BgTagData>();
+        parser = res.getXml(res_id);
+        try {
+            int eventType = parser.getEventType();
+            BgTagData data = null;
+
+            while(eventType != XmlPullParser.END_DOCUMENT) {
+                switch (eventType) {
+                    case XmlPullParser.START_TAG:
+                        String startTag = parser.getName();
+                        if(startTag.equals("bgtagdata")) {
+                            data = new BgTagData();
+                        }
+                        if(startTag.equals("id")) {
+                            data.id = parser.nextText();
+                        }
+                        if(startTag.equals("tag")) {
+                            data.tag = parser.nextText();
+                        }
+                        if(startTag.equals("file")) {
+                            data.file = parser.nextText();
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        String endTag = parser.getName();
+                        if(endTag.equals("bgtagdata")) {
+                            arrayList.add(data);
+                        }
+                        break;
+                }
+                eventType = parser.next();
+            }
+        }catch(XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return arrayList;
+    }
+
     public ArrayList<VoiceAnalysisData> xmlVoiceAnalysisDataParser(int res_id,Resources res) {
         ArrayList<VoiceAnalysisData> arrayList = new ArrayList<VoiceAnalysisData>();
         parser = res.getXml(res_id);
@@ -3236,6 +3334,29 @@ public class NetServiceManager {
         mVoiceAnalysisThraed.interrupt();
     }
 
+    //================================================================
+    // 2021.01 추가 Utility 함수
+    //================================================================
+    // 감정상태 id 1~16을 주면 그에 해당하는 HealingTag를 넘겨준다.
+    String GetHealingTag(int id){
+        int dataNum = mHealingTagDataList.size();
+        for(int i = 0 ; i < dataNum ; i++){
+            if(mHealingTagDataList.get(i).id.equals(Integer.toString(id))){
+                return mHealingTagDataList.get(i).tag;
+            }
+        }
+        return null;
+    }
+    // contentscharinfo의 chartag를 넣어주면 해당 bg의 이름을 알려준다.
+    String GetBgImagName(String chartag){
+        int dataNum = mBgTagDataList.size();
+        for(int i = 0; i < dataNum; i++){
+            if(mBgTagDataList.get(i).tag.equals(chartag)){
+                return mBgTagDataList.get(i).file;
+            }
+        }
+        return null;
+    }
 
     //==========================================================================================================
     //  유저 콘텐츠 등록 : 음원파일명, 녹음,파일인지 여부, 생성날짜, 힐링Tag, 저자, 기존 콘텐츠 정보 이용. 콘텐츠 UID
