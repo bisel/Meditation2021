@@ -3580,7 +3580,7 @@ public class NetServiceManager {
 
         // 완료되었을때의 처리
         if(doneUploadContentsThumnailImg && doneUploadContentsSnd){
-            if(newContents){
+            if(!newContents){
                 mfbDBRef.child(socialContentsInfoString).child(infoData.uid).updateChildren(updateMap)
                         .addOnCompleteListener(task ->
                                 Log.d("TAG", "update infoData.uid : " + task.isSuccessful())

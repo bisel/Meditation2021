@@ -54,8 +54,17 @@ public class ContentsUploadActivity extends BaseActivity {
                if(validate)
                {
                    // 업로드 성공
-                   
+
+                   NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
+
+                   NetServiceManager.getinstance().sendValProfile(NetServiceManager.getinstance().getUserProfile());
+
+                   NetServiceManager.getinstance().mSocialContentsList.add(successContents);
+
+
+
                    OnEvent_Success();
+
 
                    Toast.makeText(getApplicationContext(),"업로드 성공",Toast.LENGTH_SHORT).show();
                }

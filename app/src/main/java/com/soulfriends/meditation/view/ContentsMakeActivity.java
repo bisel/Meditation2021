@@ -171,6 +171,8 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             binding.ivBackgroundImage.setImageResource(list_background.get(UtilAPI.s_id_background_image));
 
             bCheck_Background = true;
+
+            Check_NextButton();
         }
         else
         {
