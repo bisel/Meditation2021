@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -101,10 +100,20 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
             @Override
             public void onRecvContentsCharInfo(boolean validate) {
                 if(validate == true){
+                    NetServiceManager.getinstance().recvSocialContentsExt();
+                }
+            }
+        });
+
+        NetServiceManager.getinstance().setOnSocialRecvContentsListener(new NetServiceManager.OnSocialRecvContentsListener() {
+            @Override
+            public void onSocialRecvContents(boolean validate) {
+                if(validate == true){
                     NetServiceManager.getinstance().recvContentsExt();
                 }
             }
         });
+
     }
 
     private void DoRecvContents(boolean validate)

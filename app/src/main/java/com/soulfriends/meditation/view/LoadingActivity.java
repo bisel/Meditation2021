@@ -54,6 +54,15 @@ public class LoadingActivity extends AppCompatActivity {
                 @Override
                 public void onRecvContentsCharInfo(boolean validate) {
                     if(validate == true){
+                        NetServiceManager.getinstance().recvSocialContentsExt();
+                    }
+                }
+            });
+
+            NetServiceManager.getinstance().setOnSocialRecvContentsListener(new NetServiceManager.OnSocialRecvContentsListener() {
+                @Override
+                public void onSocialRecvContents(boolean validate) {
+                    if(validate == true){
                         NetServiceManager.getinstance().recvContentsExt();
                     }
                 }
