@@ -55,15 +55,7 @@ public class ContentsUploadActivity extends BaseActivity {
                {
                    // 업로드 성공
 
-                   NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
-
-                   NetServiceManager.getinstance().sendValProfile(NetServiceManager.getinstance().getUserProfile());
-
-                   NetServiceManager.getinstance().mSocialContentsList.add(successContents);
-
-
-
-                   OnEvent_Success();
+                   OnEvent_Success(successContents);
 
 
                    Toast.makeText(getApplicationContext(),"업로드 성공",Toast.LENGTH_SHORT).show();
@@ -103,13 +95,37 @@ public class ContentsUploadActivity extends BaseActivity {
 //        });
     }
 
-    private void OnEvent_Success()
+    private void OnEvent_Success(MeditationContents successContents)
+    {
+        NetServiceManager.getinstance().setOnRecvValProfileListener(new NetServiceManager.OnRecvValProfileListener() {
+            @Override
+            public void onRecvValProfile(boolean validate) {
+                if (validate == true) {
+
+                    ChangeActivity();
+
+                } else {
+
+                }
+            }
+        });
+
+        NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
+
+        NetServiceManager.getinstance().sendValProfile(NetServiceManager.getinstance().getUserProfile());
+
+        NetServiceManager.getinstance().mSocialContentsList.add(successContents);
+    }
+
+    private void ChangeActivity()
     {
         Intent intent = new Intent(this, MyContentsActivity.class);
         startActivity(intent);
         this.overridePendingTransition(0, 0);
         finish();
+
     }
+
 
     private void OnEvent_Faild()
     {

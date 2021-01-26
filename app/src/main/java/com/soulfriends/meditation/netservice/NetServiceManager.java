@@ -575,17 +575,6 @@ public class NetServiceManager {
                         // bg image -> bg는 이미지
                         // contentsdata.bgimg =   NetServiceUtility.bgimgdir + contentsdata.bgimg + NetServiceUtility.imgextenstion;
 
-                        // showtype결정
-                        if(contentsdata.artist.equals("0")){
-                            if(!contentsdata.author.equals("0")){
-                                contentsdata.showtype = 1;
-                            }else{
-                                contentsdata.showtype = 0;
-                            }
-                        }else{
-                            contentsdata.showtype = 2;
-                        }
-
                         mSocialContentsList.add(contentsdata);
                     }
                     mSocialRecvContentsListener.onSocialRecvContents(true);

@@ -148,8 +148,6 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
             binding.layoutBackgroundImage.setVisibility(View.VISIBLE);
 
-
-
             // 음악 bg 넣도록 한다.
             list_background.clear();
 
@@ -172,7 +170,6 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
             bCheck_Background = true;
 
-            Check_NextButton();
         }
         else
         {
