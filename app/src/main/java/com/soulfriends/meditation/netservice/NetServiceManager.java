@@ -569,7 +569,7 @@ public class NetServiceManager {
                         contentsdata.audio =   NetServiceUtility.audiofiledir + contentsdata.audio;
 
                         // thumnail
-                        contentsdata.thumbnail = NetServiceUtility.mycontentsthumnaildir + contentsdata.thumbnail  + NetServiceUtility.imgextenstion;
+                        contentsdata.thumbnail = NetServiceUtility.mycontentsthumnaildir + contentsdata.thumbnail;
 
                         // bg image -> bg는 이미지
                         // contentsdata.bgimg =   NetServiceUtility.bgimgdir + contentsdata.bgimg + NetServiceUtility.imgextenstion;
@@ -3681,7 +3681,6 @@ public class NetServiceManager {
                 infoData.playtime = playtime;
                 updateMap.put("playtime", playtime);
             }
-
 
             // thumnail 처리
             if(thumnailImgName != null){
