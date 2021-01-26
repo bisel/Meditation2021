@@ -35,6 +35,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.model.MediationShowContents;
+import com.soulfriends.meditation.model.MeditationAlarm;
 import com.soulfriends.meditation.model.MeditationCategory;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.MeditationContentsCharInfo;
@@ -559,8 +560,8 @@ public class NetServiceManager {
                     for (DataSnapshot meditationSnapshot: snapshot.getChildren()) {
                         MeditationContents contentsdata = meditationSnapshot.getValue(MeditationContents.class);
 
-                        // audio
-                        contentsdata.audio =   NetServiceUtility.audiofiledir + contentsdata.audio + NetServiceUtility.audioextenstion;
+                        // audio , 소셜은 확장자를 이미 가지고 있다.
+                        contentsdata.audio =   NetServiceUtility.audiofiledir + contentsdata.audio;
 
                         // thumnail
                         contentsdata.thumbnail = NetServiceUtility.mycontentsthumnaildir + contentsdata.thumbnail  + NetServiceUtility.imgextenstion;
@@ -3358,6 +3359,14 @@ public class NetServiceManager {
         return null;
     }
 
+    // 현재 DataFormat에 맞게 날짜 시간을 알려준다.
+    public String getCurDate(String formatPattern){
+        SimpleDateFormat format_date =new SimpleDateFormat(formatPattern);
+        Date date_detail_now = new Date(System.currentTimeMillis());
+        return format_date.format(date_detail_now);
+    }
+
+
     //==========================================================================================================
     //  유저 콘텐츠 등록 : 음원파일명, 녹음,파일인지 여부, 생성날짜, 힐링Tag, 저자, 기존 콘텐츠 정보 이용. 콘텐츠 UID
     //  1. 파일을 먼저 Firebasestorage에 올리고 그 다음에 콘텐츠를 올려야 한다.
@@ -3422,8 +3431,6 @@ public class NetServiceManager {
     public void getFriendList() {
     }
 
-    //public UserProfile OtherUserProfile = new UserProfile();
-
     private OnRecvOtherProfileListener mRecvOtherProfileListener = null;
     public interface OnRecvOtherProfileListener {
         void onRecvOtherProfileListener(boolean validate,UserProfile otherUser);
@@ -3478,21 +3485,6 @@ public class NetServiceManager {
     MediaRecorder mMycContentsRecorder = null;
     public String mMyContentsPath = null;
     public boolean isMyContentsRecording = false;
-
-//    public void callMyContentsRecordThread() {
-//        mMyContentsRecordThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    mMycContentsRecorder.start();
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//    }
-
 
     private void initMyContentsRecord()
     {
@@ -3611,7 +3603,7 @@ public class NetServiceManager {
     //  성공이 유저의 정보에서 playerlist도 업데이트해야 한다.
     //
     //  emotion에 따라서 healing Tag을 업데이트 해야 한다.
-    public void sendValSocialMeditationContents(MeditationContents socialcontents, String titleName, String thumnailImgName,String playtime, int IsSndFile,String SndFileName, String releasedate, String backgrroundImgName,String genre,String emotion){
+     public void sendValSocialMeditationContents(MeditationContents socialcontents, String titleName, String thumnailImgName,String playtime, int IsSndFile,String SndFileName, String releasedate, String backgrroundImgName,String genre,String emotion){
         if(this.mOnRecvValMeditationContentsListener != null){
             SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMdd" );
             Date date_now = new Date(System.currentTimeMillis());
@@ -3619,7 +3611,7 @@ public class NetServiceManager {
 
             SimpleDateFormat format_detail_date =new SimpleDateFormat("yyyyMMddHHmmss");
             Date date_detail_now = new Date(System.currentTimeMillis());
-            String curdetialdate = format_date.format(date_detail_now);
+            String curdetialdate = format_detail_date.format(date_detail_now);
 
             boolean newContents = false;
             doneUploadContentsThumnailImg = false;
@@ -3872,22 +3864,44 @@ public class NetServiceManager {
 
     //===================================================================================================
     // 요구사항 6 . 알림
-    // type : 1 : 간단 알람  2 : 수락,거절 알람
+    // alarm type : 1 : 간단 알람  2 : 수락,거절 알람
     //
-    //  1.  친구 신청 수락
+    // alarm subtype
+    //  1.  친구 신청 수락 (상대방이 수락)
     //  2.  친구 신청 거절 (상대방이 거절)
-    //  3.  감정 공유 수락
-    //  4.  감정 공유 거절
+    //  3.  감정 공유 수락 (상다방이 나에게 수락)
+    //  4.  감정 공유 거절 (상다방이 나에게 거절)
     //
-    //  1 . 친구 신청 시청
-    //  2.  감정 공유 신청
+    //  1 . 친구 신청 신청 (상대방이 나에게 신청)
+    //  2.  감정 공유 신청 (상대방이 나에게 신청)
+    //
+    //  1) 자신의 ID에 있는 모든 알람을 가져온다.
+    //  2) 해당 alarmtype , alarmsubtype 으로 정의가 되어 있다.
+    //  3) alarm은 releasedate를 알고 있어야 한다. (초까지 알고 있자) yymmddhhmmss 그래야 정렬 가능
+    //  4) alarm은 보았는지 안보았는지 서버에 저장해야 한다.
+    //  5) 안본 메세지들의 총합을 Client에서 구해야 한다.
+    //  6) 클라이언트에서 type 1에 대한 메시지가 100개가 넘으면 시간순서대로 오래된 순서대로 지워야 한다.
+    //  7) 6)번을 행할떄 서버 및 클라이언트의 처리의 동기화가 중요하다.
     //===================================================================================================
+    public void sendAlarm(String otheruid, int alarmtype, int alarmsubtype)
+    {
+        MeditationAlarm valData = new MeditationAlarm();
+        valData.uid = mUserProfile.uid;
+        valData.releaseDate = getCurDate("yyyyMMddHHmmss");
+        valData.alarmtype = alarmtype;
+        valData.alarmsubtype = alarmsubtype;
 
-
-
-
-
-
+        mfbDBRef.child("alarms").child(otheruid).push().setValue(valData).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            }
+        });
+    }
 
 
     //=========================================================================================================
