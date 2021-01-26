@@ -140,6 +140,8 @@ public class NetServiceManager {
     private String contentsInfoString = "meditationext"; //
     private String socialContentsInfoString = "social_meditationext"; //
     private String contentsCharInfoString = "meditationchartag";//
+    private String alarmInfoString = "alarms";
+    private String userInfoString = "users";
 
     public ArrayList<MeditationContents> mContentsList = new ArrayList<MeditationContents>();
     public ArrayList<MeditationContents> mSocialContentsList = new ArrayList<MeditationContents>();
@@ -364,7 +366,7 @@ public class NetServiceManager {
     }
     public void sendValProfile(UserProfile profile){
         if(this.mRecvValProfileListener != null){
-            mfbDBRef.child("users").child(profile.uid).setValue(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
+            mfbDBRef.child(userInfoString).child(profile.uid).setValue(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     mfbDBRef.child("nick").child(profile.nickname).setValue(profile.uid);
@@ -460,7 +462,7 @@ public class NetServiceManager {
         mRecvProfileListener = listenfunc;
     }
     public void recvUserProfile(String uid){
-        mfbDBRef.child("users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        mfbDBRef.child(userInfoString).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -1635,14 +1637,14 @@ public class NetServiceManager {
                 // 값을 넣어 주어야 함.
                 mUserProfile.favoriteslist.put(contentid,true);
                 // 서버에 값을 넣어주어야 한다.
-                mfbDBRef.child("users").child(mUserProfile.uid).setValue(mUserProfile);
+                mfbDBRef.child(userInfoString).child(mUserProfile.uid).setValue(mUserProfile);
             }
         }else{
             // 있는 놈만 지운다.
             if(isHaveContents) {
                 mUserProfile.favoriteslist.remove(contentid);
             }
-            mfbDBRef.child("users").child(mUserProfile.uid).setValue(mUserProfile);
+            mfbDBRef.child(userInfoString).child(mUserProfile.uid).setValue(mUserProfile);
         }
     }
 
@@ -1650,7 +1652,7 @@ public class NetServiceManager {
     public void checkFeelTest(int selectid)
     {
         mUserProfile.emotiontype = selectid;
-        mfbDBRef.child("users").child(mUserProfile.uid).setValue(mUserProfile);
+        mfbDBRef.child(userInfoString).child(mUserProfile.uid).setValue(mUserProfile);
     }
 
     // 컬러 검사. 선택한 colorList 1~4선택된 6개로 온다.
@@ -3440,7 +3442,7 @@ public class NetServiceManager {
     }
 
     public void getOtherUserProfile(String uid) {
-        mfbDBRef.child("users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        mfbDBRef.child(userInfoString).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -3488,6 +3490,7 @@ public class NetServiceManager {
 
     private void initMyContentsRecord()
     {
+        mMycContentsRecorder = new MediaRecorder();
         mMycContentsRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         //mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
         mMycContentsRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -3682,46 +3685,80 @@ public class NetServiceManager {
                 MeditationContents finalInfoData = infoData;
                 boolean finalNewContents = newContents;
 
-                // 1. 기존 Thumnail을 지워야 한다.
-                StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(infoData.thumbnail);
+                if(finalNewContents){
+                    File upfile = new File(thumnailImgName);
+                    Uri thumbnailImgUri = Uri.fromFile(upfile);
+                    String curimgName = mUserProfile.uid + "_" + curdate + "_" + thumbnailImgUri.getLastPathSegment(); // uploadimageName
 
-                // Delete the file
-                delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        File upfile = new File(thumnailImgName);
-                        Uri thumbnailImgUri = Uri.fromFile(upfile);
-                        String curimgName = mUserProfile.uid + "_" + curdate + "_" + thumbnailImgUri.getLastPathSegment(); // uploadimageName
+                    StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(curimgName);
+                    UploadTask task = storageRef.putFile(thumbnailImgUri);
 
-                        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(curimgName);
-                        UploadTask task = storageRef.putFile(thumbnailImgUri);
+                    task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            finalInfoData.thumbnail = curimgName;
+                            notifyDoneUpload(finalInfoData,1,updateMap, finalNewContents);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                        }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                            @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                                    double progress = (100 * snapshot.getBytesTransferred()) /  snapshot.getTotalByteCount();
+                        }
+                    });
+                }else{
+                    // 1. 기존 Thumnail을 지워야 한다.
+                    StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(infoData.thumbnail);
 
-                        task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    // Delete the file
+                    if(delStorageRef != null){
+                        delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                finalInfoData.thumbnail = curimgName;
-                                notifyDoneUpload(finalInfoData,1,updateMap, finalNewContents);
+                            public void onSuccess(Void aVoid) {
+                                File upfile = new File(thumnailImgName);
+                                Uri thumbnailImgUri = Uri.fromFile(upfile);
+                                String curimgName = mUserProfile.uid + "_" + curdate + "_" + thumbnailImgUri.getLastPathSegment(); // uploadimageName
+
+                                StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(curimgName);
+                                UploadTask task = storageRef.putFile(thumbnailImgUri);
+
+                                task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        finalInfoData.thumbnail = curimgName;
+                                        notifyDoneUpload(finalInfoData,1,updateMap, finalNewContents);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                                    }
+                                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                        @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                                                double progress = (100 * snapshot.getBytesTransferred()) /  snapshot.getTotalByteCount();
+                                    }
+                                });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
-                            public void onFailure(@NonNull Exception e) {
-                                mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
-                            }
-                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                                @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
-                                        double progress = (100 * snapshot.getBytesTransferred()) /  snapshot.getTotalByteCount();
+                            public void onFailure(@NonNull Exception exception) {
+                                // Uh-oh, an error occurred!
+                                mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false, null);
                             }
                         });
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Uh-oh, an error occurred!
-                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false, null);
+                    else{
+                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
                     }
-                });
+
+                }
             }else{
                 // 이미 있기 때문에 success를 보낸다.
                 notifyDoneUpload(infoData,1,updateMap,newContents);
@@ -3883,6 +3920,8 @@ public class NetServiceManager {
     //  6) 클라이언트에서 type 1에 대한 메시지가 100개가 넘으면 시간순서대로 오래된 순서대로 지워야 한다.
     //  7) 6)번을 행할떄 서버 및 클라이언트의 처리의 동기화가 중요하다.
     //===================================================================================================
+
+    // 상대방에게 알람 메시지를 보낸다. type과 subtype은 바로위의 요구사항 6. 참조
     public void sendAlarm(String otheruid, int alarmtype, int alarmsubtype)
     {
         MeditationAlarm valData = new MeditationAlarm();
@@ -3891,7 +3930,7 @@ public class NetServiceManager {
         valData.alarmtype = alarmtype;
         valData.alarmsubtype = alarmsubtype;
 
-        mfbDBRef.child("alarms").child(otheruid).push().setValue(valData).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mfbDBRef.child(alarmInfoString).child(otheruid).push().setValue(valData).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
             }
@@ -3903,6 +3942,30 @@ public class NetServiceManager {
         });
     }
 
+    // main activity에서 보여줄 list의 개수를 확인하기 위해서 사용. 만약 alaram창에 들어가려면 다시 detail할 otherprofile까지 얻어서 처리 필요
+    // 상대방이 요청을 지웠을 경우의 처리 필요
+    public void recvMyAlarmList(){
+        // join을 통해서 상대방의 UserProfiel정보까지 아니면 한꺼번에 가져와 볼까......
+        // 1. 모든 alarm list를 가져와 보자.
+        mfbDBRef.child(alarmInfoString).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot alarmSnapshot: snapshot.getChildren()) {
+                        MeditationAlarm alarmdata = alarmSnapshot.getValue(MeditationAlarm.class);
+                    }
+                }
+                else{
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                mSocialRecvContentsListener.onSocialRecvContents(false);
+            }
+        });
+
+    }
 
     //=========================================================================================================
     // 요구사항 7. 인앱 : 참고 https://it-highjune.tistory.com/4
