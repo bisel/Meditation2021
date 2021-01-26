@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -3582,17 +3583,39 @@ public class NetServiceManager {
         if(doneUploadContentsThumnailImg && doneUploadContentsSnd){
             if(!newContents){
                 mfbDBRef.child(socialContentsInfoString).child(infoData.uid).updateChildren(updateMap)
-                        .addOnCompleteListener(task ->
-                                Log.d("TAG", "update infoData.uid : " + task.isSuccessful())
-                );
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(true, infoData);
+                                    doneUploadContentsThumnailImg = false;
+                                    doneUploadContentsSnd = false;
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false, infoData);
+                            }
+                        });
             }else{
-                mfbDBRef.child(socialContentsInfoString).child(infoData.uid).setValue(infoData);
+                mfbDBRef.child(socialContentsInfoString).child(infoData.uid).setValue(infoData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG", "socialContentsInfoString");
+                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(true, infoData);
+                        doneUploadContentsThumnailImg = false;
+                        doneUploadContentsSnd = false;
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false, infoData);
+                    }
+                });
             }
-
-            mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(true, infoData);
-
-            doneUploadContentsThumnailImg = false;
-            doneUploadContentsSnd = false;
         }
     }
 
