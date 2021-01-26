@@ -147,6 +147,8 @@ public class NetServiceManager {
     public ArrayList<MeditationContents> mSocialContentsList = new ArrayList<MeditationContents>();
     public ArrayList<MeditationContentsCharInfo> mContentsCharinfoList = new ArrayList<MeditationContentsCharInfo>();
 
+    public ArrayList<MeditationAlarm> mAlarmDataList = new ArrayList<MeditationAlarm>();
+
     private DatabaseReference mfbDBRef;
     private UserProfile mUserProfile = new UserProfile();
 
@@ -352,6 +354,7 @@ public class NetServiceManager {
        mContentsList.clear();
        mContentsCharinfoList.clear();
        mSocialContentsList.clear();
+       mAlarmDataList.clear();
     }
 
     //========================================================
@@ -3766,47 +3769,79 @@ public class NetServiceManager {
 
 
             if(SndFileName != null){
-                // 기존의 사운드 파일 삭제
-                StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(infoData.audio);
-                MeditationContents finalInfoData1 = infoData;
-                boolean finalNewContents1 = newContents;
+                MeditationContents finalInfoData = infoData;
+                boolean finalNewContents = newContents;
 
-                // Delete the file
-                delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        File upSoundfile = new File(SndFileName);
-                        Uri SoundUri = Uri.fromFile(upSoundfile);
-                        String curSndName = mUserProfile.uid + "_" + curdate + "_" + SoundUri.getLastPathSegment();
+                if(newContents){
+                    File upSoundfile = new File(SndFileName);
+                    Uri SoundUri = Uri.fromFile(upSoundfile);
+                    String curSndName = mUserProfile.uid + "_" + curdate + "_" + SoundUri.getLastPathSegment();
 
-                        StorageReference sndStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(curSndName);
-                        UploadTask sndTask = sndStorageRef.putFile(SoundUri);
-                        sndTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    StorageReference sndStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(curSndName);
+                    UploadTask sndTask = sndStorageRef.putFile(SoundUri);
+                    sndTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            finalInfoData.audio = curSndName;
+                            notifyDoneUpload(finalInfoData,2,updateMap, finalNewContents);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                        }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                            @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                                    double progress = (100 * snapshot.getBytesTransferred()) /  snapshot.getTotalByteCount();
+                        }
+                    });
+                }else{
+                    // 기존의 사운드 파일 삭제
+                    StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(infoData.audio);
+                    // Delete the file
+                    if(delStorageRef != null){
+                        delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                finalInfoData1.audio = curSndName;
-                                notifyDoneUpload(finalInfoData1,2,updateMap, finalNewContents1);
+                            public void onSuccess(Void aVoid) {
+                                File upSoundfile = new File(SndFileName);
+                                Uri SoundUri = Uri.fromFile(upSoundfile);
+                                String curSndName = mUserProfile.uid + "_" + curdate + "_" + SoundUri.getLastPathSegment();
+
+                                StorageReference sndStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(curSndName);
+                                UploadTask sndTask = sndStorageRef.putFile(SoundUri);
+                                sndTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        finalInfoData.audio = curSndName;
+                                        notifyDoneUpload(finalInfoData,2,updateMap, finalNewContents);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                                    }
+                                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                        @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                                                double progress = (100 * snapshot.getBytesTransferred()) /  snapshot.getTotalByteCount();
+                                    }
+                                });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
-                            public void onFailure(@NonNull Exception e) {
+                            public void onFailure(@NonNull Exception exception) {
+                                // Uh-oh, an error occurred!
                                 mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
-                            }
-                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                                @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
-                                        double progress = (100 * snapshot.getBytesTransferred()) /  snapshot.getTotalByteCount();
                             }
                         });
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Uh-oh, an error occurred!
+                    else{
                         mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
                     }
-                });
+                }
             }else{
                 notifyDoneUpload(infoData,2,updateMap, newContents);
             }
@@ -3953,6 +3988,7 @@ public class NetServiceManager {
                 if (snapshot.exists()) {
                     for (DataSnapshot alarmSnapshot: snapshot.getChildren()) {
                         MeditationAlarm alarmdata = alarmSnapshot.getValue(MeditationAlarm.class);
+                        mAlarmDataList.add(alarmdata);
                     }
                 }
                 else{
@@ -3961,9 +3997,52 @@ public class NetServiceManager {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                mSocialRecvContentsListener.onSocialRecvContents(false);
             }
         });
+    }
+
+    public void recvMyDetailAlaramList(){
+        mfbDBRef.child(alarmInfoString).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot alarmSnapshot: snapshot.getChildren()) {
+                        MeditationAlarm alarmdata = alarmSnapshot.getValue(MeditationAlarm.class);
+
+                        mfbDBRef.child(userInfoString).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    for (DataSnapshot alarmSnapshot: snapshot.getChildren()) {
+                                        //MeditationAlarm alarmdata = alarmSnapshot.getValue(MeditationAlarm.class);
+                                        //mAlarmDataList.add(alarmdata);
+
+
+
+
+
+
+                                    }
+                                }
+                                else{
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
+                    }
+                }
+                else{
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
 
     }
 
