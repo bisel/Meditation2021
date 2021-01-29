@@ -4485,6 +4485,34 @@ public class NetServiceManager {
 
     // main activity에서 보여줄 list의 개수를 확인하기 위해서 사용. 만약 alaram창에 들어가려면 다시 detail할 otherprofile까지 얻어서 처리 필요
     // 상대방이 요청을 지웠을 경우의 처리 필요
+
+    private void SortAlarmListReleaseDate(boolean AscendingOrder ){
+        Collections.sort(mDetailAlarmDataList, new Comparator() {
+            @Override
+            public int compare(Object t1, Object t2) {
+                MeditationDetailAlarm o1 = (MeditationDetailAlarm)t1;
+                MeditationDetailAlarm o2 = (MeditationDetailAlarm)t2;
+                // 내림차순.
+                if(AscendingOrder){
+                    if( Integer.parseInt(o1.entity.releasedate)  > Integer.parseInt(o2.entity.releasedate)) {
+                        return 1;
+                    }
+                    else if(Integer.parseInt(o1.entity.releasedate) < Integer.parseInt(o2.entity.releasedate)) {
+                        return -1;
+                    }
+                }else{
+                    if( Integer.parseInt(o1.entity.releasedate)  > Integer.parseInt(o2.entity.releasedate)) {
+                        return -1;
+                    }
+                    else if(Integer.parseInt(o1.entity.releasedate) < Integer.parseInt(o2.entity.releasedate)) {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        });
+    }
+
     private OnRecvMyAlarmListListener mOnRecvMyAlarmListListener = null;
     public interface OnRecvMyAlarmListListener {
         void onRecvMyAlarmList(boolean validate);
@@ -4497,55 +4525,120 @@ public class NetServiceManager {
     boolean doneRecvFriendReqAlarm = false;
     boolean doneRecvEmotionFriendReqAlarm = false;
 
-    private void notifyAlarmList(int successtype){
-//        if(successtype == 1){
-//            doneUploadContentsThumnailImg = true;
-//        }else {
-//            doneUploadContentsSnd = true;
-//        }
-//
-//        // 완료되었을때의 처리
-//        if(doneUploadContentsThumnailImg && doneUploadContentsSnd){
-//            if(!newContents){
-//                mfbDBRef.child(socialContentsInfoString).child(infoData.uid).updateChildren(updateMap)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                if (task.isSuccessful()) {
-//                                    mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(true, infoData);
-//                                    doneUploadContentsThumnailImg = false;
-//                                    doneUploadContentsSnd = false;
-//                                }
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false, infoData);
-//                            }
-//                        });
-//            }else{
-//                mfbDBRef.child(socialContentsInfoString).child(infoData.uid).setValue(infoData).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Log.d("TAG", "socialContentsInfoString");
-//                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(true, infoData);
-//                        doneUploadContentsThumnailImg = false;
-//                        doneUploadContentsSnd = false;
-//                    }
-//                })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false, infoData);
-//                            }
-//                        });
-//            }
-//        }
+    void notifyMyAlarmList(int successtype){
+        if(successtype == 1){
+            doneRecvNormalAlarm = true;
+        }else if(successtype == 2) {
+            doneRecvFriendReqAlarm = true;
+        }else if(successtype == 3) {
+            doneRecvEmotionFriendReqAlarm = true;
+        }
+
+        // 완료되었을때의 처리
+        if(doneRecvNormalAlarm && doneRecvFriendReqAlarm & doneRecvEmotionFriendReqAlarm) {
+            SortAlarmListReleaseDate(false); // 내림차순 정렬
+            mOnRecvMyAlarmListListener.onRecvMyAlarmList(true);
+        }
+    }
+
+    // 새로운 알림 정보 갯수 확인
+    public int calcNewAlarmNum(){
+        int dataNum = mDetailAlarmDataList.size();
+        int checkNum = 0;
+        for(int i = 0; i < dataNum; i++){
+            if(!mDetailAlarmDataList.get(i).entity.doneshow){
+                checkNum++;
+            }
+        }
+
+        return  checkNum;
+    }
+
+    // 알람 리스트를 UX로 열면 안열었던 모든 알람들을 열었으므로 반드시 아래의 함수 호출 필요
+    public void openAlarmList(){
+        int dataNum = mDetailAlarmDataList.size();
+        int checkNum = 0;
+        for(int i = 0; i < dataNum; i++){
+            mDetailAlarmDataList.get(i).entity.doneshow = true;
+        }
+
+        // normal alarm
+        mfbDBRef.child(alarmInfoString).child(normalalarmString).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot alarmSnapshot: snapshot.getChildren()) {
+                        MeditationAlarm alarmdata = alarmSnapshot.getValue(MeditationAlarm.class);
+                    }
+                }
+                else{
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        // find friend
+        mfbDBRef.child("alarms").child("friendrequest").child(mUserProfile.uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot friendsrequest: snapshot.getChildren()) {
+                        MeditationRequest friendsrequestdata = friendsrequest.getValue(MeditationRequest.class);
+                        if(friendsrequestdata.requesttype.equals("recv")){
+                            // 해당 uid 저장
+                            String uid = friendsrequest.getKey();
+                        }
+                    }
+                    notifyMyAlarmList(2);
+                }
+                else{
+                    notifyMyAlarmList(2);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                notifyMyAlarmList(2);
+            }
+        });
+
+        // emotion friends request
+        mfbDBRef.child("alarms").child("emotionfriendrequest").child(mUserProfile.uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot friendsrequest: snapshot.getChildren()) {
+                        MeditationRequest friendsrequestdata = friendsrequest.getValue(MeditationRequest.class);
+                        if(friendsrequestdata.requesttype.equals("recv")){
+                            // 해당 uid 저장
+                            String uid = friendsrequest.getKey();
+
+                        }
+                    }
+                }
+                else{
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 
-    public void recvMyAlarmList(){
+    // 알람 정보 서버에서 받기
+    public void recvMyAlarmList()
+    {
+        mDetailAlarmDataList.clear();
+
+        doneRecvNormalAlarm = false;
+        doneRecvFriendReqAlarm = false;
+        doneRecvEmotionFriendReqAlarm = false;
+
         // normal alarm
         mfbDBRef.child(alarmInfoString).child(normalalarmString).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -4568,15 +4661,20 @@ public class NetServiceManager {
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
+                                mOnRecvMyAlarmListListener.onRecvMyAlarmList(false);
                             }
                         });
                     }
+
+                    notifyMyAlarmList(1);
                 }
                 else{
+                    notifyMyAlarmList(1);
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                notifyMyAlarmList(1);
             }
         });
 
@@ -4613,17 +4711,21 @@ public class NetServiceManager {
                                 }
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
+                                    mOnRecvMyAlarmListListener.onRecvMyAlarmList(false);
                                 }
                             });
                         }
                     }
+
+                    notifyMyAlarmList(2);
                 }
                 else{
+                    notifyMyAlarmList(2);
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                notifyMyAlarmList(2);
             }
         });
 
@@ -4660,17 +4762,23 @@ public class NetServiceManager {
                                 }
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
+                                    mOnRecvMyAlarmListListener.onRecvMyAlarmList(false);
                                 }
                             });
                         }
                     }
+
+                    notifyMyAlarmList(3);
                 }
                 else{
+                    mOnRecvMyAlarmListListener.onRecvMyAlarmList(false);
+                    notifyMyAlarmList(3);
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                mOnRecvMyAlarmListListener.onRecvMyAlarmList(false);
+                notifyMyAlarmList(3);
             }
         });
 
