@@ -13,9 +13,12 @@ import android.widget.Toast;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.NotiBinding;
+import com.soulfriends.meditation.model.MeditationDetailAlarm;
+import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.view.friend.FriendEditAdapter;
+import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.view.noti.NotiAdapter;
 import com.soulfriends.meditation.view.noti.NotiItemViewModel;
 import com.soulfriends.meditation.viewmodel.NotiViewModel;
@@ -92,42 +95,56 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
 
     private List<NotiItemViewModel> ItemList() {
+
         List list = new ArrayList<>();
+        ArrayList<MeditationDetailAlarm> list_alarm = NetServiceManager.getinstance().mDetailAlarmDataList;
 
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < list_alarm.size(); i++)
         {
-            if(i % 6 == 0)
-            {
-                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 0, 0);
+            MeditationDetailAlarm alarm = list_alarm.get(i);
 
-                list.add(notiViewModel);
-            }
-            else if(i % 6 == 1){
-                NotiItemViewModel notiViewModel = new NotiItemViewModel(this, this, String.valueOf(i), String.valueOf(i), 0, 1);
+            NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), alarm);
 
-                list.add(notiViewModel);
-            }
-            else if(i % 6 == 2){
-                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 0, 2);
+            list.add(notiViewModel);
 
-                list.add(notiViewModel);
-            }
-            else if(i % 6== 3){
-                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 0, 3);
-
-                list.add(notiViewModel);
-            }
-            else if(i % 6 == 4){
-                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 1, 0);
-
-                list.add(notiViewModel);
-            }
-            else {
-                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 1, 1);
-
-                list.add(notiViewModel);
-            }
         }
+
+//        List list = new ArrayList<>();
+//
+//        for (int i = 0; i < 30; i++)
+//        {
+//            if(i % 6 == 0)
+//            {
+//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 0, 0);
+//
+//                list.add(notiViewModel);
+//            }
+//            else if(i % 6 == 1){
+//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this, this, String.valueOf(i), String.valueOf(i), 0, 1);
+//
+//                list.add(notiViewModel);
+//            }
+//            else if(i % 6 == 2){
+//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 0, 2);
+//
+//                list.add(notiViewModel);
+//            }
+//            else if(i % 6== 3){
+//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 0, 3);
+//
+//                list.add(notiViewModel);
+//            }
+//            else if(i % 6 == 4){
+//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 1, 0);
+//
+//                list.add(notiViewModel);
+//            }
+//            else {
+//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 1, 1);
+//
+//                list.add(notiViewModel);
+//            }
+//        }
 
         return list;
     }
@@ -155,6 +172,64 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
             case R.id.iv_reject: {
                 //  거절
 
+                MeditationDetailAlarm hAlarm = (MeditationDetailAlarm)obj;
+
+                if(hAlarm.entity.alarmtype == 2)
+                {
+                    if(hAlarm.entity.alarmsubtype == 1)
+                    {
+                        //  1 . 친구 신청 거절 (상대방이 나에게 신청)
+                        NetServiceManager.getinstance().setOnCancelFriendRequestListener(new NetServiceManager.OnCancelFriendRequestListener() {
+                            @Override
+                            public void onCancelFriendRequest(boolean validate) {
+
+                                if(validate)
+                                {
+                                    // 리스트에서 삭제
+                                    list_noti.remove(pos);
+                                    notiAdapter.notifyItemRemoved(pos);
+                                    notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+
+                                    //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        });
+
+                        NetServiceManager.getinstance().cancelFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  hAlarm.otheruser.uid);
+
+                    }
+                    else
+                    {
+                        //  2.  감정 공유 거절 (상대방이 나에게 신청)
+                        NetServiceManager.getinstance().setOnCancelFriendRequestListener(new NetServiceManager.OnCancelFriendRequestListener() {
+                            @Override
+                            public void onCancelFriendRequest(boolean validate) {
+
+                                if(validate)
+                                {
+                                    // 리스트에서 삭제
+                                    list_noti.remove(pos);
+                                    notiAdapter.notifyItemRemoved(pos);
+                                    notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+
+                                    //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        });
+
+                        NetServiceManager.getinstance().cancelEmotionFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  hAlarm.otheruser.uid);
+
+                    }
+                }
+
                 list_noti.remove(pos);
                 notiAdapter.notifyItemRemoved(pos);
                 notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
@@ -166,11 +241,66 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
                 //  수락
 
-                list_noti.remove(pos);
-                notiAdapter.notifyItemRemoved(pos);
-                notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                MeditationDetailAlarm hAlarm = (MeditationDetailAlarm)obj;
 
-                Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
+                if(hAlarm.entity.alarmtype == 2)
+                {
+                    if(hAlarm.entity.alarmsubtype == 1)
+                    {
+                        //  1 . 친구 신청 신청 (상대방이 나에게 신청)
+
+                        NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
+                            @Override
+                            public void onAcceptFriendRequest(boolean validate) {
+
+                                if(validate)
+                                {
+                                    // 리스트에서 삭제
+                                    list_noti.remove(pos);
+                                    notiAdapter.notifyItemRemoved(pos);
+                                    notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+
+                                    //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        });
+
+                        NetServiceManager.getinstance().AcceptFriend(NetServiceManager.getinstance().getUserProfile().uid,  hAlarm.otheruser.uid);
+                    }
+                    else
+                    {
+                        //  2.  감정 공유 신청 (상대방이 나에게 신청)
+
+                        NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
+                            @Override
+                            public void onAcceptFriendRequest(boolean validate) {
+
+                                if(validate)
+                                {
+                                    // 리스트에서 삭제
+                                    list_noti.remove(pos);
+                                    notiAdapter.notifyItemRemoved(pos);
+                                    notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+
+                                    //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        });
+
+                        NetServiceManager.getinstance().AcceptEmotionFriend(NetServiceManager.getinstance().getUserProfile().uid,  hAlarm.otheruser.uid);
+
+                    }
+                }
+
+
             }
             break;
         }

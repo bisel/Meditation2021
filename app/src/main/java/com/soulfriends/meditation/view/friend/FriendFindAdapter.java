@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.soulfriends.meditation.databinding.FriendFindItemBinding;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
+import com.soulfriends.meditation.util.UtilAPI;
 
 import java.util.List;
 
@@ -73,6 +75,13 @@ public class FriendFindAdapter extends RecyclerView.Adapter{
             bind.layoutBt.setVisibility(View.GONE);
             bind.layoutRequestbt.setVisibility(View.VISIBLE);
         }
+
+        // profile 이미지
+        if(friendFindItemViewModel.userProfile.profileimg != null && friendFindItemViewModel.userProfile.profileimg.length() != 0) {
+            UtilAPI.load_image(context, friendFindItemViewModel.userProfile.profileimg, bind.ivIcon);
+        }
+
+
     }
 
     @Override

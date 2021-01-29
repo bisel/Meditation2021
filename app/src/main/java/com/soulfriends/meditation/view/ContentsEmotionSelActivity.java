@@ -18,12 +18,15 @@ import com.soulfriends.meditation.databinding.FriendEditBinding;
 import com.soulfriends.meditation.dlg.AlertLineTwoPopup;
 import com.soulfriends.meditation.dlg.CopyrightDialog;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.parser.EmotionListData;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.viewmodel.ContentsEmotionSelViewModel;
 import com.soulfriends.meditation.viewmodel.ContentsEmotionSelViewModelFactory;
 import com.soulfriends.meditation.viewmodel.FriendEditViewModel;
 import com.soulfriends.meditation.viewmodel.FriendEditViewModelFactory;
+
+import java.util.ArrayList;
 
 public class ContentsEmotionSelActivity extends BaseActivity implements ResultListener {
 
@@ -51,6 +54,10 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
     private String releasedate = "";
     private String backgrroundImgName = "";
 
+
+    private String str_genre_id = "select_genre_id";
+    private String str_emoticon_id = "select_emoticon_id";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +81,59 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
         SndFileName = intent.getStringExtra("SndFileName");
         releasedate = intent.getStringExtra("releasedate");
         backgrroundImgName = intent.getStringExtra("backgrroundImgName");
+
+        str_genre_id = intent.getStringExtra("genre");
+        str_emoticon_id = intent.getStringExtra("emotion");
+
+        if(str_genre_id == null || str_genre_id.length() == 0)
+        {
+            // 없는 경우 
+            // 콘텐츠 새로 만든 경우에 해당됨
+        }
+        else
+        {
+            // 있는 경우
+            // 콘텐츠 수정된 경우 해당
+
+            if(str_genre_id.equals("명상"))
+            {
+                SelectKind(1);
+            }
+            else if(str_genre_id.equals("수면"))
+            {
+                SelectKind(2);
+            }
+            else if(str_genre_id.equals("음악"))
+            {
+                SelectKind(3);
+            }
+        }
+
+        if(str_emoticon_id == null || str_emoticon_id.length() == 0)
+        {
+            // 없는 경우
+            // 콘텐츠 새로 만든 경우에 해당됨
+
+
+        }
+        else
+        {
+            // 있는 경우
+            // 콘텐츠 수정된 경우 해당
+
+            ArrayList<EmotionListData> list = NetServiceManager.getinstance().getEmotionListMeditationDataList();
+
+            int find_emotion = 0;
+            for(int i = 0, len = list.size(); i < len; i++)
+            {
+                if(list.get(i).softemotion == str_emoticon_id)
+                {
+                    find_emotion = i;
+                    break;
+                }
+            }
+            SelectEmoticon(find_emotion);
+        }
     }
 
     @Override
@@ -96,8 +156,28 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
 
                     // 선택된 인덱스
 
-                    String str_kind_id = "select_kind_id";
-                    String str_emoticon_id = "select_emoticon_id";
+
+                    // 장르
+                    String str_genre = "";
+                    if(select_kind_id == 1)
+                    {
+                        str_genre = "명상";
+                    }
+                    else if(select_kind_id == 1)
+                    {
+                        str_genre = "수면";
+                    }
+                    else if(select_kind_id == 2)
+                    {
+                        str_genre = "음악";
+                    }
+
+                    String final_genre = str_genre;
+
+                    // 감정
+                    ArrayList<EmotionListData> list_emotion = NetServiceManager.getinstance().getEmotionListMeditationDataList();
+                    String str_emotion = list_emotion.get(select_emoticon_id).softemotion;
+
 
                     // 등록 시 저작권 정보 안내 팝업 노출 후 확인 시 업로드 진행 함
                     CopyrightDialog alertDlg = new CopyrightDialog(this, this);
@@ -119,8 +199,8 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                         intent.putExtra("releasedate", releasedate);
                         intent.putExtra("backgrroundImgName", backgrroundImgName);
 
-                        intent.putExtra("genre", str_kind_id); // 장르
-                        intent.putExtra("emotion", str_emoticon_id);
+                        intent.putExtra("genre", final_genre); // 장르
+                        intent.putExtra("emotion", str_emotion);
 
                         this.startActivity(intent);
                         this.overridePendingTransition(0, 0);
@@ -139,79 +219,79 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
             break;
 
             case R.id.iv_item1: {
-                SelectKind(id,1);
+                SelectKind(1);
             }
             break;
             case R.id.iv_item2: {
-                SelectKind(id,2);
+                SelectKind(2);
             }
             break;
             case R.id.iv_item3: {
-                SelectKind(id,3);
+                SelectKind(3);
             }
             break;
             case R.id.lay_1: {
-                SelectEmoticon(id,1);
+                SelectEmoticon(1);
             }
             break;
             case R.id.lay_2: {
-                SelectEmoticon(id,2);
+                SelectEmoticon(2);
             }
             break;
             case R.id.lay_3: {
-                SelectEmoticon(id,3);
+                SelectEmoticon(3);
             }
             break;
             case R.id.lay_4: {
-                SelectEmoticon(id,4);
+                SelectEmoticon(4);
             }
             break;
             case R.id.lay_5: {
-                SelectEmoticon(id,5);
+                SelectEmoticon(5);
             }
             break;
             case R.id.lay_6: {
-                SelectEmoticon(id,6);
+                SelectEmoticon(6);
             }
             break;
             case R.id.lay_7: {
-                SelectEmoticon(id,7);
+                SelectEmoticon(7);
             }
             break;
             case R.id.lay_8: {
-                SelectEmoticon(id,8);
+                SelectEmoticon(8);
             }
             break;
             case R.id.lay_9: {
-                SelectEmoticon(id,9);
+                SelectEmoticon(9);
             }
             break;
             case R.id.lay_10: {
-                SelectEmoticon(id,10);
+                SelectEmoticon(10);
             }
             break;
             case R.id.lay_11: {
-                SelectEmoticon(id,11);
+                SelectEmoticon(11);
             }
             break;
             case R.id.lay_12: {
-                SelectEmoticon(id,12);
+                SelectEmoticon(12);
             }
             break;
             case R.id.lay_13: {
-                SelectEmoticon(id,13);
+                SelectEmoticon(13);
             }
             break;
             case R.id.lay_14: {
-                SelectEmoticon(id,14);
+                SelectEmoticon(14);
             }
             break;
             case R.id.lay_15: {
-                SelectEmoticon(id,15);
+                SelectEmoticon(15);
             }
             break;
             case R.id.lay_16: {
-                SelectEmoticon(id,16);
+                SelectEmoticon(16);
             }
             break;
         }
@@ -222,7 +302,7 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
 
     }
 
-    private void SelectKind(int id, int index) {
+    private void SelectKind(int index) {
 
         // 이전 버튼 비선택 처리
         if (select_kind_id != -1) {
@@ -249,7 +329,7 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
 
     }
 
-    private void SelectEmoticon(int id, int index) {
+    private void SelectEmoticon(int index) {
         // 이전 버튼 비선택 처리
         if (select_emoticon_id != -1) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

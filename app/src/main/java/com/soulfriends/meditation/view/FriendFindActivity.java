@@ -21,6 +21,7 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.FriendEditBinding;
 import com.soulfriends.meditation.databinding.FriendFindBinding;
 import com.soulfriends.meditation.dlg.AlertLineOnePopup;
+import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
@@ -97,6 +98,8 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                 {
                     //Toast.makeText(getApplicationContext(),"success db",Toast.LENGTH_SHORT).show();
 
+                    Find_Friend();
+
                     hideKeyBoard();
                     binding.editText.clearFocus();
 
@@ -139,7 +142,7 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                 friend_state = 2;
             }
 
-            FriendFindItemViewModel friendFindItemViewModel = new FriendFindItemViewModel(this, String.valueOf(i), userProfile, friend_state);
+            FriendFindItemViewModel friendFindItemViewModel = new FriendFindItemViewModel(this, i, userProfile, friend_state);
 
             list_friend.add(friendFindItemViewModel);
 
@@ -197,17 +200,36 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
 
                 alertDlg.iv_ok.setOnClickListener(v -> {
 
-                    int index_id =  Integer.parseInt((String)obj);
+                    UserProfile userProfile = (UserProfile)obj;
 
-                    FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(index_id);
-                    friendFindItemViewModel.friend_state = 2;  // 감정공유 요청
+                    // 3. 친구 추가
+                    // sendFriendRequest(보내는 사람 uid,  받는 사람 uid)
+                    //        => 성공이 되면 "친구요청중"이라고 ux 변경
 
-                    // 리사이클 데이터 변경에따른 ui 업데이트
-                    friendFindAdapter.notifyDataSetChanged();
+                    NetServiceManager.getinstance().setOnSendFriendRequestListener(new NetServiceManager.OnSendFriendRequestListener() {
+                        @Override
+                        public void onSendFriendRequest(boolean validate) {
 
-                    Toast.makeText(this,"친구 요청중",Toast.LENGTH_SHORT).show();
+                            if(validate)
+                            {
+                                FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
+                                friendFindItemViewModel.friend_state = 2;  // 친구 요청
 
-                    alertDlg.dismiss();
+                                // 리사이클 데이터 변경에따른 ui 업데이트
+                                friendFindAdapter.notifyDataSetChanged();
+
+                                //Toast.makeText(this,"친구 요청중",Toast.LENGTH_SHORT).show();
+
+                                alertDlg.dismiss();
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    });
+
+                    NetServiceManager.getinstance().sendFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
                 });
             }
             break;
@@ -223,17 +245,33 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
 
                 alertDlg.iv_ok.setOnClickListener(v -> {
 
-                    int index_id =  Integer.parseInt((String)obj);
+                    UserProfile userProfile = (UserProfile)obj;
 
-                    FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(index_id);
-                    friendFindItemViewModel.friend_state = 2;  // 삭제가 되어야 함.
+                    NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
+                        @Override
+                        public void onRemoveFriend(boolean validate) {
 
-                    // 리사이클 데이터 변경에따른 ui 업데이트
-                    friendFindAdapter.notifyDataSetChanged();
+                            if(validate)
+                            {
+                                // 삭제
+                                // 리사이클 데이터 변경에따른 ui 업데이트
+                                list_friend.remove(pos);
+                                friendFindAdapter.notifyItemRemoved(pos);
+                                friendFindAdapter.notifyItemRangeChanged(pos, list_friend.size());
 
-                    Toast.makeText(this,"삭제처리",Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(this,"친구 요청중",Toast.LENGTH_SHORT).show();
 
-                    alertDlg.dismiss();
+                                alertDlg.dismiss();
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    });
+
+                    NetServiceManager.getinstance().removeFriend(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
+
                 });
             }
             break;
@@ -249,15 +287,33 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
 
                 alertDlg.iv_ok.setOnClickListener(v -> {
 
-                    int index_id =  Integer.parseInt((String)obj);
+                    UserProfile userProfile = (UserProfile)obj;
 
-                    FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(index_id);
-                    friendFindItemViewModel.friend_state = 0;  // 감정공유 요청 중
 
-                    // 리사이클 데이터 변경에따른 ui 업데이트
-                    friendFindAdapter.notifyDataSetChanged();
+                    NetServiceManager.getinstance().setOnCancelFriendRequestListener(new NetServiceManager.OnCancelFriendRequestListener() {
+                        @Override
+                        public void onCancelFriendRequest(boolean validate) {
 
-                    Toast.makeText(this,"친구 추가+",Toast.LENGTH_SHORT).show();
+                            if(validate)
+                            {
+                                FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
+                                friendFindItemViewModel.friend_state = 0;  // 친구추가로 변경
+
+                                // 리사이클 데이터 변경에따른 ui 업데이트
+                                friendFindAdapter.notifyDataSetChanged();
+
+                                //Toast.makeText(this,"친구 요청중",Toast.LENGTH_SHORT).show();
+
+                                alertDlg.dismiss();
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    });
+
+                    NetServiceManager.getinstance().cancelFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
 
                     alertDlg.dismiss();
 
@@ -281,9 +337,6 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
             break;
             case R.id.iv_find:
             {
-
-
-
                 String strInputWord = viewModel.inputword.getValue();
 
                 if(strInputWord.length() > 0) {
@@ -299,6 +352,8 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                     binding.layoutNofind.setVisibility(View.VISIBLE);
                     binding.recyclerview.setVisibility(View.GONE);
                 }
+
+                binding.editText.clearFocus();
 
             }
             break;

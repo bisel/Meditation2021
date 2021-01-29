@@ -39,7 +39,7 @@
             android:fontFamily="@font/font_notosanskr_regular"
             android:includeFontPadding="false"
             android:lineSpacingExtra="6sp"
-            android:text="TextView"
+            android:text="@{viewModel.nickname}"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"

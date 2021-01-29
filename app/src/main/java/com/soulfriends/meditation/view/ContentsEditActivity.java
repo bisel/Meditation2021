@@ -97,6 +97,9 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
     public String orig_emotion;              // 감정 내용
 
     public int orig_bgimg_indx;              // 배경 이미지 인덱스 번호
+    
+    public boolean bChange_Thumb; // 썸네일 변경 여부
+    public boolean bChange_Audio; // 오디오 변경 여부
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +140,6 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
             binding.layoutThumbAdd.setVisibility(View.GONE);
             binding.layoutThumbImage.setVisibility(View.VISIBLE);
 
-
             UtilAPI.load_image(this, orig_thumbnail_uri, binding.ivPictureImage);
 
             // 오디오
@@ -159,21 +161,23 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
 
                 SetState_Audio(eAudioState.audio);
 
+                // 녹음된 경우에는 파일명이 나오지 않게 표시 한다.
                 binding.tvContext.setText(filename);
-
             }
-
 
             // 배경
             UtilAPI.s_id_backimamge_makecontents = orig_bgimg_indx;
 
 
+            // ui 상태
+            bCheck_TitleName = true;
+            bCheck_Thumb = true;
+            bCheck_Audio = true;
+            bCheck_Background = true;
+
+            Check_NextButton();
+
         }
-
-        // default
-        //binding.layoutThumbAdd.setVisibility(View.VISIBLE);
-
-        //binding.layoutThumbImage.setVisibility(View.GONE);
 
         // 배경음악과 오디오 재생 중이면 정지되도록 한다.
 
@@ -188,10 +192,6 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                 AudioPlayer.instance().pause();
             }
         }
-
-
-        // audio
-        //SetState_Audio(eAudioState.audio);
 
         binding.editTitle.setOnEditorActionListener(new EditText.OnEditorActionListener()
         {
@@ -327,6 +327,8 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
 
         bCheck_Audio = true;
 
+        bChange_Audio = true;
+
         playtime_sec_audio = (int)(duration / 1000);
 
         // 시간단위
@@ -378,6 +380,8 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
         binding.ivPictureImage.setImageURI(albumURI);
 
         bCheck_Thumb = true;
+
+        bChange_Thumb= true;
 
         Check_NextButton();
     }
@@ -587,30 +591,96 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
 
                     // String titleName, String thumnailImgName,String playtime, int IsSndFile, String SndFileName, String releasedate, String backgrroundImgName, String genre,String emotion){
 
-                    // 타이틀
-                    intent.putExtra("titleName", viewModel.title.getValue());
-                    intent.putExtra("thumnailImgName", mCurrentPhotoPath);
-                    intent.putExtra("playtime", playtime_sec_audio);
+                    //  public String orig_title;                // 콘텐츠 제목
+                    //  public String orig_thumbnail_uri;        // thumnail http 용 url
+                    //  public String orig_playtime;             // 콘텐츠 재생 시간(s)
+                    //  public int orig_isRecordSndFile = 0;     // 0 : 음악파일로  1 : 녹음한 걸로 소셜 콘텐츠 만듬 // IsSndFile
+                    //  public String orig_audio;                // audio 파일
+                    //  public String orig_releasedate;          // 콘텐츠 릴리즈 날짜. ex)2020-11-26
+                    //  public String orig_bgimg;                // 배경 이미지.
+                    //  public String orig_genre;                // 콘텐츠 장르 : 명상, 수면 등등
+                    //  public String orig_emotion;              // 감정 내용
+                    //  public int orig_bgimg_indx;              // 배경 이미지 인덱스 번호
 
-                    if (Upload_Audio_filePath.length() == 0) {
-                        // 녹음 파일 이고
-                        intent.putExtra("IsSndFile", 1);
-                        intent.putExtra("SndFileName", NetServiceManager.getinstance().mMyContentsPath);
-                    } else {
-                        // 파일에서
-                        intent.putExtra("IsSndFile", 0);
-                        intent.putExtra("SndFileName", Upload_Audio_filePath);
+                    // 타이틀
+                    if(orig_title == viewModel.title.getValue())
+                    {
+                        intent.putExtra("titleName", ""); // null 일 경우 공백으로 설정
+                    }
+                    else
+                    {
+                        intent.putExtra("titleName", viewModel.title.getValue());
+                    }
+
+                    // 썸네일 변경
+                    if(bChange_Thumb)
+                    {
+                        // 썸네일 변경 된 경우에 해당된다.
+                        intent.putExtra("thumnailImgName", mCurrentPhotoPath);
+                    }
+                    else
+                    {
+                        intent.putExtra("thumnailImgName", "");
+                    }
+
+                    // 오디오 변경
+                    if(bChange_Audio)
+                    {
+                        // 오디오 변경 된 경우에 해당된다.
+                        if (Upload_Audio_filePath.length() == 0) {
+                            // 녹음 파일 이고
+                            intent.putExtra("IsSndFile", 1);
+                            intent.putExtra("SndFileName", NetServiceManager.getinstance().mMyContentsPath);
+                        } else {
+                            // 파일에서
+                            intent.putExtra("IsSndFile", 0);
+                            intent.putExtra("SndFileName", Upload_Audio_filePath);
+                        }
+                    }
+                    else
+                    {
+                        intent.putExtra("IsSndFile", -1);
+                        intent.putExtra("SndFileName", "");
+                    }
+
+                    if(orig_playtime == String.valueOf(playtime_sec_audio))
+                    {
+                        intent.putExtra("playtime", -1);
+                    }
+                    else
+                    {
+                        intent.putExtra("playtime", playtime_sec_audio);
                     }
 
                     SimpleDateFormat format_date = new SimpleDateFormat("yyyy-MM-dd");
                     Date date_now = new Date(System.currentTimeMillis());
                     String curdate = format_date.format(date_now);
 
-                    intent.putExtra("releasedate", curdate);
+                    if(orig_releasedate == curdate)
+                    {
+                        intent.putExtra("releasedate", "");
+                    }
+                    else
+                    {
+                        intent.putExtra("releasedate", curdate);
+                    }
 
+                    // 장르
+                    intent.putExtra("genre", orig_genre);
 
-                    if (list_background_string.size() > UtilAPI.s_id_backimamge_makecontents && UtilAPI.s_id_backimamge_makecontents > -1) {
-                        intent.putExtra("backgrroundImgName", list_background_string.get(UtilAPI.s_id_backimamge_makecontents));
+                    //감정
+                    intent.putExtra("emotion", orig_emotion);
+
+                    // 배경
+                    if(orig_bgimg_indx == UtilAPI.s_id_backimamge_makecontents)
+                    {
+                        intent.putExtra("backgrroundImgName", "");
+                    }
+                    else
+                    {
+                        if (list_background_string.size() > UtilAPI.s_id_backimamge_makecontents && UtilAPI.s_id_backimamge_makecontents > -1) {
+                            intent.putExtra("backgrroundImgName", list_background_string.get(UtilAPI.s_id_backimamge_makecontents));
+                        }
                     }
 
                     this.startActivity(intent);
@@ -657,6 +727,8 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
         // 녹음 완료 할 경우
         SetState_Audio(eAudioState.play);
         StopTimer();
+
+        bChange_Audio = true;
 
         bAudioIng = false;
 

@@ -26,6 +26,16 @@ public class MainViewModel extends ViewModel {
     private MutableLiveData<String> title = new MutableLiveData<>();
     private ResultListener listener;
 
+    public MutableLiveData<String> getAlarm() {
+        return alarm;
+    }
+
+    public void setAlarm(String alarm) {
+        this.alarm.setValue(alarm);
+    }
+
+    private MutableLiveData<String> alarm = new MutableLiveData<>();
+
     private Context context;
 
     private long mLastClickTime = 0;

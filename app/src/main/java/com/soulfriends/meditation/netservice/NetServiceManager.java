@@ -4847,7 +4847,7 @@ public class NetServiceManager {
         mOnRecvFindUserListListener = listenfunc;
     }
 
-    public ArrayList<UserProfile> mFindUserList = new ArrayList<UserProfile>();
+        public ArrayList<UserProfile> mFindUserList = new ArrayList<UserProfile>();
 
     // 100개 최대
     // orderByChild을 이용하면 지정된 하위키의 조건을 가지고 있는 entry를 처리한다.

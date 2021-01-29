@@ -21,6 +21,7 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.MainBinding;
 import com.soulfriends.meditation.dlg.PsychologyDlg;
 import com.soulfriends.meditation.model.MeditationContents;
+import com.soulfriends.meditation.model.MeditationDetailAlarm;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.parser.ResultData;
@@ -162,6 +163,43 @@ public class MainActivity extends BaseActivity implements ResultListener {
                 AudioPlayer.instance().update();
             }
         }
+
+        //---------------------------------------------------------
+        // 알람 정보 얻기
+        //---------------------------------------------------------
+
+        NetServiceManager.getinstance().setOnRecvMyAlarmListListener(new NetServiceManager.OnRecvMyAlarmListListener() {
+            @Override
+            public void onRecvMyAlarmList(boolean validate) {
+
+                if(validate)
+                {
+
+                    //ArrayList<MeditationDetailAlarm> list_alarm = NetServiceManager.getinstance().mDetailAlarmDataList;
+
+                    // 새로운 알림 정보 갯수 확인
+                    int total_alarm = NetServiceManager.getinstance().calcNewAlarmNum();
+
+                    String str_alarm = "";
+                    if(total_alarm > 99)
+                    {
+                        str_alarm= "99+";
+                    }
+                    else
+                    {
+                        str_alarm = String.valueOf(total_alarm);
+                    }
+                    viewModel.setAlarm(str_alarm);
+                }
+                else
+                {
+
+                }
+            }
+        });
+
+
+        NetServiceManager.getinstance().recvMyAlarmList();
     }
 
     @Override // 2020.12.20
@@ -437,15 +475,15 @@ public class MainActivity extends BaseActivity implements ResultListener {
             break;
             case R.id.meun_btn: {
 
-//                this.startActivity(new Intent(this, SettingActivity.class));
-//                this.overridePendingTransition(0, 0);
-//                finish();
+                this.startActivity(new Intent(this, SettingActivity.class));
+                this.overridePendingTransition(0, 0);
+                finish();
 
                 // 테스트
 
-                this.startActivity(new Intent(this, UserinfoExtActivity.class));
-                this.overridePendingTransition(0, 0);
-                finish();
+//                this.startActivity(new Intent(this, UserinfoExtActivity.class));
+//                this.overridePendingTransition(0, 0);
+//                finish();
 //
 //                this.startActivity(new Intent(this, MyContentsActivity.class));
 //                //this.startActivity(new Intent(this, FriendEditActivity.class));

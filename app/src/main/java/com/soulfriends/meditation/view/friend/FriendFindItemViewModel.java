@@ -3,6 +3,7 @@ package com.soulfriends.meditation.view.friend;
 import android.os.SystemClock;
 import android.view.View;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.soulfriends.meditation.model.UserProfile;
@@ -18,19 +19,31 @@ public class FriendFindItemViewModel extends ViewModel {
 
     public int friend_state = 0;
 
-    public String id = "";
+    public int position = 0;
 
     public UserProfile userProfile;
 
-    public FriendFindItemViewModel(ItemClickListenerExt listener, String id, UserProfile userProfile,  int friend_state) {
+    public MutableLiveData<String> getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname.setValue(nickname);
+    }
+
+    public MutableLiveData<String> nickname = new MutableLiveData<>();
+
+    public FriendFindItemViewModel(ItemClickListenerExt listener, int position, UserProfile userProfile,  int friend_state) {
 
         this.listener = listener;
 
         this.friend_state = friend_state;
 
-        this.id = id;
+        this.position = position;
 
         this.userProfile = userProfile;
+
+        setNickname(userProfile.nickname);
 
     }
 
@@ -41,6 +54,6 @@ public class FriendFindItemViewModel extends ViewModel {
         }
         mLastClickTime = SystemClock.elapsedRealtime();
 
-        this.listener.onItemClick(view, this.id, this.friend_state);
+        this.listener.onItemClick(view, this.userProfile, position);
     }
 }

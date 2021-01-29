@@ -277,7 +277,7 @@
                 android:includeFontPadding="false"
                 android:letterSpacing="-0.02"
                 android:lineSpacingExtra="0sp"
-                android:text="+99"
+                android:text="@={viewModel.alarm}"
                 android:textColor="@color/white"
                 android:textSize="8sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView25"

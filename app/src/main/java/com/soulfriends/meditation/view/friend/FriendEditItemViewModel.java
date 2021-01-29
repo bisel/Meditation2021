@@ -6,6 +6,7 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -20,6 +21,8 @@ public class FriendEditItemViewModel extends ViewModel {
 
     public int position = -1;
 
+    public UserProfile userProfile;
+
     public MutableLiveData<String> getNickname() {
         return nickname;
     }
@@ -30,13 +33,15 @@ public class FriendEditItemViewModel extends ViewModel {
 
     public MutableLiveData<String> nickname = new MutableLiveData<>();     // 닉네임
 
-    public FriendEditItemViewModel(ItemClickListenerExt listener, String nickname,  String id) {
+    public FriendEditItemViewModel(ItemClickListenerExt listener, int position, UserProfile userProfile) {
 
         this.listener = listener;
 
-        setNickname(nickname);
+        setNickname(userProfile.nickname);
 
-        this.id = id;
+        this.position = position;
+
+        this.userProfile = userProfile;
     }
 
     public void OnClicked_Select(View view)
@@ -46,6 +51,6 @@ public class FriendEditItemViewModel extends ViewModel {
         }
         mLastClickTime = SystemClock.elapsedRealtime();
 
-        this.listener.onItemClick(view, this.id, position);
+        this.listener.onItemClick(view, this.userProfile, position);
     }
 }

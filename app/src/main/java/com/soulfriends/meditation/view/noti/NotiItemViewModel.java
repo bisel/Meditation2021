@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.soulfriends.meditation.R;
+import com.soulfriends.meditation.model.MeditationDetailAlarm;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -19,10 +20,6 @@ public class NotiItemViewModel extends ViewModel {
 
     private long mLastClickTime = 0;
 
-    public int main_type = 0;
-    public int sub_type = 0;
-
-    public String nickName = "";
     public String id = "";
 
    private Context context;
@@ -39,58 +36,68 @@ public class NotiItemViewModel extends ViewModel {
 
     public MutableLiveData<String> Contents = new MutableLiveData<>();     // 내용
 
-    public NotiItemViewModel(Context context, ItemClickListenerExt listener, String id, String nickName, int main_type, int sub_type) {
+    public MeditationDetailAlarm hAlarm;
+
+    public NotiItemViewModel(Context context, ItemClickListenerExt listener, String id, MeditationDetailAlarm hAlarm) {
 
         this.listener = listener;
         this.context = context;
 
         this.id = id;
 
-        this.main_type = main_type;
-        this.sub_type = sub_type;
+        this.hAlarm = hAlarm;
 
-        this.nickName = nickName;
+        String strText = hAlarm.otheruser.nickname;
 
-        String strText = nickName;
-
-        if(main_type == 0)
+        // alarm type : 1 : 간단 알람  2 : 수락,거절 알람
+        //
+        // alarm subtype
+        //  1.  친구 신청 수락 (상대방이 수락)
+        //  2.  친구 신청 거절 (상대방이 거절)
+        //  3.  감정 공유 수락 (상다방이 나에게 수락)
+        //  4.  감정 공유 거절 (상다방이 나에게 거절)
+        //
+        //  1 . 친구 신청 신청 (상대방이 나에게 신청)
+        //  2.  감정 공유 신청 (상대방이 나에게 신청)
+        if(hAlarm.entity.alarmtype == 1)
         {
-            switch(sub_type)
+            switch(hAlarm.entity.alarmsubtype)
             {
-                case 0:
+                case 1:
                 {
                     strText += context.getResources().getString(R.string.noti_a_0);
                 }
                 break;
-                case 1:
+                case 2:
                 {
                     strText += context.getResources().getString(R.string.noti_a_1);
                 }
                 break;
-                case 2:
+                case 3:
                 {
                     strText += context.getResources().getString(R.string.noti_a_2);
                 }
                 break;
-                case 3:
+                case 4:
                 {
                     strText += context.getResources().getString(R.string.noti_a_3);
                 }
                 break;
             }
         }
-        else
+        else if(hAlarm.entity.alarmtype == 2)
         {
-            switch(sub_type)
+            switch(hAlarm.entity.alarmsubtype)
             {
-                case 0:
-                {
-                    strText += context.getResources().getString(R.string.noti_b_0);
-                }
-                break;
                 case 1:
                 {
                     strText += context.getResources().getString(R.string.noti_b_1);
+
+                }
+                break;
+                case 2:
+                {
+                    strText += context.getResources().getString(R.string.noti_b_0);
                 }
                 break;
             }
@@ -106,6 +113,6 @@ public class NotiItemViewModel extends ViewModel {
         }
         mLastClickTime = SystemClock.elapsedRealtime();
 
-        this.listener.onItemClick(view, this.id, position);
+        this.listener.onItemClick(view, hAlarm, position);
     }
 }

@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.FriendEditBinding;
+import com.soulfriends.meditation.model.MeditationDetailFriend;
+import com.soulfriends.meditation.model.UserProfile;
+import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.view.friend.FriendEditAdapter;
@@ -36,6 +39,8 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
 
     private List list_friend = new ArrayList<>();
 
+    private LinearLayoutManager layoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +54,49 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
         viewModel = new ViewModelProvider(this.getViewModelStore(), friendEditViewModelFactory).get(FriendEditViewModel.class);
         binding.setViewModel(viewModel);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         //rcv.setLayoutManager(layoutManager);
 
-        list_friend = ItemList();
+//        list_friend = ItemList();
+//        friendEditAdapter = new FriendEditAdapter(list_friend, this, this);
+//
+//        binding.recyclerview.setAdapter(friendEditAdapter);
+//        binding.recyclerview.setLayoutManager(layoutManager);
+//        binding.recyclerview.setNestedScrollingEnabled(false);  // 12.02.괜찮은듯
+
+        NetServiceManager.getinstance().setOnRecvFriendsListener(new NetServiceManager.OnRecvFriendsListener() {
+            @Override
+            public void onRecvFriends(boolean validate) {
+
+                if(validate)
+                {
+                    DoFriendList();
+                }
+                else
+                {
+
+                }
+            }
+        });
+
+
+        NetServiceManager.getinstance().recvFriendsList();
+    }
+
+    private void DoFriendList()
+    {
+        List list = new ArrayList<>();
+        ArrayList<MeditationDetailFriend> list_user = NetServiceManager.getinstance().mDetialFriendsList;
+
+        int count = 0;
+        for (int i = 0; i < list_user.size(); i++) {
+            MeditationDetailFriend meditationDetailFriend = list_user.get(i);
+
+            FriendEditItemViewModel friendEditItemViewModel = new FriendEditItemViewModel(this, count, meditationDetailFriend.mUserProfile);
+
+            list.add(friendEditItemViewModel);
+        }
+
         friendEditAdapter = new FriendEditAdapter(list_friend, this, this);
 
         binding.recyclerview.setAdapter(friendEditAdapter);
@@ -60,18 +104,24 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
         binding.recyclerview.setNestedScrollingEnabled(false);  // 12.02.괜찮은듯
     }
 
-    private List<FriendEditItemViewModel> ItemList() {
-        List list = new ArrayList<>();
-
-        for (int i = 0; i < 50; i++)
-        {
-            FriendEditItemViewModel friendEditItemViewModel = new FriendEditItemViewModel(this, String.valueOf(i) ,String.valueOf(i));
-
-            list.add(friendEditItemViewModel);
-        }
-
-        return list;
-    }
+//    private List<FriendEditItemViewModel> ItemList() {
+//
+//
+//
+//
+//
+////
+////        List list = new ArrayList<>();
+////
+////        for (int i = 0; i < 50; i++)
+////        {
+////            FriendEditItemViewModel friendEditItemViewModel = new FriendEditItemViewModel(this, String.valueOf(i) ,String.valueOf(i));
+////
+////            list.add(friendEditItemViewModel);
+////        }
+//
+//        return list;
+//    }
 
     @Override
     public void onSuccess(Integer id, String message) {
@@ -99,17 +149,41 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
                 // 삭제 버튼 선택하면
                 // 서버에 보내고 성공 이벤트 받고 리스트에서 삭제하도록 한다.
                 // 일단 테스트로 삭제 기능
-                int index_id = Integer.parseInt((String)obj);
+                //int index_id = Integer.parseInt((String)obj);
+
+                UserProfile userProfile = (UserProfile)obj;
+
+                NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
+                    @Override
+                    public void onRemoveFriend(boolean validate) {
+
+                        if(validate)
+                        {
+                            // 삭제
+                            // 리사이클 데이터 변경에따른 ui 업데이트
+                            list_friend.remove(pos);
+                            friendEditAdapter.notifyItemRemoved(pos);
+                            friendEditAdapter.notifyItemRangeChanged(pos, list_friend.size());
+
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                });
+
+                NetServiceManager.getinstance().removeFriend(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
 
                 list_friend.remove(pos);
                 friendEditAdapter.notifyItemRemoved(pos);
                 friendEditAdapter.notifyItemRangeChanged(pos, list_friend.size());
 
-                String msg = "id = ";
-                msg += String.valueOf(index_id);
-                msg += " , pos = ";
-                msg += String.valueOf(pos);
-                Toast.makeText(this, msg ,Toast.LENGTH_SHORT).show();
+//                String msg = "id = ";
+//                msg += String.valueOf(index_id);
+//                msg += " , pos = ";
+//                msg += String.valueOf(pos);
+//                Toast.makeText(this, msg ,Toast.LENGTH_SHORT).show();
 
             }
             break;

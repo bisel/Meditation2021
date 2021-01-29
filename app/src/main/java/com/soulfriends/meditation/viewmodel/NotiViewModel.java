@@ -6,6 +6,7 @@ import android.view.View;
 
 import androidx.lifecycle.ViewModel;
 
+import com.soulfriends.meditation.model.MeditationDetailAlarm;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 
@@ -15,6 +16,7 @@ public class NotiViewModel extends ViewModel {
     private Context context;
 
     private long mLastClickTime = 0;
+
 
 
     public NotiViewModel(Context mContext, ResultListener listener) {
