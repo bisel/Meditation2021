@@ -1,9 +1,553 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.ContentsEditActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data class="ContentsEditBinding">
+
+        <variable
+            name="viewModel"
+            type="com.soulfriends.meditation.viewmodel.ContentsEditViewModel">
+
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/social_create_bg"
+        tools:context=".view.ContentsMakeActivity">
+
+        <FrameLayout
+            android:id="@+id/ic_close"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="26dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="11.4dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:clickable="false"
+                app:srcCompat="@drawable/back_btn" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="200dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="43dp"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="9sp"
+            android:text="@string/contentsmake_title"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_titlebg"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:srcCompat="@drawable/social_create_title" />
+
+        <EditText
+            android:id="@+id/edit_title"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="left"
+            android:maxLines="1"
+            android:background="@android:color/transparent"
+            android:hint="@string/contentsmake_titleinput"
+            android:imeOptions="actionDone"
+            android:includeFontPadding="false"
+            android:inputType="text"
+            android:text="@={viewModel.title}"
+            android:lineSpacingExtra="6sp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_titlebg"
+            app:layout_constraintEnd_toEndOf="@+id/iv_titlebg"
+            app:layout_constraintStart_toStartOf="@+id/iv_titlebg"
+            app:layout_constraintTop_toTopOf="@+id/iv_titlebg" />
+
+        <TextView
+            android:id="@+id/tv_thumb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37dp"
+            android:fontFamily="@font/font_notosanskr_medium"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="8sp"
+            android:text="@string/contentsmake_thumb"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_titlebg" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_thumb_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_thumb">
+
+            <ImageView
+                android:id="@+id/iv_picture"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="7dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/social_create_thumbimg" />
+
+            <ImageView
+                android:id="@+id/iv_picture_add"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="34dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/iv_picture"
+                app:srcCompat="@drawable/social_create_addphoto_1" />
+
+            <TextView
+                android:id="@+id/tv_picture_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/contentsmake_pictureadd"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_picture"
+                app:layout_constraintStart_toStartOf="@+id/iv_picture"
+                app:layout_constraintTop_toBottomOf="@+id/iv_picture_add" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_thumb_image"
+            android:layout_width="130dp"
+            android:layout_height="125dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_thumb">
+
+            <ImageView
+                android:id="@+id/iv_picture_image"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="7dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/social_create_thumbimg" />
+
+            <ImageView
+                android:id="@+id/iv_picture_icon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/social_edit_thumb" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 녹음 / 업로드 레이아웃-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_audio_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_thumb">
+
+            <TextView
+                android:id="@+id/tv_context"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/contentsmake_context"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_audio"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                android:layout_marginRight="30dp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/tv_context"
+                app:srcCompat="@drawable/social_create_record" />
+
+            <ImageView
+                android:id="@+id/iv_upload"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="34dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/tv_context"
+                app:srcCompat="@drawable/social_create_upload" />
+
+            <TextView
+                android:id="@+id/tv_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/contentsmake_audio"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_audio"
+                app:layout_constraintStart_toStartOf="@+id/iv_audio"
+                app:layout_constraintTop_toBottomOf="@+id/iv_audio" />
+
+            <TextView
+                android:id="@+id/tv_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/contentsmake_upload"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_upload"
+                app:layout_constraintStart_toStartOf="@+id/iv_upload"
+                app:layout_constraintTop_toBottomOf="@+id/iv_upload" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <!-- 녹음 진행-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_audio_ing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_thumb">
+
+            <TextView
+                android:id="@+id/tv_context_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="6sp"
+                android:text="03:40"
+                android:textColor="#a59df7"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/iv_audio_stop"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:layout_marginTop="12dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_context_1"
+                android:background="@drawable/social_create_stop" />
+
+            <TextView
+                android:id="@+id/tv_audio_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/contentsmake_audio_stop"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_audio_stop"
+                app:layout_constraintStart_toStartOf="@+id/iv_audio_stop"
+                app:layout_constraintTop_toBottomOf="@+id/iv_audio_stop" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 재생 / 다시녹음-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_audio_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_thumb">
+
+            <TextView
+                android:id="@+id/tv_context_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="6sp"
+                android:text="@={viewModel.audio_time}"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_audio_2"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintEnd_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toBottomOf="@+id/tv_context_2"
+                android:background="@drawable/social_create_play" />
+
+            <ImageView
+                android:id="@+id/iv_re_audiobt"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="34dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toBottomOf="@+id/tv_context_2"
+                app:srcCompat="@drawable/social_create_upload" />
+
+            <TextView
+                android:id="@+id/tv_audio_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/contentsmake_audioplay"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_audio_2"
+                app:layout_constraintStart_toStartOf="@+id/iv_audio_2"
+                app:layout_constraintTop_toBottomOf="@+id/iv_audio_2" />
+
+            <TextView
+                android:id="@+id/tv_re_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/contentsmake_reaudio"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_re_audiobt"
+                app:layout_constraintStart_toStartOf="@+id/iv_re_audiobt"
+                app:layout_constraintTop_toBottomOf="@+id/iv_re_audiobt" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/iv_next"
+            android:layout_width="120dp"
+            android:layout_height="54dp"
+            android:layout_marginBottom="20dp"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/social_btn_disable" />
+
+
+
+        <TextView
+            android:id="@+id/tv_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="8sp"
+            android:text="@string/contentsmake_next"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_next"
+            app:layout_constraintEnd_toEndOf="@+id/iv_next"
+            app:layout_constraintStart_toStartOf="@+id/iv_next"
+            app:layout_constraintTop_toTopOf="@+id/iv_next" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_background_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="55dp"
+            android:layout_marginRight="55dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/iv_next"
+            app:layout_constraintTop_toTopOf="@+id/iv_next">
+
+            <ImageView
+                android:id="@+id/iv_backgroundbt"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/social_create_bgimg" />
+
+            <ImageView
+                android:id="@+id/iv_bg_add"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_backgroundbt"
+                app:layout_constraintEnd_toEndOf="@+id/iv_backgroundbt"
+                app:layout_constraintStart_toStartOf="@+id/iv_backgroundbt"
+                app:layout_constraintTop_toTopOf="@+id/iv_backgroundbt"
+                app:srcCompat="@drawable/social_create_addphoto_2" />
+
+            <TextView
+                android:id="@+id/tv_background"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/contentsmake_background"
+                android:textColor="@color/white"
+                android:textSize="8sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_backgroundbt"
+                app:layout_constraintStart_toStartOf="@+id/iv_backgroundbt"
+                app:layout_constraintTop_toBottomOf="@+id/iv_backgroundbt" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_background_image"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="55dp"
+            android:layout_marginRight="55dp"
+            app:layout_constraintEnd_toStartOf="@+id/iv_next"
+            app:layout_constraintTop_toTopOf="@+id/iv_next">
+
+            <ImageView
+                android:id="@+id/iv_background_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="6dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/social_create_bgimg" />
+
+            <TextView
+                android:id="@+id/tv_background_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/font_notosanskr_medium"
+                android:gravity="center_horizontal"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/contentsmake_background"
+                android:textColor="@color/white"
+                android:textSize="8sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_background_image"
+                app:layout_constraintStart_toStartOf="@+id/iv_background_image"
+                app:layout_constraintTop_toBottomOf="@+id/iv_background_image" />
+
+            <ImageView
+                android:id="@+id/iv_bg_icon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/social_edit_bg" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

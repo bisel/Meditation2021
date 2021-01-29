@@ -83,8 +83,8 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
             case R.id.ic_close: {
 
                 // 닫기
-                this.startActivity(new Intent(this, MyContentsActivity.class));
-                this.overridePendingTransition(0, 0);
+                //this.startActivity(new Intent(this, MyContentsActivity.class));
+                //this.overridePendingTransition(0, 0);
                 finish();
 
             }
@@ -125,6 +125,11 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                         this.startActivity(intent);
                         this.overridePendingTransition(0, 0);
                         finish();
+
+                        if(UtilAPI.s_activity_temp != null) {
+                            ContentsMakeActivity contentsMakeActivity = (ContentsMakeActivity) UtilAPI.s_activity_temp;
+                            contentsMakeActivity.finish();
+                        }
 
                         alertDlg.dismiss();
                     });
@@ -292,8 +297,8 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
     public void onBackPressed() {
 
         // 닫기
-        this.startActivity(new Intent(this, MyContentsActivity.class));
-        this.overridePendingTransition(0, 0);
+        //this.startActivity(new Intent(this, MyContentsActivity.class));
+        //this.overridePendingTransition(0, 0);
         finish();
     }
 

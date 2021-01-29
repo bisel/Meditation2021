@@ -4011,6 +4011,8 @@ public class NetServiceManager {
 
     public boolean delMyContentsRecordFile()
     {
+        if(mMyContentsPath == null) return false; //dlsmdla
+
         File delFile = new File(mMyContentsPath);
         if(delFile.exists()){
             delFile.delete();
@@ -4630,6 +4632,10 @@ public class NetServiceManager {
         }
 
         boolean bFinalFindNormalFriend = bFindNormalFriend;
+
+        if(mfbDBRef.child("alarms").child(findType).child(mUserProfile.uid) == null) {
+            mOnRecvFriendsRequestListener.onRecvFriendsRequest(false);
+        }
 
         mfbDBRef.child("alarms").child(findType).child(mUserProfile.uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

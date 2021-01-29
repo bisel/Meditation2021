@@ -13,6 +13,7 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.UtilAPI;
 
 public class ContentsUploadActivity extends BaseActivity {
 
@@ -119,6 +120,10 @@ public class ContentsUploadActivity extends BaseActivity {
 
     private void ChangeActivity()
     {
+
+        // 콘텐츠 배경이미지 초기화
+        UtilAPI.s_id_backimamge_makecontents = -1;
+
         Intent intent = new Intent(this, MyContentsActivity.class);
         startActivity(intent);
         this.overridePendingTransition(0, 0);
@@ -140,5 +145,11 @@ public class ContentsUploadActivity extends BaseActivity {
 
             alertDlg.dismiss();
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        // 백키 작동되지 않도록 한다.
     }
 }

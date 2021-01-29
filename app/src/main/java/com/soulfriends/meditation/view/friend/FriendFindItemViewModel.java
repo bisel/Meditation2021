@@ -5,6 +5,7 @@ import android.view.View;
 
 import androidx.lifecycle.ViewModel;
 
+import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -19,13 +20,17 @@ public class FriendFindItemViewModel extends ViewModel {
 
     public String id = "";
 
-    public FriendFindItemViewModel(ItemClickListenerExt listener,  String id, int friend_state) {
+    public UserProfile userProfile;
+
+    public FriendFindItemViewModel(ItemClickListenerExt listener, String id, UserProfile userProfile,  int friend_state) {
 
         this.listener = listener;
 
         this.friend_state = friend_state;
 
         this.id = id;
+
+        this.userProfile = userProfile;
 
     }
 

@@ -36,6 +36,7 @@ import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ItemClickListener;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
+import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.view.mycontents.MyContentsAdapter;
 import com.soulfriends.meditation.view.mycontents.MyContentsItemViewModel;
@@ -217,6 +218,17 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.action_menu1) {
                             Toast.makeText(MyContentsActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
+
+                            UtilAPI.s_MeditationContents_temp = meditationContents;
+
+                            // 콘텐츠 수정 액티비티로 이동
+                            Intent intent = new Intent(MyContentsActivity.this, ContentsEditActivity.class);
+                            startActivity(intent);
+                            MyContentsActivity.this.overridePendingTransition(0, 0);
+
+                            finish();
+
+
                         } else {
                             // 팝업
                             // 친구추가

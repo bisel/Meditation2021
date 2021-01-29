@@ -110,7 +110,7 @@ public class BackGroundActivity extends BaseActivity implements ResultListener {
             case R.id.iv_select: {
 
                 // 선택
-                UtilAPI.s_id_background_image = binding.vpSlider.getCurrentItem();
+                UtilAPI.s_id_backimamge_makecontents = binding.vpSlider.getCurrentItem();
 
                 finish();
 

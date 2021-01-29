@@ -20,12 +20,23 @@ public class ContentsMakeViewModel extends ViewModel {
     public MutableLiveData<String> getTitle() {
         return title;
     }
-
     public void setTitle(MutableLiveData<String> title) {
         this.title = title;
     }
 
+
+
     public MutableLiveData<String> title = new MutableLiveData<>();
+
+    public MutableLiveData<String> getAudio_time() {
+        return audio_time;
+    }
+
+    public void setAudio_time(String audio_time) {
+        this.audio_time.setValue(audio_time);
+    }
+
+    public MutableLiveData<String> audio_time = new MutableLiveData<>();
 
     public ContentsMakeViewModel(Context mContext, ResultListener listener) {
         this.context = mContext;

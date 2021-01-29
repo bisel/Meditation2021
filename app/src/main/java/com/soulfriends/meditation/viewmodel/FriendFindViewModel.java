@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.view.View;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.soulfriends.meditation.util.ResultListener;
@@ -15,6 +16,16 @@ public class FriendFindViewModel extends ViewModel {
     private Context context;
 
     private long mLastClickTime = 0;
+
+    public MutableLiveData<String> getInputword() {
+        return inputword;
+    }
+
+    public void setInputword(MutableLiveData<String> inputword) {
+        this.inputword = inputword;
+    }
+
+    public MutableLiveData<String> inputword = new MutableLiveData<>();
 
     public FriendFindViewModel(Context mContext, ResultListener listener) {
         this.context = mContext;

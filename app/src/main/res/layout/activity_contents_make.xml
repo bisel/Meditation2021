@@ -346,7 +346,7 @@
                 android:gravity="center_horizontal"
                 android:includeFontPadding="false"
                 android:lineSpacingExtra="6sp"
-                android:text="@string/contentsmake_time_end"
+                android:text="@={viewModel.audio_time}"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"

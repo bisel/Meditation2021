@@ -21,6 +21,8 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.FriendEditBinding;
 import com.soulfriends.meditation.databinding.FriendFindBinding;
 import com.soulfriends.meditation.dlg.AlertLineOnePopup;
+import com.soulfriends.meditation.model.UserProfile;
+import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.view.friend.FriendEditAdapter;
@@ -72,6 +74,9 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
         // 초기에 리스트를 보여줄 필요가 없다.
         //ItemList();
 
+
+        
+
         friendFindAdapter = new FriendFindAdapter(list_friend, this, this);
 
         binding.recyclerview.setAdapter(friendFindAdapter);
@@ -102,27 +107,58 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
         });
     }
 
-    private List<FriendFindItemViewModel> ItemList() {
+    private List<FriendFindItemViewModel> ItemList(ArrayList<UserProfile> list_user) {
         //List list = new ArrayList<>();
 
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < list_user.size(); i++)
         {
-            if(i % 4 == 0) {
-                FriendFindItemViewModel friendFindItemViewModel = new FriendFindItemViewModel(this, String.valueOf(i), 0);
+            UserProfile userProfile = list_user.get(i);
 
-                list_friend.add(friendFindItemViewModel);
-            }
-            else if(i % 3 == 1) {
-                FriendFindItemViewModel friendFindItemViewModel = new FriendFindItemViewModel(this, String.valueOf(i),1);
+            // 친구 추가 friend_state == 0
+            // 친구  friend_state == 1
+            // 친구 요청 중 friend_state == 2
 
-                list_friend.add(friendFindItemViewModel);
+            int friend_state = -1;
+            // 친구 인지 아닌지 판별
+            if(NetServiceManager.getinstance().findFriends(userProfile.uid) != null)
+            {
+                // 친구 임
+                friend_state = 1;
             }
             else
             {
-                FriendFindItemViewModel friendFindItemViewModel = new FriendFindItemViewModel(this, String.valueOf(i), 2);
-
-                list_friend.add(friendFindItemViewModel);
+                // 친구 아닌 상태
+                // 친구 추가
+                friend_state = 0;
             }
+
+            // 현재 친구 요청 리스트
+            if(NetServiceManager.getinstance().findFriendsRequest(userProfile.uid))
+            {
+                // 친구 요청중에 있는지 확인
+                friend_state = 2;
+            }
+
+            FriendFindItemViewModel friendFindItemViewModel = new FriendFindItemViewModel(this, String.valueOf(i), userProfile, friend_state);
+
+            list_friend.add(friendFindItemViewModel);
+
+//            if(i % 4 == 0) {
+//                FriendFindItemViewModel friendFindItemViewModel = new FriendFindItemViewModel(this, String.valueOf(i),UserProfile, 0);
+//
+//                list_friend.add(friendFindItemViewModel);
+//            }
+//            else if(i % 3 == 1) {
+//                FriendFindItemViewModel friendFindItemViewModel = new FriendFindItemViewModel(this, String.valueOf(i),UserProfile, 1);
+//
+//                list_friend.add(friendFindItemViewModel);
+//            }
+//            else
+//            {
+//                FriendFindItemViewModel friendFindItemViewModel = new FriendFindItemViewModel(this, String.valueOf(i), UserProfile, 2);
+//
+//                list_friend.add(friendFindItemViewModel);
+//            }
         }
 
         return list_friend;
@@ -246,10 +282,23 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
             case R.id.iv_find:
             {
 
-                // 찾기
-                Find_Friend();
 
-                Toast.makeText(this,"친구 검색 중",Toast.LENGTH_SHORT).show();
+
+                String strInputWord = viewModel.inputword.getValue();
+
+                if(strInputWord.length() > 0) {
+
+                    // 찾기
+                    Find_Friend();
+
+                    Toast.makeText(this, "친구 검색 중", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    // 친구가 없음 표시
+                    binding.layoutNofind.setVisibility(View.VISIBLE);
+                    binding.recyclerview.setVisibility(View.GONE);
+                }
 
             }
             break;
@@ -261,35 +310,58 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
     {
 
         // 서버에 요청 메시지를 보낸다.
+        // 돋보기 눌렸을때 이벤트
+        // 1. recvFindUserList : 돋보기 누른 시점
+        //      - mFindUserList
+        NetServiceManager.getinstance().setOnRecvFindUserListListener(new NetServiceManager.OnRecvFindUserListListener() {
+            @Override
+            public void onRecvFindUserList(boolean validate) {
+                if(validate)
+                {
+                    ArrayList<UserProfile> list = NetServiceManager.getinstance().mFindUserList;
+
+                    int total_friend = list.size();
+                    if(total_friend == 0) {
+
+                        // 친구가 없다면
+                        binding.layoutNofind.setVisibility(View.VISIBLE);
+                        binding.recyclerview.setVisibility(View.GONE);
+
+                        // clear
+                        list_friend.clear();
+                        friendFindAdapter.notifyDataSetChanged();
+                    }
+                    else
+                    {
+                        // 친구가 있다면
+                        binding.layoutNofind.setVisibility(View.GONE);
+                        binding.recyclerview.setVisibility(View.VISIBLE);
+
+                        // 클리어
+                        list_friend.clear();
+
+                        // 호출하도록 한다.
+                        ItemList(list);
+                    }
+                }
+                else
+                {
+
+                    // 실패 한경우 
+                    // 친구가 없음 표시 처리
+                    // 친구가 없다면
+                    binding.layoutNofind.setVisibility(View.VISIBLE);
+                    binding.recyclerview.setVisibility(View.GONE);
+
+                    // clear
+                    list_friend.clear();
+                    friendFindAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        NetServiceManager.getinstance().recvFindUserList(viewModel.inputword.getValue());
         
-        // 응답이 온 경우 
-        
-        // 친구가 없다면
-        //layout_nofind
-
-        int total_friend = 0;
-        if(total_friend == 0) {
-
-            // 친구가 없다면
-            binding.layoutNofind.setVisibility(View.VISIBLE);
-            binding.recyclerview.setVisibility(View.GONE);
-
-            // clear
-            list_friend.clear();
-            friendFindAdapter.notifyDataSetChanged();
-        }
-        else
-        {
-            // 친구가 있다면
-            binding.layoutNofind.setVisibility(View.GONE);
-            binding.recyclerview.setVisibility(View.VISIBLE);
-
-            // 클리어
-            list_friend.clear();
-
-            // 호출하도록 한다.
-            ItemList();
-        }
     }
 
     @Override

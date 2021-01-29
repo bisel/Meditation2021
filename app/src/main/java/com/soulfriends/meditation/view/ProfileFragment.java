@@ -64,6 +64,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
     private List list_friend = new ArrayList<>();
 
+    private int count_friend_recv = 0;
 
     public ProfileFragment() {
     }
@@ -137,7 +138,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         }
 
         //------------------------------------------------
-        // 콘텐츠 버튼 선택
+        // 콘텐츠 탭 버튼 선택
         //------------------------------------------------
 
         ImageView ivContentsBt = view.findViewById(R.id.iv_contentsbt);
@@ -151,7 +152,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         });
 
         //------------------------------------------------
-        // 친구 버튼 선택
+        // 친구 탭  버튼 선택
         //------------------------------------------------
 
         ImageView ivFriendBt = view.findViewById(R.id.iv_friendbt);
@@ -159,21 +160,71 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
             this.contents_RecyclerViewItem.setVisibility(View.GONE);
 
-            //ItemList_Friend();
+            layout_friend_bts.setVisibility(View.GONE);
 
-            // 리사이클 데이터 변경에따른 ui 업데이트
-            friendEmotionAdapter.notifyDataSetChanged();
+            // 2. 현재 친구 리스트 : 친구 인지 아닌지 판별 , 감정친구인지
+            //  -> recvFriendsRequestList(normal) : 어느 특정 시작 시점
+            // 5. 감정 친구 요청중
+            //  -> recvFriendsRequestList("emotion") : 감정친구 요청 리스트 받는 함수
 
-            if(list_friend.size() == 0) {
-                friend_RecyclerViewItem.setVisibility(View.GONE);
-                layout_friend_bts.setVisibility(View.GONE);
-            }
-            else {
-                this.friend_RecyclerViewItem.setVisibility(View.VISIBLE);
+            //--------------------------
+            // 1. 친구 노멀 리스트 요청
+            //--------------------------
 
+            NetServiceManager.getinstance().setOnRecvFriendsRequestListener(new NetServiceManager.OnRecvFriendsRequestListener() {
+                @Override
+                public void onRecvFriendsRequest(boolean validate) {
+                    if(validate)
+                    {
+                        count_friend_recv++;
 
-                layout_friend_bts.setVisibility(View.VISIBLE);
-            }
+                        if(count_friend_recv == 2)
+                        {
+
+                            ArrayList<String> mFriendsRequestList = NetServiceManager.getinstance().mFriendsRequestList;
+                            ArrayList<String> mEmotionFriendsRequestList = NetServiceManager.getinstance().mEmotionFriendsRequestList;
+
+                            if(mFriendsRequestList.size() > 0 || mEmotionFriendsRequestList.size() > 0)
+                            {
+                                ProfileFragment.this.friend_RecyclerViewItem.setVisibility(View.VISIBLE);
+                                layout_friend_bts.setVisibility(View.VISIBLE);
+
+                                //ItemList_Friend();
+
+                                // 리사이클 데이터 변경에따른 ui 업데이트
+                                friendEmotionAdapter.notifyDataSetChanged();
+
+                            }
+                            else
+                            {
+                                friend_RecyclerViewItem.setVisibility(View.GONE);
+                                layout_friend_bts.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+            });
+
+            NetServiceManager.getinstance().recvFriendsRequestList("normal");
+            NetServiceManager.getinstance().recvFriendsRequestList("emotion");
+
+//
+//            //ItemList_Friend();
+//
+//            // 리사이클 데이터 변경에따른 ui 업데이트
+//            friendEmotionAdapter.notifyDataSetChanged();
+//
+//            if(list_friend.size() == 0) {
+//                friend_RecyclerViewItem.setVisibility(View.GONE);
+//                layout_friend_bts.setVisibility(View.GONE);
+//            }
+//            else {
+//
+//            }
 
         });
 

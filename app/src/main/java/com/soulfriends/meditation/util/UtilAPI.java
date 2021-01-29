@@ -44,7 +44,7 @@ public class UtilAPI {
     public static boolean s_bEvent_service_player_timer_stop = false;
 
     // 백그라운드 이미지 아이디
-    public static int s_id_background_image = -1;
+    public static int s_id_backimamge_makecontents = -1;
 
     public static final String FRAGMENT_HOME = "HomeFragment";
     public static final String FRAGMENT_SLEEP = "SleepFragment";
@@ -98,6 +98,9 @@ public class UtilAPI {
         s_activityInPlayerList.clear();
     }
 
+    //
+    public static Activity s_activity_temp;
+    public static MeditationContents s_MeditationContents_temp;
 
     public enum PlayerMode
     {
@@ -257,6 +260,9 @@ public class UtilAPI {
 
         s_activity = null;
 
+        s_activity_temp = null;
+        s_MeditationContents_temp = null;
+
         ClearActivityInPlayerList();
 
         s_activityFocus = null;
@@ -265,7 +271,7 @@ public class UtilAPI {
 
         s_psychology_state = -1;
 
-        s_id_background_image = -1;
+        s_id_backimamge_makecontents = -1;
 
         s_playerMode = PlayerMode.base;
     }

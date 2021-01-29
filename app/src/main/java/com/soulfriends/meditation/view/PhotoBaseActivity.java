@@ -388,6 +388,17 @@ public class PhotoBaseActivity extends BaseActivity {
         return cursor.getString(column_index);
     }
 
+    public String getFileName(Uri uri) {
+        if (uri == null) return null;
+        String fileName = null;
+        String path = uri.getPath();
+        int cut = path.lastIndexOf('/');
+        if (cut != -1) {
+            fileName = path.substring(cut + 1);
+        }
+        return fileName;
+    }
+
     // 파일명 찾기
     public String getName(Uri uri) {
         String[] projection = {MediaStore.Images.ImageColumns.DISPLAY_NAME};
@@ -428,6 +439,10 @@ public class PhotoBaseActivity extends BaseActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        catch(IllegalStateException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void Stop_Audio()
@@ -435,6 +450,7 @@ public class PhotoBaseActivity extends BaseActivity {
         if(mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
+            mediaPlayer = null;
         }
     }
 }
