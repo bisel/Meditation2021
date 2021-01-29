@@ -40,6 +40,10 @@ import com.soulfriends.meditation.model.MeditationAlarm;
 import com.soulfriends.meditation.model.MeditationCategory;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.MeditationContentsCharInfo;
+import com.soulfriends.meditation.model.MeditationDetailAlarm;
+import com.soulfriends.meditation.model.MeditationDetailFriend;
+import com.soulfriends.meditation.model.MeditationFriend;
+import com.soulfriends.meditation.model.MeditationRequest;
 import com.soulfriends.meditation.model.MeditationShowCategorys;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.parser.BgTagData;
@@ -143,12 +147,19 @@ public class NetServiceManager {
     private String contentsCharInfoString = "meditationchartag";//
     private String alarmInfoString = "alarms";
     private String userInfoString = "users";
+    private String friendRequestString = "friendrequest";
+    private String emotionFriendRequestString = "emotionfriendrequest";
+    private String requestTypeString = "requesttype";
+    private String friendsString = "friends";
+    private String normalalarmString = "normalalarm";
 
     public ArrayList<MeditationContents> mContentsList = new ArrayList<MeditationContents>();
     public ArrayList<MeditationContents> mSocialContentsList = new ArrayList<MeditationContents>();
     public ArrayList<MeditationContentsCharInfo> mContentsCharinfoList = new ArrayList<MeditationContentsCharInfo>();
 
     public ArrayList<MeditationAlarm> mAlarmDataList = new ArrayList<MeditationAlarm>();
+    public ArrayList<MeditationDetailAlarm> mDetailAlarmDataList = new ArrayList<MeditationDetailAlarm>();
+
 
     private DatabaseReference mfbDBRef;
     private UserProfile mUserProfile = new UserProfile();
@@ -356,6 +367,7 @@ public class NetServiceManager {
        mContentsCharinfoList.clear();
        mSocialContentsList.clear();
        mAlarmDataList.clear();
+       mDetailAlarmDataList.clear();
     }
 
     //========================================================
@@ -1465,7 +1477,9 @@ public class NetServiceManager {
                 return returnSleepShowCategorys(mIsDoneTest);
             case 4:   // 음악
                 return returnMusicShowCategorys(mIsDoneTest);
-            case 5:   // Test 용
+            //case 5:
+            //    return returnSocialShowCategorys(mIsDoneTest); // 2021.01.28
+            case 6:   // Test 용
                 // home에 대한 정보를 만들어서 처리한다.
                 MeditationShowCategorys newShowCategorys = new MeditationShowCategorys();
                 newShowCategorys.showcategorys = new ArrayList<MeditationCategory>();
@@ -3471,6 +3485,464 @@ public class NetServiceManager {
     //             5) 감정 공유 친구 삭제
     //==============================================================================
 
+    // 1. friend 친구 요청
+    private OnSendFriendRequestListener mSendFriendRequestListener = null;
+    public interface OnSendFriendRequestListener {
+        void onSendFriendRequest(boolean validate);
+    }
+    public void setOnSendFriendRequestListener(OnSendFriendRequestListener listenfunc){
+        mSendFriendRequestListener = listenfunc;
+    }
+
+    public void sendFriendRequest(String sendUserID, String recvUserID){
+        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).child(requestTypeString).setValue("sent").addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).child(requestTypeString).setValue("recv").addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // 요청 성공
+                        mSendFriendRequestListener.onSendFriendRequest(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mSendFriendRequestListener.onSendFriendRequest(false);
+                    }
+                });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mSendFriendRequestListener.onSendFriendRequest(false);
+            }
+        });
+    }
+
+    // 2. friend 감정 친구 요청, 일반 친구 요청과 동일한 callback함수 사용
+    public void sendEmotionFriendRequest(String sendUserID, String recvUserID){
+        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).child(requestTypeString).setValue("sent").addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).child(requestTypeString).setValue("recv").addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // 요청 성공
+                        mSendFriendRequestListener.onSendFriendRequest(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mSendFriendRequestListener.onSendFriendRequest(false);
+                    }
+                });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mSendFriendRequestListener.onSendFriendRequest(false);
+            }
+        });
+    }
+
+    // 3. 친구 요청 취소 (자신이 취소한것임 그래서 알림 불필요)
+    private OnCancelFriendRequestListener mCancelFriendRequestListener = null;
+    public interface OnCancelFriendRequestListener {
+        void onCancelFriendRequest(boolean validate);
+    }
+    public void setOnCancelFriendRequestListener(OnCancelFriendRequestListener listenfunc){
+        mCancelFriendRequestListener = listenfunc;
+    }
+
+    public void cancelFriendRequest(String  sendUserID, String recvUserID){
+        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // 요청 성공
+                        mCancelFriendRequestListener.onCancelFriendRequest(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mCancelFriendRequestListener.onCancelFriendRequest(false);
+                    }
+                });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mCancelFriendRequestListener.onCancelFriendRequest(false);
+            }
+        });
+    }
+
+    // 4. 감정 친구 요청 취소, 친구 요청 취소와 동일한 callback 함수 사용 (자신이 취소한것임 그래서 알림 불필요)
+    public void cancelEmotionFriendRequest(String  sendUserID, String recvUserID){
+        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // 요청 성공
+                        mCancelFriendRequestListener.onCancelFriendRequest(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mCancelFriendRequestListener.onCancelFriendRequest(false);
+                    }
+                });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mCancelFriendRequestListener.onCancelFriendRequest(false);
+            }
+        });
+    }
+
+    // 5. 친구 수락(수락후 요청들 지워야 한다.)
+    private OnAcceptFriendRequestListener mAcceptFriendRequestListener = null;
+    public interface OnAcceptFriendRequestListener {
+        void onAcceptFriendRequest(boolean validate);
+    }
+    public void setOnAcceptFriendRequestListener(OnAcceptFriendRequestListener listenfunc){
+        mAcceptFriendRequestListener = listenfunc;
+    }
+
+    public  void AcceptFriend(String  sendUserID, String recvUserID){
+        MeditationFriend mEntity = new MeditationFriend();
+        mEntity.friendtype = "normal";
+        mEntity.releasedate = getCurDate("yyyyMMddHHmmss");
+
+        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).setValue(mEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).setValue(mEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // 일반 알람을 보내야 한다.
+                                        MeditationAlarm sendentity = new MeditationAlarm();
+                                        sendentity.alarmtype = 1;
+                                        sendentity.alarmsubtype = 1;
+                                        sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
+                                        sendentity.uid = sendUserID;
+                                        mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                // 요청 성공
+                                                mAcceptFriendRequestListener.onAcceptFriendRequest(true);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                                            }
+                                        });
+
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                                    }
+                                });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                    }
+                });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+            }
+        });
+    }
+    
+    
+    // 6. 감정 친구 수락 (수락후 요청들 지워야 한다.)
+    public void AcceptEmotionFriend(String  sendUserID, String recvUserID){
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("friendtype", "emotion");
+
+        // 기존값을 덮어서 저장한다.
+        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // 요청 성공
+                                        // 일반 알람을 보내야 한다.
+                                        MeditationAlarm sendentity = new MeditationAlarm();
+                                        sendentity.alarmtype = 1;
+                                        sendentity.alarmsubtype = 3;
+                                        sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
+                                        sendentity.uid = sendUserID;
+                                        mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                // 요청 성공
+                                                mAcceptFriendRequestListener.onAcceptFriendRequest(true);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                                            }
+                                        });
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                                    }
+                                });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                    }
+                });
+        }
+            })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+            }
+        });
+    }
+
+    // 7. 친구 요청 거절 : 요청만 삭제 하면 된다. cancelFriendRequest와 유사 Noti만 달라질듯
+    private OnRejectFriendRequestListener mRejectFriendRequestListener = null;
+    public interface OnRejectFriendRequestListener {
+        void onRejectFriendRequest(boolean validate);
+    }
+    public void setOnRejectFriendRequestListener(OnRejectFriendRequestListener listenfunc){
+        mRejectFriendRequestListener = listenfunc;
+    }
+
+    public void rejectFriendRequest(String  sendUserID, String recvUserID)
+    {
+        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // 일반 알람을 보내야 한다.
+                                MeditationAlarm sendentity = new MeditationAlarm();
+                                sendentity.alarmtype = 1;
+                                sendentity.alarmsubtype = 2;
+                                sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
+                                sendentity.uid = sendUserID;
+                                mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        mRejectFriendRequestListener.onRejectFriendRequest(true);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        mRejectFriendRequestListener.onRejectFriendRequest(true);
+                                    }
+                                });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                mRejectFriendRequestListener.onRejectFriendRequest(true);
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mRejectFriendRequestListener.onRejectFriendRequest(false);
+                    }
+                });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mRejectFriendRequestListener.onRejectFriendRequest(false);
+            }
+        });
+    }
+
+    // 8. 감정 친구 요청 거절
+    public void rejectEmotionFriendRequest(String  sendUserID, String recvUserID)
+    {
+        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // 일반 알람을 보내야 한다.
+                        MeditationAlarm sendentity = new MeditationAlarm();
+                        sendentity.alarmtype = 1;
+                        sendentity.alarmsubtype = 4;
+                        sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
+                        sendentity.uid = sendUserID;
+                        mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                mRejectFriendRequestListener.onRejectFriendRequest(true);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                mRejectFriendRequestListener.onRejectFriendRequest(true);
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mRejectFriendRequestListener.onRejectFriendRequest(false);
+                    }
+                });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mRejectFriendRequestListener.onRejectFriendRequest(false);
+            }
+        });
+    }
+
+    // 9. 친구 삭제
+    private OnRemoveFriendListener mRemoveFriendListener = null;
+    public interface OnRemoveFriendListener {
+        void onRemoveFriend(boolean validate);
+    }
+    public void setOnRemoveFriendListener(OnRemoveFriendListener listenfunc){
+        mRemoveFriendListener = listenfunc;
+    }
+
+    public void removeFriend(String  sendUserID, String recvUserID){
+        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // 요청 성공
+                        mRemoveFriendListener.onRemoveFriend(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mRemoveFriendListener.onRemoveFriend(false);
+                    }
+                });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mRemoveFriendListener.onRemoveFriend(false);
+            }
+        });
+    }
+
+
+    // 10. 감정 친구 삭제, 친구 자체의 값만 업데이트 한다.
+    public void removeEmotionFriend(String  sendUserID, String recvUserID){
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("friendtype", "normal");
+        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // 요청 성공
+                        mRemoveFriendListener.onRemoveFriend(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mRemoveFriendListener.onRemoveFriend(false);
+                    }
+                });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mRemoveFriendListener.onRemoveFriend(false);
+            }
+        });
+    }
+
+
     //======================================================================================
     // 요구사항 3
     //
@@ -3974,7 +4446,7 @@ public class NetServiceManager {
     {
         MeditationAlarm valData = new MeditationAlarm();
         valData.uid = mUserProfile.uid;
-        valData.releaseDate = getCurDate("yyyyMMddHHmmss");
+        valData.releasedate = getCurDate("yyyyMMddHHmmss");
         valData.alarmtype = alarmtype;
         valData.alarmsubtype = alarmsubtype;
 
@@ -4014,6 +4486,7 @@ public class NetServiceManager {
         });
     }
 
+    // detail alarm 정보를 얻을려면 다르게 처리
     public void recvMyDetailAlaramList(){
         mfbDBRef.child(alarmInfoString).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -4021,26 +4494,19 @@ public class NetServiceManager {
                 if (snapshot.exists()) {
                     for (DataSnapshot alarmSnapshot: snapshot.getChildren()) {
                         MeditationAlarm alarmdata = alarmSnapshot.getValue(MeditationAlarm.class);
-
-                        mfbDBRef.child(userInfoString).addListenerForSingleValueEvent(new ValueEventListener() {
+                        mfbDBRef.child(userInfoString).child(alarmdata.uid).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
-                                    for (DataSnapshot alarmSnapshot: snapshot.getChildren()) {
-                                        //MeditationAlarm alarmdata = alarmSnapshot.getValue(MeditationAlarm.class);
-                                        //mAlarmDataList.add(alarmdata);
-
-
-
-
-
-
-                                    }
+                                    UserProfile user = (UserProfile)snapshot.getValue(UserProfile.class);
+                                    MeditationDetailAlarm entity = new MeditationDetailAlarm();
+                                    entity.otheruser = user;
+                                    entity.entity = alarmdata;
+                                    mDetailAlarmDataList.add(entity);
                                 }
                                 else{
                                 }
                             }
-
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
                             }
@@ -4050,7 +4516,6 @@ public class NetServiceManager {
                 else{
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
@@ -4071,6 +4536,719 @@ public class NetServiceManager {
     public boolean checkBilling(){
         return true;
     }
+
+
+    //===================================================================
+    //2021.01.28
+    //===================================================================
+    // 특정 단어가 속해있는 사람 찾기 (최대 100명)
+    // UserProfile에 nickname이 특정 주어진 문자를 가지고 있는 사람
+    private OnRecvFindUserListListener mOnRecvFindUserListListener = null;
+    public interface OnRecvFindUserListListener {
+        void onRecvFindUserList(boolean validate);
+    }
+    public void setOnRecvFindUserListListener(OnRecvFindUserListListener listenfunc){
+        mOnRecvFindUserListListener = listenfunc;
+    }
+
+    public ArrayList<UserProfile> mFindUserList = new ArrayList<UserProfile>();
+
+    // 100개 최대
+    // orderByChild을 이용하면 지정된 하위키의 조건을 가지고 있는 entry를 처리한다.
+    // 검증 완료
+    public void recvFindUserList(String findString){
+        mFindUserList.clear();
+
+        mfbDBRef.child("users").orderByChild("nickname")
+                .startAt(findString)
+                .endAt(findString+"\uf8ff")
+                .limitToFirst(100)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        //searchList = new ArrayList<>();
+                        for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                            UserProfile user = postSnapshot.getValue(UserProfile.class);
+                            Log.d("USER: ", "" + user.nickname);
+
+                            mFindUserList.add(user);
+                        }
+
+                        mOnRecvFindUserListListener.onRecvFindUserList(true);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("onQueryTextChange: " ,databaseError.getMessage());
+                        mOnRecvFindUserListListener.onRecvFindUserList(false);
+                    }
+                });
+    }
+
+
+    //  친구 요청과 감정 친구 요청중 정보 얻기.
+    public ArrayList<String> mFriendsRequestList = new ArrayList<String>();
+    public ArrayList<String> mEmotionFriendsRequestList = new ArrayList<String>();
+
+    // 해당 uid가 친구 요청중에 있는지 확인
+    public boolean findFriendsRequest(String uid){
+        int dataNum = mFriendsRequestList.size();
+        for(int i = 0 ; i < dataNum; i++){
+            if(mFriendsRequestList.get(i).equals(uid))
+                return true;
+        }
+        return false;
+    }
+
+    // 해당 uid가 감정 친구 요청중에 있는지 확인
+    public boolean findEmotionFriendsRequest(String uid){
+        int dataNum = mFriendsRequestList.size();
+        for(int i = 0 ; i < dataNum; i++){
+            if(mEmotionFriendsRequestList.get(i).equals(uid))
+                return true;
+        }
+        return false;
+    }
+
+    private OnRecvFriendsRequestListener mOnRecvFriendsRequestListener = null;
+    public interface OnRecvFriendsRequestListener {
+        void onRecvFriendsRequest(boolean validate);
+    }
+    public void setOnRecvFriendsRequestListener(OnRecvFriendsRequestListener listenfunc){
+        mOnRecvFriendsRequestListener = listenfunc;
+    }
+
+    public void recvFriendsRequestList(String infotype){
+        String findType = "";
+        boolean bFindNormalFriend = true;
+
+        if(infotype.equals("normal")){
+            findType = "friendrequest";
+        }else{
+            findType = "emotionfriendrequest";
+            bFindNormalFriend = false;
+        }
+
+        boolean bFinalFindNormalFriend = bFindNormalFriend;
+
+        mfbDBRef.child("alarms").child(findType).child(mUserProfile.uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot friendsrequest: snapshot.getChildren()) {
+                        MeditationRequest friendsrequestdata = friendsrequest.getValue(MeditationRequest.class);
+                        if(friendsrequestdata.requesttype.equals("recv")){
+                           // 해당 uid 저장
+                            String uid = friendsrequest.getKey();
+                            if(bFinalFindNormalFriend){
+                                mFriendsRequestList.add(uid);
+                            }else{
+                                mEmotionFriendsRequestList.add(uid);
+                            }
+                        }
+                    }
+                    mOnRecvFriendsRequestListener.onRecvFriendsRequest(true);
+                }
+                else{
+                    if(bFinalFindNormalFriend)  mDetialFriendsList.clear();
+                    else                        mEmotionFriendsRequestList.clear();
+
+                    mOnRecvFriendsRequestListener.onRecvFriendsRequest(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                if(bFinalFindNormalFriend)  mDetialFriendsList.clear();
+                else                        mEmotionFriendsRequestList.clear();
+                mOnRecvFriendsRequestListener.onRecvFriendsRequest(false);
+            }
+        });
+    }
+
+    // 친구 정보 얻기
+    public ArrayList<MeditationDetailFriend> mDetialFriendsList = new ArrayList<MeditationDetailFriend>();
+
+    // 해당 uid가 감정 친구 요청중에 있는지 확인, 있다면 무슨 타입인지 알려줌. (normal, emotion)
+    public String findFriends(String uid){
+        int dataNum = mDetialFriendsList.size();
+        for(int i = 0 ; i < dataNum; i++){
+            if(mDetialFriendsList.get(i).mUserProfile.uid.equals(uid))
+                return mDetialFriendsList.get(i).mFriendInfo.friendtype;
+        }
+        return null;
+    }
+
+    private OnRecvFriendsListener mRecvFriendsListener = null;
+    public interface OnRecvFriendsListener {
+        void onRecvFriends(boolean validate);
+    }
+    public void setOnRecvFriendsListener(OnRecvFriendsListener listenfunc){
+        mRecvFriendsListener = listenfunc;
+    }
+
+    //  친구 정보 받기
+    public  void recvFriendsList(){
+        mfbDBRef.child("friends").child(mUserProfile.uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot friendsSnapshot: snapshot.getChildren()) {
+                        MeditationFriend frineddata = friendsSnapshot.getValue(MeditationFriend.class);
+                        String uid = friendsSnapshot.getKey();
+                        mfbDBRef.child("users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    UserProfile OtherUserProfile = (UserProfile)snapshot.getValue(UserProfile.class);
+                                    MeditationDetailFriend entity = new MeditationDetailFriend();
+                                    entity.mUserProfile = OtherUserProfile;
+                                    entity.mFriendInfo = frineddata;
+                                    mDetialFriendsList.add(entity);
+                                }
+                                else{
+                                    // 없는 경우 데이터가 올라가지 않음,
+                                    mDetialFriendsList.clear();
+                                }
+
+                                mRecvFriendsListener.onRecvFriends(true);
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                mDetialFriendsList.clear();
+                                mRecvFriendsListener.onRecvFriends(false);
+                            }
+                        });
+                    }
+                }
+                else{
+                    mDetialFriendsList.clear();
+                    mRecvFriendsListener.onRecvFriends(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                mDetialFriendsList.clear();
+                mRecvFriendsListener.onRecvFriends(false);
+            }
+        });
+    }
+
+
+
+    //=========================================================================================
+    // 감정 테스트 여부를 파악해서 홈에 관련된 카데고리 정보를 반환한다.
+    // 감정 테스트를 했으면 UserProfile 구조체의 emotionid 정보를 통해 선택한 감정을 확인한다.
+    //=========================================================================================
+    // 감정테스트후에 감정에 따른 감정테스트 결과에 대한 카데고리를 알려준다.
+
+    // CategoryData를 emotionid와 genre를 통해서 Data를 알려줌.
+    int startSocialCategoryID = 105;
+    public CategoryData getSocialCategoryDataExt(String emotionid, String genre){
+        // 해당 curSelColorId을 통해서 해당 Color를 찾아서 그 Color의 emotionid와 score를 저장해야한다.
+        int DataNum = mCategoryDataList.size();
+        for(int j = 0 ; j < DataNum; j++){
+            CategoryData entity = mCategoryDataList.get(j);
+
+            if(Integer.parseInt(entity.id) < startSocialCategoryID)
+                continue;
+
+            if( entity.emotionid.equals(emotionid) && entity.genre.equals(genre)){
+                return entity;
+            }
+        }
+        return null;
+    }
+
+
+    private MeditationCategory getSocialEmotionTestCategory(String genre)
+    {
+        // 명상
+        String curemotionid = Integer.toString(mUserProfile.emotiontype);
+
+        int dataNum = 0; // mEmotionListMeditationDataList.size();
+        Map<String,MeditationContents> contentsList = new HashMap<>();
+
+        // 카테고리 정보를 얻어야 한다.
+        CategoryData curCategoryData = null;
+        ArrayList<EmotionListData> curEmotionListDataList = null;
+
+        // 주어진 장르와 같은 DataList를 얻는다.
+        if(genre.equals(genre1)) {
+            curCategoryData = getSocialCategoryDataExt(curemotionid, genre1);
+            curEmotionListDataList = mEmotionListMeditationDataList;
+        }else if(genre.equals(genre2)){
+            curCategoryData = getSocialCategoryDataExt(curemotionid, genre2);
+            curEmotionListDataList = mEmotionListSleepDataList;
+        }else if(genre.equals(genre3)){
+            curCategoryData = getSocialCategoryDataExt(curemotionid, genre3);
+            curEmotionListDataList = mEmotionListMusicDataList;
+        }else{
+            return null;
+        }
+
+        dataNum = curEmotionListDataList.size();
+        MeditationCategory mCurCategory = null;
+
+        // 1. 감정 태그를 먼저 찾는다.
+        List<String> healingtaglist = null;
+        for(int i = 0; i < dataNum; i++) {
+            EmotionListData mData = curEmotionListDataList.get(i);
+            if (curemotionid.equals(mData.emotionid)) {
+                healingtaglist = asList(mData.healingtag.split(","));
+                break;
+            }
+        }
+
+        // 2. 찾은 감정태그를 이용해서 콘텐츠의 태그들과 비교한다.
+        if(healingtaglist == null)
+            return null;
+
+        int contentsNum = mSocialContentsList.size();
+        int subDataNum = healingtaglist.size();
+
+        for(int k = 0; k < contentsNum; k++){
+            MeditationContents curContents = mSocialContentsList.get(k);
+            List<String> contentshealingtaglist = asList(curContents.healingtag.split(","));
+            int healingtagNum = contentshealingtaglist.size();
+
+            boolean bFindContents = false;
+
+            // healingtag 하나라도 같으면 넣으면 된다.
+            for(int j = 0; j < subDataNum; j++) {
+                String tagString = healingtaglist.get(j);
+
+                for (int idx = 0; idx < healingtagNum; idx++) {
+                    String curHealingTag = contentshealingtaglist.get(idx);
+                    if (tagString.equals(curHealingTag) && curContents.genre.equals(genre)) {   // genre비교 안되어 있었음.
+                        // 해당 HealingTag가 Map에 있는 지 조사
+                        if (!contentsList.containsKey(curContents.uid)) {
+                            contentsList.put(curContents.uid, curContents);
+                            bFindContents = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(bFindContents == true)
+                    break;
+            }
+        }
+
+        // 완료된후에 Map에 들어가 있는 원소들을 모두 돌면서 contentsid를 얻고
+        if(contentsList.size()> 0){
+            mCurCategory = new MeditationCategory();
+            mCurCategory.name = curCategoryData.name;
+            mCurCategory.contests = new ArrayList<MediationShowContents>();
+        }
+
+        //======================================================================
+        // Map을 랜덤하게 일정수를 넣도록 하는것이 좋다. 우선은 Max치만 넣게 한다.
+        //======================================================================
+        int curNum = 0;
+        for (Map.Entry<String, MeditationContents> entry : contentsList.entrySet()) {
+            if(curNum < curCategoryData.maxnum) {
+                String curkey = entry.getKey();  // contents id
+                MediationShowContents newEntity = new MediationShowContents();
+                newEntity.entity = entry.getValue();
+                mCurCategory.contests.add(newEntity);
+                curNum++;
+            }
+        }
+
+        // 2020.12.05
+        if(mCurCategory != null &&  mCurCategory.contests.size() > 0){
+            Collections.shuffle(mCurCategory.contests);
+        }
+
+        return mCurCategory;
+    }
+
+    private void SortSocialContentsUID(boolean AscendingOrder ){
+        Collections.sort(mSocialContentsList, new Comparator() {
+            @Override
+            public int compare(Object t1, Object t2) {
+                MeditationContents o1 = (MeditationContents)t1;
+                MeditationContents o2 = (MeditationContents)t2;
+                // 내림차순.
+                if(AscendingOrder){
+                    if( Integer.parseInt(o1.uid)  > Integer.parseInt(o2.uid)) {
+                        return 1;
+                    }
+                    else if(Integer.parseInt(o1.uid) < Integer.parseInt(o2.uid)) {
+                        return -1;
+                    }
+                }else{
+                    if( Integer.parseInt(o1.uid)  > Integer.parseInt(o2.uid)) {
+                        return -1;
+                    }
+                    else if(Integer.parseInt(o1.uid) < Integer.parseInt(o2.uid)) {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        });
+    }
+
+    // 최근 재생 소셜콘텐츠 리스트
+    private MeditationCategory getSocialRecentPlayCategory(int seletType)
+    {
+        int recentplaylistNum = mUserProfile.recentplaylist.size();
+        if(recentplaylistNum == 0)
+            return null;
+
+        CategoryData entityData = getCategoryData(recentPlayCategoryId);
+        if(entityData == null)
+            return null;
+
+        MeditationCategory recentPlayCategory =  new MeditationCategory();
+        recentPlayCategory.name = entityData.name;
+        recentPlayCategory.contests = new ArrayList<MediationShowContents>();
+
+        int contentsNum = 0;
+        int contentsSize = mSocialContentsList.size();
+        MeditationContents entity = null;
+
+        for(int i = 0; i < recentplaylistNum; i++){
+            entity = getSocialContents(mUserProfile.recentplaylist.get(i));
+
+            if(seletType == 1){
+                if(!entity.genre.equals(genre1)){
+                    continue;
+                }
+            }
+            else if(seletType == 2){
+                if(!entity.genre.equals(genre2)){
+                    continue;
+                }
+            }
+            else if(seletType == 3){
+                if(!entity.genre.equals(genre3)){
+                    continue;
+                }
+            }
+
+            if(mSocialContentsList.get(i).favoritecnt > 0 && contentsNum < maxRecentPlayListNum){
+                MediationShowContents newEntity = new MediationShowContents();
+                newEntity.entity = entity;
+                recentPlayCategory.contests.add(newEntity);
+                contentsNum++;
+            }
+        }
+
+        if(contentsNum > 0)
+            return recentPlayCategory;
+
+        return null;
+    }
+
+    // top10 카테고리
+    private MeditationCategory getSocialTop10Category(int seletType)
+    {
+        CategoryData entityData = getCategoryData(top10CategoryId);
+
+        SortContentsFavoritecnt(false);  // 내림차순 정렬
+
+        if(mContentsList.get(0).favoritecnt == 0 || entityData == null)
+            return null;
+
+        //Log.d("MeditationCategory","MeditationCategory size : "+ mContentsList.size());
+
+        // 내림차순한 Content의 favoritecnt가 처음 원소가 0이면 top10은 의미가 없고 값도 null을 주어야 한다.
+        MeditationCategory top10Category =  new MeditationCategory();
+        top10Category.name = entityData.name;
+        top10Category.contests = new ArrayList<MediationShowContents>();
+        top10Category.subtype = 1;
+
+        // favoritecnt가 0 이상인것만 올려야 한다. 그리고 최대 30개
+        int contentsNum = 0;
+        int contentsSize = mSocialContentsList.size();
+        MeditationContents entity = null;
+
+        for(int i = 0; i < contentsSize; i++){
+            entity = mSocialContentsList.get(i);
+
+            if(seletType == 1){
+                if(!entity.genre.equals(genre1)){
+                    continue;
+                }
+            }
+            else if(seletType == 2){
+                if(!entity.genre.equals(genre2)){
+                    continue;
+                }
+            }
+            else if(seletType == 3){
+                if(!entity.genre.equals(genre3)){
+                    continue;
+                }
+            }
+
+            if(mSocialContentsList.get(i).favoritecnt > 0 && contentsNum < maxTop10ContentsNum){
+                MediationShowContents newEntity = new MediationShowContents();
+                newEntity.entity = entity;
+                top10Category.contests.add(newEntity);
+                contentsNum++;
+            }
+        }
+
+        // uid별로 정렬이 되어 원래대로 되어야 한다.
+        SortSocialContentsUID(true);
+
+        if(contentsNum > 0)
+            return top10Category;
+
+        return null;
+    }
+
+    MeditationCategory   mSocialEmotionMeditationCategory = null;
+    MeditationCategory   mSocialEmotionSleepCategory = null;
+    MeditationCategory   mSocialEmotionMusicCategory = null;
+
+    public void reqSocialEmotionAllContents(){
+        mSocialEmotionMeditationCategory = getSocialEmotionTestCategory(genre1);
+        mSocialEmotionSleepCategory = getSocialEmotionTestCategory(genre2);
+        mSocialEmotionMusicCategory = getSocialEmotionTestCategory(genre3);
+    }
+
+    private MeditationCategory getLocalSocialEmotionTestCategory(String genre)
+    {
+        if(genre.equals(genre1)){
+            return mSocialEmotionMeditationCategory;
+        }else if(genre.equals(genre2)){
+            return mSocialEmotionSleepCategory;
+        }else if(genre.equals(genre3)){
+            return mSocialEmotionMusicCategory;
+        }
+
+        return null;
+    }
+
+    // getSocialFavoriteCategory(0)
+    private MeditationCategory getSocialFavoriteCategory(int seletType)
+    {
+        int favoritesContentsNum = mUserProfile.favoriteslist.size();
+        if(favoritesContentsNum > 0){
+            CategoryData entityData = getCategoryData(favoriteCategoryId);
+
+            if(entityData != null){
+                MeditationCategory favoriteCategory = new MeditationCategory();
+                favoriteCategory.name = entityData.name;
+                favoriteCategory.contests = new ArrayList<MediationShowContents>();
+
+                // 유저프로파일에 있는 favorites 콘텐츠를 통해서 카데고리 구성
+                boolean checkedEntity = false;
+                int contentsNum = 0;
+
+                for (Map.Entry<String, Boolean> entry : mUserProfile.favoriteslist.entrySet()) {
+                    String curkey = entry.getKey();  // contents id
+                    checkedEntity = false;
+                    MeditationContents entity = getSocialContents(curkey);
+
+                    if(seletType == 1){
+                        if(entity.genre.equals(genre1))  checkedEntity = true;
+                    }else if(seletType == 2){
+                        if(entity.genre.equals(genre2))  checkedEntity = true;
+                    }else if(seletType == 3){
+                        if(entity.genre.equals(genre3))  checkedEntity = true;
+                    }else{
+                        checkedEntity = true;
+                    }
+
+                    if(entity != null && checkedEntity == true){
+                        if(contentsNum < maxFavoriteContentsNum){
+                            MediationShowContents newEntity = new MediationShowContents();
+                            newEntity.entity = entity;
+                            favoriteCategory.contests.add(newEntity);
+                            contentsNum++;
+                        }
+                    }
+                }
+
+                if(favoriteCategory.contests.size() > 0)
+                    return favoriteCategory;
+            }
+        }
+        return null;
+    }
+
+    // 해당 장르에 따른 Contents에 처리한다.
+    private MeditationCategory getSocialCategory(String genre)
+    {
+        int dataNum = mSocialContentsList.size();
+
+        // 카테고리 정보를 얻어야 한다.
+        CategoryData entityData = null;
+        String newSocialCategoryId = "";
+
+        // 주어진 장르와 같은 DataList를 얻는다.
+        if(genre.equals(genre1)) {
+            newSocialCategoryId = "106";
+            entityData = getCategoryData(newSocialCategoryId);
+        }else if(genre.equals(genre2)){
+            newSocialCategoryId = "107";
+            entityData = getCategoryData(newSocialCategoryId);
+        }else if(genre.equals(genre3)){
+            newSocialCategoryId = "108";
+            entityData = getCategoryData(newSocialCategoryId);
+        }else{
+            return null;
+        }
+
+        MeditationCategory newSocialCategory =  new MeditationCategory();
+        newSocialCategory.name = entityData.name;
+        newSocialCategory.contests = new ArrayList<MediationShowContents>();
+        newSocialCategory.subtype = 0;
+
+        int maxNewContentsNum = 30;
+        int curEntityNum = 0;
+
+        for(int i = 0; i < dataNum; i++){
+            if(mSocialContentsList.get(i).genre.equals(genre)){
+                MediationShowContents newEntity = new MediationShowContents();
+                newEntity.entity = mSocialContentsList.get(i);
+                newSocialCategory.contests.add(newEntity);
+                curEntityNum++;
+            }
+
+            if(curEntityNum > maxNewContentsNum){
+                break;
+            }
+        }
+
+        if(curEntityNum == 0) {
+            newSocialCategory = null;
+            return null;
+        }
+
+        return newSocialCategory;
+    }
+
+
+
+    private MeditationCategory getSocialNew30Category()
+    {
+        String newSocialCategoryId = "105";
+        CategoryData entityData = getCategoryData(newSocialCategoryId);
+
+
+        MeditationCategory newSocialCategory =  new MeditationCategory();
+        newSocialCategory.name = entityData.name;
+        newSocialCategory.contests = new ArrayList<MediationShowContents>();
+        newSocialCategory.subtype = 0;
+
+        int dataNum = mSocialContentsList.size();
+        int curEntityNum = 0;
+        int maxNewContentsNum = 30;
+
+        for(int i = 0; i < dataNum; i++){
+            MediationShowContents newEntity = new MediationShowContents();
+            newEntity.entity = mSocialContentsList.get(i);
+            newSocialCategory.contests.add(newEntity);
+            curEntityNum++;
+
+            if(curEntityNum > maxNewContentsNum){
+                break;
+            }
+        }
+
+        if(curEntityNum == 0) {
+            newSocialCategory = null;
+            return null;
+        }
+
+        return newSocialCategory;
+    }
+
+
+    public MeditationShowCategorys returnSocialShowCategorys(boolean mIsDoneTest){
+        MeditationShowCategorys newShowCategorys = new MeditationShowCategorys();
+        newShowCategorys.showcategorys = new ArrayList<MeditationCategory>();
+
+        //  해당 감정의 id를 이용해서 매칭 태그 string list를 얻고 이것을 통해서 콘텐츠의
+        //  healingtag에 같은 것이 하나라도 있으면 선택이 되는 것임.
+        if(mIsDoneTest){
+            for(int i = 0; i < 3; i++){
+                String genre = "";
+                if(i == 0) {
+                    genre = genre1;
+                }else if(i == 1){
+                    genre = genre2;
+                }else{
+                    genre = genre3;
+                }
+
+                MeditationCategory emotionCategory =  getLocalSocialEmotionTestCategory(genre);
+                if(emotionCategory != null){
+                    newShowCategorys.showcategorys.add(emotionCategory);
+                }
+            }
+        }
+
+
+        //  즐겨찾기한 소셜 콘텐츠 -> 완료
+        MeditationCategory favoriteCategory = getSocialFavoriteCategory(0);
+        if(favoriteCategory != null){
+            newShowCategorys.showcategorys.add(favoriteCategory);
+        }
+
+        // 3. 인기리스트 -> 완료
+        MeditationCategory top10Category = getSocialTop10Category(0);
+        if(top10Category != null){
+            newShowCategorys.showcategorys.add(top10Category);
+        }
+
+        // 최근 재생한 리스트 -> 완료
+        MeditationCategory recentPlayCategory = getSocialRecentPlayCategory(0);
+        if(recentPlayCategory != null){
+            newShowCategorys.showcategorys.add(recentPlayCategory);
+        }
+
+        // 신규 소셜 콘텐츠 : 105, 날짜대로 정렬해서 30개 , 날짜시간으로 되어 있으므로 내림차순으로 해서 앞의 것 30개 가져오기
+        // 순서대로 가면서 Add
+        SortSocialContentsUID(false);  // 내림차순 정렬
+        MeditationCategory newSocialCategory = getSocialNew30Category();
+
+        if(newSocialCategory != null){
+            newShowCategorys.showcategorys.add(newSocialCategory);
+        }
+
+        // random
+        Collections.shuffle(mSocialContentsList);
+
+        // 소셜 명상 리스트 : 106, 명상 30
+        MeditationCategory socialMeditationCategory =  getSocialCategory(genre1);;
+        if(socialMeditationCategory != null){
+            newShowCategorys.showcategorys.add(socialMeditationCategory);
+        }
+
+        // 소셜 수면 리스트 : 107, 수면 30
+        MeditationCategory socialSleepCategory =  getSocialCategory(genre2);;
+        if(socialSleepCategory != null){
+            newShowCategorys.showcategorys.add(socialSleepCategory);
+        }
+
+        // 소셜 음악 리스트 : 108, 음악 30
+        MeditationCategory socialMusicCategory =  getSocialCategory(genre3);;
+        if(socialMusicCategory != null){
+            newShowCategorys.showcategorys.add(socialMusicCategory);
+        }
+
+        // 다시 완료.
+        SortSocialContentsUID(false);  // 내림차순 정렬
+
+        return newShowCategorys;
+    }
+
+    //=================================================
+    // alarm 값을 받아서 List처리해야 한다.
+    // alarm 도 보았는지 여부.
+    // alarm open처리 , new 처리 : 이후 처리
+    //=================================================
+
+    // 빌링 처리
 }
 
 
