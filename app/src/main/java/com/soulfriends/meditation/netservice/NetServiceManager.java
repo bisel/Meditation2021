@@ -4806,6 +4806,14 @@ public class NetServiceManager {
         mOnRecvFriendsRequestListener = listenfunc;
     }
 
+    private OnRecvEmotionFriendsRequestListener mOnRecvEmotionFriendsRequestListener = null;
+    public interface OnRecvEmotionFriendsRequestListener {
+        void onRecvEmotionFriendsRequest(boolean validate);
+    }
+    public void setOnRecvEmotionFriendsRequestListener(OnRecvEmotionFriendsRequestListener listenfunc){
+        mOnRecvEmotionFriendsRequestListener = listenfunc;
+    }
+
     public void recvFriendsRequestList(String infotype){
         String findType = "";
         boolean bFindNormalFriend = true;
@@ -4840,13 +4848,15 @@ public class NetServiceManager {
                             }
                         }
                     }
-                    mOnRecvFriendsRequestListener.onRecvFriendsRequest(true);
+                    if(bFinalFindNormalFriend) mOnRecvFriendsRequestListener.onRecvFriendsRequest(true);
+                    else                       mOnRecvEmotionFriendsRequestListener.onRecvEmotionFriendsRequest(true);
                 }
                 else{
                     if(bFinalFindNormalFriend)  mDetialFriendsList.clear();
                     else                        mEmotionFriendsRequestList.clear();
 
-                    mOnRecvFriendsRequestListener.onRecvFriendsRequest(false);
+                    if(bFinalFindNormalFriend) mOnRecvFriendsRequestListener.onRecvFriendsRequest(false);
+                    else                       mOnRecvEmotionFriendsRequestListener.onRecvEmotionFriendsRequest(false);
                 }
             }
 
@@ -4854,7 +4864,9 @@ public class NetServiceManager {
             public void onCancelled(@NonNull DatabaseError error) {
                 if(bFinalFindNormalFriend)  mDetialFriendsList.clear();
                 else                        mEmotionFriendsRequestList.clear();
-                mOnRecvFriendsRequestListener.onRecvFriendsRequest(false);
+
+                if(bFinalFindNormalFriend) mOnRecvFriendsRequestListener.onRecvFriendsRequest(false);
+                else                       mOnRecvEmotionFriendsRequestListener.onRecvEmotionFriendsRequest(false);
             }
         });
     }
