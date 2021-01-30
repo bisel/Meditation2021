@@ -174,7 +174,6 @@ public class MainActivity extends BaseActivity implements ResultListener {
 
                 if(validate)
                 {
-
                     //ArrayList<MeditationDetailAlarm> list_alarm = NetServiceManager.getinstance().mDetailAlarmDataList;
 
                     // 새로운 알림 정보 갯수 확인

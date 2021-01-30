@@ -3511,6 +3511,8 @@ public class NetServiceManager {
                 mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).setValue(newRecverEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        mFriendsRequestList.add(recvUserID); // 내가 보낸 요청 성공했기 때문에 local mFriendsRequestList update진행
+
                         // 요청 성공
                         mSendFriendRequestListener.onSendFriendRequest(true);
                     }
@@ -3548,6 +3550,8 @@ public class NetServiceManager {
                 mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).setValue(newRecverEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        mEmotionFriendsRequestList.add(recvUserID); // 내가 보낸 요청 성공했기 때문에 local mFriendsRequestList update진행
+
                         // 요청 성공
                         mSendFriendRequestListener.onSendFriendRequest(true);
                     }
@@ -3664,7 +3668,9 @@ public class NetServiceManager {
                                         sendentity.alarmsubtype = 1;
                                         sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
                                         sendentity.uid = sendUserID;
-                                        mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
+                                        sendentity.alarmkey = normalnoti.getKey();
+                                        normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 // 요청 성공
@@ -3725,10 +3731,10 @@ public class NetServiceManager {
                 mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         // 요청 성공
@@ -3738,7 +3744,10 @@ public class NetServiceManager {
                                         sendentity.alarmsubtype = 3;
                                         sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
                                         sendentity.uid = sendUserID;
-                                        mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                        DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
+                                        sendentity.alarmkey = normalnoti.getKey();
+                                        normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 // 요청 성공
@@ -3811,7 +3820,10 @@ public class NetServiceManager {
                                 sendentity.alarmsubtype = 2;
                                 sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
                                 sendentity.uid = sendUserID;
-                                mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
+                                sendentity.alarmkey = normalnoti.getKey();
+                                normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         mRejectFriendRequestListener.onRejectFriendRequest(true);
@@ -3864,7 +3876,11 @@ public class NetServiceManager {
                         sendentity.alarmsubtype = 4;
                         sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
                         sendentity.uid = sendUserID;
-                        mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                        DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
+                        sendentity.alarmkey = normalnoti.getKey();
+
+                        normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 mRejectFriendRequestListener.onRejectFriendRequest(true);
@@ -3910,6 +3926,7 @@ public class NetServiceManager {
                 mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        removeDetialFriends(recvUserID); //해당 유저를 local에서 지워버림
                         // 요청 성공
                         mRemoveFriendListener.onRemoveFriend(true);
                     }
@@ -3941,6 +3958,7 @@ public class NetServiceManager {
                 mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        removeDetialEmotionFriends(recvUserID);
                         // 요청 성공
                         mRemoveFriendListener.onRemoveFriend(true);
                     }
@@ -4494,17 +4512,17 @@ public class NetServiceManager {
                 MeditationDetailAlarm o2 = (MeditationDetailAlarm)t2;
                 // 내림차순.
                 if(AscendingOrder){
-                    if( Integer.parseInt(o1.entity.releasedate)  > Integer.parseInt(o2.entity.releasedate)) {
+                    if( Long.parseLong(o1.entity.releasedate)  > Long.parseLong(o2.entity.releasedate)) {
                         return 1;
                     }
-                    else if(Integer.parseInt(o1.entity.releasedate) < Integer.parseInt(o2.entity.releasedate)) {
+                    else if(Long.parseLong(o1.entity.releasedate) < Long.parseLong(o2.entity.releasedate)) {
                         return -1;
                     }
                 }else{
-                    if( Integer.parseInt(o1.entity.releasedate)  > Integer.parseInt(o2.entity.releasedate)) {
+                    if( Long.parseLong(o1.entity.releasedate)  > Long.parseLong(o2.entity.releasedate)) {
                         return -1;
                     }
-                    else if(Integer.parseInt(o1.entity.releasedate) < Integer.parseInt(o2.entity.releasedate)) {
+                    else if(Long.parseLong(o1.entity.releasedate) < Long.parseLong(o2.entity.releasedate)) {
                         return 1;
                     }
                 }
@@ -4513,13 +4531,23 @@ public class NetServiceManager {
         });
     }
 
-    private OnRecvMyAlarmListListener mOnRecvMyAlarmListListener = null;
-    public interface OnRecvMyAlarmListListener {
-        void onRecvMyAlarmList(boolean validate);
+    // 새로운 알림 정보 갯수 확인
+    public int calcNewAlarmNum(){
+        int dataNum = mDetailAlarmDataList.size();
+        int checkNum = 0;
+        for(int i = 0; i < dataNum; i++){
+            if(!mDetailAlarmDataList.get(i).entity.doneshow){
+                checkNum++;
+            }
+        }
+
+        return  checkNum;
     }
-    public void setOnRecvMyAlarmListListener(OnRecvMyAlarmListListener listenfunc){
-        mOnRecvMyAlarmListListener = listenfunc;
-    }
+
+    // 알람 정보 서버에서 받기
+    int curNormalAlarmCnt = 0;
+    int curFriendReqAlarmCnt = 0;
+    int curEmotionFriendReqAlarmCnt = 0;
 
     boolean doneRecvNormalAlarm = false;
     boolean doneRecvFriendReqAlarm = false;
@@ -4541,109 +4569,33 @@ public class NetServiceManager {
         }
     }
 
-    // 새로운 알림 정보 갯수 확인
-    public int calcNewAlarmNum(){
-        int dataNum = mDetailAlarmDataList.size();
-        int checkNum = 0;
-        for(int i = 0; i < dataNum; i++){
-            if(!mDetailAlarmDataList.get(i).entity.doneshow){
-                checkNum++;
-            }
-        }
-
-        return  checkNum;
+    private OnRecvMyAlarmListListener mOnRecvMyAlarmListListener = null;
+    public interface OnRecvMyAlarmListListener {
+        void onRecvMyAlarmList(boolean validate);
+    }
+    public void setOnRecvMyAlarmListListener(OnRecvMyAlarmListListener listenfunc){
+        mOnRecvMyAlarmListListener = listenfunc;
     }
 
-    // 알람 리스트를 UX로 열면 안열었던 모든 알람들을 열었으므로 반드시 아래의 함수 호출 필요
-    public void openAlarmList(){
-        int dataNum = mDetailAlarmDataList.size();
-        int checkNum = 0;
-        for(int i = 0; i < dataNum; i++){
-            mDetailAlarmDataList.get(i).entity.doneshow = true;
-        }
-
-        // normal alarm
-        mfbDBRef.child(alarmInfoString).child(normalalarmString).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot alarmSnapshot: snapshot.getChildren()) {
-                        MeditationAlarm alarmdata = alarmSnapshot.getValue(MeditationAlarm.class);
-                    }
-                }
-                else{
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        // find friend
-        mfbDBRef.child("alarms").child("friendrequest").child(mUserProfile.uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot friendsrequest: snapshot.getChildren()) {
-                        MeditationRequest friendsrequestdata = friendsrequest.getValue(MeditationRequest.class);
-                        if(friendsrequestdata.requesttype.equals("recv")){
-                            // 해당 uid 저장
-                            String uid = friendsrequest.getKey();
-                        }
-                    }
-                    notifyMyAlarmList(2);
-                }
-                else{
-                    notifyMyAlarmList(2);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                notifyMyAlarmList(2);
-            }
-        });
-
-        // emotion friends request
-        mfbDBRef.child("alarms").child("emotionfriendrequest").child(mUserProfile.uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot friendsrequest: snapshot.getChildren()) {
-                        MeditationRequest friendsrequestdata = friendsrequest.getValue(MeditationRequest.class);
-                        if(friendsrequestdata.requesttype.equals("recv")){
-                            // 해당 uid 저장
-                            String uid = friendsrequest.getKey();
-
-                        }
-                    }
-                }
-                else{
-
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-
-    // 알람 정보 서버에서 받기
     public void recvMyAlarmList()
     {
+        curNormalAlarmCnt = 0;
+        curFriendReqAlarmCnt = 0;
+        curEmotionFriendReqAlarmCnt = 0;
+
         mDetailAlarmDataList.clear();
 
         doneRecvNormalAlarm = false;
         doneRecvFriendReqAlarm = false;
         doneRecvEmotionFriendReqAlarm = false;
 
-        // normal alarm
-        mfbDBRef.child(alarmInfoString).child(normalalarmString).addListenerForSingleValueEvent(new ValueEventListener() {
+        // normal alarm -> 2021.01.30
+        mfbDBRef.child(alarmInfoString).child(normalalarmString).child(mUserProfile.uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    long childCnt = snapshot.getChildrenCount();
+
                     for (DataSnapshot alarmSnapshot: snapshot.getChildren()) {
                         MeditationAlarm alarmdata = alarmSnapshot.getValue(MeditationAlarm.class);
                         mfbDBRef.child(userInfoString).child(alarmdata.uid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -4658,6 +4610,13 @@ public class NetServiceManager {
                                 }
                                 else{
                                 }
+
+                                curNormalAlarmCnt++;
+
+                                if(childCnt == curNormalAlarmCnt){
+                                    notifyMyAlarmList(1);
+                                    curNormalAlarmCnt = 0;
+                                }
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
@@ -4665,8 +4624,6 @@ public class NetServiceManager {
                             }
                         });
                     }
-
-                    notifyMyAlarmList(1);
                 }
                 else{
                     notifyMyAlarmList(1);
@@ -4678,11 +4635,13 @@ public class NetServiceManager {
             }
         });
 
-        // find friend
+        // find friend request
         mfbDBRef.child("alarms").child("friendrequest").child(mUserProfile.uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    long childCnt = snapshot.getChildrenCount();
+
                     for (DataSnapshot friendsrequest: snapshot.getChildren()) {
                         MeditationRequest friendsrequestdata = friendsrequest.getValue(MeditationRequest.class);
                         if(friendsrequestdata.requesttype.equals("recv")){
@@ -4708,6 +4667,13 @@ public class NetServiceManager {
                                     }
                                     else{
                                     }
+
+                                    curFriendReqAlarmCnt++;
+
+                                    if(childCnt == curFriendReqAlarmCnt){
+                                        notifyMyAlarmList(2);
+                                        curFriendReqAlarmCnt = 0;
+                                    }
                                 }
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
@@ -4717,7 +4683,7 @@ public class NetServiceManager {
                         }
                     }
 
-                    notifyMyAlarmList(2);
+
                 }
                 else{
                     notifyMyAlarmList(2);
@@ -4734,6 +4700,8 @@ public class NetServiceManager {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    long childCnt = snapshot.getChildrenCount();
+
                     for (DataSnapshot friendsrequest: snapshot.getChildren()) {
                         MeditationRequest friendsrequestdata = friendsrequest.getValue(MeditationRequest.class);
                         if(friendsrequestdata.requesttype.equals("recv")){
@@ -4759,6 +4727,13 @@ public class NetServiceManager {
                                     }
                                     else{
                                     }
+
+                                    curEmotionFriendReqAlarmCnt++;
+
+                                    if(childCnt == curEmotionFriendReqAlarmCnt){
+                                        notifyMyAlarmList(3);
+                                        curEmotionFriendReqAlarmCnt = 0;
+                                    }
                                 }
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
@@ -4768,7 +4743,7 @@ public class NetServiceManager {
                         }
                     }
 
-                    notifyMyAlarmList(3);
+
                 }
                 else{
                     mOnRecvMyAlarmListListener.onRecvMyAlarmList(false);
@@ -4781,43 +4756,130 @@ public class NetServiceManager {
                 notifyMyAlarmList(3);
             }
         });
+    }
 
+    // 알람 리스트를 UX로 열면 안열었던 모든 알람들을 열었으므로 반드시 아래의 함수 호출 필요
+    int openAlarmNum = 0;
+    int AlarmDataTotalNum = 0;
+
+    private OnOpenAlarmListListener mOnOpenAlarmListListener = null;
+    public interface OnOpenAlarmListListener {
+        void onOpenAlarmList(boolean validate);
+    }
+    public void setOnOpenAlarmListListener(OnOpenAlarmListListener listenfunc){
+        mOnOpenAlarmListListener = listenfunc;
+    }
+
+    void notifyOpenAlarmList(int successtype){
+        openAlarmNum++;
+        if(AlarmDataTotalNum == openAlarmNum){
+            mOnOpenAlarmListListener.onOpenAlarmList(true);
+        }
+    }
+
+    public void openAlarmList(){
+        openAlarmNum = 0;
+        AlarmDataTotalNum  = mDetailAlarmDataList.size();
+
+        // normal alarm
+        MeditationDetailAlarm tmpDetailAlarm = null;
+
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("doneshow", true);
+
+        for(int i = 0; i < AlarmDataTotalNum ; i++){
+            tmpDetailAlarm = mDetailAlarmDataList.get(i);
+            tmpDetailAlarm.entity.doneshow = true;
+
+            int finalIdx = i;
+
+            if(tmpDetailAlarm.entity.alarmtype == 1){
+                mfbDBRef.child(alarmInfoString).child(normalalarmString).child(mUserProfile.uid).child(tmpDetailAlarm.entity.alarmkey)
+                        .updateChildren(updateMap)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                notifyOpenAlarmList(finalIdx);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                mOnOpenAlarmListListener.onOpenAlarmList(false);
+                            }
+                        });
+            }
+            else if(tmpDetailAlarm.entity.alarmtype == 2){
+                if(tmpDetailAlarm.entity.alarmsubtype == 1){  // 일반 친구 신청
+                    mfbDBRef.child("alarms").child("friendrequest").child(mUserProfile.uid).child(tmpDetailAlarm.entity.uid)
+                            .updateChildren(updateMap)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    notifyOpenAlarmList(finalIdx);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    mOnOpenAlarmListListener.onOpenAlarmList(false);
+                                }
+                            });
+                }
+                else if(tmpDetailAlarm.entity.alarmsubtype == 2){   // 감정 친구 신청
+                    mfbDBRef.child("alarms").child("emotionfriendrequest").child(mUserProfile.uid).child(tmpDetailAlarm.entity.uid)
+                            .updateChildren(updateMap)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    notifyOpenAlarmList(finalIdx);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    mOnOpenAlarmListListener.onOpenAlarmList(false);
+                                }
+                            });
+                }
+            }
+        }
     }
 
     // detail alarm 정보를 얻을려면 다르게 처리
     public void recvMyDetailAlaramList(){
-        mfbDBRef.child(alarmInfoString).child(normalalarmString).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot alarmSnapshot: snapshot.getChildren()) {
-                        MeditationAlarm alarmdata = alarmSnapshot.getValue(MeditationAlarm.class);
-                        mfbDBRef.child(userInfoString).child(alarmdata.uid).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()) {
-                                    UserProfile user = (UserProfile)snapshot.getValue(UserProfile.class);
-                                    MeditationDetailAlarm entity = new MeditationDetailAlarm();
-                                    entity.otheruser = user;
-                                    entity.entity = alarmdata;
-                                    mDetailAlarmDataList.add(entity);
-                                }
-                                else{
-                                }
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                            }
-                        });
-                    }
-                }
-                else{
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+//        mfbDBRef.child(alarmInfoString).child(normalalarmString).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    for (DataSnapshot alarmSnapshot: snapshot.getChildren()) {
+//                        MeditationAlarm alarmdata = alarmSnapshot.getValue(MeditationAlarm.class);
+//                        mfbDBRef.child(userInfoString).child(alarmdata.uid).addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                if (snapshot.exists()) {
+//                                    UserProfile user = (UserProfile)snapshot.getValue(UserProfile.class);
+//                                    MeditationDetailAlarm entity = new MeditationDetailAlarm();
+//                                    entity.otheruser = user;
+//                                    entity.entity = alarmdata;
+//                                    mDetailAlarmDataList.add(entity);
+//                                }
+//                                else{
+//                                }
+//                            }
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//                            }
+//                        });
+//                    }
+//                }
+//                else{
+//                }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//        });
     }
 
     //=========================================================================================================
@@ -4847,7 +4909,7 @@ public class NetServiceManager {
         mOnRecvFindUserListListener = listenfunc;
     }
 
-        public ArrayList<UserProfile> mFindUserList = new ArrayList<UserProfile>();
+    public ArrayList<UserProfile> mFindUserList = new ArrayList<UserProfile>();
 
     // 100개 최대
     // orderByChild을 이용하면 지정된 하위키의 조건을 가지고 있는 entry를 처리한다.
@@ -4855,30 +4917,58 @@ public class NetServiceManager {
     public void recvFindUserList(String findString){
         mFindUserList.clear();
 
-        mfbDBRef.child("users").orderByChild("nickname")
-                .startAt(findString)
-                .endAt(findString+"\uf8ff")
-                .limitToFirst(100)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        //searchList = new ArrayList<>();
-                        for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                            UserProfile user = postSnapshot.getValue(UserProfile.class);
-                            Log.d("USER: ", "" + user.nickname);
-
-                            mFindUserList.add(user);
+        // 유저의 전체를 뒤지지 않고서는 모른다. firebase에서는 해당 내용이 최선 : 많은 유저에선느 사용불가.
+        mfbDBRef.child(userInfoString).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot profileSnapshot: snapshot.getChildren()) {
+                        UserProfile userData = profileSnapshot.getValue(UserProfile.class);
+                        if(userData.uid.equals(mUserProfile.uid)) {
+                                continue;
                         }
 
-                        mOnRecvFindUserListListener.onRecvFindUserList(true);
+                        if(userData.nickname.contains(findString)){
+                            mFindUserList.add(userData);
+                        }
                     }
+                    mOnRecvFindUserListListener.onRecvFindUserList(true);
+                }
+                else{
+                    mOnRecvFindUserListListener.onRecvFindUserList(false);
+                }
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.e("onQueryTextChange: " ,databaseError.getMessage());
-                        mOnRecvFindUserListListener.onRecvFindUserList(false);
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                mOnRecvFindUserListListener.onRecvFindUserList(false);
+            }
+        });
+
+//        mfbDBRef.child("users").orderByChild("nickname")
+//                .startAt(findString)
+//                .endAt(findString+"\uf8ff")
+//                .limitToFirst(100)
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot snapshot) {
+//                        //searchList = new ArrayList<>();
+//                        for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+//                            UserProfile user = postSnapshot.getValue(UserProfile.class);
+//                            Log.d("USER: ", "" + user.nickname);
+//
+//                            mFindUserList.add(user);
+//                        }
+//
+//                        mOnRecvFindUserListListener.onRecvFindUserList(true);
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//                        Log.e("onQueryTextChange: " ,databaseError.getMessage());
+//                        mOnRecvFindUserListListener.onRecvFindUserList(false);
+//                    }
+//                });
     }
 
 
@@ -4928,9 +5018,11 @@ public class NetServiceManager {
 
         if(infotype.equals("normal")){
             findType = "friendrequest";
+            mFriendsRequestList.clear();
         }else{
             findType = "emotionfriendrequest";
             bFindNormalFriend = false;
+            mEmotionFriendsRequestList.clear();
         }
 
         boolean bFinalFindNormalFriend = bFindNormalFriend;
@@ -4946,7 +5038,7 @@ public class NetServiceManager {
                 if (snapshot.exists()) {
                     for (DataSnapshot friendsrequest: snapshot.getChildren()) {
                         MeditationRequest friendsrequestdata = friendsrequest.getValue(MeditationRequest.class);
-                        if(friendsrequestdata.requesttype.equals("recv")){
+                        if(friendsrequestdata.requesttype.equals("sent")){
                            // 해당 uid 저장
                             String uid = friendsrequest.getKey();
                             if(bFinalFindNormalFriend){
@@ -4990,6 +5082,28 @@ public class NetServiceManager {
                 return mDetialFriendsList.get(i).mFriendInfo.friendtype;
         }
         return null;
+    }
+
+    // 친구 삭제 하기
+    public void removeDetialFriends(String uid){
+        int dataNum = mDetialFriendsList.size();
+        for(int i = 0 ; i < dataNum; i++){
+            if(mDetialFriendsList.get(i).mUserProfile.uid.equals(uid)) {
+                mDetialFriendsList.remove(i);
+                return;
+            }
+        }
+    }
+
+    // 감정 친구 삭제하기 일반친구로 변경
+    public void removeDetialEmotionFriends(String uid){
+        int dataNum = mDetialFriendsList.size();
+        for(int i = 0 ; i < dataNum; i++){
+            if(mDetialFriendsList.get(i).mUserProfile.uid.equals(uid)) {
+                mDetialFriendsList.get(i).mFriendInfo.friendtype = "normal";
+                return;
+            }
+        }
     }
 
     private OnRecvFriendsListener mRecvFriendsListener = null;

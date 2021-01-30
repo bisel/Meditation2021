@@ -60,6 +60,14 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
             binding.layoutAlert.setVisibility(View.VISIBLE);
         }
         else {
+            NetServiceManager.getinstance().setOnOpenAlarmListListener(new NetServiceManager.OnOpenAlarmListListener() {
+                @Override
+                public void onOpenAlarmList(boolean validate) {
+                        // TRUE가 오면... 처리
+                }
+            });
+            NetServiceManager.getinstance().openAlarmList();
+
 
             // 알림 있는 경우 해당
 
