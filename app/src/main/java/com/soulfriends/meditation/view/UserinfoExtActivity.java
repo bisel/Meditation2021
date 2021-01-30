@@ -69,53 +69,57 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
             }
         });
 
-        NetServiceManager.getinstance().setOnRecvValProfileListener(new NetServiceManager.OnRecvValProfileListener() {
-            @Override
-            public void onRecvValProfile(boolean validate) {
-                DoRecvValProfile(validate);
-            }
-        });
 
+        //---------------------------------------------
+        // 초기 설정 처리
+        //---------------------------------------------
+
+        UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
+
+        // 프로필 사진
+        UtilAPI.load_image(this, userProfile.profileimg, binding.ivPicture);
+
+        // 닉네임
+        viewModel.setNickname(userProfile.nickname);
+        
+        // 성별
+        SetGender(userProfile.gender);
+
+        // 자기 소개
+        viewModel.setIntroduction(userProfile.profileIntro);
+
+
+        // 버튼 활성화 처리
+        bSuccess_nickname = true;
+        bSuccess_gender = true;
+
+        Check_IsButton();
     }
 
-    private void DoRecvContents(boolean validate) {
-        binding.progressBar.setVisibility(View.GONE);
+    private void SetGender(int gender)
+    {
+        if(gender == 1) {
+            
+            // 남성 선택
+            
+            // man
+            UtilAPI.setButtonBackground(this, binding.buttonMan, R.drawable.man_selected);
 
-        if (validate) {
+            // woman
+            UtilAPI.setButtonBackground(this, binding.buttonWoman, R.drawable.man);
+        }
+        else
+        {
+            // 여성 선택
 
-            this.startActivity(new Intent(this, MainActivity.class));
+            // woman
+            UtilAPI.setButtonBackground(this, binding.buttonWoman, R.drawable.man_selected);
 
-            finish();
-        } else {
-
+            // man
+            UtilAPI.setButtonBackground(this, binding.buttonMan, R.drawable.man);
+            
         }
 
-    }
-
-    private void DoRecvValProfile(boolean validate) {
-        if (validate) {
-            // 성공을 하면
-
-            UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
-            //userProfile.uid = PreferenceManager.getString(this,"uid");
-
-            NetServiceManager.getinstance().setOnRecvProfileListener(new NetServiceManager.OnRecvProfileListener() {
-                @Override
-                public void onRecvProfile(boolean validate, int errorcode) {
-
-                    if (errorcode == 0) {
-                        NetServiceManager.getinstance().recvContentsCharInfo();
-                    }
-                }
-            });
-
-            NetServiceManager.getinstance().recvUserProfile(userProfile.uid);
-        } else {
-            // 다시 보낸다.
-            UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
-
-            NetServiceManager.getinstance().sendValProfile(userProfile);
-        }
     }
 
     private void DoRecvValNickName(boolean validate) {
@@ -190,8 +194,7 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
             case R.id.button_nickname: {
                 // 중복 검사 버튼
 
-                hideKeyBoard();
-                binding.editNickname.clearFocus();
+                Check_EditFocus_OnButton();
 
                 // 예외처리
                 //1 ~ 6자로 제한
@@ -208,6 +211,7 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
             break;
             case R.id.button_man: {
 
+                Check_EditFocus_OnButton();
                 //--------------------------------------------------
                 // 회원 정보 수정에서는 성별 변경하지 않도록 한다.
                 //--------------------------------------------------
@@ -228,6 +232,7 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
             break;
             case R.id.button_woman: {
 
+                Check_EditFocus_OnButton();
                 //--------------------------------------------------
                 // 회원 정보 수정에서는 성별 변경하지 않도록 한다.
                 //--------------------------------------------------
@@ -250,6 +255,8 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
 
             case R.id.button_ok: {
 
+                Check_EditFocus_OnButton();
+
                 if (!bSuccess_nickname) {
                     break;
                 }
@@ -263,11 +270,15 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
 
                 UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
 
+                userProfile.profileimg = mCurrentPhotoPath;
                 userProfile.nickname = viewModel.getNickname().getValue();
+                userProfile.profileIntro = viewModel.getIntroduction().getValue();
                 NetServiceManager.getinstance().sendValProfile(userProfile);
             }
             break;
             case R.id.iv_picture: {
+
+                Check_EditFocus_OnButton();
 
                 // 썹네일 이미지 선택시
 
@@ -296,6 +307,18 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
                 });
             }
             break;
+        }
+    }
+
+    // 버튼들을 눌렀을때 에디트 포커스 해제 처리
+    private void Check_EditFocus_OnButton()
+    {
+        if(binding.editNickname.isFocused()) {
+            binding.editNickname.clearFocus();
+        }
+
+        if(binding.editIntrodution.isFocused()) {
+            binding.editIntrodution.clearFocus();
         }
     }
 

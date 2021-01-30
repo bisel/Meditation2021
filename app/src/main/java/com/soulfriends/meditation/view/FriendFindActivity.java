@@ -255,11 +255,21 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                             {
                                 // 삭제
                                 // 리사이클 데이터 변경에따른 ui 업데이트
-                                list_friend.remove(pos);
-                                friendFindAdapter.notifyItemRemoved(pos);
-                                friendFindAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                                //list_friend.remove(pos);
+                                //friendFindAdapter.notifyItemRemoved(pos);
+                                //friendFindAdapter.notifyItemRangeChanged(pos, list_friend.size());
 
                                 //Toast.makeText(this,"친구 요청중",Toast.LENGTH_SHORT).show();
+
+                                FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
+                                friendFindItemViewModel.friend_state = 0;  // 친구추가로 변경
+
+                                // 리사이클 데이터 변경에따른 ui 업데이트
+                                friendFindAdapter.notifyDataSetChanged();
+
+                                //Toast.makeText(this,"친구 요청중",Toast.LENGTH_SHORT).show();
+
+                                alertDlg.dismiss();
 
                                 alertDlg.dismiss();
                             }

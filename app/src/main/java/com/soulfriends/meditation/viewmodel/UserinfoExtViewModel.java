@@ -12,8 +12,8 @@ import com.soulfriends.meditation.util.UtilAPI;
 
 public class UserinfoExtViewModel extends ViewModel {
 
-    public MutableLiveData<String> nickname = new MutableLiveData<>();
 
+    public MutableLiveData<String> nickname = new MutableLiveData<>();
     public MutableLiveData<String> introduction = new MutableLiveData<>();
     private ResultListener listener;
 
@@ -35,6 +35,15 @@ public class UserinfoExtViewModel extends ViewModel {
     public MutableLiveData<String> getIntroduction() {
         return introduction;
     }
+
+    public void setNickname(String nickname) {
+        this.nickname.setValue(nickname);
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction.setValue(introduction);
+    }
+
 
     public void OnClick_Select(View view) {
 

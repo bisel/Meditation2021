@@ -21,6 +21,8 @@ public class FriendEmotionItemViewModel extends ViewModel {
 
     public UserProfile userProfile;
 
+    public int position = 0;
+
     public MutableLiveData<String> getNickname() {
         return nickname;
     }
@@ -31,11 +33,13 @@ public class FriendEmotionItemViewModel extends ViewModel {
 
     public MutableLiveData<String> nickname = new MutableLiveData<>();
 
-    public FriendEmotionItemViewModel(ItemClickListenerExt listener, UserProfile userProfile, int emotion_state) {
+    public FriendEmotionItemViewModel(ItemClickListenerExt listener,  int position, UserProfile userProfile, int emotion_state) {
 
         this.listener = listener;
 
         this.emotion_state = emotion_state;
+
+        this.position = position;
 
         this.userProfile = userProfile;
 
@@ -51,6 +55,6 @@ public class FriendEmotionItemViewModel extends ViewModel {
         }
         mLastClickTime = SystemClock.elapsedRealtime();
 
-        this.listener.onItemClick(view, userProfile, this.emotion_state);
+        this.listener.onItemClick(view, userProfile, position);
     }
 }

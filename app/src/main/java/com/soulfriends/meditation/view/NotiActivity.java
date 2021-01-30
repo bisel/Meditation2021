@@ -179,9 +179,9 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                     if(hAlarm.entity.alarmsubtype == 1)
                     {
                         //  1 . 친구 신청 거절 (상대방이 나에게 신청)
-                        NetServiceManager.getinstance().setOnCancelFriendRequestListener(new NetServiceManager.OnCancelFriendRequestListener() {
+                        NetServiceManager.getinstance().setOnRejectFriendRequestListener(new NetServiceManager.OnRejectFriendRequestListener() {
                             @Override
-                            public void onCancelFriendRequest(boolean validate) {
+                            public void onRejectFriendRequest(boolean validate) {
 
                                 if(validate)
                                 {
@@ -199,15 +199,15 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                             }
                         });
 
-                        NetServiceManager.getinstance().cancelFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  hAlarm.otheruser.uid);
+                        NetServiceManager.getinstance().rejectFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  hAlarm.otheruser.uid);
 
                     }
                     else
                     {
                         //  2.  감정 공유 거절 (상대방이 나에게 신청)
-                        NetServiceManager.getinstance().setOnCancelFriendRequestListener(new NetServiceManager.OnCancelFriendRequestListener() {
+                        NetServiceManager.getinstance().setOnRejectFriendRequestListener(new NetServiceManager.OnRejectFriendRequestListener() {
                             @Override
-                            public void onCancelFriendRequest(boolean validate) {
+                            public void onRejectFriendRequest(boolean validate) {
 
                                 if(validate)
                                 {
@@ -225,7 +225,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                             }
                         });
 
-                        NetServiceManager.getinstance().cancelEmotionFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  hAlarm.otheruser.uid);
+                        NetServiceManager.getinstance().rejectEmotionFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  hAlarm.otheruser.uid);
 
                     }
                 }

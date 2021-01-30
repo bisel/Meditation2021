@@ -41,6 +41,7 @@ import com.soulfriends.meditation.view.friend.FriendEditAdapter;
 import com.soulfriends.meditation.view.friend.FriendEditItemViewModel;
 import com.soulfriends.meditation.view.friend.FriendEmotionAdapter;
 import com.soulfriends.meditation.view.friend.FriendEmotionItemViewModel;
+import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.view.nested.ParentItemViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentBottomItemExtViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentItemExtAdapter;
@@ -187,39 +188,11 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             NetServiceManager.getinstance().setOnRecvFriendsRequestListener(new NetServiceManager.OnRecvFriendsRequestListener() {
                 @Override
                 public void onRecvFriendsRequest(boolean validate) {
-
                     DoEmotionFriendRequest();
-//                    if(validate)
-//                    {
-//                        DoEmotionFriendRequest();
-//                    }
-//                    else
-//                    {
-//                        friend_RecyclerViewItem.setVisibility(View.GONE);
-//                        layout_friend_bts.setVisibility(View.GONE);
-//
-//                        layout_friend_no.setVisibility(View.VISIBLE);
-//                    }
                 }
             });
 
             NetServiceManager.getinstance().recvFriendsRequestList("normal");
-            //NetServiceManager.getinstance().recvFriendsRequestList("emotion");
-
-//
-//            //ItemList_Friend();
-//
-//            // 리사이클 데이터 변경에따른 ui 업데이트
-//            friendEmotionAdapter.notifyDataSetChanged();
-//
-//            if(list_friend.size() == 0) {
-//                friend_RecyclerViewItem.setVisibility(View.GONE);
-//                layout_friend_bts.setVisibility(View.GONE);
-//            }
-//            else {
-//
-//            }
-
         });
 
 
@@ -293,37 +266,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         NetServiceManager.getinstance().setOnRecvEmotionFriendsRequestListener(new NetServiceManager.OnRecvEmotionFriendsRequestListener() {
             @Override
             public void onRecvEmotionFriendsRequest(boolean validate) {
-               // if (validate) {
-
-                    DoRequest_FriendList();
-
-//                    ArrayList<String> mFriendsRequestList = NetServiceManager.getinstance().mFriendsRequestList;
-//                    ArrayList<String> mEmotionFriendsRequestList = NetServiceManager.getinstance().mEmotionFriendsRequestList;
-//
-//                    if(mFriendsRequestList.size() > 0 || mEmotionFriendsRequestList.size() > 0)
-//                    {
-//                        ProfileFragment.this.friend_RecyclerViewItem.setVisibility(View.VISIBLE);
-//                        ProfileFragment.this.layout_friend_bts.setVisibility(View.VISIBLE);
-//                        //ItemList_Friend();
-//
-//                        // 리사이클 데이터 변경에따른 ui 업데이트
-//                        friendEmotionAdapter.notifyDataSetChanged();
-//
-//                    }
-//                    else
-//                    {
-//                        friend_RecyclerViewItem.setVisibility(View.GONE);
-//                        layout_friend_bts.setVisibility(View.GONE);
-//
-//                        layout_friend_no.setVisibility(View.VISIBLE);
-//                    }
-
-//                } else {
-//                    friend_RecyclerViewItem.setVisibility(View.GONE);
-//                    layout_friend_bts.setVisibility(View.GONE);
-//
-//                    layout_friend_no.setVisibility(View.VISIBLE);
-//                }
+                DoRequest_FriendList();
             }
         });
 
@@ -358,45 +301,51 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         List list_friend = new ArrayList<>();
         ArrayList<MeditationDetailFriend> list_user = NetServiceManager.getinstance().mDetialFriendsList;
 
-        int count = 0;
-        for (int i = 0; i < list_user.size(); i++) {
-            MeditationDetailFriend meditationDetailFriend = list_user.get(i);
+        if(list_user.size() > 0) {
 
-            String res = NetServiceManager.getinstance().findFriends(meditationDetailFriend.mUserProfile.uid);
+            int count = 0;
+            for (int i = 0; i < list_user.size(); i++) {
+                MeditationDetailFriend meditationDetailFriend = list_user.get(i);
 
-            int emotion_type = -1;
-            if(res.equals("normal"))
-            {
-                // 감정공유 +
-                emotion_type = 2;
-            }
-            else if(res.equals("emotion"))
-            {
-                // 감정상태
-                emotion_type = 0;
-            }
-            else
-            {
-                // "감정 공유 요청 중"
+                String res = NetServiceManager.getinstance().findFriends(meditationDetailFriend.mUserProfile.uid);
 
-                if(NetServiceManager.getinstance().findEmotionFriendsRequest(meditationDetailFriend.mUserProfile.uid))
-                {
-                    emotion_type = 1;
+                int emotion_type = -1;
+                if (res.equals("normal")) {
+                    // 감정공유 +
+                    emotion_type = 2;
+                } else if (res.equals("emotion")) {
+                    // 감정상태
+                    emotion_type = 0;
+                } else {
+                    // "감정 공유 요청 중"
+
+                    if (NetServiceManager.getinstance().findEmotionFriendsRequest(meditationDetailFriend.mUserProfile.uid)) {
+                        emotion_type = 1;
+                    }
+                }
+
+                if (emotion_type > -1) {
+                    FriendEmotionItemViewModel friendEmotionItemViewModel = new FriendEmotionItemViewModel(this, count, meditationDetailFriend.mUserProfile, emotion_type);
+                    count++;
+                    list_friend.add(friendEmotionItemViewModel);
                 }
             }
 
-            if(emotion_type > -1) {
-                FriendEmotionItemViewModel friendEmotionItemViewModel = new FriendEmotionItemViewModel(this, meditationDetailFriend.mUserProfile, emotion_type);
+            friendEmotionAdapter = new FriendEmotionAdapter(list_friend, container.getContext(), this);
 
-                list_friend.add(friendEmotionItemViewModel);
-            }
+            friend_RecyclerViewItem.setAdapter(friendEmotionAdapter);
+            friend_RecyclerViewItem.setLayoutManager(layoutManager_friend);
+            friend_RecyclerViewItem.setNestedScrollingEnabled(false);
+        }
+        else
+        {
+            friend_RecyclerViewItem.setVisibility(View.GONE);
+            layout_friend_bts.setVisibility(View.GONE);
+
+            layout_friend_no.setVisibility(View.VISIBLE);
         }
 
-        friendEmotionAdapter = new FriendEmotionAdapter(list_friend, container.getContext(), this);
 
-        friend_RecyclerViewItem.setAdapter(friendEmotionAdapter);
-        friend_RecyclerViewItem.setLayoutManager(layoutManager_friend);
-        friend_RecyclerViewItem.setNestedScrollingEnabled(false);  // 12.02.괜찮은듯
     }
 
 
@@ -595,23 +544,44 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                 // 감정상태
                 // "감정 공유를 취소하시겠습니까" 팝업 띄운다.
                 // 예 -> "감정공유 요청"
+                // 기획서에 색상 하늘색
+                // 감정상태 x
+
+                UserProfile userProfile = (UserProfile)obj;
+
                 AlertLineOnePopup alertDlg = new AlertLineOnePopup(getActivity(), getActivity(), AlertLineOnePopup.Dlg_Type.emotion_cancel);
                 alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 alertDlg.show();
 
                 alertDlg.iv_ok.setOnClickListener(v -> {
 
-                    int index_id =  Integer.parseInt((String)obj);
 
-                    FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(index_id);
-                    friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 요청
+                    NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
+                        @Override
+                        public void onRemoveFriend(boolean validate) {
 
-                    // 리사이클 데이터 변경에따른 ui 업데이트
-                    friendEmotionAdapter.notifyDataSetChanged();
+                            if(validate)
+                            {
+                                FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 +
 
-                    Toast.makeText(getActivity(),"감정 공유를 취소",Toast.LENGTH_SHORT).show();
+                                // 리사이클 데이터 변경에따른 ui 업데이트
+                                friendEmotionAdapter.notifyDataSetChanged();
 
-                    alertDlg.dismiss();
+                                //Toast.makeText(getActivity(),"감정 공유를 취소",Toast.LENGTH_SHORT).show();
+
+                                alertDlg.dismiss();
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    });
+
+
+                    NetServiceManager.getinstance().removeEmotionFriend(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
+
                 });
             }
             break;
@@ -621,23 +591,45 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                 // 감정 공유 요청중
                 // "감정공유 요청을 취소하시겠습니까" 팝업 띄운다.
                 // 예 -> "감정공유 요청"
+                // 기획서에 색상 짙은 파란색
+                // 감정 공유 요청 중 x
+
+                UserProfile userProfile = (UserProfile)obj;
+
                 AlertLineOnePopup alertDlg = new AlertLineOnePopup(getActivity(), getActivity(), AlertLineOnePopup.Dlg_Type.emotion_request_cancel);
                 alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 alertDlg.show();
 
                 alertDlg.iv_ok.setOnClickListener(v -> {
 
-                    int index_id =  Integer.parseInt((String)obj);
 
-                    FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(index_id);
-                    friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 요청
+                    NetServiceManager.getinstance().setOnCancelFriendRequestListener(new NetServiceManager.OnCancelFriendRequestListener() {
+                        @Override
+                        public void onCancelFriendRequest(boolean validate) {
 
-                    // 리사이클 데이터 변경에따른 ui 업데이트
-                    friendEmotionAdapter.notifyDataSetChanged();
+                            if(validate)
+                            {
+                                FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 요청
 
-                    Toast.makeText(getActivity(),"감정공유 요청을 취소",Toast.LENGTH_SHORT).show();
+                                // 리사이클 데이터 변경에따른 ui 업데이트
+                                friendEmotionAdapter.notifyDataSetChanged();
 
-                    alertDlg.dismiss();
+                                //Toast.makeText(getActivity(),"감정공유 요청을 취소",Toast.LENGTH_SHORT).show();
+
+                                alertDlg.dismiss();
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    });
+
+
+                    NetServiceManager.getinstance().cancelEmotionFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
+
+
                 });
             }
             break;
@@ -647,23 +639,42 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                 // 감정 공유 요청
                 // "감정 공유를 요청하시겠습니까" 팝업 띄운다.
                 // 예 -> "감정공유 요청 중"
+                // 기획서에 색상 녹색 
+                // 감정 공유 + 해당
+
+                UserProfile userProfile = (UserProfile)obj;
+
                 AlertLineOnePopup alertDlg = new AlertLineOnePopup(getActivity(), getActivity(), AlertLineOnePopup.Dlg_Type.emotion_request);
                 alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 alertDlg.show();
 
                 alertDlg.iv_ok.setOnClickListener(v -> {
 
-                    int index_id =  Integer.parseInt((String)obj);
 
-                    FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(index_id);
-                    friendEmotionItemViewModel.emotion_state = 1;  // 감정공유 요청 중
+                    NetServiceManager.getinstance().setOnSendFriendRequestListener(new NetServiceManager.OnSendFriendRequestListener() {
+                        @Override
+                        public void onSendFriendRequest(boolean validate) {
 
-                    // 리사이클 데이터 변경에따른 ui 업데이트
-                    friendEmotionAdapter.notifyDataSetChanged();
+                            if(validate)
+                            {
+                                FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                friendEmotionItemViewModel.emotion_state = 1;  // 감정공유 요청 중
 
-                    Toast.makeText(getActivity(),"감정 공유를 요청",Toast.LENGTH_SHORT).show();
+                                // 리사이클 데이터 변경에따른 ui 업데이트
+                                friendEmotionAdapter.notifyDataSetChanged();
 
-                    alertDlg.dismiss();
+                                //Toast.makeText(getActivity(),"감정 공유를 요청",Toast.LENGTH_SHORT).show();
+
+                                alertDlg.dismiss();
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    });
+
+                    NetServiceManager.getinstance().sendEmotionFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
 
                 });
             }

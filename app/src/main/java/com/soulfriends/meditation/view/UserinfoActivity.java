@@ -259,6 +259,8 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
     public void onSuccess(Integer id, String message) {
         switch (id) {
             case R.id.button_nickname: {
+
+                Check_EditFocus_OnButton();
                 // 중복 검사 버튼
 
                 hideKeyBoard();
@@ -279,6 +281,9 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
             }
             break;
             case R.id.button_man: {
+
+                Check_EditFocus_OnButton();
+
                 userProfile.gender = 1;
 
                 bSuccess_gender = true;
@@ -293,6 +298,9 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
             }
             break;
             case R.id.button_woman: {
+
+                Check_EditFocus_OnButton();
+
                 userProfile.gender = 2;
 
                 bSuccess_gender = true;
@@ -310,6 +318,7 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
 
             case R.id.button_ok: {
 
+                Check_EditFocus_OnButton();
                 if(!bSuccess_nickname) {
                     break;
                 }
@@ -324,12 +333,17 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
                 UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
                 userProfile.uid = mAuth.getCurrentUser().getUid();
                 userProfile.nickname = viewModel.getNickname().getValue();
+
+                userProfile.profileimg = mCurrentPhotoPath;
+                userProfile.profileIntro = viewModel.getIntroduction().getValue();
+
                 NetServiceManager.getinstance().sendValProfile(userProfile);
 
             }
             break;
             case R.id.iv_picture: {
 
+                Check_EditFocus_OnButton();
                 // 썹네일 이미지 선택시
 
                 final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
@@ -357,6 +371,19 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
                 });
             }
             break;
+        }
+    }
+
+
+    // 버튼들을 눌렀을때 에디트 포커스 해제 처리
+    private void Check_EditFocus_OnButton()
+    {
+        if(binding.editNickname.isFocused()) {
+            binding.editNickname.clearFocus();
+        }
+
+        if(binding.editIntrodution.isFocused()) {
+            binding.editIntrodution.clearFocus();
         }
     }
 
