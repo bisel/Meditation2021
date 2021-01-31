@@ -56,6 +56,7 @@ public class MainActivity extends BaseActivity implements ResultListener {
 
     private MeditationContents meditationContents;
 
+
     MeditationAudioManager meditationAudioManager;
 
     private ArrayList<ResultData> resultData_list;
