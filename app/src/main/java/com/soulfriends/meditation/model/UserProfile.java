@@ -28,7 +28,7 @@ public class UserProfile {
     public String finalchartestdate;   // 성격 검사 시간     // 2020.12.21
     public String finalvoicetestdate;  // 목소리 분석 시간   // 2020.12.21
 
-
+    public String profileimg_uri; // 2021.01.31
     public boolean mIsDoneTest = false;
 
     //public String profileImgURI;   // 이미지 프로필 이미지 위치. 2021.01.21

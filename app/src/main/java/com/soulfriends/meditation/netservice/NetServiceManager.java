@@ -447,6 +447,7 @@ public class NetServiceManager {
                         //Uri downloadUri=uriTask.getResult();
                         //String download_url = downloadUri.toString();
                         profile.profileimg = curimgName;
+                        profile.profileimg_uri = profieimgdir + profile.profileimg; // 2021.01.31
 
                         // 성공한 후에 보내야 한다.
                         sendValProfile(profile);
@@ -4439,9 +4440,15 @@ public class NetServiceManager {
         });;
     }
 
-    // local social Contents도 지워야 한다.
+    // local social Contents도 지워야 한다. -> remove 수정
     public void delLocalMyContents(String uid){
-        mSocialContentsList.remove(getSocialContents(uid));
+        int dataNum = mSocialContentsList.size();
+
+        for(int i = 0; i < dataNum; i++){
+            mSocialContentsList.get(i).uid.equals(uid);
+            mSocialContentsList.remove(i);
+            break;
+        }
     }
 
     // playerlist의 social Contents도 지워야 한다. 그리고 UserProfile을 업데이트 해야 한다.

@@ -13,6 +13,7 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.netservice.NetServiceUtility;
 import com.soulfriends.meditation.util.UtilAPI;
 
 public class ContentsUploadActivity extends BaseActivity {
@@ -106,8 +107,6 @@ public class ContentsUploadActivity extends BaseActivity {
             public void onRecvValProfile(boolean validate) {
                 if (validate == true) {
 
-
-
                     ChangeActivity();
 
                 } else {
@@ -118,7 +117,12 @@ public class ContentsUploadActivity extends BaseActivity {
 
         //NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
 
+        // 20201.01.31 start
+        successContents.audio = NetServiceUtility.mycontentsaudiodir + successContents.audio;
+        successContents.thumbnail = NetServiceUtility.mycontentsthumnaildir +  successContents.thumbnail;
         NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
+        // 20201.01.31 end
+
         NetServiceManager.getinstance().mSocialContentsList.add(successContents);
 
         NetServiceManager.getinstance().sendValProfile(NetServiceManager.getinstance().getUserProfile());
