@@ -71,6 +71,7 @@ public class LoadingActivity extends AppCompatActivity {
             NetServiceManager.getinstance().setOnRecvContentsListener(new NetServiceManager.OnRecvContentsListener() {
                 @Override
                 public void onRecvContents(boolean validate) {
+
                     DoRecvContents(validate);
                 }
             });

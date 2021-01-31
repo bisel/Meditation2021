@@ -600,7 +600,7 @@ public class NetServiceManager {
                     mSocialRecvContentsListener.onSocialRecvContents(true);
                 }
                 else{
-                    mSocialRecvContentsListener.onSocialRecvContents(false);
+                    mSocialRecvContentsListener.onSocialRecvContents(true);  // social 콘텐츠 없다고 문제된느 것은 아니다.
                 }
             }
 
@@ -4399,34 +4399,54 @@ public class NetServiceManager {
     public void delMyContents(MeditationContents delMyContents){
 
         // 1. 기존 Thumnail을 지워야 한다.
-        StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(delMyContents.thumbnail);
+        String[] delthumbnailSplit = delMyContents.thumbnail.split("/");
+
+        int splitNum = delthumbnailSplit.length;
+        String delThumbnailImgName = "";
+        if(splitNum > 0){
+            delThumbnailImgName = delthumbnailSplit[splitNum-1];
+        }else{
+            delThumbnailImgName = delMyContents.thumbnail;
+        }
+
+        StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(delThumbnailImgName);
 
         // Delete the file
         delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
+                    Log.d("del","success File");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-
+                    Log.d("del","Failed File");
             }
         });
 
         // 2. 기존 Sound File을 지운다.
-        StorageReference delAudioStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(delMyContents.audio);
+        String[] delSndSplit = delMyContents.audio.split("/");
+
+        int splitSndNum = delSndSplit.length;
+        String delSndName = "";
+        if(splitSndNum > 0){
+            delSndName = delSndSplit[splitSndNum-1];
+        }else{
+            delSndName = delMyContents.audio;
+        }
+
+        StorageReference delAudioStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(delSndName);
 
         // Delete the file
         delAudioStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
+                Log.d("del","success File1");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-
+                Log.d("del","Failed File1");
             }
         });
 
