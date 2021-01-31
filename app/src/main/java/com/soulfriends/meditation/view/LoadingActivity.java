@@ -75,11 +75,6 @@ public class LoadingActivity extends AppCompatActivity {
                     DoRecvContents(validate);
                 }
             });
-        //}
-//        else
-//        {
-//             int xxxx = 0;
-//        }
 
     }
 

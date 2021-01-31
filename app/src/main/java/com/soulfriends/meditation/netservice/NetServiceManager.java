@@ -4487,7 +4487,18 @@ public class NetServiceManager {
             }
         }
 
-        sendValProfile(mUserProfile);
+        mfbDBRef.child(userInfoString).child(mUserProfile.uid).setValue(mUserProfile).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("del","success");
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("del","failed");
+            }
+        });
     }
 
     //===================================================================================================
