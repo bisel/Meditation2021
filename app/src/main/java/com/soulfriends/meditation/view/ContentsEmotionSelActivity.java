@@ -172,11 +172,11 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                     {
                         str_genre = "명상";
                     }
-                    else if(select_kind_id == 1)
+                    else if(select_kind_id == 2)
                     {
                         str_genre = "수면";
                     }
-                    else if(select_kind_id == 2)
+                    else if(select_kind_id == 3)
                     {
                         str_genre = "음악";
                     }

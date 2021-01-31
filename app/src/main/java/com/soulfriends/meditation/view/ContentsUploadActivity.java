@@ -106,9 +106,7 @@ public class ContentsUploadActivity extends BaseActivity {
             public void onRecvValProfile(boolean validate) {
                 if (validate == true) {
 
-                    NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
 
-                    NetServiceManager.getinstance().mSocialContentsList.add(successContents);
 
                     ChangeActivity();
 
@@ -119,6 +117,9 @@ public class ContentsUploadActivity extends BaseActivity {
         });
 
         //NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
+
+        NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
+        NetServiceManager.getinstance().mSocialContentsList.add(successContents);
 
         NetServiceManager.getinstance().sendValProfile(NetServiceManager.getinstance().getUserProfile());
 

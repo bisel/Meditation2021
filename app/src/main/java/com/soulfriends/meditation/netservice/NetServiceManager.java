@@ -1819,8 +1819,10 @@ public class NetServiceManager {
     public MeditationContents getSocialContents(String contentid){
         int dataNum = mSocialContentsList.size();
         for(int i = 0; i < dataNum; i++){
-            if(mSocialContentsList.get(i).uid.equals(contentid))
-                return mSocialContentsList.get(i);
+            if(mSocialContentsList.get(i).uid != null) {
+                if (mSocialContentsList.get(i).uid.equals(contentid))
+                    return mSocialContentsList.get(i);
+            }
         }
         return null;
     }
