@@ -365,10 +365,10 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
                 //userProfile.profileimg = mCurrentPhotoPath;
                 userProfile.profileIntro = viewModel.getIntroduction().getValue();
 
-                NetServiceManager.getinstance().sendValProfile(userProfile);
+                //NetServiceManager.getinstance().sendValProfile(userProfile);
 
                 // 안됨 dlsmdla
-                //NetServiceManager.getinstance().sendValNewProfileExt(userProfile, null, null, mCurrentPhotoPath);
+                NetServiceManager.getinstance().sendValNewProfileExt(userProfile, null, null, mCurrentPhotoPath);
             }
             break;
             case R.id.iv_picture: {

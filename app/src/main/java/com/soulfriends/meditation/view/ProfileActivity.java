@@ -36,6 +36,7 @@ import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.MeditationShowCategorys;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.netservice.NetServiceUtility;
 import com.soulfriends.meditation.parser.PersonResultData;
 import com.soulfriends.meditation.parser.ResultData;
 import com.soulfriends.meditation.util.ItemClickListener;
@@ -90,7 +91,12 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
 
         // 프로필 사진
 
-        //UtilAPI.load_image_circle(this, userProfile.profileimg, binding.ivProfileThumb);
+        if(userProfile.profileimg_uri !=null) {
+
+            String image_uri = userProfile.profileimg_uri;
+
+            UtilAPI.load_image_circle(this, image_uri, binding.ivPicture);
+        }
         
         //----------------------------------------------
         // 최근 체험 콘텐츠

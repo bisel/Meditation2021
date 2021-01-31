@@ -213,11 +213,15 @@ public class UtilAPI {
         storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
+
+                int xxx = 0;
                 showImage_circle(context, uri, view);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+
+                int xx = 0;
             }
         });
     }
