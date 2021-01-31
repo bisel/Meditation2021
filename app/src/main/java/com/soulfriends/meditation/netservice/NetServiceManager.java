@@ -421,14 +421,14 @@ public class NetServiceManager {
         if(profileImageURI != null){
             File upfile = new File(profileImageURI);
             if(upfile != null){
-                SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMdd" );
+                SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMddHHmmss" );
                 Date date_now = new Date(System.currentTimeMillis());
                 String curdate = format_date.format(date_now);
 
                 Uri profileUri = Uri.fromFile(upfile);
-                String curimgName = profile.uid + "_" + curdate + ".jpg";
+                String curimgName = profile.nickname + "_" + curdate + ".jpg";
 
-                StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(profieimgdir).child(profileUri.getLastPathSegment());
+                StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(profieimgdir).child(curimgName);
                 UploadTask task = storageRef.putFile(profileUri);
 
                 task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
