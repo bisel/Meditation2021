@@ -295,6 +295,7 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
 
                 if(validate)
                 {
+
                     // 삭제 성공
 
                     NetServiceManager.getinstance().delLocalMyContents(meditationContents.uid);
