@@ -133,6 +133,8 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             }
         });
 
+
+        UtilAPI.ClearActivity_Temp();
     }
 
     private void Check_TitleEdit()
@@ -294,7 +296,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 Check_TitleEdit();
 
                 Intent intent = new Intent(this, BackGroundActivity.class);
-                intent.putExtra("title_text",binding.editTitle.getText());
+                intent.putExtra("title_text",viewModel.getTitle().getValue());
                 startActivity(intent);
                 this.overridePendingTransition(0, 0);
 
@@ -510,7 +512,9 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                     this.overridePendingTransition(0, 0);
 
 
-                    UtilAPI.s_activity_temp = this;
+
+                    UtilAPI.AddActivity_Temp(this);
+                    //UtilAPI.s_activity_temp = this;
                 }
 
                 // 액티비티 저장을하고
@@ -866,7 +870,11 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 Intent intent = new Intent(this, MyContentsActivity.class);
                 startActivity(intent);
                 this.overridePendingTransition(0, 0);
+
                 finish();
+
+                UtilAPI.ClearActivity_Temp();
+
 
                 alertDlg.dismiss();
             });
@@ -900,7 +908,11 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             Intent intent = new Intent(this, MyContentsActivity.class);
             startActivity(intent);
             this.overridePendingTransition(0, 0);
+
             finish();
+
+            UtilAPI.ClearActivity_Temp();
+
         }
     }
 }

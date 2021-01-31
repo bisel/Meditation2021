@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.view.BaseActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -99,8 +100,40 @@ public class UtilAPI {
     }
 
     //
-    public static Activity s_activity_temp;
     public static MeditationContents s_MeditationContents_temp;
+
+    //
+
+    private static ArrayList<Activity>  s_activity_TempList = new ArrayList<>();
+    public static void AddActivity_Temp(Activity activity) {
+        if(!s_activity_TempList.contains(activity))
+        {
+            s_activity_TempList.add(activity);
+        }
+    }
+
+    public static void RemoveActivity_Temp(Activity activity) {
+        if(s_activity_TempList.size() > 0) {
+            s_activity_TempList.remove(activity);
+        }
+    }
+
+    public static void AllFinishActivity_Temp()
+    {
+        int size = s_activity_TempList.size();
+        for(int i = 0; i < s_activity_TempList.size(); i++)
+        {
+            s_activity_TempList.get(i).finish();
+        }
+    }
+
+
+    public static UserProfile s_userProfile_friend;
+
+    public static void ClearActivity_Temp() {
+        s_activity_TempList.clear();
+    }
+
 
     public enum PlayerMode
     {
@@ -171,6 +204,30 @@ public class UtilAPI {
     {
        //statesList.put(uri.toString(),uri.toString());
        Glide.with(view.getContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(view);
+    }
+
+
+    public static void load_image_circle(Context context, String str_uri, de.hdodenhof.circleimageview.CircleImageView view)
+    {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(str_uri);
+        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                showImage_circle(context, uri, view);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        });
+    }
+
+    //static Map<String, String> statesList = new HashMap<>();
+
+    public static void showImage_circle(Context context, Uri uri, de.hdodenhof.circleimageview.CircleImageView view)
+    {
+        //statesList.put(uri.toString(),uri.toString());
+        Glide.with(view.getContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(view);
     }
 
     public static void setImage(Context context, ImageView view, int res_id)
@@ -260,7 +317,11 @@ public class UtilAPI {
 
         s_activity = null;
 
-        s_activity_temp = null;
+
+        ClearActivity_Temp();
+
+        s_userProfile_friend = null;
+
         s_MeditationContents_temp = null;
 
         ClearActivityInPlayerList();

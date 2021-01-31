@@ -32,7 +32,7 @@ public class NetServiceExtViewPager extends ViewPager {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                parentItemExtAdapter.pauseRun();
+                //parentItemExtAdapter.pauseRun();
 
                 //Log.d("Meditation", "ACTION_DOWN");
             }

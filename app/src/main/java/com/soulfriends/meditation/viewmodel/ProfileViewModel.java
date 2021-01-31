@@ -25,6 +25,17 @@ public class ProfileViewModel extends ViewModel {
     // 3 / 10
     public MutableLiveData<String> contents_make_number = new MutableLiveData<>();
 
+    public MutableLiveData<String> getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(MutableLiveData<String> introduction) {
+        this.introduction = introduction;
+    }
+
+    public MutableLiveData<String> introduction = new MutableLiveData<>();
+
+
     private ResultListener listener;
 
     private Context context;
@@ -42,6 +53,9 @@ public class ProfileViewModel extends ViewModel {
     {
         // nick
         nickname.setValue(userProfile.nickname);
+
+        // 소개글
+        introduction.setValue(userProfile.profileIntro);
 
         // 총 세션수
         if(userProfile.sessionnum > 9999)

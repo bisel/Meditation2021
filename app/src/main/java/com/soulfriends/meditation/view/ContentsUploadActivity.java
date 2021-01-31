@@ -28,6 +28,8 @@ public class ContentsUploadActivity extends BaseActivity {
     private String genre = "";
     private String emotion = "";
 
+    private String activity_class;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +38,7 @@ public class ContentsUploadActivity extends BaseActivity {
         // 정보 받기
         Intent intent = getIntent();
 
+        activity_class = intent.getStringExtra("activity_class");
         titleName = intent.getStringExtra("titleName");
         thumnailImgName = intent.getStringExtra("thumnailImgName");
         playtime = intent.getIntExtra("playtime", 0);
@@ -43,8 +46,8 @@ public class ContentsUploadActivity extends BaseActivity {
         SndFileName = intent.getStringExtra("SndFileName");
         releasedate = intent.getStringExtra("releasedate");
         backgrroundImgName = intent.getStringExtra("backgrroundImgName");
-        genre = intent.getStringExtra("명상");//genre
-        emotion = intent.getStringExtra("기쁨");//emotion
+        genre = intent.getStringExtra("genre");//genre
+        emotion = intent.getStringExtra("emotion");//emotion
 
         // 추후 수정일 경우에는 null 이 아니므로 고려해야함.
 
@@ -103,6 +106,10 @@ public class ContentsUploadActivity extends BaseActivity {
             public void onRecvValProfile(boolean validate) {
                 if (validate == true) {
 
+                    NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
+
+                    NetServiceManager.getinstance().mSocialContentsList.add(successContents);
+
                     ChangeActivity();
 
                 } else {
@@ -111,11 +118,11 @@ public class ContentsUploadActivity extends BaseActivity {
             }
         });
 
-        NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
+        //NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
 
         NetServiceManager.getinstance().sendValProfile(NetServiceManager.getinstance().getUserProfile());
 
-        NetServiceManager.getinstance().mSocialContentsList.add(successContents);
+
     }
 
     private void ChangeActivity()
@@ -124,10 +131,35 @@ public class ContentsUploadActivity extends BaseActivity {
         // 콘텐츠 배경이미지 초기화
         UtilAPI.s_id_backimamge_makecontents = -1;
 
-        Intent intent = new Intent(this, MyContentsActivity.class);
-        startActivity(intent);
-        this.overridePendingTransition(0, 0);
-        finish();
+        if(activity_class != null && activity_class.length() > 0) {
+
+            if(activity_class.equals("ProfileActivity")) {
+
+                // ProfileActivity
+                Intent intent = new Intent(this, ProfileActivity.class);
+                startActivity(intent);
+                this.overridePendingTransition(0, 0);
+                finish();
+            }
+            else
+            {
+                // MyContentsActivity
+                Intent intent = new Intent(this, MyContentsActivity.class);
+                startActivity(intent);
+                this.overridePendingTransition(0, 0);
+                finish();
+            }
+        }
+        else {
+            Intent intent = new Intent(this, MyContentsActivity.class);
+            startActivity(intent);
+            this.overridePendingTransition(0, 0);
+            finish();
+        }
+
+
+
+        UtilAPI.AllFinishActivity_Temp();
 
     }
 
@@ -140,6 +172,8 @@ public class ContentsUploadActivity extends BaseActivity {
         alertDlg.show();
 
         alertDlg.iv_ok.setOnClickListener(v -> {
+
+            // 업로드 실패 할 경우에는
 
             finish();
 

@@ -35,6 +35,16 @@ public class PlayerViewModel extends ViewModel {
 
     public MutableLiveData<String> timer_time = new MutableLiveData<>();    // 타이머 타임
 
+    public MutableLiveData<String> getNickname_friend() {
+        return nickname_friend;
+    }
+
+    public void setNickname_friend(String nickname_friend) {
+        this.nickname_friend.setValue(nickname_friend);
+    }
+
+    public MutableLiveData<String> nickname_friend = new MutableLiveData<>();    // 친구 닉네임
+
     private long mLastClickTime = 0;
 
     public PlayerViewModel(MeditationContents meditationContents, Context mContext, ResultListener listener) {

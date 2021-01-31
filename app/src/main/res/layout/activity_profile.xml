@@ -87,7 +87,7 @@
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_profile_thumb"
+                        android:id="@+id/layout_photo"
                         android:layout_width="100dp"
                         android:layout_height="80dp"
                         android:layout_marginTop="30dp"
@@ -96,21 +96,21 @@
                         android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <ImageView
-                            android:id="@+id/iv_profile_thumb"
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/iv_picture"
                             android:layout_width="80dp"
                             android:layout_height="80dp"
-
+                            app:civ_border_color="#FF000000"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/my_profile_img" />
+                            android:background="@drawable/my_profile_img" />
 
                         <ImageView
                             android:id="@+id/iv_photobt"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_profile_thumb"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_picture"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:srcCompat="@drawable/profile_editphoto" />
 
@@ -125,7 +125,7 @@
                         android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/layout_profile_thumb">
+                        app:layout_constraintTop_toBottomOf="@+id/layout_photo">
 
                         <ImageView
                             android:id="@+id/imageView23"
@@ -145,7 +145,7 @@
                             android:fontFamily="@font/font_notosanskr_medium"
                             android:includeFontPadding="false"
                             android:lineSpacingExtra="8sp"
-                            android:text="닉네임닉네임"
+                            android:text="@{viewModel.nickname}"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -192,7 +192,7 @@
                         android:id="@+id/tv_introduction"
                         android:layout_width="280dp"
                         android:layout_height="100dp"
-                        android:text="TextView"
+                        android:text="@{viewModel.introduction}"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_Introduction_bg"
                         app:layout_constraintEnd_toEndOf="@+id/iv_Introduction_bg"
                         app:layout_constraintStart_toStartOf="@+id/iv_Introduction_bg"
@@ -518,6 +518,7 @@
                             android:id="@+id/layout_contents_new"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:visibility="gone"
                             android:layout_gravity="left"
                             android:layout_marginTop="20dp"
                             android:orientation="vertical">

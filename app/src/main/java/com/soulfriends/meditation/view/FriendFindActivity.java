@@ -270,8 +270,6 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                                 //Toast.makeText(this,"친구 요청중",Toast.LENGTH_SHORT).show();
 
                                 alertDlg.dismiss();
-
-                                alertDlg.dismiss();
                             }
                             else
                             {
@@ -407,6 +405,9 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
 
                         // 호출하도록 한다.
                         ItemList(list);
+
+                        friendFindAdapter.notifyDataSetChanged();
+
                     }
                 }
                 else

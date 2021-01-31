@@ -174,19 +174,30 @@ public class MainActivity extends BaseActivity implements ResultListener {
 
                 if(validate)
                 {
-                    //ArrayList<MeditationDetailAlarm> list_alarm = NetServiceManager.getinstance().mDetailAlarmDataList;
+                    ArrayList<MeditationDetailAlarm> list_alarm = NetServiceManager.getinstance().mDetailAlarmDataList;
 
                     // 새로운 알림 정보 갯수 확인
                     int total_alarm = NetServiceManager.getinstance().calcNewAlarmNum();
 
                     String str_alarm = "";
+
+                    binding.ivAlarmBg.setVisibility(View.VISIBLE);
+                    binding.tvAlarmCount.setVisibility(View.VISIBLE);
+
                     if(total_alarm > 99)
                     {
                         str_alarm= "99+";
                     }
                     else
                     {
-                        str_alarm = String.valueOf(total_alarm);
+                        if(total_alarm == 0)
+                        {
+                            binding.ivAlarmBg.setVisibility(View.GONE);
+                            binding.tvAlarmCount.setVisibility(View.GONE);
+                        }
+                        else {
+                            str_alarm = String.valueOf(total_alarm);
+                        }
                     }
                     viewModel.setAlarm(str_alarm);
                 }
@@ -197,7 +208,7 @@ public class MainActivity extends BaseActivity implements ResultListener {
             }
         });
 
-
+        // null exception으로 인해서 주석처리함 dlsmdla
         NetServiceManager.getinstance().recvMyAlarmList();
     }
 
@@ -479,7 +490,7 @@ public class MainActivity extends BaseActivity implements ResultListener {
                 finish();
 
                 // 테스트
-
+//
 //                this.startActivity(new Intent(this, UserinfoExtActivity.class));
 //                this.overridePendingTransition(0, 0);
 //                finish();
@@ -502,6 +513,12 @@ public class MainActivity extends BaseActivity implements ResultListener {
             case R.id.noti_btn: {
 
                 this.startActivity(new Intent(this, NotiActivity.class));
+                this.overridePendingTransition(0, 0);
+            }
+            break;
+            case R.id.profile_btn: {
+
+                this.startActivity(new Intent(this, ProfileActivity.class));
                 this.overridePendingTransition(0, 0);
             }
             break;

@@ -10,8 +10,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +42,8 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
 
     private boolean bSuccess_nickname;
     private boolean bSuccess_gender;
+
+    private boolean bChange_ProfileImage = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +84,7 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
         UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
 
         // 프로필 사진
-        UtilAPI.load_image(this, userProfile.profileimg, binding.ivPicture);
+        //UtilAPI.load_image_circle(this, userProfile.profileimg, binding.ivPicture);
 
         // 닉네임
         viewModel.setNickname(userProfile.nickname);
@@ -94,6 +101,38 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
         bSuccess_gender = true;
 
         Check_IsButton();
+
+
+        binding.editNickname.setOnEditorActionListener(new EditText.OnEditorActionListener()
+        {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if(actionId == EditorInfo.IME_ACTION_DONE)
+                {
+                    Check_EditFocus_OnButton();
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        binding.editIntrodution.setOnEditorActionListener(new EditText.OnEditorActionListener()
+        {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if(actionId == EditorInfo.IME_ACTION_DONE)
+                {
+
+                    Check_EditFocus_OnButton();
+
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void SetGender(int gender)
@@ -191,6 +230,11 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
     @Override
     public void onSuccess(Integer id, String message) {
         switch (id) {
+            case R.id.ic_close:
+            {
+                finish();
+            }
+            break;
             case R.id.button_nickname: {
                 // 중복 검사 버튼
 
@@ -270,10 +314,43 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
 
                 UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
 
-                userProfile.profileimg = mCurrentPhotoPath;
-                userProfile.nickname = viewModel.getNickname().getValue();
-                userProfile.profileIntro = viewModel.getIntroduction().getValue();
-                NetServiceManager.getinstance().sendValProfile(userProfile);
+                //userProfile.profileimg = mCurrentPhotoPath;
+                //userProfile.nickname = viewModel.getNickname().getValue();
+                //userProfile.profileIntro = viewModel.getIntroduction().getValue();
+                //NetServiceManager.getinstance().sendValProfile(userProfile);
+
+
+                String str_nickname = null;
+                if(!userProfile.nickname.equals(viewModel.getNickname().getValue()))
+                {
+                    str_nickname = viewModel.getNickname().getValue();
+                }
+
+                String str_intro = null;
+                if(!userProfile.profileIntro.equals(viewModel.getIntroduction().getValue()))
+                {
+                    str_intro = viewModel.getIntroduction().getValue();
+                }
+
+                String str_photopath = null;
+                if(bChange_ProfileImage)
+                {
+                    str_photopath = mCurrentPhotoPath;
+                }
+
+                NetServiceManager.getinstance().setOnRecvValProfileListener(new NetServiceManager.OnRecvValProfileListener() {
+                    @Override
+                    public void onRecvValProfile(boolean validate) {
+
+                        binding.progressBar.setVisibility(View.GONE);
+
+                        // 수정하면 finish
+                        finish();
+                    }
+                });
+
+                // 유저 이미지를 보내야만 되는 이벤트 오는거 같음 - dlsmdla
+                NetServiceManager.getinstance().sendValNewProfileExt(userProfile, str_nickname, str_intro, str_photopath);
             }
             break;
             case R.id.iv_picture: {
@@ -313,6 +390,9 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
     // 버튼들을 눌렀을때 에디트 포커스 해제 처리
     private void Check_EditFocus_OnButton()
     {
+        // 우선순위 주의!!
+        hideKeyBoard();
+
         if(binding.editNickname.isFocused()) {
             binding.editNickname.clearFocus();
         }
@@ -342,13 +422,16 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
         // 썹네일 성공시
         // 이미지 show
 
+        bChange_ProfileImage = true;
+
         binding.ivPicture.setImageURI(albumURI);
 
     }
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+
+        finish();
     }
 
 }

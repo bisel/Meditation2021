@@ -73,6 +73,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
     private View layout_friend_bts;
     private View layout_friend_no;
 
+
+
     private LinearLayoutManager layoutManager_friend;
 
     private ViewGroup container;
@@ -105,6 +107,9 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         layout_friend_no = view.findViewById(R.id.layout_friend_no);
 
         layout_friend_bts.setVisibility(View.GONE);
+
+//        ImageView iv_contentsbt = (ImageView)view.findViewById(R.id.iv_contentsbt);
+//        ImageView iv_friendbt = (ImageView)view.findViewById(R.id.iv_friendbt);
 
         //------------------------------------------------
         // 콘텐츠
@@ -156,6 +161,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         //------------------------------------------------
 
         ImageView ivContentsBt = view.findViewById(R.id.iv_contentsbt);
+        ImageView ivFriendBt = view.findViewById(R.id.iv_friendbt);
+
         ivContentsBt.setOnClickListener(v -> {
 
             this.contents_RecyclerViewItem.setVisibility(View.VISIBLE);
@@ -163,18 +170,25 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             this.friend_RecyclerViewItem.setVisibility(View.GONE);
 
             layout_friend_bts.setVisibility(View.GONE);
+            layout_friend_no.setVisibility(View.GONE);
+
+            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg);
+            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg_selected);
+
         });
 
         //------------------------------------------------
         // 친구 탭  버튼 선택
         //------------------------------------------------
 
-        ImageView ivFriendBt = view.findViewById(R.id.iv_friendbt);
         ivFriendBt.setOnClickListener(v -> {
 
             this.contents_RecyclerViewItem.setVisibility(View.GONE);
 
             layout_friend_bts.setVisibility(View.GONE);
+
+            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg_selected);
+            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg);
 
             // 2. 현재 친구 리스트 : 친구 인지 아닌지 판별 , 감정친구인지
             //  -> recvFriendsRequestList(normal) : 어느 특정 시작 시점

@@ -75,15 +75,18 @@ public class MyContentsAdapter extends RecyclerView.Adapter{
             bind.layoutBase.setVisibility(View.VISIBLE);
             bind.layoutAdd.setVisibility(View.GONE);
 
-            if(myContentsItemViewModel.meditationContents.thumbnail_uri == null)
-            {
+            if(myContentsItemViewModel.meditationContents.thumbnail != null) {
                 UtilAPI.load_imageEX(this.context, myContentsItemViewModel.meditationContents.thumbnail, bind.imgChildItem, myContentsItemViewModel.meditationContents);
             }
-            else
-            {
-                Uri uri = Uri.parse(myContentsItemViewModel.meditationContents.thumbnail_uri);
-                UtilAPI.showImage(this.context, uri, myContentsViewHolder.getMyContentsItemBinding().imgChildItem);
-            }
+//            if(myContentsItemViewModel.meditationContents.thumbnail_uri == null)
+//            {
+//                UtilAPI.load_imageEX(this.context, myContentsItemViewModel.meditationContents.thumbnail, bind.imgChildItem, myContentsItemViewModel.meditationContents);
+//            }
+//            else
+//            {
+//                Uri uri = Uri.parse(myContentsItemViewModel.meditationContents.thumbnail_uri);
+//                UtilAPI.showImage(this.context, uri, myContentsViewHolder.getMyContentsItemBinding().imgChildItem);
+//            }
 
             // 콘텐츠 상태
             // 콘텐츠 인덱스를 받아서 콘텐츠 상태 표시를 해야 한다.

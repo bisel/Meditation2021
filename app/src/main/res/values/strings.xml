@@ -262,6 +262,7 @@
 
     <!-- contents make activity 콘텐츠 제작-->
     <string name="contentsmake_title">콘텐츠 제작</string>
+    <string name="contentsmake_title_edit">콘텐츠 수정</string>
     <string name="contentsmake_titleinput">타이틀을 입력하세요.</string>
     <string name="contentsmake_thumb">썸네일 이미지</string>
     <string name="contentsmake_pictureadd">사진추가</string>

@@ -177,7 +177,7 @@ public class ParentItemExtAdapter extends RecyclerView.Adapter{
             slider_image_list = new ArrayList<>();
 
             slider_image_list.add("1"); // 심리검사
-            slider_image_list.add("2"); // 성격검사
+            //slider_image_list.add("2"); // 성격검사
             final SliderPagerExtAdapter sliderPagerExtAdapter = new SliderPagerExtAdapter((Activity) context, slider_image_list, listener);
             parentMiddleExtViewHolder.viewPager.setAdapter(sliderPagerExtAdapter);
             parentMiddleExtViewHolder.setSliderPageExtAdapter(sliderPagerExtAdapter);
@@ -185,55 +185,55 @@ public class ParentItemExtAdapter extends RecyclerView.Adapter{
 
             parentMiddleExtViewHolder.viewPager.SetParentItemExtAdapter(this);
 
-            parentMiddleExtViewHolder.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                    int xx = 0;
-                    Log.d("Meditation", "onPageScrolled = " + position);
-                    //if(state == 2)
-                    {
-                        startRun();
-                    }
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    addBottomDots(position, parentMiddleExtViewHolder.ll_dots);
-                    page = position;
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                    // state == 1 이면 터치가 된 상태가 된다.
-                    // state == 0 이면 터치가 off
-
-                    // Log.d("Meditation", "state = " + state);
-
-                    if(state == 1 )
-                    {
-                        //터치가 된 상태가 된다.
-                        //pauseRun();
-                        page_state = 1;
-                    }
-
-//                    if(state == 0 && page_state == 1)
+//            parentMiddleExtViewHolder.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//
+//
+//                @Override
+//                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//                    int xx = 0;
+//                    Log.d("Meditation", "onPageScrolled = " + position);
+//                    //if(state == 2)
 //                    {
 //                        startRun();
 //                    }
+//                }
+//
+//                @Override
+//                public void onPageSelected(int position) {
+//                    addBottomDots(position, parentMiddleExtViewHolder.ll_dots);
+//                    page = position;
+//                }
+//
+//                @Override
+//                public void onPageScrollStateChanged(int state) {
+//
+//                    // state == 1 이면 터치가 된 상태가 된다.
+//                    // state == 0 이면 터치가 off
+//
+//                    // Log.d("Meditation", "state = " + state);
+//
+//                    if(state == 1 )
+//                    {
+//                        //터치가 된 상태가 된다.
+//                        //pauseRun();
+//                        page_state = 1;
+//                    }
+//
+////                    if(state == 0 && page_state == 1)
+////                    {
+////                        startRun();
+////                    }
+//
+//                    if(state == 2)
+//                    {
+//                        startRun();
+//                    }
+//                }
+//            });
+            //addBottomDots(0, parentMiddleExtViewHolder.ll_dots);
 
-                    if(state == 2)
-                    {
-                        startRun();
-                    }
-                }
-            });
-            addBottomDots(0, parentMiddleExtViewHolder.ll_dots);
-
-            startRun();
+            //startRun();
 //            mhandler.postDelayed(new Runnable() {
 //                @Override
 //                public void run() {
@@ -297,7 +297,7 @@ public class ParentItemExtAdapter extends RecyclerView.Adapter{
     private void initPage(int page)
     {
         parentMiddleExtViewHolder.viewPager.setCurrentItem(page);
-        addBottomDots(page, parentMiddleExtViewHolder.ll_dots);
+        //addBottomDots(page, parentMiddleExtViewHolder.ll_dots);
     }
 
     public void startRun()
@@ -351,7 +351,7 @@ public class ParentItemExtAdapter extends RecyclerView.Adapter{
 
     public void pauseRun()
     {
-        countDownTimer.cancel();
+        //countDownTimer.cancel();
 
 //        if(mhandler != null) {
 //            mhandler.removeCallbacks(mRunnable);

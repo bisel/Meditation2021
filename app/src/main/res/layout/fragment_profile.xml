@@ -28,23 +28,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/ic_profilebt"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginRight="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+<!--    <FrameLayout-->
+<!--        android:id="@+id/ic_profilebt"-->
+<!--        android:layout_width="54dp"-->
+<!--        android:layout_height="54dp"-->
+<!--        android:layout_marginTop="26dp"-->
+<!--        android:layout_marginEnd="6dp"-->
+<!--        android:layout_marginRight="6dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:clickable="false"
-            app:srcCompat="@drawable/profile_icon" />
-    </FrameLayout>
+<!--        <ImageView-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:layout_gravity="center_horizontal|center_vertical"-->
+<!--            android:clickable="false"-->
+<!--            app:srcCompat="@drawable/profile_icon" />-->
+<!--    </FrameLayout>FrameLayout-->
 
     <ImageView
         android:id="@+id/iv_contentsbt"
@@ -52,10 +52,11 @@
         android:layout_height="44dp"
         android:layout_marginStart="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="87dp"
+        android:layout_marginTop="84dp"
         android:scaleType="fitXY"
-        android:src="@drawable/social_mnbg_selected"
+        android:background="@drawable/social_mnbg"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,11 +64,11 @@
         android:id="@+id/iv_friendbt"
         android:layout_width="0dp"
         android:layout_height="44dp"
-        android:layout_marginTop="87dp"
+        android:layout_marginTop="84dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:scaleType="fitXY"
-        android:src="@drawable/social_mnbg"
+        android:background="@drawable/social_mnbg_selected"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toTopOf="parent" />

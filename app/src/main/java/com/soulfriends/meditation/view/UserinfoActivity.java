@@ -5,8 +5,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -63,12 +67,7 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
         // 자동로그인 시 uid 초기화 처리
         PreferenceManager.setString(this,"uid", "");
 
-//        NetServiceManager.getinstance().setOnRecvValProfileListener(new NetServiceManager.OnRecvValProfileListener() {
-//            @Override
-//            public void onRecvValProfile(boolean validate) {
-//                Toast.makeText(getApplicationContext(),"success db",Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
         //---------------------------------------------
         // NetServiceManager
         //---------------------------------------------
@@ -111,6 +110,37 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
                 if(validate == true){
                     NetServiceManager.getinstance().recvContentsExt();
                 }
+            }
+        });
+
+
+        binding.editNickname.setOnEditorActionListener(new EditText.OnEditorActionListener()
+        {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if(actionId == EditorInfo.IME_ACTION_DONE)
+                {
+                    Check_EditFocus_OnButton();
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        binding.editIntrodution.setOnEditorActionListener(new EditText.OnEditorActionListener()
+        {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if(actionId == EditorInfo.IME_ACTION_DONE)
+                {
+                    Check_EditFocus_OnButton();
+
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -263,9 +293,6 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
                 Check_EditFocus_OnButton();
                 // 중복 검사 버튼
 
-                hideKeyBoard();
-                binding.editNickname.clearFocus();
-
                 // 예외처리
                 //1 ~ 6자로 제한
                 String nickname = viewModel.getNickname().getValue();
@@ -283,6 +310,7 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
             case R.id.button_man: {
 
                 Check_EditFocus_OnButton();
+
 
                 userProfile.gender = 1;
 
@@ -334,11 +362,13 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
                 userProfile.uid = mAuth.getCurrentUser().getUid();
                 userProfile.nickname = viewModel.getNickname().getValue();
 
-                userProfile.profileimg = mCurrentPhotoPath;
+                //userProfile.profileimg = mCurrentPhotoPath;
                 userProfile.profileIntro = viewModel.getIntroduction().getValue();
 
                 NetServiceManager.getinstance().sendValProfile(userProfile);
 
+                // 안됨 dlsmdla
+                //NetServiceManager.getinstance().sendValNewProfileExt(userProfile, null, null, mCurrentPhotoPath);
             }
             break;
             case R.id.iv_picture: {
@@ -378,6 +408,9 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
     // 버튼들을 눌렀을때 에디트 포커스 해제 처리
     private void Check_EditFocus_OnButton()
     {
+        // 우선순위 주의!!
+        hideKeyBoard();
+
         if(binding.editNickname.isFocused()) {
             binding.editNickname.clearFocus();
         }

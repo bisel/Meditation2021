@@ -105,6 +105,8 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
 
     private void Update_Recyclerview()
     {
+        MyContentsItemList();
+
         myContentsAdapter.SetList(list_contents);
         // 리사이클 데이터 변경에따른 ui 업데이트
         myContentsAdapter.notifyDataSetChanged();
@@ -231,21 +233,15 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
 
                         } else {
                             // 팝업
-                            // 친구추가
                             // "콘텐츠를 정말 삭제하시겠습니까? 팝업 띄운다.
-                            AlertLineOnePopup alertDlg = new AlertLineOnePopup(MyContentsActivity.this, MyContentsActivity.this, AlertLineOnePopup.Dlg_Type.friend_add);
+                            AlertLineOnePopup alertDlg = new AlertLineOnePopup(MyContentsActivity.this, MyContentsActivity.this, AlertLineOnePopup.Dlg_Type.contents_delete);
                             alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                             alertDlg.show();
 
                             alertDlg.iv_ok.setOnClickListener(v -> {
 
-                                int index_id =  Integer.parseInt((String)obj);
-
                                 OnEvent_Delete_Contents(meditationContents);
                                 Toast.makeText(MyContentsActivity.this,"삭제",Toast.LENGTH_SHORT).show();
-
-
-
 
                                 alertDlg.dismiss();
                             });

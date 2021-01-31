@@ -56,7 +56,9 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
 
 
     private String str_genre_id = "select_genre_id";
-    private String str_emoticon_id = "select_emoticon_id";
+    private String str_emotion_id = "select_emotion_id";
+
+    private String activity_class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,8 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
         // 정보 받기
         Intent intent = getIntent();
 
+        // 액티비티
+        activity_class = intent.getStringExtra("activity_class");
         titleName = intent.getStringExtra("titleName");
         thumnailImgName = intent.getStringExtra("thumnailImgName");
         playtime = intent.getIntExtra("playtime", 0);
@@ -83,11 +87,12 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
         backgrroundImgName = intent.getStringExtra("backgrroundImgName");
 
         str_genre_id = intent.getStringExtra("genre");
-        str_emoticon_id = intent.getStringExtra("emotion");
+        str_emotion_id = intent.getStringExtra("emotion");
 
         if(str_genre_id == null || str_genre_id.length() == 0)
         {
-            // 없는 경우 
+            // 없는 경우
+            str_genre_id = "";
             // 콘텐츠 새로 만든 경우에 해당됨
         }
         else
@@ -109,9 +114,11 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
             }
         }
 
-        if(str_emoticon_id == null || str_emoticon_id.length() == 0)
+        if(str_emotion_id == null || str_emotion_id.length() == 0)
         {
             // 없는 경우
+
+            str_emotion_id = "";
             // 콘텐츠 새로 만든 경우에 해당됨
 
 
@@ -126,7 +133,7 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
             int find_emotion = 0;
             for(int i = 0, len = list.size(); i < len; i++)
             {
-                if(list.get(i).softemotion == str_emoticon_id)
+                if(list.get(i).softemotion == str_emotion_id)
                 {
                     find_emotion = i;
                     break;
@@ -145,6 +152,8 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                 // 닫기
                 //this.startActivity(new Intent(this, MyContentsActivity.class));
                 //this.overridePendingTransition(0, 0);
+
+                UtilAPI.RemoveActivity_Temp(this);
                 finish();
 
             }
@@ -176,7 +185,7 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
 
                     // 감정
                     ArrayList<EmotionListData> list_emotion = NetServiceManager.getinstance().getEmotionListMeditationDataList();
-                    String str_emotion = list_emotion.get(select_emoticon_id).softemotion;
+                    String str_emotion = list_emotion.get(select_emoticon_id - 1).softemotion;
 
 
                     // 등록 시 저작권 정보 안내 팝업 노출 후 확인 시 업로드 진행 함
@@ -191,6 +200,8 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                         Intent intent = new Intent(this, ContentsUploadActivity.class);
 
                         // 전달
+                        // 액티비티
+                        intent.putExtra("activity_class", activity_class);
                         intent.putExtra("titleName", titleName);
                         intent.putExtra("thumnailImgName", thumnailImgName);
                         intent.putExtra("playtime", playtime);
@@ -199,17 +210,36 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                         intent.putExtra("releasedate", releasedate);
                         intent.putExtra("backgrroundImgName", backgrroundImgName);
 
-                        intent.putExtra("genre", final_genre); // 장르
-                        intent.putExtra("emotion", str_emotion);
+
+
+                        // 장르
+                        String res_genre = null;
+                        if(!str_genre_id.equals(final_genre))
+                        {
+                            res_genre = final_genre;
+                        }
+
+                        // 명상
+                        String res_emotion = null;
+                        if(!str_emotion_id.equals(str_emotion))
+                        {
+                            res_emotion = str_emotion;
+                        }
+
+
+                        intent.putExtra("genre", res_genre); // 장르
+                        intent.putExtra("emotion", res_emotion);
 
                         this.startActivity(intent);
                         this.overridePendingTransition(0, 0);
-                        finish();
+                        //finish();
 
-                        if(UtilAPI.s_activity_temp != null) {
-                            ContentsMakeActivity contentsMakeActivity = (ContentsMakeActivity) UtilAPI.s_activity_temp;
-                            contentsMakeActivity.finish();
-                        }
+                        UtilAPI.AddActivity_Temp(this);
+
+//                        if(UtilAPI.s_activity_temp != null) {
+//                            ContentsMakeActivity contentsMakeActivity = (ContentsMakeActivity) UtilAPI.s_activity_temp;
+//                            contentsMakeActivity.finish();
+//                        }
 
                         alertDlg.dismiss();
                     });
@@ -379,6 +409,8 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
         // 닫기
         //this.startActivity(new Intent(this, MyContentsActivity.class));
         //this.overridePendingTransition(0, 0);
+
+        UtilAPI.RemoveActivity_Temp(this);
         finish();
     }
 

@@ -101,6 +101,8 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
     public boolean bChange_Thumb; // 썸네일 변경 여부
     public boolean bChange_Audio; // 오디오 변경 여부
 
+    private String activity_class;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +115,13 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
         }
         viewModel = new ViewModelProvider(this.getViewModelStore(), contentsEditViewModelFactory).get(ContentsEditViewModel.class);
         binding.setViewModel(viewModel);
+
+
+        // 정보 받기
+        Intent intent = getIntent();
+
+        activity_class = intent.getStringExtra("activity_class");
+
 
 
         cur_meditationContents = UtilAPI.s_MeditationContents_temp;
@@ -212,6 +221,8 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
             }
         });
 
+
+        UtilAPI.ClearActivity_Temp();
     }
 
 
@@ -405,7 +416,7 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                 Check_TitleEdit();
 
                 Intent intent = new Intent(this, BackGroundActivity.class);
-                intent.putExtra("title_text",binding.editTitle.getText());
+                intent.putExtra("title_text",viewModel.getTitle().getValue());
                 startActivity(intent);
                 this.overridePendingTransition(0, 0);
 
@@ -602,47 +613,57 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                     //  public String orig_emotion;              // 감정 내용
                     //  public int orig_bgimg_indx;              // 배경 이미지 인덱스 번호
 
+
+                    // 액티비티
+                    intent.putExtra("activity_class", activity_class);
+
                     // 타이틀
+                    String res_title = null;
                     if(orig_title == viewModel.title.getValue())
                     {
-                        intent.putExtra("titleName", ""); // null 일 경우 공백으로 설정
                     }
                     else
                     {
-                        intent.putExtra("titleName", viewModel.title.getValue());
+                        res_title = viewModel.title.getValue();
                     }
+                    intent.putExtra("titleName", res_title);
 
                     // 썸네일 변경
+                    String res_thumb = null;
                     if(bChange_Thumb)
                     {
                         // 썸네일 변경 된 경우에 해당된다.
-                        intent.putExtra("thumnailImgName", mCurrentPhotoPath);
+                        res_thumb = mCurrentPhotoPath;
                     }
                     else
                     {
-                        intent.putExtra("thumnailImgName", "");
                     }
+                    intent.putExtra("thumnailImgName", res_thumb);
 
                     // 오디오 변경
+                    String res_sndfilename = null;
                     if(bChange_Audio)
                     {
                         // 오디오 변경 된 경우에 해당된다.
                         if (Upload_Audio_filePath.length() == 0) {
                             // 녹음 파일 이고
                             intent.putExtra("IsSndFile", 1);
-                            intent.putExtra("SndFileName", NetServiceManager.getinstance().mMyContentsPath);
+
+
+                            res_sndfilename = NetServiceManager.getinstance().mMyContentsPath;
                         } else {
                             // 파일에서
                             intent.putExtra("IsSndFile", 0);
-                            intent.putExtra("SndFileName", Upload_Audio_filePath);
+                            res_sndfilename = Upload_Audio_filePath;
                         }
                     }
                     else
                     {
                         intent.putExtra("IsSndFile", -1);
-                        intent.putExtra("SndFileName", "");
                     }
+                    intent.putExtra("SndFileName", res_sndfilename);
 
+                    // playtime
                     if(orig_playtime == String.valueOf(playtime_sec_audio))
                     {
                         intent.putExtra("playtime", -1);
@@ -656,14 +677,15 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                     Date date_now = new Date(System.currentTimeMillis());
                     String curdate = format_date.format(date_now);
 
+                    String res_releasedate = null;
                     if(orig_releasedate == curdate)
                     {
-                        intent.putExtra("releasedate", "");
                     }
                     else
                     {
-                        intent.putExtra("releasedate", curdate);
+                        res_releasedate = curdate;
                     }
+                    intent.putExtra("releasedate", res_releasedate);
 
                     // 장르
                     intent.putExtra("genre", orig_genre);
@@ -672,22 +694,23 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                     intent.putExtra("emotion", orig_emotion);
 
                     // 배경
+                    String res_backgroundimg = null;
                     if(orig_bgimg_indx == UtilAPI.s_id_backimamge_makecontents)
                     {
-                        intent.putExtra("backgrroundImgName", "");
                     }
                     else
                     {
                         if (list_background_string.size() > UtilAPI.s_id_backimamge_makecontents && UtilAPI.s_id_backimamge_makecontents > -1) {
-                            intent.putExtra("backgrroundImgName", list_background_string.get(UtilAPI.s_id_backimamge_makecontents));
+                            res_backgroundimg = list_background_string.get(UtilAPI.s_id_backimamge_makecontents);
                         }
                     }
+                    intent.putExtra("backgrroundImgName", res_backgroundimg);
 
                     this.startActivity(intent);
                     this.overridePendingTransition(0, 0);
 
-
-                    UtilAPI.s_activity_temp = this;
+                    UtilAPI.AddActivity_Temp(this);
+                    //UtilAPI.s_activity_temp = this;
                 }
 
                 // 액티비티 저장을하고
@@ -1042,10 +1065,38 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                 UtilAPI.s_id_backimamge_makecontents = -1;
 
                 // 마이 콘텐츠로 이동
-                Intent intent = new Intent(this, MyContentsActivity.class);
-                startActivity(intent);
-                this.overridePendingTransition(0, 0);
-                finish();
+
+                if(activity_class != null && activity_class.length() > 0)
+                {
+
+                    if(activity_class.equals("ProfileActivity"))
+                    {
+                        //  ProfileActivity
+                        Intent intent = new Intent(this, ProfileActivity.class);
+                        startActivity(intent);
+                        this.overridePendingTransition(0, 0);
+                        finish();
+                    }
+                    else
+                    {
+                        //  MyContentsActivity
+                        Intent intent = new Intent(this, MyContentsActivity.class);
+                        startActivity(intent);
+                        this.overridePendingTransition(0, 0);
+                        finish();
+                    }
+                }
+                else
+                {
+                    //  MyContentsActivity
+                    Intent intent = new Intent(this, MyContentsActivity.class);
+                    startActivity(intent);
+                    this.overridePendingTransition(0, 0);
+                    finish();
+                }
+
+
+                UtilAPI.ClearActivity_Temp();
 
                 alertDlg.dismiss();
             });
@@ -1076,10 +1127,31 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
             // 배경이미지 초기화
             UtilAPI.s_id_backimamge_makecontents = -1;
 
-            Intent intent = new Intent(this, MyContentsActivity.class);
-            startActivity(intent);
-            this.overridePendingTransition(0, 0);
-            finish();
+            if(activity_class != null && activity_class.length() > 0) {
+                if (activity_class.equals("ProfileActivity")) {
+                    //  ProfileActivity
+                    Intent intent = new Intent(this, ProfileActivity.class);
+                    startActivity(intent);
+                    this.overridePendingTransition(0, 0);
+                    finish();
+                } else {
+                    //  MyContentsActivity
+                    Intent intent = new Intent(this, MyContentsActivity.class);
+                    startActivity(intent);
+                    this.overridePendingTransition(0, 0);
+                    finish();
+                }
+            }else
+            {
+                //  MyContentsActivity
+                Intent intent = new Intent(this, MyContentsActivity.class);
+                startActivity(intent);
+                this.overridePendingTransition(0, 0);
+                finish();
+            }
+
+
+            UtilAPI.ClearActivity_Temp();
         }
     }
 }

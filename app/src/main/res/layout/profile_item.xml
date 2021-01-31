@@ -34,6 +34,7 @@
                     android:id="@+id/img_child_item"
                     android:layout_width="140dp"
                     android:layout_height="140dp"
+                    android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
                     android:scaleType="centerCrop"
                     android:background="@drawable/default_card_02"/>
                 <!--                android:background="@drawable/main_video"-->
@@ -106,27 +107,38 @@
 
                 </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/iv_top_count"
-                    android:layout_width="80dp"
-                    android:layout_height="74dp"
-                    android:layout_above="@+id/iv_text_bar"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginBottom="0dp"
-                    app:srcCompat="@drawable/main_top_10_02" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/iv_top_count"-->
+<!--                    android:layout_width="80dp"-->
+<!--                    android:layout_height="74dp"-->
+<!--                    android:layout_above="@+id/iv_text_bar"-->
+<!--                    android:layout_marginStart="8dp"-->
+<!--                    android:layout_marginLeft="0dp"-->
+<!--                    android:layout_marginBottom="0dp"-->
+<!--                    app:srcCompat="@drawable/main_top_10_02" />-->
 
                 <ImageView
-                    android:id="@+id/iv_played_icon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:id="@+id/iv_modify"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_above="@+id/iv_text_bar"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginBottom="-10dp"
-                    app:srcCompat="@drawable/main_icn_played" />
+                    android:layout_marginLeft="8dp"
+                    android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
+                    android:layout_marginBottom="2dp"
+                    app:srcCompat="@drawable/profile_mycontents_edit" />
 
                 <!--                android:text="@={viewModel.entity.title}"-->
+
+                <ImageView
+                    android:id="@+id/iv_state"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_above="@+id/iv_text_bar"
+                    android:layout_alignRight="@id/child_item_title"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@drawable/ctgr_sleep_ms" />
 
             </RelativeLayout>
         </androidx.cardview.widget.CardView>

@@ -163,6 +163,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
         switch (id) {
             case R.id.ic_close: {
                 // 닫기
+                this.overridePendingTransition(0, 0);
                 finish();
             }
             break;
@@ -318,6 +319,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
     public void onBackPressed() {
 
         // 닫기
+        this.overridePendingTransition(0, 0);
         finish();
     }
 }

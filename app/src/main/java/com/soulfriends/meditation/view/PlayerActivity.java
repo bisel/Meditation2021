@@ -33,6 +33,7 @@ import androidx.lifecycle.ViewModelStore;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.PlayerBinding;
 import com.soulfriends.meditation.model.MeditationContents;
+import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.PreferenceManager;
 import com.soulfriends.meditation.util.RecvEventListener;
@@ -49,6 +50,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
 
 public class PlayerActivity extends BaseActivity implements RecvEventListener, ResultListener {
 
@@ -79,6 +82,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
     private boolean bEvent_service_interior = false;
 
+    private UserProfile userProfile_friend;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +102,42 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         binding.setViewModel(viewModel);
 
         // bg
-        UtilAPI.load_image(this, meditationContents.bgimg, binding.ivBg1);
+
+        // string
+
+        ArrayList<Integer> list_background = new ArrayList<>();
+        list_background.add(R.drawable.bsleep_wall);
+        list_background.add(R.drawable.med_wall);
+        list_background.add(R.drawable.music_wall);
+        list_background.add(R.drawable.nature_wall);
+        list_background.add(R.drawable.sleep_md_wall);
+        list_background.add(R.drawable.sleep_ms_wall);
+
+        ArrayList<String> list_background_string = new ArrayList<>();
+        list_background_string.add("bsleep_wall");
+        list_background_string.add("med_wall");
+        list_background_string.add("music_wall");
+        list_background_string.add("nature_wall");
+        list_background_string.add("sleep_md_wall");
+        list_background_string.add("sleep_ms_wall");
+
+        int bg_index = list_background_string.indexOf(meditationContents.bgimg);
+
+        if(bg_index < 0)
+        {
+            for(int i = 0; i < list_background_string.size(); i++)
+            {
+                if(meditationContents.bgimg.contains(list_background_string.get(i)))
+                {
+                    bg_index = i;
+                    break;
+                }
+            }
+        }
+
+        binding.ivBg1.setImageResource(list_background.get(bg_index));
+
+        //UtilAPI.load_image(this, meditationContents.bgimg, binding.ivBg1);
 
         // 제작 , 마이, 친구 분리
 
@@ -116,6 +156,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 binding.layoutBase.setVisibility(View.GONE);
                 binding.layoutBaseMy.setVisibility(View.VISIBLE);
                 binding.layoutBaseFriend.setVisibility(View.GONE);
+
+              
             }
             break;
             case friend:
@@ -123,6 +165,12 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 binding.layoutBase.setVisibility(View.GONE);
                 binding.layoutBaseMy.setVisibility(View.GONE);
                 binding.layoutBaseFriend.setVisibility(View.VISIBLE);
+
+
+                if(UtilAPI.s_userProfile_friend != null) {
+                    viewModel.setNickname_friend(UtilAPI.s_userProfile_friend.nickname);
+                }
+                //userProfile_friend
             }
             break;
         }
@@ -188,7 +236,10 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
         //StorageReference storageRef = storage.getReferenceFromUrl("gs://meditation-m.appspot.com/test/play_bgm5.mp3");
-        StorageReference storageRef = storage.getReferenceFromUrl(meditationContents.audio);
+
+        String strTest= "gs://meditation-m.appspot.com/meditation/Sound/bookbros_aud.mp3";
+        //StorageReference storageRef = storage.getReferenceFromUrl(meditationContents.audio);
+        StorageReference storageRef = storage.getReferenceFromUrl(strTest);
 
         storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -362,41 +413,41 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         }
 
 
-        //-----------------------------------------------------------------------------
-        // 친구 플레이어
-        //-----------------------------------------------------------------------------
-        findViewById(R.id.iv_friend_report).setOnClickListener(v -> {
-
-            Context c = PlayerActivity.this;
-
-            c.setTheme(R.style.PopupMenu);
-            //PopupMenu popupMenu = new PopupMenu(c,view);
-            PopupMenu popupMenu = new PopupMenu(c, v, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
-            getMenuInflater().inflate(R.menu.popup_friendplayer, popupMenu.getMenu());
-
-            Menu menu = popupMenu.getMenu();
-            {
-                MenuItem item = menu.findItem(R.id.action_menu1);
-                SpannableString s = new SpannableString(PlayerActivity.this.getResources().getString(R.string.popup_menu_report));
-                s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
-                s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
-                item.setTitle(s);
-            }
-
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    if (menuItem.getItemId() == R.id.action_menu1) {
-                        Toast.makeText(PlayerActivity.this, "수정하기 클릭", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(PlayerActivity.this, "삭제하기 클릭", Toast.LENGTH_SHORT).show();
-                    }
-
-                    return false;
-                }
-            });
-            popupMenu.show();
-        });
+//        //-----------------------------------------------------------------------------
+//        // 친구 플레이어
+//        //-----------------------------------------------------------------------------
+//        findViewById(R.id.iv_friend_report).setOnClickListener(v -> {
+//
+//            Context c = PlayerActivity.this;
+//
+//            c.setTheme(R.style.PopupMenu);
+//            //PopupMenu popupMenu = new PopupMenu(c,view);
+//            PopupMenu popupMenu = new PopupMenu(c, v, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
+//            getMenuInflater().inflate(R.menu.popup_friendplayer, popupMenu.getMenu());
+//
+//            Menu menu = popupMenu.getMenu();
+//            {
+//                MenuItem item = menu.findItem(R.id.action_menu1);
+//                SpannableString s = new SpannableString(PlayerActivity.this.getResources().getString(R.string.popup_menu_report));
+//                s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
+//                s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
+//                item.setTitle(s);
+//            }
+//
+//            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                @Override
+//                public boolean onMenuItemClick(MenuItem menuItem) {
+//                    if (menuItem.getItemId() == R.id.action_menu1) {
+//                        Toast.makeText(PlayerActivity.this, "수정하기 클릭", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(PlayerActivity.this, "삭제하기 클릭", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                    return false;
+//                }
+//            });
+//            popupMenu.show();
+//        });
         //-----------------------------------------------------------------------------
         // 마이 플레이어
         //-----------------------------------------------------------------------------
@@ -649,6 +700,74 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
                 NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactionCode);
                 NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactionCode);
+
+            }
+            break;
+
+            //-------------------------------------------------
+            // 친구
+            //-------------------------------------------------
+            case R.id.layout_nickname: {
+                // 친구 닉네임 또는 썹네일 선택
+                // 친구 프로필으로 이동 처리
+
+                Intent intent = new Intent(this, ProfileFriendActivity.class);
+                startActivity(intent);
+                this.overridePendingTransition(0, 0);
+                finish();
+
+            }
+            break;
+            case R.id.iv_friend_state: {
+                // 친구 상태 아이콘 선택
+                // 친구 프로필으로 이동 처리
+
+                // 친구가 아닌 경우 : 프로필이미지 + 닉네임 + 친구추가 버튼 표시되며 선택 시
+                // 친구 추가됨(안내 문구 제공 : 친구로 추가되었습니다.)
+                // - 친구인 경우 : 프로필이미지 + 닉네임 + 친구 표시, 터치하면 친구삭제(안내 문
+                //         구 제공 : 친구가 취소되었습니다.)
+                // - 친구 요청중인 경우 : 프로필 이미지 + 닉네임 + 친구요청중 표시, 터치하면 친
+                // 구 요청이 취소됨(안내 문구 제공 : 친구가 취소되었습니다.)
+                // - 친구 프로필, 닉네임 선택 시 해당 친구의 프로필 페이지로 이동
+
+
+            }
+            break;
+            case R.id.iv_friend_report: {
+                // 친구 신고하기
+
+                Context c = PlayerActivity.this;
+
+                View v = findViewById(R.id.iv_friend_report);
+                c.setTheme(R.style.PopupMenu);
+                //PopupMenu popupMenu = new PopupMenu(c,view);
+                PopupMenu popupMenu = new PopupMenu(c, v, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
+                getMenuInflater().inflate(R.menu.popup_friendplayer, popupMenu.getMenu());
+
+                Menu menu = popupMenu.getMenu();
+                {
+                    MenuItem item = menu.findItem(R.id.action_menu1);
+                    SpannableString s = new SpannableString(PlayerActivity.this.getResources().getString(R.string.popup_menu_report));
+                    s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
+                    s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
+                    item.setTitle(s);
+                }
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if (menuItem.getItemId() == R.id.action_menu1) {
+
+                            NetServiceManager.getinstance().reportedSocialContents(meditationContents);
+
+                            //Toast.makeText(PlayerActivity.this, "수정하기 클릭", Toast.LENGTH_SHORT).show();
+                        }
+
+                        return false;
+                    }
+                });
+                popupMenu.show();
+
 
             }
             break;
