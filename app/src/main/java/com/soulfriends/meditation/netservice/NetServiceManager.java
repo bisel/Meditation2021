@@ -4444,7 +4444,13 @@ public class NetServiceManager {
 
     // playerlist의 social Contents도 지워야 한다. 그리고 UserProfile을 업데이트 해야 한다.
     public void delUserProfileMyContents(String uid){
-        mUserProfile.mycontentslist.remove(uid);
+        int dataNum = mUserProfile.mycontentslist.size();
+        for(int i = 0; i < dataNum; i++){
+            mUserProfile.mycontentslist.get(i).equals(uid);
+            mUserProfile.mycontentslist.remove(i);
+            break;
+        }
+
         sendValProfile(mUserProfile);
     }
 
