@@ -176,8 +176,14 @@ public class SessioinActivity extends BaseActivity implements ResultListener {
                 Select_Good();
 
                 String uid = NetServiceManager.getinstance().getUserProfile().uid;
-                NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactiionCode);
-                NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactiionCode);
+
+                if(meditationContents.ismycontents == 1){ // social
+                    NetServiceManager.getinstance().sendFavoriteLocalEventExt(uid, meditationContents.uid, reactiionCode,true);
+                    NetServiceManager.getinstance().sendSocialFavoriteEventExt(uid, meditationContents.uid, reactiionCode,true);
+                }else{
+                    NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactiionCode);
+                    NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactiionCode);
+                }
             }
             break;
             case R.id.iv_bad_button: {
@@ -188,8 +194,14 @@ public class SessioinActivity extends BaseActivity implements ResultListener {
                 Select_Bad();
 
                 String uid = NetServiceManager.getinstance().getUserProfile().uid;
-                NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactiionCode);
-                NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactiionCode);
+
+                if(meditationContents.ismycontents == 1){ // social
+                    NetServiceManager.getinstance().sendFavoriteLocalEventExt(uid, meditationContents.uid, reactiionCode,true);
+                    NetServiceManager.getinstance().sendSocialFavoriteEventExt(uid, meditationContents.uid, reactiionCode,true);
+                }else{
+                    NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactiionCode);
+                    NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactiionCode);
+                }
             }
             break;
         }

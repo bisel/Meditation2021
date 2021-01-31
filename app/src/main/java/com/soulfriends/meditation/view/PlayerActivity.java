@@ -697,9 +697,13 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 //String uid_11 = NetServiceManager.getinstance().getUserProfile().uid;
 
                 // 2020.12.04 로컬 콘텐츠 List 자체에 대한 수정도 같이 이루어져야 한다.
-
-                NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactionCode);
-                NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactionCode);
+                if(meditationContents.ismycontents == 1){ // social
+                    NetServiceManager.getinstance().sendFavoriteLocalEventExt(uid, meditationContents.uid, reactionCode,true);
+                    NetServiceManager.getinstance().sendSocialFavoriteEventExt(uid, meditationContents.uid, reactionCode,true);
+                }else{
+                    NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactionCode);
+                    NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactionCode);
+                }
 
             }
             break;

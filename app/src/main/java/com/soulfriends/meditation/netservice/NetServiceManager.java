@@ -1610,6 +1610,83 @@ public class NetServiceManager {
                 });
     }
 
+
+    //==============================================================================================
+    //  해당 소셜 콘텐츠의 좋아요, 싫어요 결정. reactiionCode 0: Default 1 : 좋아요, 2: 싫어요
+    // ex) NetServiceManager.getinstance().sendFavoriteEvent("dkefddfeassss","10001",1);
+    //==============================================================================================
+    public void sendSocialFavoriteEventExt(String uid, String contentid, int reactionCode,boolean isSocial){
+        String findString = "";
+
+        if(isSocial == true) {
+            findString = socialContentsInfoString;
+        }else{
+            findString = contentsInfoString;
+        }
+
+
+        FirebaseDatabase.getInstance().getReference(findString).child(contentid)
+                .runTransaction(new Transaction.Handler() {
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                        MeditationContents infoData =  currentData.getValue(MeditationContents.class);
+
+                        if (infoData == null) {
+                            return Transaction.success(currentData);
+                        }
+
+                        // 2020.12.11
+                        Integer curstate = infoData.states.get(uid);
+
+                        if(infoData.states.containsKey(uid)){
+                            // 기존의 값을 입력값을 기준으로 해서 상태 업데이트
+                            int prevReaction = curstate.intValue();
+
+                            // remove는 될수가 없다. Add만 있다. 따라서 비교해서 수정만 하면 된다.
+                            // 우선 이전것을 - 한다. 그리고  현재 것을 +한다.
+                            if(prevReaction == 1){
+                                infoData.favoritecnt -= 1;
+                            }else if(prevReaction == 2){
+                                infoData.hatecnt -= 1;
+                            }
+
+                            if(reactionCode == 1){
+                                infoData.favoritecnt += 1;
+                            }else if(reactionCode == 2){
+                                infoData.hatecnt += 1;
+                            }
+
+                            if(infoData.favoritecnt < 0 ) infoData.favoritecnt = 0;
+                            if(infoData.hatecnt < 0 ) infoData.hatecnt = 0;
+
+                            infoData.states.put(uid,reactionCode);
+                        }else {
+                            if(reactionCode == 1){
+                                infoData.favoritecnt += 1;
+                                infoData.states.put(uid,reactionCode);
+                            }else if(reactionCode == 2){
+                                infoData.hatecnt += 1;
+                                infoData.states.put(uid,reactionCode);
+                            }else{
+                                // error
+                                return null;
+                            }
+                        }
+
+                        if(infoData.favoritecnt < 0 ) infoData.favoritecnt = 0;
+                        if(infoData.hatecnt < 0 ) infoData.hatecnt = 0;
+
+                        currentData.setValue(infoData);
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                    }
+                });
+    }
+
     // 해당 콘텐츠의 해당 유저의 favorite여부 0: Default 1 : 좋아요, 2: 싫어요
     public int reqContentsFavoriteEvent(String uid, String contentid)
     {
@@ -2635,6 +2712,49 @@ public class NetServiceManager {
         }
     }
 
+    // 소셜 여부 처리확장판 소셜 처리
+    public void sendFavoriteLocalEventExt(String uid, String contentid, int reactionCode, boolean isSocial) {
+        MeditationContents localContents = null;
+
+        if(isSocial){
+            localContents = this.getSocialContents(contentid);
+        }else{
+            localContents = this.getMeditationContents(contentid);
+        }
+
+        if(localContents != null){
+            if(localContents.states.containsKey(uid)){
+                // 기존값이 있느데 같을 경우
+                // 기존값이 있는데 다를 경우
+                Integer prev = localContents.states.get(uid);
+                if(prev.intValue() != reactionCode){
+                    if(reactionCode == 1){
+                        // 기존코드가 reactionCode 2
+                        localContents.favoritecnt++;
+                        localContents.hatecnt--;
+                        localContents.states.put(uid,reactionCode);
+
+                    }else if(reactionCode == 2){
+                        // 기존코드가 reactionCode 1
+                        localContents.favoritecnt--;
+                        localContents.hatecnt++;
+                        localContents.states.put(uid,reactionCode);
+                    }
+                }
+            }else{
+                // 기존값이 없을 경우
+                if(reactionCode == 1){
+                    localContents.favoritecnt++;
+                    localContents.states.put(uid,reactionCode);
+                }else if(reactionCode == 2){
+                    // 기존코드가 reactionCode 1
+                    localContents.hatecnt++;
+                    localContents.states.put(uid,reactionCode);
+                }
+
+            }
+        }
+    }
 
     // 2020.12.21
     // 해당 감정이 긍정인지, 부정인지 판별
