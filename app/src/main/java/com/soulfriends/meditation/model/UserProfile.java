@@ -58,16 +58,23 @@ public class UserProfile {
         myemotiontype = 0;
         donefirstpopup = 0;
 
+        donevoicetermpopup = 0;
+        isPayUser = 0;
+
         finaltestdate = "";
         finalchartestdate = "";
         finalvoicetestdate = "";
         finalchartestdate = "";
         finalvoicetestdate = "";
 
+        profileimg_uri = "";
         mIsDoneTest = false;
+
+        profileIntro = "";
 
         favoriteslist.clear();
         recentplaylist.clear();
+        mycontentslist.clear();
 
     }
 }
