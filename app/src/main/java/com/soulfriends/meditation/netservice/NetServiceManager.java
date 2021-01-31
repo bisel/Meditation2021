@@ -4445,9 +4445,10 @@ public class NetServiceManager {
         int dataNum = mSocialContentsList.size();
 
         for(int i = 0; i < dataNum; i++){
-            mSocialContentsList.get(i).uid.equals(uid);
-            mSocialContentsList.remove(i);
-            break;
+            if(mSocialContentsList.get(i).uid.equals(uid)){
+                mSocialContentsList.remove(i);
+                break;
+            }
         }
     }
 
@@ -4455,9 +4456,10 @@ public class NetServiceManager {
     public void delUserProfileMyContents(String uid){
         int dataNum = mUserProfile.mycontentslist.size();
         for(int i = 0; i < dataNum; i++){
-            mUserProfile.mycontentslist.get(i).equals(uid);
-            mUserProfile.mycontentslist.remove(i);
-            break;
+            if(mUserProfile.mycontentslist.get(i).equals(uid)){
+                mUserProfile.mycontentslist.remove(i);
+                break;
+            }
         }
 
         sendValProfile(mUserProfile);

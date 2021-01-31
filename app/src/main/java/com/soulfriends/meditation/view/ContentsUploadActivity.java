@@ -117,11 +117,11 @@ public class ContentsUploadActivity extends BaseActivity {
 
         //NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
 
-        // 20201.01.31 start
+        // 2021.01.31 start
         successContents.audio = NetServiceUtility.mycontentsaudiodir + successContents.audio;
         successContents.thumbnail = NetServiceUtility.mycontentsthumnaildir +  successContents.thumbnail;
         NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
-        // 20201.01.31 end
+        // 2021.01.31 end
 
         NetServiceManager.getinstance().mSocialContentsList.add(successContents);
 
