@@ -444,8 +444,8 @@ public class NetServiceManager {
                             }
                         }
 
-                        Uri downloadUri=uriTask.getResult();
-                        String download_url = downloadUri.toString();
+                        //Uri downloadUri=uriTask.getResult();
+                        //String download_url = downloadUri.toString();
                         profile.profileimg = curimgName;
 
                         // 성공한 후에 보내야 한다.
@@ -461,6 +461,8 @@ public class NetServiceManager {
             }else{
                 sendValProfile(profile);
             }
+        }else{
+            sendValProfile(profile);
         }
 
     }
