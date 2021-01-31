@@ -434,23 +434,28 @@ public class NetServiceManager {
                 task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Task<Uri> uriTask = task.getResult().getStorage().getDownloadUrl();
-                        if(!uriTask.isSuccessful()){
-                            try {
-                                throw uriTask.getException();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                mRecvValProfileListener.onRecvValProfile(false);
-                            }
-                        }
-
-                        //Uri downloadUri=uriTask.getResult();
-                        //String download_url = downloadUri.toString();
+                        // 성공한 후에 보내야 한다.
                         profile.profileimg = curimgName;
                         profile.profileimg_uri = profieimgdir + profile.profileimg; // 2021.01.31
-
-                        // 성공한 후에 보내야 한다.
                         sendValProfile(profile);
+
+//                        Task<Uri> uriTask = task.getResult().getStorage().getDownloadUrl();
+//                        if(!uriTask.isSuccessful()){
+//                            try {
+//                                throw uriTask.getException();
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                                mRecvValProfileListener.onRecvValProfile(false);
+//                            }
+//                        }else{
+//                            //Uri downloadUri=uriTask.getResult();
+//                            //String download_url = downloadUri.toString();
+//                            profile.profileimg = curimgName;
+//                            profile.profileimg_uri = profieimgdir + profile.profileimg; // 2021.01.31
+//
+//                            // 성공한 후에 보내야 한다.
+//                            sendValProfile(profile);
+//                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -4426,7 +4431,7 @@ public class NetServiceManager {
         });
 
         // 3. 기존 Contents를 지운다. -> 내가 재생한 콘텐츠 지워진 콘텐츠가 있을수 도 있다. 이것에 대한 처리 지워진것은 소셜 콘텐츠에 대해서 예외처리 할 수 밖에 없다.
-        mfbDBRef.child(socialContentsInfoString).child(delMyContents.uid).setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mfbDBRef.child(socialContentsInfoString).child(delMyContents.uid).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 mDelMyContentsListener.onDelMyContentsListener(true);
