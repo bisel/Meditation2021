@@ -101,6 +101,7 @@ public class LoadingActivity extends AppCompatActivity {
     {
         if(validate) {
 
+            NetServiceManager.getinstance().reqSocialEmotionAllContents(); // 2021.02.01
             NetServiceManager.getinstance().reqEmotionAllContents(); // 2020.12.05 2st
             NetServiceManager.getinstance().reqChartypeAllContents(false);  // 2020.12.22
 

@@ -126,6 +126,7 @@ public class PsychologyResultActivity extends BaseActivity implements ResultList
 
                 // 2020.12.05 감정이 여기에 정상적으로 들어오는지 확인 필요
                 NetServiceManager.getinstance().reqEmotionAllContents();
+                NetServiceManager.getinstance().reqSocialEmotionAllContents();
 
                 Intent intent = new Intent(this, PsychologyListActivity.class);
                 startActivity(intent);
@@ -141,6 +142,7 @@ public class PsychologyResultActivity extends BaseActivity implements ResultList
                 // 콘텐츠 추천하기
                 // 2020.12.05 감정이 여기에 정상적으로 들어오는지 확인 필요
                 NetServiceManager.getinstance().reqEmotionAllContents();
+                NetServiceManager.getinstance().reqSocialEmotionAllContents();
 
                 UtilAPI.s_psychology_state = 0;
                 Intent intent = new Intent(this, MainActivity.class);
@@ -163,6 +165,7 @@ public class PsychologyResultActivity extends BaseActivity implements ResultList
     @Override // 2020.12.20 , Close 막기
     public void onBackPressed() {
         NetServiceManager.getinstance().reqEmotionAllContents();
+        NetServiceManager.getinstance().reqSocialEmotionAllContents();
         Intent intent = new Intent(this, PsychologyListActivity.class);
         startActivity(intent);
         this.overridePendingTransition(0, 0);

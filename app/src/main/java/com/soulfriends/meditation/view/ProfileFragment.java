@@ -125,7 +125,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             } else {
                 mIsDoneTest = true;
             }
-            meditationShowCategorys = NetServiceManager.getinstance().reqMediationType(4, mIsDoneTest);
+            meditationShowCategorys = NetServiceManager.getinstance().reqMediationType(5, mIsDoneTest);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             ParentItemExtAdapter parentItemExtAdapter = new ParentItemExtAdapter(ParentItemList(), container.getContext(), this, UtilAPI.s_psychology_state);

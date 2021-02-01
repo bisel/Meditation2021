@@ -223,7 +223,8 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                         String res_emotion = null;
                         if(!str_emotion_id.equals(str_emotion))
                         {
-                            res_emotion = str_emotion;
+                            //res_emotion = str_emotion;
+                            res_emotion = Integer.toString(select_emoticon_id);  // 2021.02.01로 처리하자.  1~16 index
                         }
 
 

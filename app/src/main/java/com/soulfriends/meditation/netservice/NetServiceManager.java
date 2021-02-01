@@ -1485,8 +1485,8 @@ public class NetServiceManager {
                 return returnSleepShowCategorys(mIsDoneTest);
             case 4:   // 음악
                 return returnMusicShowCategorys(mIsDoneTest);
-            //case 5:
-            //    return returnSocialShowCategorys(mIsDoneTest); // 2021.01.28
+            case 5:
+                return returnSocialShowCategorys(mIsDoneTest); // 2021.01.28
             case 6:   // Test 용
                 // home에 대한 정보를 만들어서 처리한다.
                 MeditationShowCategorys newShowCategorys = new MeditationShowCategorys();
@@ -4191,6 +4191,22 @@ public class NetServiceManager {
         return false;
     }
 
+    // emotionid를 이용해서 특정 EmotionString을 얻기
+    public String GetEmotionString(String emotionid){
+        // Social emotion은 명상에서 찾아도 무관 왜냐면 명상,음악,수면 동일
+        int dataNum = mEmotionListMeditationDataList.size();
+
+        // 1. 감정 태그를 먼저 찾는다.
+        List<String> healingtaglist = null;
+        for(int i = 0; i < dataNum; i++) {
+            EmotionListData mData = mEmotionListMeditationDataList.get(i);
+            if (emotionid.equals(mData.emotionid)) {
+                return mData.softemotion;
+            }
+        }
+
+        return null;
+    }
 
     //  5. 콘텐츠 올리기 function : sendValMeditationContents
     private OnRecvValMeditationContentsListener mOnRecvValMeditationContentsListener  = null;
@@ -4251,6 +4267,9 @@ public class NetServiceManager {
         }
     }
 
+
+
+
     //  중복이 안되어 있으면 해당 NickName은 허용 가능하므로 true, 이미 있으면 false를 반환, 저자는 userpofile의 nickname
     //  backgrroundImgName 파일 확장자까지 넣어주세요. fullpath
     //  해당 내용이 null이면 관련 처리 안하고 업데이트
@@ -4264,7 +4283,8 @@ public class NetServiceManager {
     //  성공이 유저의 정보에서 playerlist도 업데이트해야 한다.
     //
     //  emotion에 따라서 healing Tag을 업데이트 해야 한다.
-     public void sendValSocialMeditationContents(MeditationContents socialcontents, String titleName, String thumnailImgName,String playtime, int IsSndFile,String SndFileName, String releasedate, String backgrroundImgName,String genre,String emotion){
+
+    public void sendValSocialMeditationContents(MeditationContents socialcontents, String titleName, String thumnailImgName,String playtime, int IsSndFile,String SndFileName, String releasedate, String backgrroundImgName,String genre,String emotion){
         if(this.mOnRecvValMeditationContentsListener != null){
             SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMdd" );
             Date date_now = new Date(System.currentTimeMillis());
@@ -4290,6 +4310,9 @@ public class NetServiceManager {
                 infoData.author = mUserProfile.nickname;
                 infoData.uid = curdetialdate+mUserProfile.uid;  // uid를 키를 해야 한다.
                 infoData.authoruid = mUserProfile.uid;
+                infoData.genre = genre;
+                infoData.emotion = GetEmotionString(emotion);
+                infoData.healingtag = GetHealingTag( Integer.parseInt(emotion));
                 newContents = true;
             }
 
@@ -4318,8 +4341,9 @@ public class NetServiceManager {
             }
 
             if(emotion != null){
-                infoData.emotion = emotion;
-                updateMap.put("emotion", emotion);
+                //infoData.emotion = emotion;
+                infoData.emotion = GetHealingTag( Integer.parseInt(emotion));
+                updateMap.put("emotion",  infoData.emotion);
 
                //=======================================================
                // 해당 감정에 따른 healing Tag를 바꿔야 한다.
@@ -5473,19 +5497,19 @@ public class NetServiceManager {
             public int compare(Object t1, Object t2) {
                 MeditationContents o1 = (MeditationContents)t1;
                 MeditationContents o2 = (MeditationContents)t2;
-                // 내림차순.
+
                 if(AscendingOrder){
-                    if( Integer.parseInt(o1.uid)  > Integer.parseInt(o2.uid)) {
+                    if( o1.uid.compareTo(o2.uid) > 0) {
                         return 1;
                     }
-                    else if(Integer.parseInt(o1.uid) < Integer.parseInt(o2.uid)) {
+                    else if(o1.uid.compareTo(o2.uid) < 0) {
                         return -1;
                     }
                 }else{
-                    if( Integer.parseInt(o1.uid)  > Integer.parseInt(o2.uid)) {
+                    if( o1.uid.compareTo(o2.uid) > 0) {
                         return -1;
                     }
-                    else if(Integer.parseInt(o1.uid) < Integer.parseInt(o2.uid)) {
+                    else if(o1.uid.compareTo(o2.uid) < 0) {
                         return 1;
                     }
                 }
@@ -5839,7 +5863,7 @@ public class NetServiceManager {
         }
 
         // 다시 완료.
-        SortSocialContentsUID(false);  // 내림차순 정렬
+        //SortSocialContentsUID(true);  // 내림차순 정렬  : 또다시 내림차순으로 정렬할 필요가 있는가. 한번이면 된다.
 
         return newShowCategorys;
     }

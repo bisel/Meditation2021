@@ -704,7 +704,6 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                     NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactionCode);
                     NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactionCode);
                 }
-
             }
             break;
 

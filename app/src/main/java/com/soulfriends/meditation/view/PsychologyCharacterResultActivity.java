@@ -148,6 +148,7 @@ public class PsychologyCharacterResultActivity extends BaseActivity implements R
     @Override // 2020.12.20 , Close 막기
     public void onBackPressed() {
         NetServiceManager.getinstance().reqEmotionAllContents();
+        NetServiceManager.getinstance().reqSocialEmotionAllContents();
         Intent intent = new Intent(this, PsychologyCharacterListActivity.class);
         startActivity(intent);
         this.overridePendingTransition(0, 0);

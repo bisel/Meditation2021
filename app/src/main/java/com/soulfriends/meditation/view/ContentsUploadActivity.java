@@ -124,6 +124,7 @@ public class ContentsUploadActivity extends BaseActivity {
         // 2021.01.31 end
 
         NetServiceManager.getinstance().mSocialContentsList.add(successContents);
+        NetServiceManager.getinstance().reqSocialEmotionAllContents();  // 2021.02.01 모든 리스트 업데이트
 
         NetServiceManager.getinstance().sendValProfile(NetServiceManager.getinstance().getUserProfile());
 
