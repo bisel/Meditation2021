@@ -4310,9 +4310,7 @@ public class NetServiceManager {
                 infoData.author = mUserProfile.nickname;
                 infoData.uid = curdetialdate+mUserProfile.uid;  // uid를 키를 해야 한다.
                 infoData.authoruid = mUserProfile.uid;
-                infoData.genre = genre;
-                infoData.emotion = GetEmotionString(emotion);
-                infoData.healingtag = GetHealingTag( Integer.parseInt(emotion));
+
                 newContents = true;
             }
 
@@ -4342,7 +4340,9 @@ public class NetServiceManager {
 
             if(emotion != null){
                 //infoData.emotion = emotion;
-                infoData.emotion = GetHealingTag( Integer.parseInt(emotion));
+                infoData.emotion = GetEmotionString(emotion);
+                infoData.healingtag = GetHealingTag( Integer.parseInt(emotion));
+
                 updateMap.put("emotion",  infoData.emotion);
 
                //=======================================================
