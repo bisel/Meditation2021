@@ -27,6 +27,7 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.MyContentsBinding;
 import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
 import com.soulfriends.meditation.dlg.AlertLineOnePopup;
+import com.soulfriends.meditation.dlg.MenuPopup;
 import com.soulfriends.meditation.dlg.PsychologyDlg;
 import com.soulfriends.meditation.model.MediationShowContents;
 import com.soulfriends.meditation.model.MeditationCategory;
@@ -196,108 +197,38 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
 
                 MeditationContents meditationContents = (MeditationContents) obj;
 
-                //Toast.makeText(getApplicationContext(), "iv_modify", Toast.LENGTH_SHORT).show();
 
-                // 팝업 메뉴
-                Context c = MyContentsActivity.this;
+                //----------------------------------------------------------------
+                // MenuPopup dialog 방식
+                //----------------------------------------------------------------
+                MenuPopup menuPopup = new MenuPopup(MyContentsActivity.this, MyContentsActivity.this);
+                menuPopup.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                menuPopup.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                menuPopup.setCancelable(true);
 
-                c.setTheme(R.style.PopupMenu);
-                //PopupMenu popupMenu = new PopupMenu(c,view);
-                PopupMenu popupMenu = new PopupMenu(c, view, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
-                getMenuInflater().inflate(R.menu.popup_myplayer, popupMenu.getMenu());
-                
-//                //----------------------------------------------------------------
-//                // 테스트
-//                //----------------------------------------------------------------
-//                AlertLineOneOkPopup alertDlg_ok = new AlertLineOneOkPopup(MyContentsActivity.this, MyContentsActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_request);
-//
-//                alertDlg_ok.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//
-//
-//
-//                int[] outLocation = new int[2];
-//                view.getLocationInWindow(outLocation);
-//                WindowManager.LayoutParams params = alertDlg_ok.getWindow().getAttributes();
-//                params.x = -outLocation[0];
-//                params.y = -outLocation[1];
-//                alertDlg_ok.getWindow().setAttributes(params);
-//
-//                alertDlg_ok.show();
-//
-////                alertDlg_ok.iv_ok.setOnClickListener(v -> {
-////
-////                    alertDlg_ok.dismiss();
-////                });
+                int[] outLocation = new int[2];
+                view.getLocationInWindow(outLocation);
+                WindowManager.LayoutParams params = menuPopup.getWindow().getAttributes();
+                params.gravity = Gravity.TOP | Gravity.LEFT;
+                params.x = outLocation[0];
+                params.y = outLocation[1];
+                menuPopup.getWindow().setAttributes(params);
 
-                Menu menu = popupMenu.getMenu();
-                {
-                    MenuItem item = menu.findItem(R.id.action_menu1);
-                    SpannableString s = new SpannableString(MyContentsActivity.this.getResources().getString(R.string.popup_menu_modify_noun));
-                    s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
-                    s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
-                    item.setTitle(s);
+                menuPopup.show();
+                menuPopup.iv_modify.setOnClickListener(v -> {
 
-                    MenuItem item1 = menu.findItem(R.id.action_menu2);
-                    SpannableString s1 = new SpannableString(MyContentsActivity.this.getResources().getString(R.string.popup_menu_delete_noun));
-                    s1.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s1.length(), 0);
-                    s1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s1.length(), 0);
-                    item1.setTitle(s1);
-                }
-
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getItemId() == R.id.action_menu1) {
-                            //Toast.makeText(MyContentsActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
-
-                            UtilAPI.s_MeditationContents_temp = meditationContents;
-
-                            // 콘텐츠 수정 액티비티로 이동
-
-                            ActivityStack.instance().Push(MyContentsActivity.this, ""); // 메인액티비티여야 된다.
-
-                            ChangeActivity(ContentsEditActivity.class);
-//                            Intent intent = new Intent(MyContentsActivity.this, ContentsEditActivity.class);
-//                            startActivity(intent);
-//                            MyContentsActivity.this.overridePendingTransition(0, 0);
-//
-//                            finish();
-
-
-                        } else {
-                            // 팝업
-                            // "콘텐츠를 정말 삭제하시겠습니까? 팝업 띄운다.
-                            AlertLineOnePopup alertDlg = new AlertLineOnePopup(MyContentsActivity.this, MyContentsActivity.this, AlertLineOnePopup.Dlg_Type.contents_delete);
-                            alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                            alertDlg.show();
-
-                            alertDlg.iv_ok.setOnClickListener(v -> {
-
-                                OnEvent_Delete_Contents(meditationContents);
-                                //Toast.makeText(MyContentsActivity.this,"삭제",Toast.LENGTH_SHORT).show();
-
-                                alertDlg.dismiss();
-                            });
-                            //Toast.makeText(MyContentsActivity.this, "삭제 클릭", Toast.LENGTH_SHORT).show();
-                        }
-
-                        return false;
-                    }
+                    // 콘텐츠 수정 액티비티로 이동
+                    UtilAPI.s_MeditationContents_temp = meditationContents;
+                    ActivityStack.instance().Push(MyContentsActivity.this, ""); // 메인액티비티여야 된다.
+                    ChangeActivity(ContentsEditActivity.class);
+                    menuPopup.dismiss();
                 });
-                popupMenu.show();
 
-//                int[] location = new int[2];
-//                view.getLocationOnScreen(location);
-//                int x = location[0];
-//                int y = location[1];
-//
-//                AlertLineOnePopup alertDlg = new AlertLineOnePopup(this, this, AlertLineOnePopup.Dlg_Type.friend_add);
-//                alertDlg.show();
-//
-//                WindowManager.LayoutParams params = alertDlg.getWindow().getAttributes();
-//                params.x = x;
-//                params.y = x;
-//                alertDlg.getWindow().setAttributes(params);
+                menuPopup.iv_delete.setOnClickListener(v -> {
+                    // 콘텐츠 삭제
+                    OnEvent_Delete_Contents(meditationContents);
+                    menuPopup.dismiss();
+                });
 
 
             }

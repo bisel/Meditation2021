@@ -158,14 +158,15 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/iv_profile_icon"
                         android:layout_width="26dp"
                         android:layout_height="26dp"
+                        app:civ_border_color="#FF000000"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/player_profileimg" />
+                        android:background="@drawable/register_profile_img" />
 
                     <TextView
                         android:id="@+id/tv_nickname"
@@ -192,7 +193,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/layout_nickname"
                     app:layout_constraintStart_toEndOf="@+id/layout_nickname"
                     app:layout_constraintTop_toTopOf="@+id/layout_nickname"
-                    android:background="@drawable/friend_add_1" />
+                    android:background="@drawable/player_addfriend" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -212,6 +213,7 @@
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_marginTop="30dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title_my"

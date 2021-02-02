@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,8 +21,10 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -35,6 +38,9 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.PlayerBinding;
 import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
 import com.soulfriends.meditation.dlg.AlertLineOnePopup;
+import com.soulfriends.meditation.dlg.MenuModifyPopup;
+import com.soulfriends.meditation.dlg.MenuPopup;
+import com.soulfriends.meditation.dlg.MenuReportPopup;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
@@ -130,12 +136,9 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
         int bg_index = list_background_string.indexOf(meditationContents.bgimg);
 
-        if(bg_index < 0)
-        {
-            for(int i = 0; i < list_background_string.size(); i++)
-            {
-                if(meditationContents.bgimg.contains(list_background_string.get(i)))
-                {
+        if (bg_index < 0) {
+            for (int i = 0; i < list_background_string.size(); i++) {
+                if (meditationContents.bgimg.contains(list_background_string.get(i))) {
                     bg_index = i;
                     break;
                 }
@@ -148,27 +151,23 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
         // 제작 , 마이, 친구 분리
 
-        UtilAPI.s_playerMode = UtilAPI.PlayerMode.friend;
-        switch(UtilAPI.s_playerMode)
-        {
-            case base:
-            {
+        //UtilAPI.s_playerMode = UtilAPI.PlayerMode.friend;
+        switch (UtilAPI.s_playerMode) {
+            case base: {
                 binding.layoutBase.setVisibility(View.VISIBLE);
                 binding.layoutBaseMy.setVisibility(View.GONE);
                 binding.layoutBaseFriend.setVisibility(View.GONE);
             }
             break;
-            case my:
-            {
+            case my: {
                 binding.layoutBase.setVisibility(View.GONE);
                 binding.layoutBaseMy.setVisibility(View.VISIBLE);
                 binding.layoutBaseFriend.setVisibility(View.GONE);
 
-              
+
             }
             break;
-            case friend:
-            {
+            case friend: {
                 binding.layoutBase.setVisibility(View.GONE);
                 binding.layoutBaseMy.setVisibility(View.GONE);
                 binding.layoutBaseFriend.setVisibility(View.VISIBLE);
@@ -176,7 +175,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
                 SetFriendState();
 
-                if(UtilAPI.s_userProfile_friend != null) {
+                if (UtilAPI.s_userProfile_friend != null) {
                     viewModel.setNickname_friend(UtilAPI.s_userProfile_friend.nickname);
                 }
                 //userProfile_friend
@@ -225,21 +224,17 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         // 좋아요 표시
         String uid = NetServiceManager.getinstance().getUserProfile().uid;
         reactionCode = NetServiceManager.getinstance().reqContentsFavoriteEvent(uid, meditationContents.uid);
-        if(reactionCode == 1)
-        {
+        if (reactionCode == 1) {
             // 좋아요
             // good 활성화
             UtilAPI.setButtonBackground(this, binding.btLike, R.drawable.like_btn_com);
-        }
-        else if(reactionCode == 2)
-        {
+        } else if (reactionCode == 2) {
             // 별로예요
             UtilAPI.setButtonBackground(this, binding.btLike, R.drawable.dislike_btn_com);
         }
     }
 
-    private void play(boolean bPlay)
-    {
+    private void play(boolean bPlay) {
         meditationAudioManager.SetTitle_Url(meditationContents.title);
         meditationAudioManager.SetThumbnail_Url(meditationContents.thumbnail_uri);
 
@@ -247,14 +242,14 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
         //StorageReference storageRef = storage.getReferenceFromUrl("gs://meditation-m.appspot.com/test/play_bgm5.mp3");
 
-        //String strTest= "gs://meditation-m.appspot.com/meditation/Sound/bookbros_aud.mp3";
-        
+        String strTest = "gs://meditation-m.appspot.com/meditation/Sound/bookbros_aud.mp3";
+
         // 내가 만든 사운드 
         //gs://meditation-m.appspot.com/meditation/MyContentsSound/f5FL3rBPAbO1obZADqDzoFYwzvx2_20210202_test_1minute.mp3 <-- 파이어베이스 경로
         //gs://meditation-m.appspot.com/meditation/Sound/f5FL3rBPAbO1obZADqDzoFYwzvx2_20210202_test_1minute.mp3 <---- 디버깅 했을때 경로
-        
-        StorageReference storageRef = storage.getReferenceFromUrl(meditationContents.audio);
-        //StorageReference storageRef = storage.getReferenceFromUrl(strTest);
+
+        //StorageReference storageRef = storage.getReferenceFromUrl(meditationContents.audio);
+        StorageReference storageRef = storage.getReferenceFromUrl(strTest);
 
         storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -267,23 +262,13 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 if (meditationAudioManager.getServiceBound()) {
                     SimpleExoPlayer player = meditationAudioManager.getplayerInstance();
                     playerView.setPlayer(player);
-
-                    if(bPlay) {
+                    if (bPlay) {
                         meditationAudioManager.playOrPause(url);
-                    }
-                    else
-                    {
+                    } else {
                         meditationAudioManager.pause();
                     }
-
-                    //Toast.makeText(getApplicationContext(),"start play 777",Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    //Toast.makeText(getApplicationContext(),"서비스 바인딩 실패",Toast.LENGTH_SHORT).show();
-
+                } else {
                     meditationAudioManager.unbind();
-
                     meditationAudioManager.bind();
                 }
             }
@@ -294,8 +279,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         });
     }
 
-    public void StopState()
-    {
+    public void StopState() {
         if (meditationAudioManager.getServiceBound()) {
             SimpleExoPlayer player = meditationAudioManager.getplayerInstance();
             playerView.setPlayer(player);
@@ -313,13 +297,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             SimpleExoPlayer player = meditationAudioManager.getplayerInstance();
             playerView.setPlayer(player);
 
-            //Toast.makeText(getApplicationContext(),"서비스 바인딩 성공",Toast.LENGTH_SHORT).show();
-
             if (meditationAudioManager.isPlayingAndPause()) {
-
-            }
-            else
-            {
+            } else {
                 play(true);
             }
         }
@@ -333,19 +312,16 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         viewModel.setTimer_time("");
 
         //플레이어 최초 실행시 안내 문구 제공
-        boolean bool_balloon_timer = PreferenceManager.getBoolean(this.getBaseContext(),"bool_player_timer_balloon");
-        if(bool_balloon_timer == false) {
+        boolean bool_balloon_timer = PreferenceManager.getBoolean(this.getBaseContext(), "bool_player_timer_balloon");
+        if (bool_balloon_timer == false) {
 
             CallWithDelay_balloon_Timer(10000); // 2020.12.24 timer 10s처리
 
-            PreferenceManager.setBoolean(this.getBaseContext(),"bool_player_timer_balloon", true);
+            PreferenceManager.setBoolean(this.getBaseContext(), "bool_player_timer_balloon", true);
         }
 
-        // meditationAudioManager.idle_start();
-
-        // 타이머 정지된 경우 
-        if(UtilAPI.s_bEvent_service_player_timer_stop)
-        {
+        // 타이머 정지된 경우
+        if (UtilAPI.s_bEvent_service_player_timer_stop) {
             UtilAPI.s_bEvent_service_player_timer_stop = false;
 
             bEvent_service_interior = true;
@@ -355,8 +331,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         }
 
         // 노티에서 정지 이벤트 클릭 한 경우
-        if(UtilAPI.s_bEvent_service_player_stop)
-        {
+        if (UtilAPI.s_bEvent_service_player_stop) {
             UtilAPI.s_bEvent_service_player_stop = false;
 
             bEvent_service_interior = true;
@@ -369,8 +344,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         }
 
         // 플레이 한번 완료 된 경우
-        if(UtilAPI.s_bEvent_service)
-        {
+        if (UtilAPI.s_bEvent_service) {
             UtilAPI.s_bEvent_service = false;
 
             bEvent_service_interior = true;
@@ -385,9 +359,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
         if (meditationAudioManager.isPlayingAndPause()) {
             onReceivedEvent();
-        }
-        else
-        {
+        } else {
             StopState();
         }
 
@@ -416,118 +388,16 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         bOneEntry_Stopped = false;
 
         // 배경음 정지
-        if(AudioPlayer.instance() != null)
-        {
+        if (AudioPlayer.instance() != null) {
             AudioPlayer.instance().pause();
         }
 
         // 다르다면 타이머 종료 처리한다.
-        if(MeditationAudioManager.getinstance().isTimerCount())
-        {
-            if(NetServiceManager.getinstance().getCur_contents() != NetServiceManager.getinstance().getCur_contents_timer())
-            {
+        if (MeditationAudioManager.getinstance().isTimerCount()) {
+            if (NetServiceManager.getinstance().getCur_contents() != NetServiceManager.getinstance().getCur_contents_timer()) {
                 MeditationAudioManager.getinstance().StopTimer();
             }
         }
-
-
-//        //-----------------------------------------------------------------------------
-//        // 친구 플레이어
-//        //-----------------------------------------------------------------------------
-//        findViewById(R.id.iv_friend_report).setOnClickListener(v -> {
-//
-//            Context c = PlayerActivity.this;
-//
-//            c.setTheme(R.style.PopupMenu);
-//            //PopupMenu popupMenu = new PopupMenu(c,view);
-//            PopupMenu popupMenu = new PopupMenu(c, v, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
-//            getMenuInflater().inflate(R.menu.popup_friendplayer, popupMenu.getMenu());
-//
-//            Menu menu = popupMenu.getMenu();
-//            {
-//                MenuItem item = menu.findItem(R.id.action_menu1);
-//                SpannableString s = new SpannableString(PlayerActivity.this.getResources().getString(R.string.popup_menu_report));
-//                s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
-//                s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
-//                item.setTitle(s);
-//            }
-//
-//            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                @Override
-//                public boolean onMenuItemClick(MenuItem menuItem) {
-//                    if (menuItem.getItemId() == R.id.action_menu1) {
-//                        Toast.makeText(PlayerActivity.this, "수정하기 클릭", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(PlayerActivity.this, "삭제하기 클릭", Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                    return false;
-//                }
-//            });
-//            popupMenu.show();
-//        });
-        //-----------------------------------------------------------------------------
-        // 마이 플레이어
-        //-----------------------------------------------------------------------------
-
-        findViewById(R.id.iv_modify_my).setOnClickListener(v -> {
-
-            Context c = PlayerActivity.this;
-
-            c.setTheme(R.style.PopupMenu);
-            //PopupMenu popupMenu = new PopupMenu(c,view);
-            PopupMenu popupMenu = new PopupMenu(c, v, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
-            getMenuInflater().inflate(R.menu.popup_myplayer, popupMenu.getMenu());
-
-            Menu menu = popupMenu.getMenu();
-            {
-                MenuItem item = menu.findItem(R.id.action_menu1);
-                SpannableString s = new SpannableString(PlayerActivity.this.getResources().getString(R.string.popup_menu_modify));
-                s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
-                s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
-                item.setTitle(s);
-
-                MenuItem item1 = menu.findItem(R.id.action_menu2);
-                SpannableString s1 = new SpannableString(PlayerActivity.this.getResources().getString(R.string.popup_menu_delete));
-                s1.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s1.length(), 0);
-                s1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s1.length(), 0);
-                item1.setTitle(s1);
-            }
-
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    if (menuItem.getItemId() == R.id.action_menu1) {
-
-                        UtilAPI.s_MeditationContents_temp = meditationContents;
-
-                        // 콘텐츠 수정 액티비티로 이동
-                        //ActivityStack.instance().Push(MyContentsActivity.this, ""); // 메인액티비티여야 된다.
-                        ChangeActivity(ContentsEditActivity.class);
-                        //Toast.makeText(PlayerActivity.this, "수정하기 클릭", Toast.LENGTH_SHORT).show();
-                    } else {
-
-                        // 팝업
-                        // "콘텐츠를 정말 삭제하시겠습니까? 팝업 띄운다.
-                        AlertLineOnePopup alertDlg = new AlertLineOnePopup(PlayerActivity.this, PlayerActivity.this, AlertLineOnePopup.Dlg_Type.contents_delete);
-                        alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                        alertDlg.show();
-
-                        alertDlg.iv_ok.setOnClickListener(v -> {
-
-                            OnEvent_Delete_Contents(meditationContents);
-                            //Toast.makeText(MyContentsActivity.this,"삭제",Toast.LENGTH_SHORT).show();
-
-                            alertDlg.dismiss();
-                        });
-                        //Toast.makeText(PlayerActivity.this, "삭제하기 클릭", Toast.LENGTH_SHORT).show();
-                    }
-
-                    return false;
-                }
-            });
-            popupMenu.show();
-        });
     }
 
     public void OnEvent_Delete_Contents(MeditationContents meditationContents) {
@@ -570,23 +440,19 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
     protected void onResume() {
         super.onResume();
 
-        if(bEvent_service_interior) {
+        if (bEvent_service_interior) {
 
             bEvent_service_interior = false;
-        }
-        else {
+        } else {
             meditationAudioManager.bind();
         }
 
-        if(MeditationAudioManager.getinstance().isTimerCount())
-        {
+        if (MeditationAudioManager.getinstance().isTimerCount()) {
             String strTimerCount = MeditationAudioManager.getinstance().GetStrTimerCount();
             viewModel.setTimer_time(strTimerCount);
             UtilAPI.setButtonBackground(this, binding.btTimer, R.drawable.timer_btn_com); // 2020.12.24
 
-        }
-        else
-        {
+        } else {
             viewModel.setTimer_time("");
             UtilAPI.setButtonBackground(this, binding.btTimer, R.drawable.timer_btn); // 2020.12.24
         }
@@ -602,7 +468,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
         super.onDestroy();
 
-        if(alertDlg_ok != null) {
+        if (alertDlg_ok != null) {
             if (alertDlg_ok.isShowing()) {
                 alertDlg_ok.dismiss();
             }
@@ -615,19 +481,18 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
     @Override
     public void onEvent(String status) {
 
-        if(status == PlaybackStatus.TIMER_COUNT)
-        {
+        if (status == PlaybackStatus.TIMER_COUNT) {
             String strTimerCount = MeditationAudioManager.getinstance().GetStrTimerCount();
             viewModel.setTimer_time(strTimerCount);
 
-            if(strTimerCount.equals("")){
+            if (strTimerCount.equals("")) {
                 UtilAPI.setButtonBackground(this, binding.btTimer, R.drawable.timer_btn); // 2020.12.24
-            }else{
+            } else {
                 UtilAPI.setButtonBackground(this, binding.btTimer, R.drawable.timer_btn_com); // 2020.12.24
             }
         }
 
-        if(strPlaybackStatus == status) return;
+        if (strPlaybackStatus == status) return;
 
         strPlaybackStatus = status;
 
@@ -679,8 +544,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             }
             break;
 
-            case PlaybackStatus.STOP_TIMER:
-            {
+            case PlaybackStatus.STOP_TIMER: {
                 // 타이머 시간이 끝날때 발생되는 이벤트
                 // MainActivity 이동
                 //ChangeActivity(MainActivity.class);
@@ -743,19 +607,15 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 }
             }
             break;
-            case R.id.bt_like:
-            {
-                if(reactionCode == 1)
-                {
+            case R.id.bt_like: {
+                if (reactionCode == 1) {
                     // 좋아요 -> 별로예요
                     UtilAPI.setButtonBackground(this, binding.btLike, R.drawable.dislike_btn_com);
 
                     reactionCode = 2;
 
                     CallWithDelay_balloon_like(2000, this, binding.layoutDislikeBalloon);
-                }
-                else if(reactionCode == 2 || reactionCode == 0)
-                {
+                } else if (reactionCode == 2 || reactionCode == 0) {
                     // 별로예요 -> 좋아요
                     UtilAPI.setButtonBackground(this, binding.btLike, R.drawable.like_btn_com);
 
@@ -768,10 +628,10 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 //String uid_11 = NetServiceManager.getinstance().getUserProfile().uid;
 
                 // 2020.12.04 로컬 콘텐츠 List 자체에 대한 수정도 같이 이루어져야 한다.
-                if(meditationContents.ismycontents == 1){ // social
-                    NetServiceManager.getinstance().sendFavoriteLocalEventExt(uid, meditationContents.uid, reactionCode,true);
-                    NetServiceManager.getinstance().sendSocialFavoriteEventExt(uid, meditationContents.uid, reactionCode,true);
-                }else{
+                if (meditationContents.ismycontents == 1) { // social
+                    NetServiceManager.getinstance().sendFavoriteLocalEventExt(uid, meditationContents.uid, reactionCode, true);
+                    NetServiceManager.getinstance().sendSocialFavoriteEventExt(uid, meditationContents.uid, reactionCode, true);
+                } else {
                     NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactionCode);
                     NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactionCode);
                 }
@@ -806,42 +666,70 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
             }
             break;
+            case R.id.iv_modify_my: {
+
+                View vModifyMy = findViewById(R.id.iv_modify_my);
+
+                MenuModifyPopup menuPopup = new MenuModifyPopup(PlayerActivity.this, PlayerActivity.this);
+                menuPopup.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                menuPopup.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                menuPopup.setCancelable(true);
+
+                int[] outLocation = new int[2];
+                vModifyMy.getLocationInWindow(outLocation);
+
+                ViewGroup.LayoutParams params_cut = vModifyMy.getLayoutParams();
+
+                WindowManager.LayoutParams params = menuPopup.getWindow().getAttributes();
+                params.gravity = Gravity.TOP | Gravity.LEFT;
+                params.x = outLocation[0] - params_cut.width / 2;
+                params.y = outLocation[1] + params_cut.height + 8;
+                menuPopup.getWindow().setAttributes(params);
+
+                menuPopup.show();
+                menuPopup.iv_modify.setOnClickListener(v1 -> {
+
+                    // 콘텐츠 수정 액티비티로 이동
+                    UtilAPI.s_MeditationContents_temp = meditationContents;
+                    //ActivityStack.instance().Push(PlayerActivity.this, ""); // 메인액티비티여야 된다.
+                    ChangeActivity(ContentsEditActivity.class);
+                    menuPopup.dismiss();
+                });
+
+                menuPopup.iv_delete.setOnClickListener(v1 -> {
+                    // 콘텐츠 삭제
+                    OnEvent_Delete_Contents(meditationContents);
+                    menuPopup.dismiss();
+                });
+
+            }
+            break;
             case R.id.iv_friend_report: {
                 // 친구 신고하기
 
-                Context c = PlayerActivity.this;
+                View iv_Report = findViewById(R.id.iv_friend_report);
+                MenuReportPopup menuPopup = new MenuReportPopup(PlayerActivity.this, PlayerActivity.this);
+                menuPopup.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                menuPopup.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                menuPopup.setCancelable(true);
 
-                View v = findViewById(R.id.iv_friend_report);
-                c.setTheme(R.style.PopupMenu);
-                //PopupMenu popupMenu = new PopupMenu(c,view);
-                PopupMenu popupMenu = new PopupMenu(c, v, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
-                getMenuInflater().inflate(R.menu.popup_friendplayer, popupMenu.getMenu());
+                int[] outLocation = new int[2];
+                iv_Report.getLocationInWindow(outLocation);
 
-                Menu menu = popupMenu.getMenu();
-                {
-                    MenuItem item = menu.findItem(R.id.action_menu1);
-                    SpannableString s = new SpannableString(PlayerActivity.this.getResources().getString(R.string.popup_menu_report));
-                    s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
-                    s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
-                    item.setTitle(s);
-                }
+                ViewGroup.LayoutParams params_cut = iv_Report.getLayoutParams();
 
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getItemId() == R.id.action_menu1) {
+                WindowManager.LayoutParams params = menuPopup.getWindow().getAttributes();
+                params.gravity = Gravity.TOP | Gravity.LEFT;
+                params.x = outLocation[0] - params_cut.width;
+                params.y = outLocation[1] + params_cut.height + 8;
+                menuPopup.getWindow().setAttributes(params);
 
-                            NetServiceManager.getinstance().reportedSocialContents(meditationContents);
+                menuPopup.show();
+                menuPopup.iv_report.setOnClickListener(v1 -> {
 
-                            //Toast.makeText(PlayerActivity.this, "수정하기 클릭", Toast.LENGTH_SHORT).show();
-                        }
-
-                        return false;
-                    }
+                    NetServiceManager.getinstance().reportedSocialContents(meditationContents);
+                    menuPopup.dismiss();
                 });
-                popupMenu.show();
-
-
             }
             break;
         }
@@ -851,7 +739,6 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
     public void onFailure(Integer id, String message) {
 
     }
-
 
 
     public void CallWithDelay_balloon(long miliseconds, final Activity activity) {
@@ -917,21 +804,17 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
     private int friend_state = -1;
 
-    public void SetFriendState()
-    {
+    public void SetFriendState() {
         // 친구 추가 friend_state == 0
         // 친구  friend_state == 1
         // 친구 요청 중 friend_state == 2
 
         // 친구 인지 아닌지 판별
-        if(NetServiceManager.getinstance().findFriends(UtilAPI.s_userProfile_friend.uid) != null)
-        {
+        if (NetServiceManager.getinstance().findFriends(UtilAPI.s_userProfile_friend.uid) != null) {
             // 친구 임
             friend_state = 1;
             UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_friend);
-        }
-        else
-        {
+        } else {
             // 친구 아닌 상태
             // 친구 추가
             friend_state = 0;
@@ -939,8 +822,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         }
 
         // 현재 친구 요청 리스트
-        if(NetServiceManager.getinstance().findFriendsRequest(UtilAPI.s_userProfile_friend.uid))
-        {
+        if (NetServiceManager.getinstance().findFriendsRequest(UtilAPI.s_userProfile_friend.uid)) {
             // 친구 요청중에 있는지 확인
             friend_state = 2;
             UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_requested);
@@ -948,12 +830,10 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
         // 상태에 따라서 ui 표시를 하고
     }
-    public void RequestFriendState()
-    {
-        switch(friend_state)
-        {
-            case 0:
-            {
+
+    public void RequestFriendState() {
+        switch (friend_state) {
+            case 0: {
                 // 3. 친구 추가
                 // sendFriendRequest(보내는 사람 uid,  받는 사람 uid)
                 //        => 성공이 되면 "친구요청중"이라고 ux 변경
@@ -962,8 +842,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                     @Override
                     public void onSendFriendRequest(boolean validate) {
 
-                        if(validate)
-                        {
+                        if (validate) {
                             alertDlg_ok = new AlertLineOneOkPopup(PlayerActivity.this, PlayerActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_request);
 
                             alertDlg_ok.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -974,27 +853,23 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                             });
 
                             //Toast.makeText(PlayerActivity.this, "친구로 요청중입니다.", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
+                        } else {
 
                         }
                     }
                 });
 
-                NetServiceManager.getinstance().sendFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  UtilAPI.s_userProfile_friend.uid);
+                NetServiceManager.getinstance().sendFriendRequest(NetServiceManager.getinstance().getUserProfile().uid, UtilAPI.s_userProfile_friend.uid);
 
             }
             break;
-            case 1:
-            {
+            case 1: {
                 // 친구 삭제
                 NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
                     @Override
                     public void onRemoveFriend(boolean validate) {
 
-                        if(validate)
-                        {
+                        if (validate) {
                             alertDlg_ok = new AlertLineOneOkPopup(PlayerActivity.this, PlayerActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_cancelled);
 
                             alertDlg_ok.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -1005,9 +880,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                             });
 
                             //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
+                        } else {
 
                         }
                     }
@@ -1017,16 +890,14 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
             }
             break;
-            case 2:
-            {
-                
+            case 2: {
+
                 // 친구 취소
                 NetServiceManager.getinstance().setOnCancelFriendRequestListener(new NetServiceManager.OnCancelFriendRequestListener() {
                     @Override
                     public void onCancelFriendRequest(boolean validate) {
 
-                        if(validate)
-                        {
+                        if (validate) {
                             alertDlg_ok = new AlertLineOneOkPopup(PlayerActivity.this, PlayerActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_cancelled);
 
                             alertDlg_ok.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -1036,15 +907,13 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                                 alertDlg_ok.dismiss();
                             });
                             //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
+                        } else {
 
                         }
                     }
                 });
 
-                NetServiceManager.getinstance().cancelFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  UtilAPI.s_userProfile_friend.uid);
+                NetServiceManager.getinstance().cancelFriendRequest(NetServiceManager.getinstance().getUserProfile().uid, UtilAPI.s_userProfile_friend.uid);
 
             }
             break;
