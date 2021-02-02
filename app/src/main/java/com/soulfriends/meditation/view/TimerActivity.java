@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelStore;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.TimerBinding;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
@@ -158,8 +159,10 @@ public class TimerActivity extends BaseActivity implements ResultListener {
                 MeditationAudioManager.getinstance().idle_start();
 
                 // MainActivity 이동
-                ChangeActivity(MainActivity.class);
-
+                ActivityStack.instance().Pop();
+                ActivityStack.instance().OnBack(this);
+//                ChangeActivity(MainActivity.class);
+//
             }
             break;
             case PlaybackStatus.STOP_NOTI: {
@@ -169,21 +172,15 @@ public class TimerActivity extends BaseActivity implements ResultListener {
                 MeditationAudioManager.getinstance().unbind();
 
                 // MainActivity 이동
-                ChangeActivity(MainActivity.class);
+                ActivityStack.instance().Pop();
+                ActivityStack.instance().OnBack(this);
+                //ChangeActivity(MainActivity.class);
             }
             break;
         }
     }
 
-    private void ChangeActivity(java.lang.Class<?> cls)
-    {
-        Intent intent = new Intent(this, cls);
-        startActivity(intent);
 
-        this.overridePendingTransition(0, 0);
-
-        finish();
-    }
 
 
     @Override
@@ -193,10 +190,7 @@ public class TimerActivity extends BaseActivity implements ResultListener {
 
             case R.id.iv_close: {
 
-                Intent intent = new Intent(this, PlayerActivity.class);
-                startActivity(intent);
-
-                finish();
+                onBackPressed();
 
             }
             break;
@@ -276,16 +270,13 @@ public class TimerActivity extends BaseActivity implements ResultListener {
     @Override
     public void onFailure(Integer id, String message) {
 
-
-        Intent intent = new Intent(getApplicationContext(), TimerDialogActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(getApplicationContext(), TimerDialogActivity.class);
+        //startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, PlayerActivity.class);
-        startActivity(intent);
-        this.overridePendingTransition(0, 0);
-        finish();
+
+        ActivityStack.instance().OnBack(this);
     }
 }

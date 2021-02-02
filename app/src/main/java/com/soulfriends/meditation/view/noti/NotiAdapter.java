@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.soulfriends.meditation.databinding.FriendEditItemBinding;
 import com.soulfriends.meditation.databinding.NotiItemBinding;
+import com.soulfriends.meditation.netservice.NetServiceUtility;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -74,7 +75,7 @@ public class NotiAdapter extends RecyclerView.Adapter{
         // 프로필 이미지
 
         if(notiItemViewModel.hAlarm.otheruser.profileimg != null && notiItemViewModel.hAlarm.otheruser.profileimg.length() != 0) {
-            UtilAPI.load_image(context, notiItemViewModel.hAlarm.otheruser.profileimg, bind.ivIcon);
+            UtilAPI.load_image_circle(context, NetServiceUtility.profieimgdir + notiItemViewModel.hAlarm.otheruser.profileimg, bind.ivIcon);
         }
 
     }

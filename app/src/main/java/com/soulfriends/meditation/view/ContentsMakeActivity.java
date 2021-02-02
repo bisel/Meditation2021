@@ -26,6 +26,7 @@ import com.soulfriends.meditation.databinding.ContentsMakeBinding;
 import com.soulfriends.meditation.dlg.AlertLineTwoPopup;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.AudioPlayer;
@@ -291,6 +292,12 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             case R.id.iv_background_image:
             case R.id.iv_backgroundbt: {
 
+                if(audioState == eAudioState.ing)
+                {
+                    // 녹음 중이면 클릭이 안되도록 처리한다.
+                    break;
+                }
+
                 // 배경 이미지 버튼 선택시
 
                 Check_TitleEdit();
@@ -309,6 +316,12 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             case R.id.iv_picture_image:
             case R.id.layout_thumb_image:
             case R.id.iv_picture: {
+
+                if(audioState == eAudioState.ing)
+                {
+                    // 녹음 중이면 클릭이 안되도록 처리한다.
+                    break;
+                }
 
                 // 썹네일 이미지 선택시
 
@@ -384,11 +397,25 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
                 if(bStopButtonActive) {
                     // 정지 버튼 활성화 되면
-                    Complete_Audio();
 
-                    // 녹음된 시간을 다시 표시한다.
-                    String strTime = GetString_time(audio_complete_time_milisecond);
-                    viewModel.setAudio_time(strTime);
+                    // 녹음 진행하고 30 초 이전 이면 녹음 취소 팝업이 나오도록 한다.
+                    if (accum_time_milisecond < 30 * 1000) {
+
+                        //1. 녹음 취소는 언제든지 가능
+                        //    -> 30s이전에 취소하면 "녹음이 취소되었습니다." 출력
+                        // 안내 팝업 처리해야함.
+
+                        NetServiceManager.getinstance().cancelMyContensRecord();
+
+
+                    } else {
+
+                        Complete_Audio();
+
+                        // 녹음된 시간을 다시 표시한다.
+                        String strTime = GetString_time(audio_complete_time_milisecond);
+                        viewModel.setAudio_time(strTime);
+                    }
                 }
             }
             break;
@@ -470,6 +497,12 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             break;
 
             case R.id.iv_next: {
+
+                if(audioState == eAudioState.ing)
+                {
+                    // 녹음 중이면 클릭이 안되도록 처리한다.
+                    break;
+                }
 
                 if (bCheck_NextActive) {
 
@@ -580,7 +613,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 binding.layoutAudioPlay.setVisibility(View.GONE);
 
                 // 초기화 stop 비활성화
-                UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop_disabled);
+                //UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop_disabled);
             }
             break;
             case ing:
@@ -652,12 +685,14 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
                 // 30초 경과 후에는
                 // 정지 버튼 활성화 하도록 한다.
-                if(accum_time_milisecond > 30 * 1000) {
 
-                    UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop);
-
-                    bStopButtonActive = true;
-                }
+                bStopButtonActive = true;
+//                if(accum_time_milisecond > 30 * 1000) {
+//
+//                    UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop);
+//
+//                    bStopButtonActive = true;
+//                }
             }
             break;
 
@@ -827,6 +862,15 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
     @Override
     public void onBackPressed() {
 
+        if(audioState == eAudioState.ing)
+        {
+            // 녹음 중이면 클릭이 안되도록 처리한다.
+            
+            // 팝업이 나오도록 처리
+            NetServiceManager.getinstance().cancelMyContensRecord();
+            return;
+        }
+
         // 콘텐츠 제작 메인에서 정보를 입력한 상태에서
         // back 하면 안내 팝업 제공
         // - 한번 더 back 하거나 ‘예’ 선택 시 이전 화면(소셜)으로 이동
@@ -867,11 +911,9 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 UtilAPI.s_id_backimamge_makecontents = -1;
 
                 // 마이 콘텐츠로 이동
-                Intent intent = new Intent(this, MyContentsActivity.class);
-                startActivity(intent);
-                this.overridePendingTransition(0, 0);
+                ActivityStack.instance().OnBack(this);
 
-                finish();
+                //ChangeActivity(MyContentsActivity.class);
 
                 UtilAPI.ClearActivity_Temp();
 
@@ -905,11 +947,10 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             // 배경이미지 초기화
             UtilAPI.s_id_backimamge_makecontents = -1;
 
-            Intent intent = new Intent(this, MyContentsActivity.class);
-            startActivity(intent);
-            this.overridePendingTransition(0, 0);
+            ActivityStack.instance().OnBack(this);
 
-            finish();
+            //ChangeActivity(MyContentsActivity.class);
+
 
             UtilAPI.ClearActivity_Temp();
 

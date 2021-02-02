@@ -10,8 +10,10 @@ import android.os.Looper;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.AuthManager;
 import com.soulfriends.meditation.util.PreferenceManager;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -29,6 +31,10 @@ public class IntroActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         authManager.onStart();
+
+        //FirebaseAuth.getInstance().signOut();
+
+        ActivityStack.with(this);
     }
 
     @Override

@@ -25,6 +25,7 @@ import com.soulfriends.meditation.model.MeditationDetailAlarm;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.parser.ResultData;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.AudioPlayer;
@@ -73,6 +74,10 @@ public class MainActivity extends BaseActivity implements ResultListener {
     protected void onStart() {
         super.onStart();
 
+
+        // 메인에서는 액티비티 스택 초기화 처리한다.
+
+        ActivityStack.instance().Clear();
 
         if (UtilAPI.s_bEvent_service_player_timer_stop) {
 
@@ -250,6 +255,9 @@ public class MainActivity extends BaseActivity implements ResultListener {
         viewModel = new ViewModelProvider(this.getViewModelStore(), mainViewModelFactory).get(MainViewModel.class);
         binding.setViewModel(viewModel);
 
+
+        binding.ivAlarmBg.setVisibility(View.GONE);
+        binding.tvAlarmCount.setVisibility(View.GONE);
 
         meditationAudioManager = MeditationAudioManager.with(getApplicationContext());
 
@@ -470,12 +478,16 @@ public class MainActivity extends BaseActivity implements ResultListener {
                     //AudioPlayer.instance().update();
 
                     // 세션으로 이동
+                    ActivityStack.instance().Push(this, "");
                     startActivity(new Intent(this, SessioinActivity.class));
 
                     this.overridePendingTransition(0, 0);
 
                     finish();
                 } else {
+
+                    ActivityStack.instance().Push(this, "");
+
                     this.startActivity(new Intent(this, PlayerActivity.class));
 
                     this.overridePendingTransition(0, 0);
@@ -513,14 +525,16 @@ public class MainActivity extends BaseActivity implements ResultListener {
             break;
             case R.id.noti_btn: {
 
-                this.startActivity(new Intent(this, NotiActivity.class));
-                this.overridePendingTransition(0, 0);
+                ActivityStack.instance().Push(this, "");
+
+                ChangeActivity(NotiActivity.class);
             }
             break;
             case R.id.profile_btn: {
 
-                this.startActivity(new Intent(this, ProfileActivity.class));
-                this.overridePendingTransition(0, 0);
+                ActivityStack.instance().Push(this, "");
+
+                ChangeActivity(ProfileActivity.class);
             }
             break;
         }

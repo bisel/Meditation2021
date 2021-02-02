@@ -33,6 +33,7 @@ import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.MeditationShowCategorys;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListener;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
@@ -101,6 +102,9 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
         strTitle += String.valueOf(total_count);
 
         viewModel.setTitle(strTitle);
+
+
+        int xx = 0;
     }
 
     private void Update_Recyclerview()
@@ -157,12 +161,13 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
             case R.id.ic_close: {
 
                 // 닫기 버튼
+                onBackPressed();
 
-                // 소셜메뉴 콘텐츠 탭으로 이동,hardwareback도 동일함
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                this.overridePendingTransition(0, 0);
-                finish();
+//                // 소셜메뉴 콘텐츠 탭으로 이동,hardwareback도 동일함
+//                Intent intent = new Intent(this, MainActivity.class);
+//                startActivity(intent);
+//                this.overridePendingTransition(0, 0);
+//                finish();
 
             }
             break;
@@ -224,11 +229,15 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
                             UtilAPI.s_MeditationContents_temp = meditationContents;
 
                             // 콘텐츠 수정 액티비티로 이동
-                            Intent intent = new Intent(MyContentsActivity.this, ContentsEditActivity.class);
-                            startActivity(intent);
-                            MyContentsActivity.this.overridePendingTransition(0, 0);
 
-                            finish();
+                            ActivityStack.instance().Push(MyContentsActivity.this, ""); // 메인액티비티여야 된다.
+
+                            ChangeActivity(ContentsEditActivity.class);
+//                            Intent intent = new Intent(MyContentsActivity.this, ContentsEditActivity.class);
+//                            startActivity(intent);
+//                            MyContentsActivity.this.overridePendingTransition(0, 0);
+//
+//                            finish();
 
 
                         } else {
@@ -275,11 +284,15 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
 
                 // 터치 시 콘텐츠 제작 화면으로 이동
 
-                Intent intent = new Intent(this, ContentsMakeActivity.class);
-                startActivity(intent);
-                this.overridePendingTransition(0, 0);
+                ActivityStack.instance().Push(MyContentsActivity.this, ""); // 메인액티비티여야 된다.
 
-                finish();
+                ChangeActivity(ContentsMakeActivity.class);
+
+//                Intent intent = new Intent(this, ContentsMakeActivity.class);
+//                startActivity(intent);
+//                this.overridePendingTransition(0, 0);
+//
+//                finish();
 
             }
             break;
@@ -322,10 +335,11 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
     @Override
     public void onBackPressed() {
 
-        // 소셜메뉴 콘텐츠 탭으로 이동,hardwareback도 동일함
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        this.overridePendingTransition(0, 0);
-        finish();
+        ActivityStack.instance().OnBack(this);
+//        // 소셜메뉴 콘텐츠 탭으로 이동,hardwareback도 동일함
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
+//        this.overridePendingTransition(0, 0);
+//        finish();
     }
 }

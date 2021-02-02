@@ -56,6 +56,13 @@ public class UtilAPI {
     public static String s_StrMainFragment = FRAGMENT_HOME;
 
 
+    // 소셜 -> 콘테츠 와 친구 탭
+    public static final String TAB_CONTENTS = "Tab_Contents";
+    public static final String TAB_FRIEND = "Tab_Friend";
+    public static String s_StrFragment_Profile_Tab = TAB_CONTENTS;
+
+
+
 
     public static boolean s_bShowTimerPopup = false;
 
@@ -318,6 +325,8 @@ public class UtilAPI {
         //s_player_timer_count = 0;
 
         s_StrMainFragment = FRAGMENT_HOME;
+
+        s_StrFragment_Profile_Tab = TAB_CONTENTS;
 
         s_activity = null;
 

@@ -39,6 +39,7 @@ import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.netservice.NetServiceUtility;
 import com.soulfriends.meditation.parser.PersonResultData;
 import com.soulfriends.meditation.parser.ResultData;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListener;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
@@ -91,7 +92,7 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
 
         // 프로필 사진
 
-        if(userProfile.profileimg_uri !=null) {
+        if(userProfile.profileimg_uri !=null && userProfile.profileimg_uri.length() > 0) {
 
             String image_uri = userProfile.profileimg_uri;
 
@@ -277,6 +278,11 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
     public void onSuccess(Integer id, String message) {
 
         switch (id) {
+            case R.id.ic_close:
+            {
+                onBackPressed();
+            }
+            break;
             case R.id.lay_feel: {
 
                 // 심리 결과 화면으로 이동 처리
@@ -386,11 +392,27 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
                     }
                 }
 
+                //  0 : 기본 제공  1 : 소셜 콘텐츠
+                if(meditationContents.ismycontents == 0)
+                {
+                    UtilAPI.s_playerMode = UtilAPI.PlayerMode.base;
+                }
+                else
+                {
+                    UtilAPI.s_playerMode = UtilAPI.PlayerMode.friend;
+                }
+
                 NetServiceManager.getinstance().setCur_contents(meditationContents);
+
+
+                ActivityStack.instance().Push(this, "");
 
                 Intent intent = new Intent();
                 intent.setClass(this, PlayerActivity.class);
                 this.startActivity(intent);
+
+
+
 
                 this.finish();
 
@@ -511,6 +533,12 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
         });
 
         NetServiceManager.getinstance().delMyContents(meditationContents);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        ActivityStack.instance().OnBack(this);
     }
 
 }

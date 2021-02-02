@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.view.View;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.soulfriends.meditation.util.ResultListener;
@@ -21,6 +22,17 @@ public class ContentsEmotionSelViewModel extends ViewModel {
     }
 
     private View view;
+
+    public MutableLiveData<String> getContents_state() {
+        return contents_state;
+    }
+
+    public void setContents_state(String contents_state) {
+        this.contents_state.setValue(contents_state);
+    }
+
+    public MutableLiveData<String> contents_state = new MutableLiveData<>();
+
 
     public ContentsEmotionSelViewModel(Context mContext, ResultListener listener) {
         this.context = mContext;

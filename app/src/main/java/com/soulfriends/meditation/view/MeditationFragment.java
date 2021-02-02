@@ -219,6 +219,9 @@ public class MeditationFragment extends Fragment implements ItemClickListener {
                 }
             }
 
+            //  0 : 기본 제공  1 : 소셜 콘텐츠
+            UtilAPI.s_playerMode = UtilAPI.PlayerMode.base;
+
             NetServiceManager.getinstance().setCur_contents(meditationContents);
 
             //String str = meditationContents.uid;

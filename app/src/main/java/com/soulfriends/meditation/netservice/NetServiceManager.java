@@ -125,9 +125,9 @@ public class NetServiceManager {
     }
     // member variables
     private final String genre0 = "홈";
-    private final String genre1 = "명상";
-    private final String genre2 = "수면";
-    private final String genre3 = "음악";
+    public final String genre1 = "명상";
+    public final String genre2 = "수면";
+    public final String genre3 = "음악";
     private final String favoriteCategoryId = "50";
     private final String top10CategoryId = "66";
     private final String recentPlayCategoryId = "68";

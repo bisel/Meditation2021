@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -83,7 +84,14 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
         NetServiceManager.getinstance().setOnRecvValProfileListener(new NetServiceManager.OnRecvValProfileListener() {
             @Override
             public void onRecvValProfile(boolean validate) {
-                DoRecvValProfile(validate);
+
+                if(validate) {
+                    DoRecvValProfile(validate);
+                }
+                else
+                {
+                    Toast.makeText(getBaseContext(), "onRecvValProfile 실패 ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -99,6 +107,9 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
             @Override
             public void onRecvContentsCharInfo(boolean validate) {
                 if(validate == true){
+
+                    // dlsmdla 2021_02_01 임시
+                    //NetServiceManager.getinstance().recvContentsExt();
                     NetServiceManager.getinstance().recvSocialContentsExt();
                 }
             }

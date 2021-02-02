@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -16,8 +17,10 @@ import com.soulfriends.meditation.databinding.FriendEditBinding;
 import com.soulfriends.meditation.model.MeditationDetailFriend;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
+import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.friend.FriendEditAdapter;
 import com.soulfriends.meditation.view.friend.FriendEditItemViewModel;
 import com.soulfriends.meditation.view.friend.FriendFindAdapter;
@@ -54,7 +57,7 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
         viewModel = new ViewModelProvider(this.getViewModelStore(), friendEditViewModelFactory).get(FriendEditViewModel.class);
         binding.setViewModel(viewModel);
 
-        layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         //rcv.setLayoutManager(layoutManager);
 
 //        list_friend = ItemList();
@@ -68,14 +71,12 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
             @Override
             public void onRecvFriends(boolean validate) {
 
-                if(validate)
-                {
-                    DoFriendList();
-                }
-                else
-                {
-
-                }
+                DoFriendList();
+//                if (validate) {
+//                    DoFriendList();
+//                } else {
+//
+//                }
             }
         });
 
@@ -83,9 +84,11 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
         NetServiceManager.getinstance().recvFriendsList();
     }
 
-    private void DoFriendList()
-    {
-        List list = new ArrayList<>();
+    private void DoFriendList() {
+
+
+        list_friend.clear();
+
         ArrayList<MeditationDetailFriend> list_user = NetServiceManager.getinstance().mDetialFriendsList;
 
         int count = 0;
@@ -94,10 +97,15 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
 
             FriendEditItemViewModel friendEditItemViewModel = new FriendEditItemViewModel(this, count, meditationDetailFriend.mUserProfile);
 
-            list.add(friendEditItemViewModel);
+            list_friend.add(friendEditItemViewModel);
         }
 
-        friendEditAdapter = new FriendEditAdapter(list_friend, this, this);
+        if(friendEditAdapter == null) {
+            friendEditAdapter = new FriendEditAdapter(list_friend, this, this);
+        }
+        else {
+            friendEditAdapter.SetList(list_friend);
+        }
 
         binding.recyclerview.setAdapter(friendEditAdapter);
         binding.recyclerview.setLayoutManager(layoutManager);
@@ -127,9 +135,14 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
     public void onSuccess(Integer id, String message) {
 
         switch (id) {
-            case R.id.iv_close: {
-
+            case R.id.ic_close: {
+                onBackPressed();
             }
+            break;
+            case R.id.iv_completebg: {
+                onBackPressed();
+            }
+            break;
         }
     }
 
@@ -141,39 +154,46 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
     @Override
     public void onItemClick(View view, Object obj, int pos) {
 
-        switch(view.getId())
-        {
-            case R.id.iv_delete:
-            {
+        switch (view.getId()) {
+            case R.id.iv_icon:
+            case R.id.tv_nickname: {
+                // 프로필과 닉네임 선택시 친구 프로필로 이동 처리
+                ActivityStack.instance().Push(this, "");
+
+                UtilAPI.s_userProfile_friend = (UserProfile) obj;
+
+
+                ChangeActivity(ProfileFriendActivity.class);
+
+            }
+            break;
+            case R.id.iv_delete: {
 
                 // 삭제 버튼 선택하면
                 // 서버에 보내고 성공 이벤트 받고 리스트에서 삭제하도록 한다.
                 // 일단 테스트로 삭제 기능
                 //int index_id = Integer.parseInt((String)obj);
 
-                UserProfile userProfile = (UserProfile)obj;
+                UserProfile userProfile = (UserProfile) obj;
 
                 NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
                     @Override
                     public void onRemoveFriend(boolean validate) {
 
-                        if(validate)
-                        {
+                        if (validate) {
                             // 삭제
                             // 리사이클 데이터 변경에따른 ui 업데이트
                             list_friend.remove(pos);
                             friendEditAdapter.notifyItemRemoved(pos);
                             friendEditAdapter.notifyItemRangeChanged(pos, list_friend.size());
 
-                        }
-                        else
-                        {
+                        } else {
 
                         }
                     }
                 });
 
-                NetServiceManager.getinstance().removeFriend(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
+                NetServiceManager.getinstance().removeFriend(NetServiceManager.getinstance().getUserProfile().uid, userProfile.uid);
 
                 list_friend.remove(pos);
                 friendEditAdapter.notifyItemRemoved(pos);
@@ -189,5 +209,13 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
             break;
 
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        ActivityStack.instance().OnBack(this);
+
     }
 }

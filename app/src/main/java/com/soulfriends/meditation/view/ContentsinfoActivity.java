@@ -12,6 +12,7 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.ContentsinfoBinding;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
@@ -110,7 +111,9 @@ public class ContentsinfoActivity extends BaseActivity implements ResultListener
                 MeditationAudioManager.getinstance().idle_start();
 
                 // MainActivity 이동
-                ChangeActivity(MainActivity.class);
+                ActivityStack.instance().Pop();
+                ActivityStack.instance().OnBack(this);
+                //ChangeActivity(MainActivity.class);
 
             }
             break;
@@ -121,21 +124,15 @@ public class ContentsinfoActivity extends BaseActivity implements ResultListener
                 MeditationAudioManager.getinstance().unbind();
 
                 // MainActivity 이동
-                ChangeActivity(MainActivity.class);
+                ActivityStack.instance().Pop();
+                ActivityStack.instance().OnBack(this);
+                //ChangeActivity(MainActivity.class);
             }
             break;
         }
     }
 
-    private void ChangeActivity(java.lang.Class<?> cls)
-    {
-        Intent intent = new Intent(this, cls);
-        startActivity(intent);
 
-        this.overridePendingTransition(0, 0);
-
-        finish();
-    }
 
     @Override
     protected void onDestroy() {
@@ -152,10 +149,8 @@ public class ContentsinfoActivity extends BaseActivity implements ResultListener
             case R.id.iv_close: {
                 // 나가기 버튼
 
-                Intent intent = new Intent(this, PlayerActivity.class);
-                startActivity(intent);
+                onBackPressed();
 
-                finish();
             }
             break;
         }
@@ -168,9 +163,7 @@ public class ContentsinfoActivity extends BaseActivity implements ResultListener
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, PlayerActivity.class);
-        startActivity(intent);
-        this.overridePendingTransition(0, 0);
-        finish();
+
+        ActivityStack.instance().OnBack(this);
     }
 }

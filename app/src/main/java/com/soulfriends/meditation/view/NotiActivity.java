@@ -15,6 +15,7 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.NotiBinding;
 import com.soulfriends.meditation.model.MeditationDetailAlarm;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.view.friend.FriendEditAdapter;
@@ -162,9 +163,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
         switch (id) {
             case R.id.ic_close: {
-                // 닫기
-                this.overridePendingTransition(0, 0);
-                finish();
+                onBackPressed();
             }
             break;
         }
@@ -319,7 +318,8 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
     public void onBackPressed() {
 
         // 닫기
-        this.overridePendingTransition(0, 0);
-        finish();
+        ActivityStack.instance().OnBack(this);
+//        this.overridePendingTransition(0, 0);
+//        finish();
     }
 }

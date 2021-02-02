@@ -89,16 +89,22 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
         str_genre_id = intent.getStringExtra("genre");
         str_emotion_id = intent.getStringExtra("emotion");
 
+
+
         if(str_genre_id == null || str_genre_id.length() == 0)
         {
             // 없는 경우
             str_genre_id = "";
             // 콘텐츠 새로 만든 경우에 해당됨
+
+            viewModel.setContents_state(this.getResources().getString(R.string.contents_emotionsel_register));
         }
         else
         {
             // 있는 경우
             // 콘텐츠 수정된 경우 해당
+
+            viewModel.setContents_state(this.getResources().getString(R.string.contents_emotionsel_edit));
 
             if(str_genre_id.equals("명상"))
             {
@@ -166,24 +172,39 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                     // 선택된 인덱스
 
 
+//                    private final String genre1 = "명상";
+//                    private final String genre2 = "수면";
+//                    private final String genre3 = "음악";
                     // 장르
                     String str_genre = "";
                     if(select_kind_id == 1)
                     {
-                        str_genre = "명상";
+                        str_genre = NetServiceManager.getinstance().genre1; //"명상";
                     }
                     else if(select_kind_id == 2)
                     {
-                        str_genre = "수면";
+                        str_genre = NetServiceManager.getinstance().genre2; //"수면";
                     }
                     else if(select_kind_id == 3)
                     {
-                        str_genre = "음악";
+                        str_genre = NetServiceManager.getinstance().genre3; //"음악";
                     }
 
                     String final_genre = str_genre;
 
                     // 감정
+//                    // emotion meditation dataList
+//                    private ArrayList<EmotionListData> mEmotionListMeditationDataList;
+//                    public ArrayList<EmotionListData> getEmotionListMeditationDataList() {return mEmotionListMeditationDataList;}
+//
+//                    // emotion sleep DataList
+//                    private ArrayList<EmotionListData> mEmotionListSleepDataList;
+//                    public ArrayList<EmotionListData> getEmotionListSleepDataList() {return mEmotionListSleepDataList;}
+//
+//                    // emotion music DataList
+//                    private ArrayList<EmotionListData> mEmotionListMusicDataList;
+//                    public ArrayList<EmotionListData> getEmotionListMusicDataList() {return mEmotionListMusicDataList;}
+
                     ArrayList<EmotionListData> list_emotion = NetServiceManager.getinstance().getEmotionListMeditationDataList();
                     String str_emotion = list_emotion.get(select_emoticon_id - 1).softemotion;
 

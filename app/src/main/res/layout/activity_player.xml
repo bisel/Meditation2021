@@ -192,7 +192,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/layout_nickname"
                     app:layout_constraintStart_toEndOf="@+id/layout_nickname"
                     app:layout_constraintTop_toTopOf="@+id/layout_nickname"
-                    app:srcCompat="@drawable/friend_add_1" />
+                    android:background="@drawable/friend_add_1" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,6 +33,7 @@ import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.parser.PersonResultData;
 import com.soulfriends.meditation.parser.ResultData;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListener;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
@@ -78,6 +79,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
     private LinearLayoutManager layoutManager_friend;
 
     private ViewGroup container;
+
+    private int bFocusTab = 0;
 
     public ProfileFragment() {
     }
@@ -156,6 +159,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
         }
 
+
+
         //------------------------------------------------
         // 콘텐츠 탭 버튼 선택
         //------------------------------------------------
@@ -163,7 +168,52 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         ImageView ivContentsBt = view.findViewById(R.id.iv_contentsbt);
         ImageView ivFriendBt = view.findViewById(R.id.iv_friendbt);
 
+
+        if(UtilAPI.s_StrFragment_Profile_Tab == UtilAPI.TAB_CONTENTS)
+        {
+            this.contents_RecyclerViewItem.setVisibility(View.VISIBLE);
+
+            this.friend_RecyclerViewItem.setVisibility(View.GONE);
+
+            layout_friend_bts.setVisibility(View.GONE);
+            layout_friend_no.setVisibility(View.GONE);
+
+            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg);
+            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg_selected);
+        }
+        else
+        {
+            this.contents_RecyclerViewItem.setVisibility(View.GONE);
+
+            layout_friend_bts.setVisibility(View.VISIBLE);
+
+
+            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg_selected);
+            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg);
+
+            // 2. 현재 친구 리스트 : 친구 인지 아닌지 판별 , 감정친구인지
+            //  -> recvFriendsRequestList(normal) : 어느 특정 시작 시점
+            // 5. 감정 친구 요청중
+            //  -> recvFriendsRequestList("emotion") : 감정친구 요청 리스트 받는 함수
+
+            //--------------------------
+            // 1. 친구 노멀 리스트 요청
+            //--------------------------
+
+            NetServiceManager.getinstance().setOnRecvFriendsRequestListener(new NetServiceManager.OnRecvFriendsRequestListener() {
+                @Override
+                public void onRecvFriendsRequest(boolean validate) {
+                    DoEmotionFriendRequest();
+                }
+            });
+
+            NetServiceManager.getinstance().recvFriendsRequestList("normal");
+        }
+
+
         ivContentsBt.setOnClickListener(v -> {
+
+            bFocusTab = 0;
 
             this.contents_RecyclerViewItem.setVisibility(View.VISIBLE);
 
@@ -175,6 +225,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg);
             UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg_selected);
 
+
+
         });
 
         //------------------------------------------------
@@ -183,9 +235,12 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
         ivFriendBt.setOnClickListener(v -> {
 
+            bFocusTab = 1;
+
             this.contents_RecyclerViewItem.setVisibility(View.GONE);
 
-            layout_friend_bts.setVisibility(View.GONE);
+            layout_friend_bts.setVisibility(View.VISIBLE);
+
 
             UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg_selected);
             UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg);
@@ -217,11 +272,17 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         iv_myBt.setOnClickListener(v -> {
 
             // 내가 제작한 콘텐츠 액티비티 이동처리
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), MyContentsActivity.class);
 
+            ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
+            getActivity().startActivity(new Intent(getActivity(), MyContentsActivity.class));
             getActivity().overridePendingTransition(0, 0);
-            getActivity().startActivity(intent);
+
+//            Intent intent = new Intent();
+//            intent.setClass(getActivity(), MyContentsActivity.class);
+//
+//            getActivity().overridePendingTransition(0, 0);
+//            getActivity().startActivity(intent);
 
             UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
             getActivity().finish();
@@ -246,8 +307,14 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         View ic_findbt = view.findViewById(R.id.ic_findbt);
         ic_findbt.setOnClickListener(v -> {
 
+            ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
             getActivity().startActivity(new Intent(getActivity(), FriendFindActivity.class));
             getActivity().overridePendingTransition(0, 0);
+
+            UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+            UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_FRIEND;
+            getActivity().finish();
         });
 
         //------------------------------------------------
@@ -256,8 +323,14 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         View ic_editbt = view.findViewById(R.id.iv_editbt);
         ic_editbt.setOnClickListener(v -> {
 
+            ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
             getActivity().startActivity(new Intent(getActivity(), FriendEditActivity.class));
             getActivity().overridePendingTransition(0, 0);
+
+            UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+            UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_FRIEND;
+            getActivity().finish();
         });
 
 
@@ -268,8 +341,14 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         View iv_find_friend_bt = view.findViewById(R.id.iv_find_friend_bt);
         iv_find_friend_bt.setOnClickListener(v -> {
 
+            ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
             getActivity().startActivity(new Intent(getActivity(), FriendFindActivity.class));
             getActivity().overridePendingTransition(0, 0);
+
+            UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+            UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_FRIEND;
+            getActivity().finish();
         });
 
         return view;
@@ -307,12 +386,18 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         });
 
 
+        // 친구 리스트 요청 할때 마다 NetServiceManager.getinstance().mDetialFriendsList 카운트가 증가되어 값을 준다.
+        // dlsmdla 2021_0202 버그 !!!
         NetServiceManager.getinstance().recvFriendsList();
     }
 
     private void DoFriendList()
     {
-        List list_friend = new ArrayList<>();
+        // 콘텐츠 탭일 경우는 리턴하도록 처리해야만 된다.
+        if(bFocusTab == 0) return;
+
+        list_friend.clear();
+
         ArrayList<MeditationDetailFriend> list_user = NetServiceManager.getinstance().mDetialFriendsList;
 
         if(list_user.size() > 0) {
@@ -345,8 +430,11 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                 }
             }
 
-            friendEmotionAdapter = new FriendEmotionAdapter(list_friend, container.getContext(), this);
+            if(friendEmotionAdapter == null) {
+                friendEmotionAdapter = new FriendEmotionAdapter(list_friend, container.getContext(), this);
+            }
 
+            friendEmotionAdapter.SetList(list_friend);
             friend_RecyclerViewItem.setAdapter(friendEmotionAdapter);
             friend_RecyclerViewItem.setLayoutManager(layoutManager_friend);
             friend_RecyclerViewItem.setNestedScrollingEnabled(false);
@@ -358,8 +446,6 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
             layout_friend_no.setVisibility(View.VISIBLE);
         }
-
-
     }
 
 
@@ -451,6 +537,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
 
                     UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+                    UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
                     getActivity().finish();
                 }
                 else
@@ -461,6 +548,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
 
                     UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+                    UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
                     getActivity().finish();
                 }
             }
@@ -476,6 +564,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                     getActivity().startActivity(intent);
 
                     UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+                    UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
                     getActivity().finish();
                 }
                 else
@@ -486,6 +575,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
 
                     UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+                    UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
                     getActivity().finish();
                 }
 
@@ -499,6 +589,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
 
                 UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+                UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
                 getActivity().finish();
 
             }
@@ -510,6 +601,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
 
                 UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+                UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
                 getActivity().finish();
 
             }
@@ -537,6 +629,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             //String str = meditationContents.uid;
             //Toast.makeText(this.getContext(), str, Toast.LENGTH_SHORT).show();
 
+            ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
             Intent intent = new Intent();
             intent.setClass(getActivity(), PlayerActivity.class);
             getActivity().startActivity(intent);
@@ -553,6 +647,23 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
         switch(view.getId())
         {
+            case R.id.tv_nickname:
+            case R.id.iv_icon:
+            {
+                // 프로필과 닉네임 선택시 친구 프로필로 이동 처리
+                ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
+                UtilAPI.s_userProfile_friend = (UserProfile) obj;
+
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), ProfileFriendActivity.class);
+                getActivity().startActivity(intent);
+
+                UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+                UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_FRIEND;
+                getActivity().finish();
+            }
+            break;
             case R.id.ic_close:
             {
                 // 감정상태

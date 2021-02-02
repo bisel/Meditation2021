@@ -35,10 +35,12 @@ import com.soulfriends.meditation.databinding.PlayerBinding;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.PreferenceManager;
 import com.soulfriends.meditation.util.RecvEventListener;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
+import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.view.player.AudioPlayer;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
 import com.soulfriends.meditation.view.player.PlaybackStatus;
@@ -167,6 +169,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 binding.layoutBaseFriend.setVisibility(View.VISIBLE);
 
 
+                SetFriendState();
+
                 if(UtilAPI.s_userProfile_friend != null) {
                     viewModel.setNickname_friend(UtilAPI.s_userProfile_friend.nickname);
                 }
@@ -207,7 +211,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             meditationAudioManager.unbind();
 
             // MainActivity 이동
-            ChangeActivity(MainActivity.class);
+            //ChangeActivity(MainActivity.class);
+            ActivityStack.instance().OnBack(this);
         });
 
         binding.playerView.setVisibility(View.GONE);
@@ -238,6 +243,11 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         //StorageReference storageRef = storage.getReferenceFromUrl("gs://meditation-m.appspot.com/test/play_bgm5.mp3");
 
         String strTest= "gs://meditation-m.appspot.com/meditation/Sound/bookbros_aud.mp3";
+        
+        // 내가 만든 사운드 
+        //gs://meditation-m.appspot.com/meditation/MyContentsSound/f5FL3rBPAbO1obZADqDzoFYwzvx2_20210202_test_1minute.mp3 <-- 파이어베이스 경로
+        //gs://meditation-m.appspot.com/meditation/Sound/f5FL3rBPAbO1obZADqDzoFYwzvx2_20210202_test_1minute.mp3 <---- 디버깅 했을때 경로
+        
         //StorageReference storageRef = storage.getReferenceFromUrl(meditationContents.audio);
         StorageReference storageRef = storage.getReferenceFromUrl(strTest);
 
@@ -347,8 +357,9 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             bEvent_service_interior = true;
 
             // MainActivity 이동
-            ChangeActivity(MainActivity.class);
+            //ChangeActivity(MainActivity.class);
 
+            ActivityStack.instance().OnBack(this);
             return;
         }
 
@@ -360,7 +371,9 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             bEvent_service_interior = true;
 
             // SessioinActivity 이동
+            // 플레이어 액티비티를 넣줄 필요가 없다.
             ChangeActivity(SessioinActivity.class);
+
             return;
         }
 
@@ -581,8 +594,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 meditationAudioManager.idle_start();
 
                 // MainActivity 이동
-                ChangeActivity(MainActivity.class);
-
+                //ChangeActivity(MainActivity.class);
+                ActivityStack.instance().OnBack(this);
             }
             break;
             case PlaybackStatus.STOP_NOTI: {
@@ -592,7 +605,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 meditationAudioManager.unbind();
 
                 // MainActivity 이동
-                ChangeActivity(MainActivity.class);
+                //ChangeActivity(MainActivity.class);
+                ActivityStack.instance().OnBack(this);
             }
             break;
 
@@ -617,7 +631,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             {
                 // 타이머 시간이 끝날때 발생되는 이벤트
                 // MainActivity 이동
-                ChangeActivity(MainActivity.class);
+                //ChangeActivity(MainActivity.class);
+                ActivityStack.instance().OnBack(this);
             }
             break;
         }
@@ -632,7 +647,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             case R.id.bt_close: {
 
                 // MainActivity 이동
-                ChangeActivity(MainActivity.class);
+                //ChangeActivity(MainActivity.class);
+                ActivityStack.instance().OnBack(this);
             }
             break;
 //            case R.id.bt_download: {
@@ -644,12 +660,15 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             case R.id.bt_timer: {
                 // 타이머
 
+                // 현재 액티비티를 넣준다.
+                ActivityStack.instance().Push(this, "");
                 ChangeActivity(TimerActivity.class);
             }
             break;
             case R.id.bt_info: {
 
                 // 정보
+                ActivityStack.instance().Push(this, "");
                 ChangeActivity(ContentsinfoActivity.class);
             }
             break;
@@ -714,10 +733,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 // 친구 닉네임 또는 썹네일 선택
                 // 친구 프로필으로 이동 처리
 
-                Intent intent = new Intent(this, ProfileFriendActivity.class);
-                startActivity(intent);
-                this.overridePendingTransition(0, 0);
-                finish();
+                ActivityStack.instance().Push(this, "");
+                ChangeActivity(ProfileFriendActivity.class);
 
             }
             break;
@@ -733,6 +750,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 // 구 요청이 취소됨(안내 문구 제공 : 친구가 취소되었습니다.)
                 // - 친구 프로필, 닉네임 선택 시 해당 친구의 프로필 페이지로 이동
 
+                RequestFriendState();
 
             }
             break;
@@ -782,15 +800,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
     }
 
-    private void ChangeActivity(java.lang.Class<?> cls)
-    {
-        Intent intent = new Intent(this, cls);
-        startActivity(intent);
 
-        this.overridePendingTransition(0, 0);
-
-        finish();
-    }
 
     public void CallWithDelay_balloon(long miliseconds, final Activity activity) {
 
@@ -847,11 +857,127 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         }, miliseconds);
     }
 
+    // 플레이어 프렌드 상태 처리
+    //- 친구가 아닌 경우 : 프로필이미지 + 닉네임 + 친구추가 버튼 표시되며 선택 시 친구 추가됨(안내 문구 제공 : 친구로 추가되었습니다.)
+    //- 친구인 경우 : 프로필이미지 + 닉네임 + 친구 표시, 터치하면 친구삭제(안내 문구 제공 : 친구가 취소되었습니다.)
+    //- 친구 요청중인 경우 : 프로필 이미지 + 닉네임 + 친구요청중 표시, 터치하면 친구 요청이 취소됨(안내 문구 제공 : 친구가 취소되었습니다.)
+
+
+    private int friend_state = -1;
+
+    public void SetFriendState()
+    {
+        // 친구 추가 friend_state == 0
+        // 친구  friend_state == 1
+        // 친구 요청 중 friend_state == 2
+
+        // 친구 인지 아닌지 판별
+        if(NetServiceManager.getinstance().findFriends(UtilAPI.s_userProfile_friend.uid) != null)
+        {
+            // 친구 임
+            friend_state = 1;
+            UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_friend);
+        }
+        else
+        {
+            // 친구 아닌 상태
+            // 친구 추가
+            friend_state = 0;
+            UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_addfriend);
+        }
+
+        // 현재 친구 요청 리스트
+        if(NetServiceManager.getinstance().findFriendsRequest(UtilAPI.s_userProfile_friend.uid))
+        {
+            // 친구 요청중에 있는지 확인
+            friend_state = 2;
+            UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_requested);
+        }
+
+        // 상태에 따라서 ui 표시를 하고
+    }
+    public void RequestFriendState()
+    {
+        switch(friend_state)
+        {
+            case 0:
+            {
+                // 3. 친구 추가
+                // sendFriendRequest(보내는 사람 uid,  받는 사람 uid)
+                //        => 성공이 되면 "친구요청중"이라고 ux 변경
+
+                NetServiceManager.getinstance().setOnSendFriendRequestListener(new NetServiceManager.OnSendFriendRequestListener() {
+                    @Override
+                    public void onSendFriendRequest(boolean validate) {
+
+                        if(validate)
+                        {
+                            Toast.makeText(PlayerActivity.this, "친구로 요청중입니다.", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                });
+
+                NetServiceManager.getinstance().sendFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  UtilAPI.s_userProfile_friend.uid);
+
+            }
+            break;
+            case 1:
+            {
+                // 친구 삭제
+                NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
+                    @Override
+                    public void onRemoveFriend(boolean validate) {
+
+                        if(validate)
+                        {
+                            Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                });
+
+                NetServiceManager.getinstance().removeFriend(NetServiceManager.getinstance().getUserProfile().uid, UtilAPI.s_userProfile_friend.uid);
+
+            }
+            break;
+            case 2:
+            {
+                
+                // 친구 취소
+                NetServiceManager.getinstance().setOnCancelFriendRequestListener(new NetServiceManager.OnCancelFriendRequestListener() {
+                    @Override
+                    public void onCancelFriendRequest(boolean validate) {
+
+                        if(validate)
+                        {
+                            Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                });
+
+                NetServiceManager.getinstance().cancelFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  UtilAPI.s_userProfile_friend.uid);
+
+            }
+            break;
+        }
+    }
+
+
     @Override // 2020.12.20 , Close 버튼과 동일
     public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        this.overridePendingTransition(0, 0);
-        finish();
+
+        ActivityStack.instance().OnBack(this);
+        //ChangeActivity(MainActivity.class);
     }
 }

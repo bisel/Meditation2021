@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.soulfriends.meditation.databinding.FriendFindItemBinding;
+import com.soulfriends.meditation.netservice.NetServiceUtility;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -78,7 +79,7 @@ public class FriendFindAdapter extends RecyclerView.Adapter{
 
         // profile 이미지
         if(friendFindItemViewModel.userProfile.profileimg != null && friendFindItemViewModel.userProfile.profileimg.length() != 0) {
-            UtilAPI.load_image(context, friendFindItemViewModel.userProfile.profileimg, bind.ivIcon);
+            UtilAPI.load_image_circle(context, NetServiceUtility.profieimgdir + friendFindItemViewModel.userProfile.profileimg, bind.ivIcon);
         }
 
 

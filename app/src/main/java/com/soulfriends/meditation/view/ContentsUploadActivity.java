@@ -62,7 +62,6 @@ public class ContentsUploadActivity extends BaseActivity {
 
                    OnEvent_Success(successContents);
 
-
                    Toast.makeText(getApplicationContext(),"업로드 성공",Toast.LENGTH_SHORT).show();
                }
                else
@@ -107,6 +106,10 @@ public class ContentsUploadActivity extends BaseActivity {
             public void onRecvValProfile(boolean validate) {
                 if (validate == true) {
 
+
+                    // 플레이어 이동
+                    UtilAPI.s_playerMode = UtilAPI.PlayerMode.my;
+                    NetServiceManager.getinstance().setCur_contents(successContents);
                     ChangeActivity();
 
                 } else {
@@ -137,31 +140,33 @@ public class ContentsUploadActivity extends BaseActivity {
         // 콘텐츠 배경이미지 초기화
         UtilAPI.s_id_backimamge_makecontents = -1;
 
-        if(activity_class != null && activity_class.length() > 0) {
+        ChangeActivity(PlayerActivity.class);
 
-            if(activity_class.equals("ProfileActivity")) {
-
-                // ProfileActivity
-                Intent intent = new Intent(this, ProfileActivity.class);
-                startActivity(intent);
-                this.overridePendingTransition(0, 0);
-                finish();
-            }
-            else
-            {
-                // MyContentsActivity
-                Intent intent = new Intent(this, MyContentsActivity.class);
-                startActivity(intent);
-                this.overridePendingTransition(0, 0);
-                finish();
-            }
-        }
-        else {
-            Intent intent = new Intent(this, MyContentsActivity.class);
-            startActivity(intent);
-            this.overridePendingTransition(0, 0);
-            finish();
-        }
+//        if(activity_class != null && activity_class.length() > 0) {
+//
+//            if(activity_class.equals("ProfileActivity")) {
+//
+//                // ProfileActivity
+//                Intent intent = new Intent(this, ProfileActivity.class);
+//                startActivity(intent);
+//                this.overridePendingTransition(0, 0);
+//                finish();
+//            }
+//            else
+//            {
+//                // MyContentsActivity
+//                Intent intent = new Intent(this, MyContentsActivity.class);
+//                startActivity(intent);
+//                this.overridePendingTransition(0, 0);
+//                finish();
+//            }
+//        }
+//        else {
+//            Intent intent = new Intent(this, MyContentsActivity.class);
+//            startActivity(intent);
+//            this.overridePendingTransition(0, 0);
+//            finish();
+//        }
 
 
 

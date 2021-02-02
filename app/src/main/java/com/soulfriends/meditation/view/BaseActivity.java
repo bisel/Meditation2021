@@ -54,6 +54,14 @@ public class BaseActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
+    public void ChangeActivity(java.lang.Class<?> cls)
+    {
+        Intent intent = new Intent(this, cls);
+        startActivity(intent);
+        this.overridePendingTransition(0, 0);
+        finish();
+    }
+
     @Subscribe
     public void onEvent(String status)
     {

@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.soulfriends.meditation.databinding.FriendEditItemBinding;
+import com.soulfriends.meditation.netservice.NetServiceUtility;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
+import com.soulfriends.meditation.util.UtilAPI;
 
 import java.util.List;
 
@@ -29,6 +31,11 @@ public class FriendEditAdapter extends RecyclerView.Adapter{
         this.list = list;
         this.context = context;
         this.listener = listener;
+    }
+
+    public void SetList(List list)
+    {
+        this.list = list;
     }
 
     @NonNull
@@ -55,6 +62,11 @@ public class FriendEditAdapter extends RecyclerView.Adapter{
 
         FriendEditItemBinding bind = friendEditViewHolder.getFriendEditItemBinding();
 
+
+        // profile 이미지
+        if(friendEditItemViewModel.userProfile.profileimg != null && friendEditItemViewModel.userProfile.profileimg.length() != 0) {
+            UtilAPI.load_image_circle(context, NetServiceUtility.profieimgdir + friendEditItemViewModel.userProfile.profileimg, bind.ivIcon);
+        }
     }
 
     @Override

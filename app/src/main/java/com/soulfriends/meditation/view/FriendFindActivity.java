@@ -24,8 +24,10 @@ import com.soulfriends.meditation.dlg.AlertLineOnePopup;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
+import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.friend.FriendEditAdapter;
 import com.soulfriends.meditation.view.friend.FriendEditItemViewModel;
 import com.soulfriends.meditation.view.friend.FriendEmotionAdapter;
@@ -189,6 +191,18 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
 
         switch(view.getId())
         {
+            case R.id.iv_icon:
+            case R.id.tv_nickname:
+            {
+                // 친구 프로필로 이동
+                ActivityStack.instance().Push(this, "");
+
+                UtilAPI.s_userProfile_friend = (UserProfile) obj;
+
+                    ChangeActivity(ProfileFriendActivity.class);
+
+            }
+            break;
             case R.id.iv_addbt:
             {
                 // 친구추가
@@ -338,8 +352,7 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
         {
             case R.id.ic_close:
             {
-                // 닫기
-                finish();
+                onBackPressed();
 
             }
             break;
@@ -347,7 +360,7 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
             {
                 String strInputWord = viewModel.inputword.getValue();
 
-                if(strInputWord.length() > 0) {
+                if(strInputWord != null && strInputWord.length() > 0) {
 
                     // 찾기
                     Find_Friend();
@@ -426,7 +439,10 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
             }
         });
 
-        NetServiceManager.getinstance().recvFindUserList(viewModel.inputword.getValue());
+        String text = viewModel.inputword.getValue();
+        if(text != null && text.length() > 0) {
+            NetServiceManager.getinstance().recvFindUserList(viewModel.inputword.getValue());
+        }
         
     }
 
@@ -438,7 +454,6 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
     @Override
     public void onBackPressed() {
 
-        // 닫기
-        finish();
+        ActivityStack.instance().OnBack(this);
     }
 }

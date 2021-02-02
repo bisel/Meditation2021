@@ -14,6 +14,7 @@ import com.soulfriends.meditation.databinding.SessionBinding;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.AudioPlayer;
@@ -143,29 +144,7 @@ public class SessioinActivity extends BaseActivity implements ResultListener {
     public void onSuccess(Integer id, String message) {
         switch (id) {
             case R.id.iv_close: {
-
-                // func 2. 해당 콘텐츠의 좋아요, 싫어요 결정. reactiionCode 0: Default, 1 : 좋아요, 2: 싫어요
-
-//                if(reactiionCode_orig != reactiionCode) {
-//                    //String uid = PreferenceManager.getString(this, "uid");
-//
-//                    String uid = NetServiceManager.getinstance().getUserProfile().uid;
-//                    NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactiionCode);
-//                }
-
-                if(bFinish)
-                {
-                    finish();
-                }
-                else {
-                    Intent intent = new Intent(this, MainActivity.class);
-                    startActivity(intent);
-
-                    this.overridePendingTransition(0, 0);
-
-                    // 나가기 버튼
-                    finish();
-                }
+                onBackPressed();
             }
             break;
             case R.id.iv_good_button: {
@@ -220,26 +199,13 @@ public class SessioinActivity extends BaseActivity implements ResultListener {
             finish();
         }
         else {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            this.overridePendingTransition(0, 0);
-            finish();
+
+            ActivityStack.instance().OnBack(this);
+
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+//            this.overridePendingTransition(0, 0);
+//            finish();
         }
     }
-
-//    public void close()
-//    {
-//        ActivityManager manager = (ActivityManager)this.getSystemService(Activity.ACTIVITY_SERVICE);
-//        List<ActivityManager.RunningTaskInfo> list = manager.getRunningTasks(1);
-//        ActivityManager.RunningTaskInfo info = list.get(0);
-//
-//        String ss = info.topActivity.getClassName();
-//
-//        if (info.topActivity.getClassName().equals("com.example.MainActivity")) {
-//
-//
-//        } else {
-//
-//        }
-//    }
 }

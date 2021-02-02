@@ -19,6 +19,7 @@ import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.MeditationShowCategorys;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListener;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -308,6 +309,8 @@ public class SnsFragment extends Fragment implements ItemClickListener, ResultLi
 
             //String str = meditationContents.uid;
             //Toast.makeText(this.getContext(), str, Toast.LENGTH_SHORT).show();
+
+            ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
 
             Intent intent = new Intent();
             intent.setClass(getActivity(), PlayerActivity.class);

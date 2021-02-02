@@ -329,6 +329,7 @@
     <string name="contents_emotionsel_text2">수면</string>
     <string name="contents_emotionsel_text3">음악</string>
     <string name="contents_emotionsel_register">콘텐츠 등록</string>
+    <string name="contents_emotionsel_edit">콘텐츠 수정</string>
 
     <!-- social fragment  -->
     <string name="social_fragment_contents">콘텐츠</string>

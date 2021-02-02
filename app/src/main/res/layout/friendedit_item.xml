@@ -19,10 +19,11 @@
         android:layout_marginTop="14dp"
         >
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_icon"
             android:layout_width="34dp"
             android:layout_height="34dp"
+            app:civ_border_color="#FF000000"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:background="@drawable/social_profileimg"
@@ -36,6 +37,7 @@
             android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
             android:text="@{viewModel.nickname}"
