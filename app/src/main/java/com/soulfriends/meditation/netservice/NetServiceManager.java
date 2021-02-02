@@ -587,7 +587,7 @@ public class NetServiceManager {
                         MeditationContents contentsdata = meditationSnapshot.getValue(MeditationContents.class);
 
                         // audio , 소셜은 확장자를 이미 가지고 있다.
-                        contentsdata.audio =   NetServiceUtility.audiofiledir + contentsdata.audio;
+                        contentsdata.audio =   NetServiceUtility.mycontentsaudiodir + contentsdata.audio;
 
                         // thumnail
                         contentsdata.thumbnail = NetServiceUtility.mycontentsthumnaildir + contentsdata.thumbnail;
@@ -5315,6 +5315,8 @@ public class NetServiceManager {
 
     //  친구 정보 받기
     public  void recvFriendsList(){
+        mDetialFriendsList.clear();
+
         mfbDBRef.child("friends").child(mUserProfile.uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
