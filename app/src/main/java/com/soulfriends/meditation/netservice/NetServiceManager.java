@@ -842,6 +842,7 @@ public class NetServiceManager {
     }
 
 
+
     // 성격테스트후에 성격에 따른 성격테스트 결과에 대한 카테고리를 알려준다.]
     private MeditationContents getCharTestCategoryContents(String genre,boolean forceAction)
     {
@@ -1898,6 +1899,16 @@ public class NetServiceManager {
         return null;
     }
 
+    // paid여부는 여기서 판단.
+    public MeditationContentsCharInfo getMeditationContentsCharInfo(String contentid){
+        int dataNum = mContentsCharinfoList.size();
+        for(int i = 0; i < dataNum; i++){
+            if(mContentsCharinfoList.get(i).uid.equals(contentid))
+                return mContentsCharinfoList.get(i);
+        }
+        return null;
+    }
+
     // func contents를 얻기 위해서 사용. 그런데 문제는 부모일경우의 처리 후에 필요.  2021.01.22
     public MeditationContents getSocialContents(String contentid){
         int dataNum = mSocialContentsList.size();
@@ -1909,6 +1920,8 @@ public class NetServiceManager {
         }
         return null;
     }
+
+
 
     private XmlResourceParser parser;
 
