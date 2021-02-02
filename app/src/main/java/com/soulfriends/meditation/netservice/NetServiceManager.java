@@ -579,6 +579,8 @@ public class NetServiceManager {
     }
 
     public void recvSocialContentsExt(){
+        mSocialContentsList.clear();
+
         mfbDBRef.child(socialContentsInfoString).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -4623,7 +4625,8 @@ public class NetServiceManager {
     }
 
     // local social Contents도 지워야 한다. -> remove 수정
-    public void delLocalMyContents(String uid){
+
+    public void delLocalSocialContents(String uid){
         int dataNum = mSocialContentsList.size();
 
         for(int i = 0; i < dataNum; i++){

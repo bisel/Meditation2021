@@ -506,7 +506,7 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
                 {
                     // 삭제 성공
 
-                    NetServiceManager.getinstance().delLocalMyContents(meditationContents.uid);
+                    NetServiceManager.getinstance().delLocalSocialContents(meditationContents.uid);
 
                     NetServiceManager.getinstance().delUserProfileMyContents(meditationContents.uid);
 
