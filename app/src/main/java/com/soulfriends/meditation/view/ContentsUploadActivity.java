@@ -62,7 +62,7 @@ public class ContentsUploadActivity extends BaseActivity {
 
                    OnEvent_Success(successContents);
 
-                   Toast.makeText(getApplicationContext(),"업로드 성공",Toast.LENGTH_SHORT).show();
+                   //Toast.makeText(getApplicationContext(),"업로드 성공",Toast.LENGTH_SHORT).show();
                }
                else
                {
@@ -70,7 +70,7 @@ public class ContentsUploadActivity extends BaseActivity {
 
                    OnEvent_Faild();
 
-                   Toast.makeText(getApplicationContext(),"업로드 실패",Toast.LENGTH_SHORT).show();
+                   //Toast.makeText(getApplicationContext(),"업로드 실패",Toast.LENGTH_SHORT).show();
                }
             }
         });

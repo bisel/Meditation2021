@@ -25,6 +25,7 @@ import android.view.View;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.MyContentsBinding;
+import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
 import com.soulfriends.meditation.dlg.AlertLineOnePopup;
 import com.soulfriends.meditation.dlg.PsychologyDlg;
 import com.soulfriends.meditation.model.MediationShowContents;
@@ -188,14 +189,14 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
 
                 MeditationContents meditationContents = (MeditationContents) obj;
 
-                Toast.makeText(getApplicationContext(), "img_child_item", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "img_child_item", Toast.LENGTH_SHORT).show();
             }
             break;
             case R.id.iv_modify: {
 
                 MeditationContents meditationContents = (MeditationContents) obj;
 
-                Toast.makeText(getApplicationContext(), "iv_modify", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "iv_modify", Toast.LENGTH_SHORT).show();
 
                 // 팝업 메뉴
                 Context c = MyContentsActivity.this;
@@ -204,6 +205,29 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
                 //PopupMenu popupMenu = new PopupMenu(c,view);
                 PopupMenu popupMenu = new PopupMenu(c, view, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
                 getMenuInflater().inflate(R.menu.popup_myplayer, popupMenu.getMenu());
+                
+//                //----------------------------------------------------------------
+//                // 테스트
+//                //----------------------------------------------------------------
+//                AlertLineOneOkPopup alertDlg_ok = new AlertLineOneOkPopup(MyContentsActivity.this, MyContentsActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_request);
+//
+//                alertDlg_ok.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//
+//
+//
+//                int[] outLocation = new int[2];
+//                view.getLocationInWindow(outLocation);
+//                WindowManager.LayoutParams params = alertDlg_ok.getWindow().getAttributes();
+//                params.x = -outLocation[0];
+//                params.y = -outLocation[1];
+//                alertDlg_ok.getWindow().setAttributes(params);
+//
+//                alertDlg_ok.show();
+//
+////                alertDlg_ok.iv_ok.setOnClickListener(v -> {
+////
+////                    alertDlg_ok.dismiss();
+////                });
 
                 Menu menu = popupMenu.getMenu();
                 {
@@ -224,7 +248,7 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.action_menu1) {
-                            Toast.makeText(MyContentsActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MyContentsActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
 
                             UtilAPI.s_MeditationContents_temp = meditationContents;
 
@@ -250,7 +274,7 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
                             alertDlg.iv_ok.setOnClickListener(v -> {
 
                                 OnEvent_Delete_Contents(meditationContents);
-                                Toast.makeText(MyContentsActivity.this,"삭제",Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(MyContentsActivity.this,"삭제",Toast.LENGTH_SHORT).show();
 
                                 alertDlg.dismiss();
                             });
@@ -280,7 +304,7 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
             break;
 
             case R.id.img_child_item_add: {
-                Toast.makeText(getApplicationContext(), "콘텐츠 추가", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "콘텐츠 추가", Toast.LENGTH_SHORT).show();
 
                 // 터치 시 콘텐츠 제작 화면으로 이동
 
@@ -317,14 +341,14 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
 
                     Update_Recyclerview();
 
-                    Toast.makeText(getApplicationContext(),"삭제 성공",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),"삭제 성공",Toast.LENGTH_SHORT).show();
 
                 }
                 else
                 {
                     // 삭제 실패
 
-                    Toast.makeText(getApplicationContext(),"삭제 실패",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),"삭제 실패",Toast.LENGTH_SHORT).show();
                 }
             }
         });

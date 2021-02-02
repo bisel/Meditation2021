@@ -277,12 +277,14 @@
     <string name="contentsmake_reaudio">다시녹음</string>
     <string name="contentsmake_gallery">갤러리</string>
     <string name="contentsmake_photo">사진촬영</string>
+    <string name="contentsmake_audio_30">30초 이상 녹음해주세요.</string>
 
 
     <!-- friend edit activity 친구편집-->
     <string name="friendedit_title">친구편집</string>
     <string name="friendedit_complete">완료</string>
     <string name="friendedit_delete">삭제</string>
+
 
     <!-- noti activity 알림-->
     <string name="noti_title">알림</string>
@@ -370,6 +372,13 @@
 
     <!-- 콘텐츠 업로드 dialog  -->
     <string name="dialog_contents_upload_failed">콘텐츠 업로드에 실패했습니다.</string> <!--alertlineone_ok 300, 136-->
+
+    <!-- 콘텐츠 에러 dialog  -->
+    <string name="dialog_contents_error">콘텐츠에 오류가 발생하여 재생할 수 없습니다.</string> <!--alertlineone_ok 300, 136-->
+
+    <!-- 친구 관련 팝업 dialog  -->
+    <string name="dialog_friend_request">친구 요청했습니다.</string> <!--alertlineone_ok 300, 136-->
+    <string name="dialog_friend_cancelled">친구가 취소되었습니다.</string> <!--alertlineone_ok 300, 136-->
 
     <!-- 콘텐츠 정보 dialog  -->
     <string name="dialog_contents_info_title">정보</string> <!--alert_info 300, 238-->

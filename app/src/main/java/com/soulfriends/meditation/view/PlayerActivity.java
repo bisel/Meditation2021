@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +33,8 @@ import androidx.lifecycle.ViewModelStore;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.PlayerBinding;
+import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
+import com.soulfriends.meditation.dlg.AlertLineOnePopup;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
@@ -85,6 +88,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
     private boolean bEvent_service_interior = false;
 
     private UserProfile userProfile_friend;
+
+    public AlertLineOneOkPopup alertDlg_ok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -493,9 +498,29 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     if (menuItem.getItemId() == R.id.action_menu1) {
-                        Toast.makeText(PlayerActivity.this, "수정하기 클릭", Toast.LENGTH_SHORT).show();
+
+                        UtilAPI.s_MeditationContents_temp = meditationContents;
+
+                        // 콘텐츠 수정 액티비티로 이동
+                        //ActivityStack.instance().Push(MyContentsActivity.this, ""); // 메인액티비티여야 된다.
+                        ChangeActivity(ContentsEditActivity.class);
+                        //Toast.makeText(PlayerActivity.this, "수정하기 클릭", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(PlayerActivity.this, "삭제하기 클릭", Toast.LENGTH_SHORT).show();
+
+                        // 팝업
+                        // "콘텐츠를 정말 삭제하시겠습니까? 팝업 띄운다.
+                        AlertLineOnePopup alertDlg = new AlertLineOnePopup(PlayerActivity.this, PlayerActivity.this, AlertLineOnePopup.Dlg_Type.contents_delete);
+                        alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        alertDlg.show();
+
+                        alertDlg.iv_ok.setOnClickListener(v -> {
+
+                            OnEvent_Delete_Contents(meditationContents);
+                            //Toast.makeText(MyContentsActivity.this,"삭제",Toast.LENGTH_SHORT).show();
+
+                            alertDlg.dismiss();
+                        });
+                        //Toast.makeText(PlayerActivity.this, "삭제하기 클릭", Toast.LENGTH_SHORT).show();
                     }
 
                     return false;
@@ -503,6 +528,27 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             });
             popupMenu.show();
         });
+    }
+
+    public void OnEvent_Delete_Contents(MeditationContents meditationContents) {
+        NetServiceManager.getinstance().setOnDelMyContentsListener(new NetServiceManager.OnDelMyContentsListener() {
+            @Override
+            public void onDelMyContentsListener(boolean validate) {
+                if (validate) {
+                    // 삭제 성공
+                    NetServiceManager.getinstance().delLocalSocialContents(meditationContents.uid);
+                    NetServiceManager.getinstance().delUserProfileMyContents(meditationContents.uid);
+
+                    onBackPressed();
+                    //Toast.makeText(getApplicationContext(),"삭제 성공",Toast.LENGTH_SHORT).show();
+
+                } else {
+                    // 삭제 실패
+                    //Toast.makeText(getApplicationContext(),"삭제 실패",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        NetServiceManager.getinstance().delMyContents(meditationContents);
     }
 
     @Override
@@ -555,6 +601,12 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
     protected void onDestroy() {
 
         super.onDestroy();
+
+        if(alertDlg_ok != null) {
+            if (alertDlg_ok.isShowing()) {
+                alertDlg_ok.dismiss();
+            }
+        }
 
         UtilAPI.RemoveActivityInPlayer(this);
 
@@ -912,7 +964,16 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
                         if(validate)
                         {
-                            Toast.makeText(PlayerActivity.this, "친구로 요청중입니다.", Toast.LENGTH_SHORT).show();
+                            alertDlg_ok = new AlertLineOneOkPopup(PlayerActivity.this, PlayerActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_request);
+
+                            alertDlg_ok.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            alertDlg_ok.show();
+                            alertDlg_ok.iv_ok.setOnClickListener(v -> {
+
+                                alertDlg_ok.dismiss();
+                            });
+
+                            //Toast.makeText(PlayerActivity.this, "친구로 요청중입니다.", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
@@ -934,7 +995,16 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
                         if(validate)
                         {
-                            Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
+                            alertDlg_ok = new AlertLineOneOkPopup(PlayerActivity.this, PlayerActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_cancelled);
+
+                            alertDlg_ok.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            alertDlg_ok.show();
+                            alertDlg_ok.iv_ok.setOnClickListener(v -> {
+
+                                alertDlg_ok.dismiss();
+                            });
+
+                            //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
@@ -957,7 +1027,15 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
                         if(validate)
                         {
-                            Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
+                            alertDlg_ok = new AlertLineOneOkPopup(PlayerActivity.this, PlayerActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_cancelled);
+
+                            alertDlg_ok.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            alertDlg_ok.show();
+                            alertDlg_ok.iv_ok.setOnClickListener(v -> {
+
+                                alertDlg_ok.dismiss();
+                            });
+                            //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {

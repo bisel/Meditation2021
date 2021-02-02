@@ -174,6 +174,9 @@ public class MainActivity extends BaseActivity implements ResultListener {
         // 알람 정보 얻기
         //---------------------------------------------------------
 
+        binding.ivAlarmBg.setVisibility(View.GONE);
+        binding.tvAlarmCount.setVisibility(View.GONE);
+
         NetServiceManager.getinstance().setOnRecvMyAlarmListListener(new NetServiceManager.OnRecvMyAlarmListListener() {
             @Override
             public void onRecvMyAlarmList(boolean validate) {

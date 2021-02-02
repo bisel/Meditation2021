@@ -18,6 +18,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.soulfriends.meditation.R;
@@ -528,11 +529,11 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                     // 녹음 진행하고 30 초 이전 이면 녹음 취소 팝업이 나오도록 한다.
                     if (accum_time_milisecond < 30 * 1000) {
 
-                        //1. 녹음 취소는 언제든지 가능
-                        //    -> 30s이전에 취소하면 "녹음이 취소되었습니다." 출력
-                        // 안내 팝업 처리해야함.
+                        //30초 이전에 정지 시 30초 이상 녹음해달라는 토스트 팝업 노출함
+                        String strText = this.getResources().getString(R.string.contentsmake_audio_30);
+                        Toast.makeText(this,strText,Toast.LENGTH_SHORT).show();
 
-                        NetServiceManager.getinstance().cancelMyContensRecord();
+                       // NetServiceManager.getinstance().cancelMyContensRecord();
                     }
                 }
 

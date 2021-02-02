@@ -19,6 +19,9 @@ public class AlertLineOneOkPopup extends Dialog {
         voice_1_1,                  // 목소리 분석은 1일 1회만 가능합니다. 260, 144
         voice_restart,              // 녹음이 완료되지 않았습니다.\n처음부터 다시 진행해주세요. 260, 159
         contents_upload_failed,     // 콘텐츠 업로드에 실패했습니다. 300, 136
+        contents_error,             // 콘텐츠에 오류가 발생하여 재생할 수 없습니다.
+        friend_request,             // 친구 요청 했습니다.
+        friend_cancelled,           // 친구가 취소되었습니다.
     }
     private Activity activity;
     private Context context;
@@ -67,6 +70,21 @@ public class AlertLineOneOkPopup extends Dialog {
             case contents_upload_failed:
             {
                 text_id = R.string.dialog_contents_upload_failed;
+            }
+            break;
+            case contents_error:
+            {
+                text_id = R.string.dialog_contents_error;
+            }
+            break;
+            case friend_request:
+            {
+                text_id = R.string.dialog_friend_request;
+            }
+            break;
+            case friend_cancelled:
+            {
+                text_id = R.string.dialog_friend_cancelled;
             }
             break;
         }
