@@ -635,6 +635,21 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                 }
             }
 
+            // userprofile에 있는 것을 가지고 옴.
+            if(meditationContents.ismycontents == 0)
+            {
+                UtilAPI.s_playerMode = UtilAPI.PlayerMode.base;
+            }
+            else
+            {
+                // 2021.02.02
+                if(meditationContents.authoruid.equals(NetServiceManager.getinstance().getUserProfile().uid)){
+                    UtilAPI.s_playerMode = UtilAPI.PlayerMode.my;
+                }else{
+                    UtilAPI.s_playerMode = UtilAPI.PlayerMode.friend;
+                }
+            }
+
             NetServiceManager.getinstance().setCur_contents(meditationContents);
 
             //String str = meditationContents.uid;

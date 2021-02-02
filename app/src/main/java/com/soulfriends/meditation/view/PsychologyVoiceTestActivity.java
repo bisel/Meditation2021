@@ -126,7 +126,7 @@ public class PsychologyVoiceTestActivity extends BaseActivity implements ResultL
             } else {
                 // 사용자가 거부만 선택한 경우에는 앱을 다시 실행하여 허용을 선택하면 앱을 사용할 수 있습니다.
                 // Theme에 영향을 받아서 버튼 색깔이 안바뀌었음. colorOnPrimary 수정하닌깐 되었음.
-                alertDialog = new AlertDialog.Builder(this,R.style.AlertMeditationDialog);
+                alertDialog = new AlertDialog.Builder(this, R.style.AlertMeditationDialog);
                 alertDialog.setTitle("권한설정");
                 alertDialog.setMessage("목소리 분석을 위해서는 해당 권한 설정이 필요합니다.");
                 alertDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {

@@ -158,15 +158,22 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
         List list = new ArrayList<>();
 
         ArrayList<String> recentplaylist = userProfile.recentplaylist;
+        ArrayList<String> noexistlist = new ArrayList<String>();
 
-        // 내가 만든 콘텐츠 개수
+        // 내가 제셍힌 콘텐츠 개수 (이미 사라진 콘텐츠들도 있으므로 삭제해야함.
         for (int i = 0; i < recentplaylist.size(); i++) {
-
-            //MediationShowContents data = entity.contests.get(i);
             MeditationContents data = NetServiceManager.getinstance().getSocialContents(recentplaylist.get(i));
+            if(data == null){
+                noexistlist.add(recentplaylist.get(i));
+            }else{
+                ProfileItemViewModel profileItemViewModel = new ProfileItemViewModel(data, 1, this);
+                list.add(profileItemViewModel);
+            }
+        }
 
-            ProfileItemViewModel profileItemViewModel = new ProfileItemViewModel(data, 1, this);
-            list.add(profileItemViewModel);
+        int dataNum = noexistlist.size();
+        for(int i = 0; i < dataNum; i++){
+            recentplaylist.remove(noexistlist.get(i));
         }
 
         return list;
@@ -401,21 +408,21 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
                 }
                 else
                 {
-                    UtilAPI.s_playerMode = UtilAPI.PlayerMode.friend;
+                    // 2021.02.02
+                    if(meditationContents.authoruid.equals(NetServiceManager.getinstance().getUserProfile().uid)){
+                        UtilAPI.s_playerMode = UtilAPI.PlayerMode.my;
+                    }else{
+                        UtilAPI.s_playerMode = UtilAPI.PlayerMode.friend;
+                    }
                 }
 
                 NetServiceManager.getinstance().setCur_contents(meditationContents);
-
 
                 ActivityStack.instance().Push(this, "");
 
                 Intent intent = new Intent();
                 intent.setClass(this, PlayerActivity.class);
                 this.startActivity(intent);
-
-
-
-
                 this.finish();
 
                 //Toast.makeText(getApplicationContext(), "img_child_item", Toast.LENGTH_SHORT).show();

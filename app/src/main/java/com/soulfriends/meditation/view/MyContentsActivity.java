@@ -95,8 +95,8 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
         // 타이틀
         String strTitle = getResources().getString(R.string.mycontents_title);
 
-        int total_count = 10;
-        int make_count = 5;
+        int total_count = NetServiceManager.getinstance().maxMyContentsNum;
+        int make_count = NetServiceManager.getinstance().getUserProfile().mycontentslist.size();
 
         strTitle += " ";
         strTitle += String.valueOf(make_count);
@@ -104,7 +104,6 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
         strTitle += String.valueOf(total_count);
 
         viewModel.setTitle(strTitle);
-
 
         int xx = 0;
     }

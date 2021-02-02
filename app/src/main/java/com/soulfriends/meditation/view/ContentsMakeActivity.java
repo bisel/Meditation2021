@@ -1,12 +1,19 @@
 package com.soulfriends.meditation.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -44,7 +51,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
     private ContentsMakeViewModel viewModel;
     private ViewModelStore viewModelStore = new ViewModelStore();
     private ContentsMakeViewModelFactory contentsMakeViewModelFactory;
-
+    private AlertDialog.Builder alertDialog = null;
 
     public enum eAudioState
     {
@@ -136,6 +143,8 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
 
         UtilAPI.ClearActivity_Temp();
+
+        checkPermission();
     }
 
     private void Check_TitleEdit()
@@ -168,6 +177,78 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             if(view != null) {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
+        }
+    }
+
+    private void checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // 마시멜로우 버전과 같거나 이상이라면
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)
+            {
+
+                //if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //    Toast.makeText(this, "외부 저장소 사용을 위해 읽기/쓰기 필요", Toast.LENGTH_SHORT).show();
+                //}
+                requestPermissions(new String[]
+                                {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.RECORD_AUDIO},
+                        3);  //마지막 인자는 체크해야될 권한 갯수
+
+            } else {
+                //Toast.makeText(this, "권한 승인되었음", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Activity myActivity = this;
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //위 예시에서 requestPermission 메서드를 썼을시 , 마지막 매개변수에 0을 넣어 줬으므로, 매칭
+        if (requestCode == 3) {
+            // requestPermission의 두번째 매개변수는 배열이므로 아이템이 여러개 있을 수 있기 때문에 결과를 배열로 받는다.
+            // 해당 예시는 요청 퍼미션이 한개 이므로 i=0 만 호출한다.
+            int grantResultsNum = 0;
+            grantResultsNum = grantResults.length;
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                //해당 권한이 승낙된 경우.
+
+            } else {
+                // 사용자가 거부만 선택한 경우에는 앱을 다시 실행하여 허용을 선택하면 앱을 사용할 수 있습니다.
+                // Theme에 영향을 받아서 버튼 색깔이 안바뀌었음. colorOnPrimary 수정하닌깐 되었음.
+                alertDialog = new AlertDialog.Builder(this,R.style.AlertMeditationDialog);
+                alertDialog.setTitle("권한설정");
+                alertDialog.setMessage("목소리 녹음을 위해서는 해당 권한 설정이 필요합니다.");
+                alertDialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:"+
+                        //        getApplicationContext().getPackageName()));
+                        //startActivity(intent);
+                        //dialogInterface.dismiss();
+                        //alertDialog = null;
+
+//                        if (bServiceAudio) {
+//                        } else {
+//                            if (AudioPlayer.instance() != null) {
+//                                AudioPlayer.instance().restart();
+//                            }
+//                        }
+
+                        //finish();
+
+                        ActivityStack.instance().OnBack(myActivity);
+                        UtilAPI.ClearActivity_Temp();
+
+
+                        //Intent intent2 = new Intent(getApplicationContext(),PsychologyListActivity.class);
+                        //startActivity(intent2);
+                    }
+                });
+
+                alertDialog.show();
+            }
+            return;
         }
     }
 

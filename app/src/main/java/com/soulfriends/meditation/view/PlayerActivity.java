@@ -172,7 +172,6 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 binding.layoutBaseMy.setVisibility(View.GONE);
                 binding.layoutBaseFriend.setVisibility(View.VISIBLE);
 
-
                 SetFriendState();
 
                 if (UtilAPI.s_userProfile_friend != null) {
@@ -817,26 +816,29 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         // 친구 추가 friend_state == 0
         // 친구  friend_state == 1
         // 친구 요청 중 friend_state == 2
-
-        // 친구 인지 아닌지 판별
-        if (NetServiceManager.getinstance().findFriends(UtilAPI.s_userProfile_friend.uid) != null) {
-            // 친구 임
-            friend_state = 1;
-            UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_friend);
-        } else {
-            // 친구 아닌 상태
-            // 친구 추가
+        if(UtilAPI.s_userProfile_friend == null){  // s_userProfile_friend처리 추가 2021.02.03
             friend_state = 0;
             UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_addfriend);
-        }
+        }else{
+            // 친구 인지 아닌지 판별
+            if (NetServiceManager.getinstance().findFriends(UtilAPI.s_userProfile_friend.uid) != null) {
+                // 친구 임
+                friend_state = 1;
+                UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_friend);
+            } else {
+                // 친구 아닌 상태
+                // 친구 추가
+                friend_state = 0;
+                UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_addfriend);
+            }
 
-        // 현재 친구 요청 리스트
-        if (NetServiceManager.getinstance().findFriendsRequest(UtilAPI.s_userProfile_friend.uid)) {
-            // 친구 요청중에 있는지 확인
-            friend_state = 2;
-            UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_requested);
+            // 현재 친구 요청 리스트
+            if (NetServiceManager.getinstance().findFriendsRequest(UtilAPI.s_userProfile_friend.uid)) {
+                // 친구 요청중에 있는지 확인
+                friend_state = 2;
+                UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_requested);
+            }
         }
-
         // 상태에 따라서 ui 표시를 하고
     }
 

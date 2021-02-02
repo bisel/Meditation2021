@@ -124,6 +124,7 @@ public class NetServiceManager {
         return false;
     }
     // member variables
+    public final int maxMyContentsNum = 10;
     private final String genre0 = "홈";
     public final String genre1 = "명상";
     public final String genre2 = "수면";
@@ -1119,6 +1120,40 @@ public class NetServiceManager {
 
     // selectType 0 : all 1: 명상, 2: 수면 3 : 음악
     // 종류별로 Top10콘텐츠를 알려준다.
+    private void SortSocialContentsFavoritecnt(boolean AscendingOrder ){
+        Collections.sort(mSocialContentsList, new Comparator() {
+            @Override
+            public int compare(Object t1, Object t2) {
+                MeditationContents o1 = (MeditationContents)t1;
+                MeditationContents o2 = (MeditationContents)t2;
+
+                if(o1 == null || o2 == null)
+                    return 0;
+
+                // 내림차순.
+                if(AscendingOrder){
+                    if(o1.favoritecnt  > o2.favoritecnt) {
+                        return 1;
+                    }
+                    else if(o1.favoritecnt < o2.favoritecnt) {
+                        return -1;
+                    }
+                }else{
+                    if(o1.favoritecnt  > o2.favoritecnt) {
+                        return -1;
+                    }
+                    else if(o1.favoritecnt < o2.favoritecnt) {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        });
+    }
+
+
+    // selectType 0 : all 1: 명상, 2: 수면 3 : 음악
+    // 종류별로 Top10콘텐츠를 알려준다.
     private void SortContentsFavoritecnt(boolean AscendingOrder ){
         Collections.sort(mContentsList, new Comparator() {
             @Override
@@ -1195,6 +1230,9 @@ public class NetServiceManager {
 
         for(int i = 0; i < recentplaylistNum; i++){
             entity = getMeditationContents(mUserProfile.recentplaylist.get(i));
+
+            if(entity == null)
+                continue;
 
             if(seletType == 1){
                 if(!entity.genre.equals(genre1)){
@@ -1306,6 +1344,9 @@ public class NetServiceManager {
                     String curkey = entry.getKey();  // contents id
                     checkedEntity = false;
                     MeditationContents entity = getMeditationContents(curkey);
+
+                    if(entity == null)
+                        continue;
 
                     if(seletType == 1){
                         if(entity.genre.equals(genre1))  checkedEntity = true;
@@ -4647,6 +4688,20 @@ public class NetServiceManager {
             }
         }
 
+        // 지웠을때에 최근 재생 리스트에 남아 있어도 지워야 한다.
+        dataNum = mUserProfile.recentplaylist.size();
+        for(int i = 0; i < dataNum; i++){
+            if(mUserProfile.recentplaylist.get(i).equals(uid)){
+                mUserProfile.recentplaylist.remove(i);
+                break;
+            }
+        }
+
+        // 지웠을때에 최근 즐겨찾기 리스트에 남아 있어도 지워야 한다.
+        if(mUserProfile.favoriteslist.containsKey(uid)){
+            mUserProfile.favoriteslist.remove(uid);
+        }
+
         mfbDBRef.child(userInfoString).child(mUserProfile.uid).setValue(mUserProfile).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -5516,6 +5571,16 @@ public class NetServiceManager {
                 MeditationContents o1 = (MeditationContents)t1;
                 MeditationContents o2 = (MeditationContents)t2;
 
+                if(o1 != null || o2 != null){
+                    Log.d("TAG","SortSocialContentsUID null");
+                    return 0;
+                }
+
+                if(o1.uid != null || o2.uid !=null) {
+                    Log.d("TAG","SortSocialContentsUID uid error");
+                    return 0;
+                }
+
                 if(AscendingOrder){
                     if( o1.uid.compareTo(o2.uid) > 0) {
                         return 1;
@@ -5558,6 +5623,10 @@ public class NetServiceManager {
         for(int i = 0; i < recentplaylistNum; i++){
             entity = getSocialContents(mUserProfile.recentplaylist.get(i));
 
+            // 해당 콘텐츠가 Social 콘텐츠가 아닐 경우 혹은 없는 경우
+            if(entity == null)
+                continue;
+
             if(seletType == 1){
                 if(!entity.genre.equals(genre1)){
                     continue;
@@ -5593,9 +5662,9 @@ public class NetServiceManager {
     {
         CategoryData entityData = getCategoryData(top10CategoryId);
 
-        SortContentsFavoritecnt(false);  // 내림차순 정렬
+        SortSocialContentsFavoritecnt(false);  // 내림차순 정렬
 
-        if(mContentsList.get(0).favoritecnt == 0 || entityData == null)
+        if(mSocialContentsList.get(0).favoritecnt == 0 || entityData == null)
             return null;
 
         //Log.d("MeditationCategory","MeditationCategory size : "+ mContentsList.size());
@@ -5690,6 +5759,10 @@ public class NetServiceManager {
                     String curkey = entry.getKey();  // contents id
                     checkedEntity = false;
                     MeditationContents entity = getSocialContents(curkey);
+
+                    if(entity == null){
+                        continue;
+                    }
 
                     if(seletType == 1){
                         if(entity.genre.equals(genre1))  checkedEntity = true;

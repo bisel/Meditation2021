@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AlertMeditationDialog" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="colorOnPrimary">@color/black</item>
         <item name="android:textColor">#FF000000</item>
         <item name="android:textColorPrimary">#FF000000</item>
         <item name="colorAccent">#1b5e20</item>

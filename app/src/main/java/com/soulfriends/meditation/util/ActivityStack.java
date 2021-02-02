@@ -61,6 +61,7 @@ public class ActivityStack {
         arrayStack.Clear();
     }
 
+
     public void OnBack(Activity activity)
     {
         Node node = Pop();
