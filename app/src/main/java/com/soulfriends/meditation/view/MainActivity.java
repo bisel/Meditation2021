@@ -505,6 +505,12 @@ public class MainActivity extends BaseActivity implements ResultListener {
                 this.overridePendingTransition(0, 0);
                 finish();
 
+                //ActivityStack.instance().Push(MyContentsActivity.this, ""); // 메인액티비티여야 된다.
+
+                //ActivityStack.instance().Push(this, "");
+                //ChangeActivity(ContentsMakeActivity.class);
+
+
                 // 테스트
 //
 //                this.startActivity(new Intent(this, UserinfoExtActivity.class));

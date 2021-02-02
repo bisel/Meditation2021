@@ -242,14 +242,14 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
         //StorageReference storageRef = storage.getReferenceFromUrl("gs://meditation-m.appspot.com/test/play_bgm5.mp3");
 
-        String strTest = "gs://meditation-m.appspot.com/meditation/Sound/bookbros_aud.mp3";
+        //String strTest = "gs://meditation-m.appspot.com/meditation/Sound/bookbros_aud.mp3";
 
         // 내가 만든 사운드 
         //gs://meditation-m.appspot.com/meditation/MyContentsSound/f5FL3rBPAbO1obZADqDzoFYwzvx2_20210202_test_1minute.mp3 <-- 파이어베이스 경로
         //gs://meditation-m.appspot.com/meditation/Sound/f5FL3rBPAbO1obZADqDzoFYwzvx2_20210202_test_1minute.mp3 <---- 디버깅 했을때 경로
 
-        //StorageReference storageRef = storage.getReferenceFromUrl(meditationContents.audio);
-        StorageReference storageRef = storage.getReferenceFromUrl(strTest);
+        StorageReference storageRef = storage.getReferenceFromUrl(meditationContents.audio);
+        //StorageReference storageRef = storage.getReferenceFromUrl(strTest);
 
         storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -408,6 +408,10 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                     // 삭제 성공
                     NetServiceManager.getinstance().delLocalSocialContents(meditationContents.uid);
                     NetServiceManager.getinstance().delUserProfileMyContents(meditationContents.uid);
+
+                    // 플레이어 강제 종료처리
+                    meditationAudioManager.stop();
+                    meditationAudioManager.unbind();
 
                     onBackPressed();
                     //Toast.makeText(getApplicationContext(),"삭제 성공",Toast.LENGTH_SHORT).show();
@@ -690,6 +694,11 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 menuPopup.iv_modify.setOnClickListener(v1 -> {
 
                     // 콘텐츠 수정 액티비티로 이동
+
+                    // 플레이어 강제 종료처리
+                    meditationAudioManager.stop();
+                    meditationAudioManager.unbind();
+
                     UtilAPI.s_MeditationContents_temp = meditationContents;
                     //ActivityStack.instance().Push(PlayerActivity.this, ""); // 메인액티비티여야 된다.
                     ChangeActivity(ContentsEditActivity.class);
