@@ -54,19 +54,21 @@ public class LoadingActivity extends AppCompatActivity {
                 @Override
                 public void onRecvContentsCharInfo(boolean validate) {
                     if(validate == true){
-                        NetServiceManager.getinstance().recvSocialContentsExt();
+
+                        NetServiceManager.getinstance().recvContentsExt();
+                     //   NetServiceManager.getinstance().recvSocialContentsExt();
                     }
                 }
             });
 
-            NetServiceManager.getinstance().setOnSocialRecvContentsListener(new NetServiceManager.OnSocialRecvContentsListener() {
-                @Override
-                public void onSocialRecvContents(boolean validate) {
-                    if(validate == true){
-                        NetServiceManager.getinstance().recvContentsExt();
-                    }
-                }
-            });
+//            NetServiceManager.getinstance().setOnSocialRecvContentsListener(new NetServiceManager.OnSocialRecvContentsListener() {
+//                @Override
+//                public void onSocialRecvContents(boolean validate) {
+//                    if(validate == true){
+//                        NetServiceManager.getinstance().recvContentsExt();
+//                    }
+//                }
+//            });
 
             NetServiceManager.getinstance().setOnRecvContentsListener(new NetServiceManager.OnRecvContentsListener() {
                 @Override
@@ -101,7 +103,7 @@ public class LoadingActivity extends AppCompatActivity {
     {
         if(validate) {
 
-            NetServiceManager.getinstance().reqSocialEmotionAllContents(); // 2021.02.01
+            //NetServiceManager.getinstance().reqSocialEmotionAllContents(); // 2021.02.01
             NetServiceManager.getinstance().reqEmotionAllContents(); // 2020.12.05 2st
             NetServiceManager.getinstance().reqChartypeAllContents(false);  // 2020.12.22
 

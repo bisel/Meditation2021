@@ -514,26 +514,25 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                     binding.editTitle.clearFocus();
                 }
 
-                // 녹음 진행하고 30 초 이전 이면 녹음 취소 팝업이 나오도록 한다.
-                if (accum_time_milisecond < 30 * 1000) {
+                if (bStopButtonActive) {
+                    // 정지 버튼 활성화 되면
 
-                    //1. 녹음 취소는 언제든지 가능
-                    //    -> 30s이전에 취소하면 "녹음이 취소되었습니다." 출력
-                    // 안내 팝업 처리해야함.
+                    Complete_Audio();
 
-                    NetServiceManager.getinstance().cancelMyContensRecord();
+                    // 녹음된 시간을 다시 표시한다.
+                    String strTime = GetString_time(audio_complete_time_milisecond);
+                    viewModel.setAudio_time(strTime);
+                }
+                else
+                {
+                    // 녹음 진행하고 30 초 이전 이면 녹음 취소 팝업이 나오도록 한다.
+                    if (accum_time_milisecond < 30 * 1000) {
 
+                        //1. 녹음 취소는 언제든지 가능
+                        //    -> 30s이전에 취소하면 "녹음이 취소되었습니다." 출력
+                        // 안내 팝업 처리해야함.
 
-                } else {
-
-                    //if(bStopButtonActive)
-                    {
-                        // 정지 버튼 활성화 되면
-                        Complete_Audio();
-
-                        // 녹음된 시간을 다시 표시한다.
-                        String strTime = GetString_time(audio_complete_time_milisecond);
-                        viewModel.setAudio_time(strTime);
+                        NetServiceManager.getinstance().cancelMyContensRecord();
                     }
                 }
 
@@ -884,14 +883,12 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
 
                 // 30초 경과 후에는
                 // 정지 버튼 활성화 하도록 한다.
+                if(accum_time_milisecond > 30 * 1000) {
 
-                bStopButtonActive = true;
-//                if(accum_time_milisecond > 30 * 1000) {
-//
-//                    UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop);
-//
-//                    bStopButtonActive = true;
-//                }
+                    UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop);
+
+                    bStopButtonActive = true;
+                }
             }
             break;
 

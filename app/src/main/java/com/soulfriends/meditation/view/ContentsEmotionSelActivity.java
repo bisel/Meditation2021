@@ -171,49 +171,41 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
 
                     // 선택된 인덱스
 
-
-//                    private final String genre1 = "명상";
-//                    private final String genre2 = "수면";
-//                    private final String genre3 = "음악";
                     // 장르
                     String str_genre = "";
+                    String str_emotion = "";
+
                     if(select_kind_id == 1)
                     {
                         str_genre = NetServiceManager.getinstance().genre1; //"명상";
+
+                        ArrayList<EmotionListData> list_emotion = NetServiceManager.getinstance().getEmotionListMeditationDataList();
+                        str_emotion = list_emotion.get(select_emoticon_id - 1).softemotion;
                     }
                     else if(select_kind_id == 2)
                     {
                         str_genre = NetServiceManager.getinstance().genre2; //"수면";
+
+                        ArrayList<EmotionListData> list_emotion = NetServiceManager.getinstance().getEmotionListSleepDataList();
+                        str_emotion = list_emotion.get(select_emoticon_id - 1).softemotion;
                     }
                     else if(select_kind_id == 3)
                     {
                         str_genre = NetServiceManager.getinstance().genre3; //"음악";
+
+                        ArrayList<EmotionListData> list_emotion = NetServiceManager.getinstance().getEmotionListMusicDataList();
+                        str_emotion = list_emotion.get(select_emoticon_id - 1).softemotion;
                     }
 
                     String final_genre = str_genre;
-
-                    // 감정
-//                    // emotion meditation dataList
-//                    private ArrayList<EmotionListData> mEmotionListMeditationDataList;
-//                    public ArrayList<EmotionListData> getEmotionListMeditationDataList() {return mEmotionListMeditationDataList;}
-//
-//                    // emotion sleep DataList
-//                    private ArrayList<EmotionListData> mEmotionListSleepDataList;
-//                    public ArrayList<EmotionListData> getEmotionListSleepDataList() {return mEmotionListSleepDataList;}
-//
-//                    // emotion music DataList
-//                    private ArrayList<EmotionListData> mEmotionListMusicDataList;
-//                    public ArrayList<EmotionListData> getEmotionListMusicDataList() {return mEmotionListMusicDataList;}
-
-                    ArrayList<EmotionListData> list_emotion = NetServiceManager.getinstance().getEmotionListMeditationDataList();
-                    String str_emotion = list_emotion.get(select_emoticon_id - 1).softemotion;
-
+                    String finalStr_emotion = str_emotion;
 
                     // 등록 시 저작권 정보 안내 팝업 노출 후 확인 시 업로드 진행 함
                     CopyrightDialog alertDlg = new CopyrightDialog(this, this);
 
                     alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                     alertDlg.show();
+
 
                     alertDlg.iv_ok.setOnClickListener(v -> {
 
@@ -231,8 +223,6 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                         intent.putExtra("releasedate", releasedate);
                         intent.putExtra("backgrroundImgName", backgrroundImgName);
 
-
-
                         // 장르
                         String res_genre = null;
                         if(!str_genre_id.equals(final_genre))
@@ -242,7 +232,7 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
 
                         // 명상
                         String res_emotion = null;
-                        if(!str_emotion_id.equals(str_emotion))
+                        if(!str_emotion_id.equals(finalStr_emotion))
                         {
                             //res_emotion = str_emotion;
                             res_emotion = Integer.toString(select_emoticon_id);  // 2021.02.01로 처리하자.  1~16 index

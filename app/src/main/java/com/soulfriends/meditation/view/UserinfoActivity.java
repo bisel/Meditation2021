@@ -109,20 +109,20 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
                 if(validate == true){
 
                     // dlsmdla 2021_02_01 임시
-                    //NetServiceManager.getinstance().recvContentsExt();
-                    NetServiceManager.getinstance().recvSocialContentsExt();
+                    NetServiceManager.getinstance().recvContentsExt();
+                    //NetServiceManager.getinstance().recvSocialContentsExt();
                 }
             }
         });
 
-        NetServiceManager.getinstance().setOnSocialRecvContentsListener(new NetServiceManager.OnSocialRecvContentsListener() {
-            @Override
-            public void onSocialRecvContents(boolean validate) {
-                if(validate == true){
-                    NetServiceManager.getinstance().recvContentsExt();
-                }
-            }
-        });
+//        NetServiceManager.getinstance().setOnSocialRecvContentsListener(new NetServiceManager.OnSocialRecvContentsListener() {
+//            @Override
+//            public void onSocialRecvContents(boolean validate) {
+//                if(validate == true){
+//                    NetServiceManager.getinstance().recvContentsExt();
+//                }
+//            }
+//        });
 
 
         binding.editNickname.setOnEditorActionListener(new EditText.OnEditorActionListener()

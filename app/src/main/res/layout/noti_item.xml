@@ -24,7 +24,7 @@
             app:civ_border_color="#FF000000"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
-            android:background="@drawable/social_profileimg"
+            android:background="@drawable/register_profile_img"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

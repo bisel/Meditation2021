@@ -395,9 +395,17 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                     binding.editTitle.clearFocus();
                 }
 
-                if(bStopButtonActive) {
+                if (bStopButtonActive) {
                     // 정지 버튼 활성화 되면
 
+                    Complete_Audio();
+
+                    // 녹음된 시간을 다시 표시한다.
+                    String strTime = GetString_time(audio_complete_time_milisecond);
+                    viewModel.setAudio_time(strTime);
+                }
+                else
+                {
                     // 녹음 진행하고 30 초 이전 이면 녹음 취소 팝업이 나오도록 한다.
                     if (accum_time_milisecond < 30 * 1000) {
 
@@ -406,15 +414,6 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                         // 안내 팝업 처리해야함.
 
                         NetServiceManager.getinstance().cancelMyContensRecord();
-
-
-                    } else {
-
-                        Complete_Audio();
-
-                        // 녹음된 시간을 다시 표시한다.
-                        String strTime = GetString_time(audio_complete_time_milisecond);
-                        viewModel.setAudio_time(strTime);
                     }
                 }
             }
@@ -686,13 +685,12 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 // 30초 경과 후에는
                 // 정지 버튼 활성화 하도록 한다.
 
-                bStopButtonActive = true;
-//                if(accum_time_milisecond > 30 * 1000) {
-//
-//                    UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop);
-//
-//                    bStopButtonActive = true;
-//                }
+                if(accum_time_milisecond > 30 * 1000) {
+
+                    UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop);
+
+                    bStopButtonActive = true;
+                }
             }
             break;
 

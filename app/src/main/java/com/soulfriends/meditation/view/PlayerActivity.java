@@ -242,14 +242,14 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
         //StorageReference storageRef = storage.getReferenceFromUrl("gs://meditation-m.appspot.com/test/play_bgm5.mp3");
 
-        String strTest= "gs://meditation-m.appspot.com/meditation/Sound/bookbros_aud.mp3";
+        //String strTest= "gs://meditation-m.appspot.com/meditation/Sound/bookbros_aud.mp3";
         
         // 내가 만든 사운드 
         //gs://meditation-m.appspot.com/meditation/MyContentsSound/f5FL3rBPAbO1obZADqDzoFYwzvx2_20210202_test_1minute.mp3 <-- 파이어베이스 경로
         //gs://meditation-m.appspot.com/meditation/Sound/f5FL3rBPAbO1obZADqDzoFYwzvx2_20210202_test_1minute.mp3 <---- 디버깅 했을때 경로
         
-        //StorageReference storageRef = storage.getReferenceFromUrl(meditationContents.audio);
-        StorageReference storageRef = storage.getReferenceFromUrl(strTest);
+        StorageReference storageRef = storage.getReferenceFromUrl(meditationContents.audio);
+        //StorageReference storageRef = storage.getReferenceFromUrl(strTest);
 
         storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override

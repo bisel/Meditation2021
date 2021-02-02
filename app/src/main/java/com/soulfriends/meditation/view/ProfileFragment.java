@@ -111,106 +111,121 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
         layout_friend_bts.setVisibility(View.GONE);
 
-//        ImageView iv_contentsbt = (ImageView)view.findViewById(R.id.iv_contentsbt);
-//        ImageView iv_friendbt = (ImageView)view.findViewById(R.id.iv_friendbt);
+
+
 
         //------------------------------------------------
-        // 콘텐츠
+        // 소셜 정보 요청
         //------------------------------------------------
-        {
-            contents_RecyclerViewItem = view.findViewById(R.id.recyclerview_contents);
+        NetServiceManager.getinstance().setOnSocialRecvContentsListener(new NetServiceManager.OnSocialRecvContentsListener() {
+            @Override
+            public void onSocialRecvContents(boolean validate) {
+                if (validate == true) {
 
-            // 정보 요청
-            userProfile = NetServiceManager.getinstance().getUserProfile();
+                    NetServiceManager.getinstance().reqSocialEmotionAllContents();
 
-            boolean mIsDoneTest = false;
-            if (userProfile.emotiontype == 0) {
-            } else {
-                mIsDoneTest = true;
+                    //------------------------------------------------
+                    // 콘텐츠
+                    //------------------------------------------------
+                    {
+                        contents_RecyclerViewItem = view.findViewById(R.id.recyclerview_contents);
+
+                        // 정보 요청
+                        userProfile = NetServiceManager.getinstance().getUserProfile();
+
+                        boolean mIsDoneTest = false;
+                        if (userProfile.emotiontype == 0) {
+                        } else {
+                            mIsDoneTest = true;
+                        }
+                        meditationShowCategorys = NetServiceManager.getinstance().reqMediationType(5, mIsDoneTest);
+
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                        ParentItemExtAdapter parentItemExtAdapter = new ParentItemExtAdapter(ParentItemList(), container.getContext(), ProfileFragment.this, UtilAPI.s_psychology_state);
+                        UtilAPI.s_psychology_state = -1;
+
+                        contents_RecyclerViewItem.setAdapter(parentItemExtAdapter);
+                        contents_RecyclerViewItem.setLayoutManager(layoutManager);
+                        contents_RecyclerViewItem.setNestedScrollingEnabled(false);  // 12.02.괜찮은듯
+
+                        contents_RecyclerViewItem.setVisibility(View.VISIBLE);
+
+                        //------------------------------------------------
+                        // 친구
+                        //------------------------------------------------
+                        {
+                            friend_RecyclerViewItem = view.findViewById(R.id.recyclerview_friend);
+                            layoutManager_friend = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                        }
+
+                        ImageView ivContentsBt = view.findViewById(R.id.iv_contentsbt);
+                        ImageView ivFriendBt = view.findViewById(R.id.iv_friendbt);
+                        
+                        //------------------------------------------------
+                        // 콘텐츠 탭 버튼 선택
+                        //------------------------------------------------
+
+                        if(UtilAPI.s_StrFragment_Profile_Tab == UtilAPI.TAB_CONTENTS)
+                        {
+                            ProfileFragment.this.contents_RecyclerViewItem.setVisibility(View.VISIBLE);
+
+                            ProfileFragment.this.friend_RecyclerViewItem.setVisibility(View.GONE);
+
+                            layout_friend_bts.setVisibility(View.GONE);
+                            layout_friend_no.setVisibility(View.GONE);
+
+                            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg);
+                            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg_selected);
+                        }
+                        else
+                        {
+                            ProfileFragment.this.contents_RecyclerViewItem.setVisibility(View.GONE);
+
+                            layout_friend_bts.setVisibility(View.VISIBLE);
+
+
+                            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg_selected);
+                            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg);
+
+                            // 2. 현재 친구 리스트 : 친구 인지 아닌지 판별 , 감정친구인지
+                            //  -> recvFriendsRequestList(normal) : 어느 특정 시작 시점
+                            // 5. 감정 친구 요청중
+                            //  -> recvFriendsRequestList("emotion") : 감정친구 요청 리스트 받는 함수
+
+                            //--------------------------
+                            // 1. 친구 노멀 리스트 요청
+                            //--------------------------
+
+                            NetServiceManager.getinstance().setOnRecvFriendsRequestListener(new NetServiceManager.OnRecvFriendsRequestListener() {
+                                @Override
+                                public void onRecvFriendsRequest(boolean validate) {
+                                    DoEmotionFriendRequest();
+                                }
+                            });
+
+                            NetServiceManager.getinstance().recvFriendsRequestList("normal");
+                        }
+                    }
+                }
             }
-            meditationShowCategorys = NetServiceManager.getinstance().reqMediationType(5, mIsDoneTest);
+        });
 
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            ParentItemExtAdapter parentItemExtAdapter = new ParentItemExtAdapter(ParentItemList(), container.getContext(), this, UtilAPI.s_psychology_state);
-            UtilAPI.s_psychology_state = -1;
+        NetServiceManager.getinstance().recvSocialContentsExt();
 
-            contents_RecyclerViewItem.setAdapter(parentItemExtAdapter);
-            contents_RecyclerViewItem.setLayoutManager(layoutManager);
-            contents_RecyclerViewItem.setNestedScrollingEnabled(false);  // 12.02.괜찮은듯
+        // 버튼 구성
+        Build_Button(view);
 
-            contents_RecyclerViewItem.setVisibility(View.VISIBLE);
-        }
+        return view;
+    }
 
-        //------------------------------------------------
-        // 친구
-        //------------------------------------------------
-
-        {
-            friend_RecyclerViewItem = view.findViewById(R.id.recyclerview_friend);
-            layoutManager_friend = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-            //rcv.setLayoutManager(layoutManager);
-
-
-//            friendEmotionAdapter = new FriendEmotionAdapter(list_friend, container.getContext(), this);
-//
-//            friend_RecyclerViewItem.setAdapter(friendEmotionAdapter);
-//            friend_RecyclerViewItem.setLayoutManager(layoutManager_friend);
-//            friend_RecyclerViewItem.setNestedScrollingEnabled(false);  // 12.02.괜찮은듯
-
-        }
-
-
-
-        //------------------------------------------------
-        // 콘텐츠 탭 버튼 선택
-        //------------------------------------------------
-
+    public void Build_Button(View view)
+    {
         ImageView ivContentsBt = view.findViewById(R.id.iv_contentsbt);
         ImageView ivFriendBt = view.findViewById(R.id.iv_friendbt);
 
-
-        if(UtilAPI.s_StrFragment_Profile_Tab == UtilAPI.TAB_CONTENTS)
-        {
-            this.contents_RecyclerViewItem.setVisibility(View.VISIBLE);
-
-            this.friend_RecyclerViewItem.setVisibility(View.GONE);
-
-            layout_friend_bts.setVisibility(View.GONE);
-            layout_friend_no.setVisibility(View.GONE);
-
-            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg);
-            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg_selected);
-        }
-        else
-        {
-            this.contents_RecyclerViewItem.setVisibility(View.GONE);
-
-            layout_friend_bts.setVisibility(View.VISIBLE);
-
-
-            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg_selected);
-            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg);
-
-            // 2. 현재 친구 리스트 : 친구 인지 아닌지 판별 , 감정친구인지
-            //  -> recvFriendsRequestList(normal) : 어느 특정 시작 시점
-            // 5. 감정 친구 요청중
-            //  -> recvFriendsRequestList("emotion") : 감정친구 요청 리스트 받는 함수
-
-            //--------------------------
-            // 1. 친구 노멀 리스트 요청
-            //--------------------------
-
-            NetServiceManager.getinstance().setOnRecvFriendsRequestListener(new NetServiceManager.OnRecvFriendsRequestListener() {
-                @Override
-                public void onRecvFriendsRequest(boolean validate) {
-                    DoEmotionFriendRequest();
-                }
-            });
-
-            NetServiceManager.getinstance().recvFriendsRequestList("normal");
-        }
-
-
+        //------------------------------------------------
+        // 콘텐츠 탭  버튼 선택
+        //------------------------------------------------
         ivContentsBt.setOnClickListener(v -> {
 
             bFocusTab = 0;
@@ -224,8 +239,6 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
             UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg);
             UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg_selected);
-
-
 
         });
 
@@ -350,8 +363,6 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_FRIEND;
             getActivity().finish();
         });
-
-        return view;
     }
 
     public void DoEmotionFriendRequest()
