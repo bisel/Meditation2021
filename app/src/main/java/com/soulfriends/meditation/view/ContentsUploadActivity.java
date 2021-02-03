@@ -31,6 +31,8 @@ public class ContentsUploadActivity extends BaseActivity {
 
     private String activity_class;
 
+    private int contents_mode = 0; // 0 이면 make, 1이면 수정
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,9 @@ public class ContentsUploadActivity extends BaseActivity {
         backgrroundImgName = intent.getStringExtra("backgrroundImgName");
         genre = intent.getStringExtra("genre");//genre
         emotion = intent.getStringExtra("emotion");//emotion
+
+
+        contents_mode = intent.getIntExtra("contents_mode", 0);
 
         // 추후 수정일 경우에는 null 이 아니므로 고려해야함.
 
@@ -75,7 +80,18 @@ public class ContentsUploadActivity extends BaseActivity {
             }
         });
 
-        NetServiceManager.getinstance().sendValSocialMeditationContents(null,
+        MeditationContents socialcontents = null;
+        if(contents_mode == 0)
+        {
+            // 새로 만든 콘텐츠
+        }
+        else
+        {
+            // 콘텐츠 수정
+            socialcontents = UtilAPI.s_MeditationContents_temp;
+        }
+
+        NetServiceManager.getinstance().sendValSocialMeditationContents(socialcontents,
                 titleName,
                 thumnailImgName,
                 String.valueOf(playtime),
@@ -141,34 +157,6 @@ public class ContentsUploadActivity extends BaseActivity {
         UtilAPI.s_id_backimamge_makecontents = -1;
 
         ChangeActivity(PlayerActivity.class);
-
-//        if(activity_class != null && activity_class.length() > 0) {
-//
-//            if(activity_class.equals("ProfileActivity")) {
-//
-//                // ProfileActivity
-//                Intent intent = new Intent(this, ProfileActivity.class);
-//                startActivity(intent);
-//                this.overridePendingTransition(0, 0);
-//                finish();
-//            }
-//            else
-//            {
-//                // MyContentsActivity
-//                Intent intent = new Intent(this, MyContentsActivity.class);
-//                startActivity(intent);
-//                this.overridePendingTransition(0, 0);
-//                finish();
-//            }
-//        }
-//        else {
-//            Intent intent = new Intent(this, MyContentsActivity.class);
-//            startActivity(intent);
-//            this.overridePendingTransition(0, 0);
-//            finish();
-//        }
-
-
 
         UtilAPI.AllFinishActivity_Temp();
 

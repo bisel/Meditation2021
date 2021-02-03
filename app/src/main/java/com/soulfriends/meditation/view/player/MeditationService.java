@@ -22,6 +22,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.exoplayer2.ExoPlayer;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -478,6 +479,9 @@ public class MeditationService extends Service implements Player.EventListener, 
 
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
+
+
+
     }
 
     public SimpleExoPlayer getplayerInstance() {
@@ -520,6 +524,16 @@ public class MeditationService extends Service implements Player.EventListener, 
         audioManager.abandonAudioFocus(this);
         wifiLockRelease();
     }
+
+//    public void setRepeatMode()
+//    {
+//        exoPlayer.getRepeatMode();//.setRepeatMode
+//    }
+//
+//    public int getRepeatMode()
+//    {
+//        exoPlayer.getRepeatMode();//.setRepeatMode
+//    }
 
 //    public void rew()
 //    {
@@ -641,12 +655,16 @@ public class MeditationService extends Service implements Player.EventListener, 
             handlerUpdateLocation.post(runnableUpdateLocation);
         }
 
+        exoPlayer.setRepeatMode(Player.REPEAT_MODE_ALL);
+
     }
 
     public void StopTimer() {
         if (handlerUpdateLocation != null) {
             handlerUpdateLocation.removeMessages(0);
             handlerUpdateLocation = null;
+
+            exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
         }
     }
 

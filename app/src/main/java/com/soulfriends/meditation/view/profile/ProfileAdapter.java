@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.ProfileItemBinding;
+import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ItemClickListener;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -77,7 +78,17 @@ public class ProfileAdapter extends RecyclerView.Adapter{
         else
         {
             // 1 : 소셜 콘텐츠
-            bind.ivModify.setVisibility(View.VISIBLE);
+            // 2021.02.02
+            if(profileItemViewModel.meditationContents.authoruid.equals(NetServiceManager.getinstance().getUserProfile().uid)){
+                UtilAPI.s_playerMode = UtilAPI.PlayerMode.my;
+
+                bind.ivModify.setVisibility(View.VISIBLE);
+
+            }else{
+                UtilAPI.s_playerMode = UtilAPI.PlayerMode.friend;
+
+                bind.ivModify.setVisibility(View.GONE);
+            }
         }
 
 //        if(profileItemViewModel.meditationContents.thumbnail_uri == null)

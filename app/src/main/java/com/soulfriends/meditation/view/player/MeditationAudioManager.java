@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
+import com.soulfriends.meditation.dlg.TimerDialog;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.TimerDialogActivity;
@@ -101,8 +102,12 @@ public class MeditationAudioManager {
                 if(UtilAPI.GetActivityFocus().GetOnStart())
                 {
                     // 활성화 된 경우
-                    Intent intent = new Intent(UtilAPI.GetActivity() , TimerDialogActivity.class);
-                    UtilAPI.GetActivity().startActivity(intent);
+                    // 타이머 팝업
+                    TimerDialog alertDialog = new TimerDialog(UtilAPI.GetActivity(), UtilAPI.GetActivity());
+                    alertDialog.setCancelable(false);
+                    alertDialog.show();
+                    //Intent intent = new Intent(UtilAPI.GetActivity() , TimerDialogActivity.class);
+                    //UtilAPI.GetActivity().startActivity(intent);
                 }
                 else
                 {

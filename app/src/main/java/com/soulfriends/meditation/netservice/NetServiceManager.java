@@ -5823,6 +5823,7 @@ public class NetServiceManager {
         int curEntityNum = 0;
 
         for(int i = 0; i < dataNum; i++){
+            if(mSocialContentsList.get(i).genre == null) continue; // dlsmdla
             if(mSocialContentsList.get(i).genre.equals(genre)){
                 MediationShowContents newEntity = new MediationShowContents();
                 newEntity.entity = mSocialContentsList.get(i);

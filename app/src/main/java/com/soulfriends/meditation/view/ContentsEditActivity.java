@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -110,6 +112,9 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
     public boolean bChange_Audio; // 오디오 변경 여부
 
     private String activity_class;
+
+    private boolean isKeyboardShowing = false;
+    private int keypadBaseHeight = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,6 +238,46 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
         UtilAPI.ClearActivity_Temp();
 
         checkPermission();
+
+        //----------------------------------------------------
+        // 키패드 처리
+        //----------------------------------------------------
+        binding.ll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                Rect r = new Rect();
+                binding.ll.getWindowVisibleDisplayFrame(r);
+                int screenHeight = binding.ll.getRootView().getHeight();
+                int keypadHeight = screenHeight - r.bottom;
+
+                if (keypadBaseHeight == 0) {
+                    keypadBaseHeight = keypadHeight;
+                }
+
+                if (keypadHeight > screenHeight * 0.15) {
+                    // 키보드 열렸을 때
+                    if (!isKeyboardShowing) {
+                        isKeyboardShowing = true;
+
+                        binding.ll.setPadding(0, 0, 0, (int) (keypadHeight * 0.5));
+                        int height = keypadHeight - keypadBaseHeight;
+                    }
+                } else {
+                    // 키보드가 닫혔을 때
+                    if (isKeyboardShowing) {
+
+
+                        binding.editTitle.clearFocus();
+
+                        isKeyboardShowing = false;
+                        binding.ll.setPadding(0, 0, 0, 0);
+
+
+                    }
+                }
+            }
+        });
     }
 
     private void checkPermission() {
@@ -509,6 +554,9 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
 
                 bAudioIng = true;
 
+                // 타이틀 입력 방지
+                binding.editTitle.setEnabled(false);
+
                 NetServiceManager.getinstance().startMyContentsRecord();
 
                 SetState_Audio(eAudioState.ing);
@@ -553,6 +601,10 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                 }
                 else
                 {
+                    // 타이틀 입력 방지
+                    binding.editTitle.setEnabled(false);
+
+
                     // 녹음 진행하고 30 초 이전 이면 녹음 취소 팝업이 나오도록 한다.
                     if (accum_time_milisecond < 30 * 1000) {
 
@@ -584,6 +636,10 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                     // 이미지는 정지 이미지
                     UtilAPI.setImage(this, binding.ivAudio2, R.drawable.social_create_stop);
 
+                    // 오디오 정지
+                    Stop_Audio();
+                    
+                    // 플레이
                     Play_Audio(NetServiceManager.getinstance().mMyContentsPath);
 
                     // 타이머 시작
@@ -616,6 +672,9 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
             case R.id.iv_re_audiobt:
             {
                 // 다시녹음
+
+                // 오디오 정지
+                Stop_Audio();
 
                 bStopButtonActive = false;
 
@@ -812,6 +871,9 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
         SetState_Audio(eAudioState.play);
         StopTimer();
 
+        // 타이틀 입력 처리
+        binding.editTitle.setEnabled(true);
+        
         bChange_Audio = true;
 
         bAudioIng = false;
@@ -1134,11 +1196,43 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
 
         if(audioState == eAudioState.ing)
         {
-            // 녹음 중이면 클릭이 안되도록 처리한다.
+            // 팝업을 띄워준다.
+            AlertLineTwoPopup alertDlg = new AlertLineTwoPopup(this, this, AlertLineTwoPopup.Dlg_Type.regiter_cancel);
 
-            // 팝업이 나오도록 처리
-            NetServiceManager.getinstance().cancelMyContensRecord();
+            alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            alertDlg.show();
 
+            // 팝업에서 예를 누르면 소셜로 이동 처리
+            alertDlg.iv_ok.setOnClickListener(v -> {
+
+                // 오디오 정지
+                Stop_Audio();
+
+
+                // 녹음 중일 경우
+                if(NetServiceManager.getinstance().isMyContentsRecording)
+                {
+                    // 녹음 시작 진행 중이라면
+                    // 녹음 취소해야 한다.
+                    NetServiceManager.getinstance().cancelMyContensRecord();
+                }
+
+                // 오디오 플레이 처리
+                if (bServiceAudio) {
+                } else {
+                    if (AudioPlayer.instance() != null) {
+                        AudioPlayer.instance().restart();
+                    }
+                }
+                // 배경이미지 초기화
+                UtilAPI.s_id_backimamge_makecontents = -1;
+
+                // 마이 콘텐츠로 이동
+                ActivityStack.instance().OnBack(this);
+                UtilAPI.ClearActivity_Temp();
+
+                alertDlg.dismiss();
+            });
             return;
         }
         // 콘텐츠 제작 메인에서 정보를 입력한 상태에서
@@ -1155,6 +1249,10 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
 
             // 팝업에서 예를 누르면 소셜로 이동 처리
             alertDlg.iv_ok.setOnClickListener(v -> {
+
+                // 오디오 정지
+                Stop_Audio();
+
 
                 // 녹음 중일 경우
                 if(NetServiceManager.getinstance().isMyContentsRecording)
@@ -1183,35 +1281,6 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                 // 마이 콘텐츠로 이동
 
                 ActivityStack.instance().OnBack(this);
-//                if(activity_class != null && activity_class.length() > 0)
-//                {
-//
-//                    if(activity_class.equals("ProfileActivity"))
-//                    {
-//                        //  ProfileActivity
-//                        Intent intent = new Intent(this, ProfileActivity.class);
-//                        startActivity(intent);
-//                        this.overridePendingTransition(0, 0);
-//                        finish();
-//                    }
-//                    else
-//                    {
-//                        //  MyContentsActivity
-//                        Intent intent = new Intent(this, MyContentsActivity.class);
-//                        startActivity(intent);
-//                        this.overridePendingTransition(0, 0);
-//                        finish();
-//                    }
-//                }
-//                else
-//                {
-//                    //  MyContentsActivity
-//                    Intent intent = new Intent(this, MyContentsActivity.class);
-//                    startActivity(intent);
-//                    this.overridePendingTransition(0, 0);
-//                    finish();
-//                }
-
 
                 UtilAPI.ClearActivity_Temp();
 
@@ -1233,6 +1302,10 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                 NetServiceManager.getinstance().cancelMyContensRecord();
             }
 
+            // 오디오 정지
+            Stop_Audio();
+
+
             // 오디오 플레이 처리
             if (bServiceAudio) {
             } else {
@@ -1245,31 +1318,6 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
             UtilAPI.s_id_backimamge_makecontents = -1;
 
             ActivityStack.instance().OnBack(this);
-
-//            if(activity_class != null && activity_class.length() > 0) {
-//                if (activity_class.equals("ProfileActivity")) {
-//                    //  ProfileActivity
-//                    Intent intent = new Intent(this, ProfileActivity.class);
-//                    startActivity(intent);
-//                    this.overridePendingTransition(0, 0);
-//                    finish();
-//                } else {
-//                    //  MyContentsActivity
-//                    Intent intent = new Intent(this, MyContentsActivity.class);
-//                    startActivity(intent);
-//                    this.overridePendingTransition(0, 0);
-//                    finish();
-//                }
-//            }
-//            else
-//            {
-//                //  MyContentsActivity
-//                Intent intent = new Intent(this, MyContentsActivity.class);
-//                startActivity(intent);
-//                this.overridePendingTransition(0, 0);
-//                finish();
-//            }
-
 
             UtilAPI.ClearActivity_Temp();
         }

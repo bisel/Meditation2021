@@ -257,6 +257,9 @@ public class TimerActivity extends BaseActivity implements ResultListener {
 
                 MeditationAudioManager.getinstance().StartTimer(total_second_time);
 
+                // 타이머 설정되게 되면 무한루프 on 처리한다. 2021_0204
+
+
                 // 테스트 5초 후에 팝업이 나와야 한다.
                 //MeditationAudioManager.getinstance().StartTimer(10);
 

@@ -459,34 +459,6 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         }
     }
 
-
-//    private List<FriendEmotionItemViewModel> ItemList_Friend() {
-//
-//        ArrayList<String> mEmotionFriendsRequestList = NetServiceManager.getinstance().mEmotionFriendsRequestList;
-//
-//        for (int i = 0; i < 50; i++)
-//        {
-//            if(i % 4 == 0) {
-//                FriendEmotionItemViewModel friendEmotionItemViewModel = new FriendEmotionItemViewModel(this,  String.valueOf(i), 0);
-//
-//                list_friend.add(friendEmotionItemViewModel);
-//            }
-//            else if(i % 3 == 1) {
-//                FriendEmotionItemViewModel friendEmotionItemViewModel = new FriendEmotionItemViewModel(this, String.valueOf(i),1);
-//
-//                list_friend.add(friendEmotionItemViewModel);
-//            }
-//            else
-//            {
-//                FriendEmotionItemViewModel friendFindItemViewModel = new FriendEmotionItemViewModel(this, String.valueOf(i),2);
-//
-//                list_friend.add(friendFindItemViewModel);
-//            }
-//        }
-//
-//        return list_friend;
-//    }
-
     private List<ParentItemViewModel> ParentItemList()
     {
         List list = new ArrayList<>();
@@ -650,18 +622,51 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                 }
             }
 
-            NetServiceManager.getinstance().setCur_contents(meditationContents);
+            if( UtilAPI.s_playerMode == UtilAPI.PlayerMode.friend)
+            {
 
-            //String str = meditationContents.uid;
-            //Toast.makeText(this.getContext(), str, Toast.LENGTH_SHORT).show();
+                NetServiceManager.getinstance().setOnRecvOtherProfileListener(new NetServiceManager.OnRecvOtherProfileListener() {
+                    @Override
+                    public void onRecvOtherProfileListener(boolean validate, UserProfile otherUser) {
 
-            ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+                        if(validate)
+                        {
+                            // 친구 유저 정보 성공
+                            UtilAPI.s_userProfile_friend = otherUser;
 
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), PlayerActivity.class);
-            getActivity().startActivity(intent);
+                            NetServiceManager.getinstance().setCur_contents(meditationContents);
 
-            getActivity().finish();
+                            ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
+                            Intent intent = new Intent();
+                            intent.setClass(getActivity(), PlayerActivity.class);
+                            getActivity().startActivity(intent);
+
+                            getActivity().finish();
+                        }
+                        else
+                        {
+                            // 실패
+                        }
+                    }
+                });
+                NetServiceManager.getinstance().getOtherUserProfile(meditationContents.authoruid);
+            }
+            else {
+
+                NetServiceManager.getinstance().setCur_contents(meditationContents);
+
+                //String str = meditationContents.uid;
+                //Toast.makeText(this.getContext(), str, Toast.LENGTH_SHORT).show();
+
+                ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), PlayerActivity.class);
+                getActivity().startActivity(intent);
+
+                getActivity().finish();
+            }
         }
     }
 

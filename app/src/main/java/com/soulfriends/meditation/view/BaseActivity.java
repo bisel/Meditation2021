@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.soulfriends.meditation.dlg.TimerDialog;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.PlaybackStatus;
 
@@ -32,8 +33,14 @@ public class BaseActivity extends AppCompatActivity {
 
         if(UtilAPI.s_bShowTimerPopup)
         {
-            Intent intent = new Intent(UtilAPI.GetActivity() , TimerDialogActivity.class);
-            UtilAPI.GetActivity().startActivity(intent);
+
+            // 타이머 팝업
+            TimerDialog alertDialog = new TimerDialog(this, this);
+            alertDialog.setCancelable(false);
+            alertDialog.show();
+            
+            //Intent intent = new Intent(UtilAPI.GetActivity() , TimerDialogActivity.class);
+            //UtilAPI.GetActivity().startActivity(intent);
 
             UtilAPI.s_bShowTimerPopup = false;
 

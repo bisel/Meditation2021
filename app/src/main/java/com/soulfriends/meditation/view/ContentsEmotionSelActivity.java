@@ -27,6 +27,7 @@ import com.soulfriends.meditation.viewmodel.FriendEditViewModel;
 import com.soulfriends.meditation.viewmodel.FriendEditViewModelFactory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ContentsEmotionSelActivity extends BaseActivity implements ResultListener {
 
@@ -59,6 +60,8 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
     private String str_emotion_id = "select_emotion_id";
 
     private String activity_class;
+    
+    private int contents_mode = 0; // 0 이면 make, 1이면 수정
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +92,6 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
         str_genre_id = intent.getStringExtra("genre");
         str_emotion_id = intent.getStringExtra("emotion");
 
-
-
         if(str_genre_id == null || str_genre_id.length() == 0)
         {
             // 없는 경우
@@ -104,19 +105,21 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
             // 있는 경우
             // 콘텐츠 수정된 경우 해당
 
+            bCheck_kind = true;
+
             viewModel.setContents_state(this.getResources().getString(R.string.contents_emotionsel_edit));
 
             if(str_genre_id.equals("명상"))
             {
-                SelectKind(1);
+                First_SelectKind(1);
             }
             else if(str_genre_id.equals("수면"))
             {
-                SelectKind(2);
+                First_SelectKind(2);
             }
             else if(str_genre_id.equals("음악"))
             {
-                SelectKind(3);
+                First_SelectKind(3);
             }
         }
 
@@ -134,18 +137,34 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
             // 있는 경우
             // 콘텐츠 수정된 경우 해당
 
-            ArrayList<EmotionListData> list = NetServiceManager.getinstance().getEmotionListMeditationDataList();
+            contents_mode = 1;
 
-            int find_emotion = 0;
-            for(int i = 0, len = list.size(); i < len; i++)
-            {
-                if(list.get(i).softemotion == str_emotion_id)
-                {
-                    find_emotion = i;
-                    break;
-                }
+            bCheck_emoticon = true;
+
+            CheckResult();
+
+
+            ArrayList<EmotionListData> list_emotion = null;
+            if(select_kind_id == 1) {
+                list_emotion = NetServiceManager.getinstance().getEmotionListMeditationDataList();
             }
-            SelectEmoticon(find_emotion);
+            else if(select_kind_id == 2) {
+                list_emotion = NetServiceManager.getinstance().getEmotionListSleepDataList();
+            }
+            else if(select_kind_id == 3) {
+                 list_emotion = NetServiceManager.getinstance().getEmotionListMusicDataList();
+            }
+
+            if(list_emotion != null) {
+                int find_emotion = 0;
+                for (int i = 0, len = list_emotion.size(); i < len; i++) {
+                    if (list_emotion.get(i).softemotion.equals(str_emotion_id)) {
+                        find_emotion = i;
+                        break;
+                    }
+                }
+                First_SelectEmoticon(find_emotion);
+            }
         }
     }
 
@@ -223,6 +242,8 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                         intent.putExtra("releasedate", releasedate);
                         intent.putExtra("backgrroundImgName", backgrroundImgName);
 
+                        intent.putExtra("contents_mode", contents_mode); // 0 이면 make, 1이면 수정
+
                         // 장르
                         String res_genre = null;
                         if(!str_genre_id.equals(final_genre))
@@ -247,11 +268,6 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
                         //finish();
 
                         UtilAPI.AddActivity_Temp(this);
-
-//                        if(UtilAPI.s_activity_temp != null) {
-//                            ContentsMakeActivity contentsMakeActivity = (ContentsMakeActivity) UtilAPI.s_activity_temp;
-//                            contentsMakeActivity.finish();
-//                        }
 
                         alertDlg.dismiss();
                     });
@@ -395,6 +411,61 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
         bCheck_emoticon = true;
 
         CheckResult();
+    }
+
+    private void First_SelectKind(int index)
+    {
+        ArrayList list = new ArrayList();
+
+        list.add(binding.ivItem1);
+        list.add(binding.ivItem2);
+        list.add(binding.ivItem3);
+
+        View view = (View)list.get(index - 1);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            view.setBackground(ContextCompat.getDrawable(this, R.drawable.social_ctgr_btn_selected));
+        } else {
+            view.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.social_ctgr_btn_selected));
+        }
+
+
+        viewPrev_kind = view;
+        select_kind_id = index;
+    }
+
+    private void First_SelectEmoticon(int index)
+    {
+        ArrayList list = new ArrayList();
+
+        list.add(binding.lay1);
+        list.add(binding.lay2);
+        list.add(binding.lay3);
+        list.add(binding.lay4);
+        list.add(binding.lay5);
+        list.add(binding.lay6);
+        list.add(binding.lay7);
+        list.add(binding.lay8);
+        list.add(binding.lay9);
+        list.add(binding.lay10);
+        list.add(binding.lay11);
+        list.add(binding.lay12);
+        list.add(binding.lay13);
+        list.add(binding.lay14);
+        list.add(binding.lay15);
+        list.add(binding.lay16);
+
+        View view = (View)list.get(index);
+
+        // 첫 이모티콘 선택시
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            view.setBackground(ContextCompat.getDrawable(this, R.drawable.feeling_bg_selected));
+        } else {
+            view.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.feeling_bg_selected));
+        }
+
+        viewPrev = view;
+        select_emoticon_id = index + 1;
     }
 
     private void CheckResult()

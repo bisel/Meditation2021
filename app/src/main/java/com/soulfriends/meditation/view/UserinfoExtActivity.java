@@ -8,10 +8,12 @@ import androidx.lifecycle.ViewModelStore;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -44,6 +46,9 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
     private boolean bSuccess_gender;
 
     private boolean bChange_ProfileImage = false;
+
+    private boolean isKeyboardShowing = false;
+    private int keypadBaseHeight = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +136,48 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
                     return true;
                 }
                 return false;
+            }
+        });
+
+
+        //----------------------------------------------------
+        // 키패드 처리
+        //----------------------------------------------------
+        binding.ll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                Rect r = new Rect();
+                binding.ll.getWindowVisibleDisplayFrame(r);
+                int screenHeight = binding.ll.getRootView().getHeight();
+                int keypadHeight = screenHeight - r.bottom;
+
+                if (keypadBaseHeight == 0) {
+                    keypadBaseHeight = keypadHeight;
+                }
+
+                if (keypadHeight > screenHeight * 0.15) {
+                    // 키보드 열렸을 때
+                    if (!isKeyboardShowing) {
+                        isKeyboardShowing = true;
+
+                        binding.ll.setPadding(0, 0, 0, (int) (keypadHeight * 0.5));
+                        int height = keypadHeight - keypadBaseHeight;
+                    }
+                } else {
+                    // 키보드가 닫혔을 때
+                    if (isKeyboardShowing) {
+
+
+                        binding.editNickname.clearFocus();
+                        binding.editIntrodution.clearFocus();
+
+                        isKeyboardShowing = false;
+                        binding.ll.setPadding(0, 0, 0, 0);
+
+
+                    }
+                }
             }
         });
     }

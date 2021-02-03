@@ -863,6 +863,9 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                                 alertDlg_ok.dismiss();
                             });
 
+                            UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_requested);
+
+
                             //Toast.makeText(PlayerActivity.this, "친구로 요청중입니다.", Toast.LENGTH_SHORT).show();
                         } else {
 
@@ -890,6 +893,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                                 alertDlg_ok.dismiss();
                             });
 
+                            UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);
                             //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
                         } else {
 
@@ -917,6 +921,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
                                 alertDlg_ok.dismiss();
                             });
+                            UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);
                             //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
                         } else {
 

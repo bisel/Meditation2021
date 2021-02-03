@@ -304,48 +304,18 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
 
             case R.id.layout_photo:
             {
-                // 포토 사진 선택 한 경우
-                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
-                bottomSheetDialog.setContentView(R.layout.layout_photo_sheetdialog);
-                bottomSheetDialog.show();
 
-                View view_gallery = bottomSheetDialog.findViewById(R.id.layer_gallery);
-
-                view_gallery.setOnClickListener(v -> {
-
-                    getAlbum();
-
-                    bottomSheetDialog.dismiss();
-
-                });
-
-                View view_photo = bottomSheetDialog.findViewById(R.id.layer_photo);
-
-                view_photo.setOnClickListener(v -> {
-
-                    captureCamera();
-
-                    bottomSheetDialog.dismiss();
-
-                });
 
             }
             break;
             case R.id.layout_nickname:
             {
-                // 유저 정보 액티비티로 이동
-                Intent intent = new Intent();
-                intent.setClass(this, UserinfoExtActivity.class);
-                this.startActivity(intent);
 
             }
             break;
             case R.id.iv_Introduction_bg:
             {
-                // 자기소개글 선택 한 경우
-                Intent intent = new Intent();
-                intent.setClass(this, UserinfoExtActivity.class);
-                this.startActivity(intent);
+
             }
             break;
         }
@@ -359,10 +329,6 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
     @Override
     public void OnSuccess_ImageCrop()
     {
-        // 썹네일 성공시
-        // 이미지 show
-
-        binding.ivPicture.setImageURI(albumURI);
 
     }
     @Override
@@ -405,9 +371,6 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
                 intent.setClass(this, PlayerActivity.class);
                 this.startActivity(intent);
 
-
-
-
                 this.finish();
 
                 //Toast.makeText(getApplicationContext(), "img_child_item", Toast.LENGTH_SHORT).show();
@@ -415,110 +378,6 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
             break;
             case R.id.iv_modify: {
 
-                MeditationContents meditationContents = (MeditationContents) obj;
-
-                //----------------------------------------------------------------
-                // MenuPopup dialog 방식
-                //----------------------------------------------------------------
-                MenuPopup menuPopup = new MenuPopup(ProfileFriendActivity.this, ProfileFriendActivity.this);
-                menuPopup.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                menuPopup.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                menuPopup.setCancelable(true);
-
-                int[] outLocation = new int[2];
-                view.getLocationInWindow(outLocation);
-                WindowManager.LayoutParams params = menuPopup.getWindow().getAttributes();
-                params.gravity = Gravity.TOP | Gravity.LEFT;
-                params.x = outLocation[0];
-                params.y = outLocation[1];
-                menuPopup.getWindow().setAttributes(params);
-
-                menuPopup.show();
-                menuPopup.iv_modify.setOnClickListener(v -> {
-
-                    // 콘텐츠 수정 액티비티로 이동
-                    UtilAPI.s_MeditationContents_temp = meditationContents;
-                    ActivityStack.instance().Push(ProfileFriendActivity.this, ""); // 메인액티비티여야 된다.
-                    ChangeActivity(ContentsEditActivity.class);
-                    menuPopup.dismiss();
-                });
-
-                menuPopup.iv_delete.setOnClickListener(v -> {
-                    // 콘텐츠 삭제
-                    OnEvent_Delete_Contents(meditationContents);
-                    menuPopup.dismiss();
-                });
-
-//                MeditationContents meditationContents = (MeditationContents) obj;
-//
-//                Toast.makeText(getApplicationContext(), "iv_modify", Toast.LENGTH_SHORT).show();
-//
-//                // 팝업 메뉴
-//                Context c = ProfileFriendActivity.this;
-//
-//                c.setTheme(R.style.PopupMenu);
-//                //PopupMenu popupMenu = new PopupMenu(c,view);
-//                PopupMenu popupMenu = new PopupMenu(c, view, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
-//                getMenuInflater().inflate(R.menu.popup_myplayer, popupMenu.getMenu());
-//
-//                Menu menu = popupMenu.getMenu();
-//                {
-//                    MenuItem item = menu.findItem(R.id.action_menu1);
-//                    SpannableString s = new SpannableString(ProfileFriendActivity.this.getResources().getString(R.string.popup_menu_modify_noun));
-//                    s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
-//                    s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
-//                    item.setTitle(s);
-//
-//                    MenuItem item1 = menu.findItem(R.id.action_menu2);
-//                    SpannableString s1 = new SpannableString(ProfileFriendActivity.this.getResources().getString(R.string.popup_menu_delete_noun));
-//                    s1.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s1.length(), 0);
-//                    s1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s1.length(), 0);
-//                    item1.setTitle(s1);
-//                }
-//
-//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem menuItem) {
-//                        if (menuItem.getItemId() == R.id.action_menu1) {
-//                            Toast.makeText(ProfileFriendActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
-//
-//                            UtilAPI.s_MeditationContents_temp = meditationContents;
-//
-//                            // 콘텐츠 수정 액티비티로 이동
-//                            Intent intent = new Intent(ProfileFriendActivity.this, ContentsEditActivity.class);
-//
-//                            intent.putExtra("activity_class", "ProfileActivity");
-//
-//                            startActivity(intent);
-//                            ProfileFriendActivity.this.overridePendingTransition(0, 0);
-//
-//                            finish();
-//
-//
-//                        } else {
-//                            // 팝업
-//                            // 친구추가
-//                            // "콘텐츠를 정말 삭제하시겠습니까? 팝업 띄운다.
-//                            AlertLineOnePopup alertDlg = new AlertLineOnePopup(ProfileFriendActivity.this, ProfileFriendActivity.this, AlertLineOnePopup.Dlg_Type.friend_add);
-//                            alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//                            alertDlg.show();
-//
-//                            alertDlg.iv_ok.setOnClickListener(v -> {
-//
-//                                int index_id =  Integer.parseInt((String)obj);
-//
-//                                OnEvent_Delete_Contents(meditationContents);
-//                                Toast.makeText(ProfileFriendActivity.this,"삭제",Toast.LENGTH_SHORT).show();
-//
-//                                alertDlg.dismiss();
-//                            });
-//                            //Toast.makeText(MyContentsActivity.this, "삭제 클릭", Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        return false;
-//                    }
-//                });
-//                popupMenu.show();
             }
             break;
         }
@@ -532,36 +391,6 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
         profileAdapter_make.notifyDataSetChanged();
     }
 
-    public void OnEvent_Delete_Contents(MeditationContents meditationContents)
-    {
-        NetServiceManager.getinstance().setOnDelMyContentsListener(new NetServiceManager.OnDelMyContentsListener() {
-            @Override
-            public void onDelMyContentsListener(boolean validate) {
-
-                if(validate)
-                {
-                    // 삭제 성공
-
-                    NetServiceManager.getinstance().delLocalSocialContents(meditationContents.uid);
-
-                    NetServiceManager.getinstance().delUserProfileMyContents(meditationContents.uid);
-
-                    Update_Recyclerview();
-
-                    Toast.makeText(getApplicationContext(),"삭제 성공",Toast.LENGTH_SHORT).show();
-
-                }
-                else
-                {
-                    // 삭제 실패
-
-                    Toast.makeText(getApplicationContext(),"삭제 실패",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        NetServiceManager.getinstance().delMyContents(meditationContents);
-    }
 
     @Override
     public void onBackPressed() {

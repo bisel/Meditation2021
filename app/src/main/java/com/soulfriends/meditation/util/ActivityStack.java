@@ -61,6 +61,11 @@ public class ActivityStack {
         arrayStack.Clear();
     }
 
+    public String Peek()
+    {
+        Node node = (Node)arrayStack.peek();
+        return node.activity_name;
+    }
 
     public void OnBack(Activity activity)
     {
