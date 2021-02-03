@@ -90,7 +90,7 @@ public class MyContentsAdapter extends RecyclerView.Adapter{
 
             // 콘텐츠 상태
             // 콘텐츠 인덱스를 받아서 콘텐츠 상태 표시를 해야 한다.
-            int contents_state = 1;
+            int contents_state = myContentsItemViewModel.meditationContents.contentskind;
             switch(contents_state)
             {
                 case 1:

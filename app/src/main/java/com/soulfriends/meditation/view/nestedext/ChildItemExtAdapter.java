@@ -45,6 +45,10 @@ public class ChildItemExtAdapter extends RecyclerView.Adapter{
             int count = 1;
             for (MediationShowContents data : category.contests) {
 
+                if(data.entity == null)
+                {
+                    int xxxx = 0;
+                }
                 ChildItemExtViewModel childItemExtViewModel = new ChildItemExtViewModel(data.entity, category.subtype, count);
                 this.list.add(childItemExtViewModel);
 

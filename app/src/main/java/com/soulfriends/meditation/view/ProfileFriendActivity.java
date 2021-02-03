@@ -73,7 +73,7 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile_friend);
         binding.setLifecycleOwner(this);
 
-        userProfile = NetServiceManager.getinstance().getUserProfile();
+        userProfile = UtilAPI.s_userProfile_friend;
 
         if (profileFriendViewModelFactory == null) {
             profileFriendViewModelFactory = new ProfileFriendViewModelFactory(userProfile, this, this);

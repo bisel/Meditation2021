@@ -64,6 +64,14 @@ public class ActivityStack {
 
     public void OnBack(Activity activity)
     {
+        if(arrayStack.empty())
+        {
+            // 메인액티비티
+            activity.startActivity(new Intent(activity, MainActivity.class));
+            activity.overridePendingTransition(0, 0);
+            activity.finish();
+            return;
+        }
         Node node = Pop();
 
         switch(node.activity_name)

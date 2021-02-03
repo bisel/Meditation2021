@@ -441,7 +441,7 @@
             android:fontFamily="@font/font_notosanskr_medium"
             android:includeFontPadding="false"
             android:text="@{viewModel.timer_time}"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@+id/bt_timer"
             app:layout_constraintHorizontal_bias="0.476"

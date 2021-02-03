@@ -22,6 +22,7 @@
     <style name="AppTheme.NumberPicker" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">normal</item>
+        <item name="android:editTextColor">@color/white</item>
         <item name="colorControlNormal">#ddf0ff</item>
     </style>
 

@@ -4,12 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.ProfileItemBinding;
 import com.soulfriends.meditation.util.ItemClickListener;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
@@ -63,6 +65,20 @@ public class ProfileAdapter extends RecyclerView.Adapter{
 
         UtilAPI.load_imageEX(this.context, profileItemViewModel.meditationContents.thumbnail, bind.imgChildItem, profileItemViewModel.meditationContents);
 
+        //  0 : 기본 제공  1 : 소셜 콘텐츠
+        if(profileItemViewModel.meditationContents.ismycontents == 0)
+        {
+            // 0 : 기본 제공
+
+            bind.ivModify.setVisibility(View.GONE);
+
+
+        }
+        else
+        {
+            // 1 : 소셜 콘텐츠
+            bind.ivModify.setVisibility(View.VISIBLE);
+        }
 
 //        if(profileItemViewModel.meditationContents.thumbnail_uri == null)
 //        {
@@ -79,6 +95,49 @@ public class ProfileAdapter extends RecyclerView.Adapter{
         // 배치 처리
         String releasedate = profileItemViewModel.meditationContents.releasedate;
 
+
+        // 콘텐츠 상태
+        // 콘텐츠 인덱스를 받아서 콘텐츠 상태 표시를 해야 한다.
+        int contents_state = profileItemViewModel.meditationContents.contentskind;
+        switch(contents_state)
+        {
+            case 1:
+            {
+                // 명상
+                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_med);
+            }
+            break;
+            case 2:
+            {
+                // 수면 명상
+                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_sleep_md);
+            }
+            break;
+            case 3:
+            {
+                // 북수면
+                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_bsleep);
+            }
+            break;
+            case 4:
+            {
+                // 음악
+                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_music);
+            }
+            break;
+            case 5:
+            {
+                // 수면음악
+                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_sleep_ms);
+            }
+            break;
+            case 6:
+            {
+                // 자연소리
+                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_nature);
+            }
+            break;
+        }
 //        FrameLayout frame = bind.frameLayout;
 //        frame.setOnClickListener(v -> {
 //
