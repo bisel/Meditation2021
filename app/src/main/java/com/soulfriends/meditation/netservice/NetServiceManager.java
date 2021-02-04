@@ -371,6 +371,17 @@ public class NetServiceManager {
        mDetailAlarmDataList.clear();
     }
 
+    // getSingle FileName
+    public String getSingleFileName(String fullPath)
+    {
+        String[] splitString = fullPath.split("/");
+        int splitNum = splitString.length;
+        String delThumbnailImgName = "";
+        if(splitNum > 0){
+            return splitString[splitNum-1];
+        }
+        return fullPath;
+    }
     //========================================================
     // profile 정보 던져서 서버에 저장
     //========================================================
@@ -3543,12 +3554,23 @@ public class NetServiceManager {
         }
         return null;
     }
-    // contentscharinfo의 chartag를 넣어주면 해당 bg의 이름을 알려준다.
-    String GetBgImagName(String chartag){
+    // contentscharinfo의 bg이름을 넣어주면 해당 id (확장자 제외)
+    String GetKindByBgImagName(String bgFileName){
         int dataNum = mBgTagDataList.size();
         for(int i = 0; i < dataNum; i++){
-            if(mBgTagDataList.get(i).tag.equals(chartag)){
-                return mBgTagDataList.get(i).file;
+            if(mBgTagDataList.get(i).file.equals(bgFileName)){
+                return mBgTagDataList.get(i).id;
+            }
+        }
+        return null;
+    }
+
+    // contentscharinfo의 배경태그를 넣어주면 해당 id
+    String GetKindByBgTagName(String tagName){
+        int dataNum = mBgTagDataList.size();
+        for(int i = 0; i < dataNum; i++){
+            if(mBgTagDataList.get(i).tag.equals(tagName)){
+                return mBgTagDataList.get(i).id;
             }
         }
         return null;
@@ -4267,7 +4289,7 @@ public class NetServiceManager {
     //  5. 콘텐츠 올리기 function : sendValMeditationContents
     private OnRecvValMeditationContentsListener mOnRecvValMeditationContentsListener  = null;
     public interface OnRecvValMeditationContentsListener {
-        void onRecvValMeditationContentsListener (boolean validate, MeditationContents successContents);
+        void onRecvValMeditationContents (boolean validate, MeditationContents successContents, boolean newContents);
     }
     public void setOnRecvValMeditationContentsListener (OnRecvValMeditationContentsListener listenfunc){
         mOnRecvValMeditationContentsListener = listenfunc;
@@ -4291,7 +4313,7 @@ public class NetServiceManager {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(true, infoData);
+                                    mOnRecvValMeditationContentsListener.onRecvValMeditationContents(true, infoData,newContents);
                                     doneUploadContentsThumnailImg = false;
                                     doneUploadContentsSnd = false;
                                 }
@@ -4300,7 +4322,7 @@ public class NetServiceManager {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false, infoData);
+                                mOnRecvValMeditationContentsListener.onRecvValMeditationContents(false, infoData, newContents);
                             }
                         });
             }else{
@@ -4308,7 +4330,7 @@ public class NetServiceManager {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("TAG", "socialContentsInfoString");
-                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(true, infoData);
+                        mOnRecvValMeditationContentsListener.onRecvValMeditationContents(true, infoData,newContents);
                         doneUploadContentsThumnailImg = false;
                         doneUploadContentsSnd = false;
                     }
@@ -4316,7 +4338,7 @@ public class NetServiceManager {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false, infoData);
+                        mOnRecvValMeditationContentsListener.onRecvValMeditationContents(false, infoData,newContents);
                     }
                 });
             }
@@ -4378,6 +4400,12 @@ public class NetServiceManager {
             
             // backgrroundImgName 처리
             if(backgrroundImgName !=null){
+                String socialKindString = GetKindByBgImagName(backgrroundImgName);
+                if(socialKindString != null){
+                    infoData.contentskind = Integer.parseInt(socialKindString);
+                    updateMap.put("contentskind", infoData.contentskind);
+                }
+
                 infoData.bgimg = backgrroundImgName;
                 updateMap.put("bgimg", backgrroundImgName);
             }
@@ -4400,6 +4428,7 @@ public class NetServiceManager {
                 infoData.healingtag = GetHealingTag( Integer.parseInt(emotion));
 
                 updateMap.put("emotion",  infoData.emotion);
+                updateMap.put("healingtag",  infoData.healingtag);
 
                //=======================================================
                // 해당 감정에 따른 healing Tag를 바꿔야 한다.
@@ -4430,16 +4459,18 @@ public class NetServiceManager {
                     StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(curimgName);
                     UploadTask task = storageRef.putFile(thumbnailImgUri);
 
+                    boolean finalNewContents1 = newContents;
                     task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             finalInfoData.thumbnail = curimgName;
+                            updateMap.put("thumbnail", curimgName);
                             notifyDoneUpload(finalInfoData,1,updateMap, finalNewContents);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                            mOnRecvValMeditationContentsListener.onRecvValMeditationContents(false,null,  finalNewContents);
                         }
                     }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -4450,10 +4481,14 @@ public class NetServiceManager {
                     });
                 }else{
                     // 1. 기존 Thumnail을 지워야 한다.
-                    StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(infoData.thumbnail);
+                    String delThumbNailImgName = getSingleFileName(infoData.thumbnail);
+                    StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(delThumbNailImgName);
+                    //StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(infoData.thumbnail);
 
                     // Delete the file
                     if(delStorageRef != null){
+                        boolean finalNewContents2 = newContents;
+                        boolean finalNewContents3 = newContents;
                         delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -4468,12 +4503,13 @@ public class NetServiceManager {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                         finalInfoData.thumbnail = curimgName;
+                                        updateMap.put("thumbnail", curimgName);
                                         notifyDoneUpload(finalInfoData,1,updateMap, finalNewContents);
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                                        mOnRecvValMeditationContentsListener.onRecvValMeditationContents(false,null, finalNewContents);
                                     }
                                 }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                                     @Override
@@ -4487,12 +4523,12 @@ public class NetServiceManager {
                             @Override
                             public void onFailure(@NonNull Exception exception) {
                                 // Uh-oh, an error occurred!
-                                mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false, null);
+                                mOnRecvValMeditationContentsListener.onRecvValMeditationContents(false, null, finalNewContents);
                             }
                         });
                     }
                     else{
-                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                        mOnRecvValMeditationContentsListener.onRecvValMeditationContents(false,null,newContents);
                     }
 
                 }
@@ -4513,16 +4549,18 @@ public class NetServiceManager {
 
                     StorageReference sndStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(curSndName);
                     UploadTask sndTask = sndStorageRef.putFile(SoundUri);
+
                     sndTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             finalInfoData.audio = curSndName;
+                            updateMap.put("audio", curSndName);
                             notifyDoneUpload(finalInfoData,2,updateMap, finalNewContents);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                            mOnRecvValMeditationContentsListener.onRecvValMeditationContents(false,null, finalNewContents);
                         }
                     }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -4533,9 +4571,12 @@ public class NetServiceManager {
                     });
                 }else{
                     // 기존의 사운드 파일 삭제
-                    StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(infoData.audio);
+                    // 1. 기존 Sound을 지워야 한다.
+                    String delSndName = getSingleFileName(infoData.audio);
+                    StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(delSndName);
                     // Delete the file
                     if(delStorageRef != null){
+
                         delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -4549,12 +4590,13 @@ public class NetServiceManager {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                         finalInfoData.audio = curSndName;
+                                        updateMap.put("audio", curSndName);
                                         notifyDoneUpload(finalInfoData,2,updateMap, finalNewContents);
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                                        mOnRecvValMeditationContentsListener.onRecvValMeditationContents(false,null, finalNewContents);
                                     }
                                 }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                                     @Override
@@ -4568,12 +4610,12 @@ public class NetServiceManager {
                             @Override
                             public void onFailure(@NonNull Exception exception) {
                                 // Uh-oh, an error occurred!
-                                mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                                mOnRecvValMeditationContentsListener.onRecvValMeditationContents(false,null, finalNewContents);
                             }
                         });
                     }
                     else{
-                        mOnRecvValMeditationContentsListener.onRecvValMeditationContentsListener(false,null);
+                        mOnRecvValMeditationContentsListener.onRecvValMeditationContents(false,null,newContents);
                     }
                 }
             }else{
@@ -5660,6 +5702,10 @@ public class NetServiceManager {
     // top10 카테고리
     private MeditationCategory getSocialTop10Category(int seletType)
     {
+        // 2021.02.04
+        if(mSocialContentsList.size() == 0)
+            return null;
+
         CategoryData entityData = getCategoryData(top10CategoryId);
 
         SortSocialContentsFavoritecnt(false);  // 내림차순 정렬
@@ -5823,7 +5869,9 @@ public class NetServiceManager {
         int curEntityNum = 0;
 
         for(int i = 0; i < dataNum; i++){
-            if(mSocialContentsList.get(i).genre == null) continue; // dlsmdla
+            if(mSocialContentsList.get(i).genre == null)
+                continue; // dlsmdla
+
             if(mSocialContentsList.get(i).genre.equals(genre)){
                 MediationShowContents newEntity = new MediationShowContents();
                 newEntity.entity = mSocialContentsList.get(i);

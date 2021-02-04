@@ -29,7 +29,7 @@ public class MeditationContents {
     public int showtype = 0;     // 플레이 화면에서 "나레이터 저자"순으로 보이면 1, "아티스트"만 보이면 2, 아무것도 안보이면 ,0
 
     // 2021.01.23
-    public int contentskind = 0; // 콘튼츠종류  1 : 명상, 2 : 수면 명상, 3 : 북수면, 4 : 음악  5. :수면음악  6: 자연소리
+    public int contentskind = 0; // 콘튼츠종류  1 : 명상, 2 : 수면 명상, 3 : 북수면, 4 : 음악  5. :수면음악  6: 자연소리 (소셜에서만 유효함), 기존 콘텐츠는 MeditationContentsCharInfo의 kind참고 해야함.
     //public int paid = 0;       //  1 :  유료 0 : 무료  charinfo에 있음
     public int ismycontents = 0; //  0 : 기본 제공  1 : 소셜 콘텐츠
     public int isRecordSndFile = 0;  // 0 : 음악파일로  1 : 녹음한 걸로 소셜 콘텐츠 만듬

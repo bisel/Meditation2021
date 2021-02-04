@@ -59,25 +59,21 @@ public class ContentsUploadActivity extends BaseActivity {
 
         NetServiceManager.getinstance().setOnRecvValMeditationContentsListener(new NetServiceManager.OnRecvValMeditationContentsListener() {
             @Override
-            public void onRecvValMeditationContentsListener(boolean validate, MeditationContents successContents) {
-
-               if(validate)
-               {
-                   // 업로드 성공
-
-                   OnEvent_Success(successContents);
-
-                   //Toast.makeText(getApplicationContext(),"업로드 성공",Toast.LENGTH_SHORT).show();
-               }
-               else
-               {
-                   // 업로드 실패
-
-                   OnEvent_Faild();
-
-                   //Toast.makeText(getApplicationContext(),"업로드 실패",Toast.LENGTH_SHORT).show();
-               }
+            public void onRecvValMeditationContents(boolean validate, MeditationContents successContents, boolean newContents) {
+                if(validate)
+                {
+                    // 업로드 성공
+                    OnEvent_Success(successContents,newContents);
+                    //Toast.makeText(getApplicationContext(),"업로드 성공",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    // 업로드 실패
+                    OnEvent_Faild();
+                    //Toast.makeText(getApplicationContext(),"업로드 실패",Toast.LENGTH_SHORT).show();
+                }
             }
+
         });
 
         MeditationContents socialcontents = null;
@@ -115,13 +111,12 @@ public class ContentsUploadActivity extends BaseActivity {
 //        });
     }
 
-    private void OnEvent_Success(MeditationContents successContents)
+    private void OnEvent_Success(MeditationContents successContents, boolean isNewContents)
     {
         NetServiceManager.getinstance().setOnRecvValProfileListener(new NetServiceManager.OnRecvValProfileListener() {
             @Override
             public void onRecvValProfile(boolean validate) {
                 if (validate == true) {
-
 
                     // 플레이어 이동
                     UtilAPI.s_playerMode = UtilAPI.PlayerMode.my;
@@ -136,18 +131,22 @@ public class ContentsUploadActivity extends BaseActivity {
 
         //NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
 
-        // 2021.01.31 start
-        successContents.audio = NetServiceUtility.mycontentsaudiodir + successContents.audio;
-        successContents.thumbnail = NetServiceUtility.mycontentsthumnaildir +  successContents.thumbnail;
-        NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
-        // 2021.01.31 end
+        // 수정했을 경우 처리 2021.02.04
+        if(!successContents.audio.contains("gs://")){
+            successContents.audio = NetServiceUtility.mycontentsaudiodir + successContents.audio;
+        }
 
-        NetServiceManager.getinstance().mSocialContentsList.add(successContents);
-        NetServiceManager.getinstance().reqSocialEmotionAllContents();  // 2021.02.01 모든 리스트 업데이트
+        if(!successContents.thumbnail.contains("gs://")){
+            successContents.thumbnail = NetServiceUtility.mycontentsthumnaildir +  successContents.thumbnail;
+        }
+
+        if(isNewContents){
+           NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);
+           NetServiceManager.getinstance().mSocialContentsList.add(successContents);
+        }
 
         NetServiceManager.getinstance().sendValProfile(NetServiceManager.getinstance().getUserProfile());
-
-
+        NetServiceManager.getinstance().reqSocialEmotionAllContents();  // 2021.02.01 모든 리스트 업데이트
     }
 
     private void ChangeActivity()
