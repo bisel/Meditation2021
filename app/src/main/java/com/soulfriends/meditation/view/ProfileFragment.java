@@ -49,6 +49,7 @@ import com.soulfriends.meditation.view.nestedext.ParentItemExtAdapter;
 import com.soulfriends.meditation.view.nestedext.ParentItemExtViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentMiddleItemExtViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentTopItemExtViewModel;
+import com.soulfriends.meditation.view.player.AudioPlayer;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
 import com.soulfriends.meditation.viewmodel.ProfileViewModel;
 import com.soulfriends.meditation.viewmodel.ProfileViewModelFactory;
@@ -167,6 +168,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                         if(UtilAPI.s_StrFragment_Profile_Tab == UtilAPI.TAB_CONTENTS)
                         {
+                            bFocusTab = 0;
                             ProfileFragment.this.contents_RecyclerViewItem.setVisibility(View.VISIBLE);
 
                             ProfileFragment.this.friend_RecyclerViewItem.setVisibility(View.GONE);
@@ -179,6 +181,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                         }
                         else
                         {
+                            bFocusTab = 1;
                             ProfileFragment.this.contents_RecyclerViewItem.setVisibility(View.GONE);
 
                             layout_friend_bts.setVisibility(View.VISIBLE);
@@ -228,6 +231,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         //------------------------------------------------
         ivContentsBt.setOnClickListener(v -> {
 
+            if(bFocusTab == 0) return; //중복방지
             bFocusTab = 0;
 
             this.contents_RecyclerViewItem.setVisibility(View.VISIBLE);
@@ -248,6 +252,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
         ivFriendBt.setOnClickListener(v -> {
 
+            if(bFocusTab == 1) return; //중복방지
             bFocusTab = 1;
 
             this.contents_RecyclerViewItem.setVisibility(View.GONE);
@@ -308,10 +313,47 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         ImageView iv_addBt = view.findViewById(R.id.iv_addbt);
         iv_addBt.setOnClickListener(v -> {
 
-            AlertLineTwoPopup alertDlg = new AlertLineTwoPopup(getActivity(), getActivity(), AlertLineTwoPopup.Dlg_Type.contents_existing_delete);
+            // - 선택 시 콘텐츠 제작 페이지로 이동(p.11참고)
+            // - 최대 10개까지 제작 가능하며, 10개인 상태에서 선택 시 팝업 노출함(hardwareback하면 닫힘)
+            // - 취소 시 팝업 닫힘
+            // - 팝업에서 확인 선택하면 프로필 페이지에서 제작한 콘텐츠 영역 편
+            // 집모드 상태로 노출함(해당 영역이 다 보일 수 있는 상태로 스크롤되 어있어야 함)
 
-            alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            alertDlg.show();
+            if(userProfile.mycontentslist.size() == 10)//1)
+            {
+                //10개인 상태에서 선택 시 팝업
+                AlertLineTwoPopup alertDlg = new AlertLineTwoPopup(getActivity(), getActivity(), AlertLineTwoPopup.Dlg_Type.contents_existing_delete);
+
+                alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                alertDlg.show();
+
+                // 팝업에서 예를 누르면 소셜로 이동 처리
+                alertDlg.iv_ok.setOnClickListener(v1 -> {
+
+                    // 프로필 페이지에서 제작한 콘텐츠 영역
+                    ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), ProfileActivity.class);
+                    intent.putExtra("move_scroll_mycontents", true);
+                    getActivity().startActivity(intent);
+
+                    getActivity().finish();
+
+                    alertDlg.dismiss();
+                });
+            }
+            else {
+
+                // 콘텐츠 제작 페이지로 이동
+                ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), ContentsMakeActivity.class);
+                getActivity().startActivity(intent);
+
+                getActivity().finish();
+            }
         });
 
         //------------------------------------------------

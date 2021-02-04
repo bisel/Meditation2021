@@ -64,6 +64,7 @@ public class ActivityStack {
     public String Peek()
     {
         Node node = (Node)arrayStack.peek();
+        if(node == null) return null;
         return node.activity_name;
     }
 

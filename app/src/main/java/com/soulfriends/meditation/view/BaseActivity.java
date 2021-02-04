@@ -35,12 +35,12 @@ public class BaseActivity extends AppCompatActivity {
         {
 
             // 타이머 팝업
-            TimerDialog alertDialog = new TimerDialog(this, this);
-            alertDialog.setCancelable(false);
-            alertDialog.show();
+            //TimerDialog alertDialog = new TimerDialog(this, this);
+            //alertDialog.setCancelable(false);
+            //alertDialog.show();
             
-            //Intent intent = new Intent(UtilAPI.GetActivity() , TimerDialogActivity.class);
-            //UtilAPI.GetActivity().startActivity(intent);
+            Intent intent = new Intent(UtilAPI.GetActivity() , TimerDialogActivity.class);
+            UtilAPI.GetActivity().startActivity(intent);
 
             UtilAPI.s_bShowTimerPopup = false;
 

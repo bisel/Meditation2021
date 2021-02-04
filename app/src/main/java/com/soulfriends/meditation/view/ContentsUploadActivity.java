@@ -155,7 +155,14 @@ public class ContentsUploadActivity extends BaseActivity {
         // 콘텐츠 배경이미지 초기화
         UtilAPI.s_id_backimamge_makecontents = -1;
 
-        ChangeActivity(PlayerActivity.class);
+        Intent intent = new Intent(this, PlayerActivity.class);
+
+        intent.putExtra("contents_upload", true);
+        startActivity(intent);
+
+        finish();
+        this.overridePendingTransition(0, 0);
+        //ChangeActivity(PlayerActivity.class);
 
         UtilAPI.AllFinishActivity_Temp();
 

@@ -103,11 +103,11 @@ public class MeditationAudioManager {
                 {
                     // 활성화 된 경우
                     // 타이머 팝업
-                    TimerDialog alertDialog = new TimerDialog(UtilAPI.GetActivity(), UtilAPI.GetActivity());
-                    alertDialog.setCancelable(false);
-                    alertDialog.show();
-                    //Intent intent = new Intent(UtilAPI.GetActivity() , TimerDialogActivity.class);
-                    //UtilAPI.GetActivity().startActivity(intent);
+                    //TimerDialog alertDialog = new TimerDialog(UtilAPI.GetActivity(), UtilAPI.GetActivity());
+                    //alertDialog.setCancelable(false);
+                    //alertDialog.show();
+                    Intent intent = new Intent(UtilAPI.GetActivity() , TimerDialogActivity.class);
+                    UtilAPI.GetActivity().startActivity(intent);
                 }
                 else
                 {
@@ -200,6 +200,15 @@ public class MeditationAudioManager {
     public static void stop() {
         if (service == null) return;
         service.stop();
+    }
+
+    // 이 함수 호출 하면 정지가 된다
+    public static void stop_ext()
+    {
+        stop();
+        if(getinstance().getServiceBound()) {
+            getinstance().unbind();
+        }
     }
 
 

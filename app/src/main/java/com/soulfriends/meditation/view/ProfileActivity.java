@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -92,8 +93,28 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
 
         meditationShowCategorys = NetServiceManager.getinstance().reqMediationType(1, false);
 
-        // 프로필 사진
+       
+        // 소셜 + 버튼 선택시 내가 만든 콘텐츠로 스크롤 처리하기
+        // 정보 받기
+        Intent intent = getIntent();
 
+        boolean move_scroll_mycontents = intent.getBooleanExtra("move_scroll_mycontents", false);
+
+        if(move_scroll_mycontents)
+        {
+            new Handler().postDelayed(new Runnable() {
+
+                public void run() {
+                    binding.scrollView.fullScroll(View.FOCUS_DOWN);
+                    binding.scrollView.invalidate();
+                }
+            }, 100);
+
+            //binding.scrollView.scrollTo(0, binding.editText3.bottom);
+        }
+
+
+        // 프로필 사진
         if(userProfile.profileimg_uri !=null && userProfile.profileimg_uri.length() > 0) {
 
             String image_uri = userProfile.profileimg_uri;
@@ -463,75 +484,6 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
                     OnEvent_Delete_Contents(meditationContents);
                     menuPopup.dismiss();
                 });
-
-                //Toast.makeText(getApplicationContext(), "iv_modify", Toast.LENGTH_SHORT).show();
-
-//                // 팝업 메뉴
-//                Context c = ProfileActivity.this;
-//
-//                c.setTheme(R.style.PopupMenu);
-//                //PopupMenu popupMenu = new PopupMenu(c,view);
-//                PopupMenu popupMenu = new PopupMenu(c, view, Gravity.CENTER, 0, R.style.PopupMenuMoreCentralized);
-//                getMenuInflater().inflate(R.menu.popup_myplayer, popupMenu.getMenu());
-//
-//                Menu menu = popupMenu.getMenu();
-//                {
-//                    MenuItem item = menu.findItem(R.id.action_menu1);
-//                    SpannableString s = new SpannableString(ProfileActivity.this.getResources().getString(R.string.popup_menu_modify_noun));
-//                    s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
-//                    s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
-//                    item.setTitle(s);
-//
-//                    MenuItem item1 = menu.findItem(R.id.action_menu2);
-//                    SpannableString s1 = new SpannableString(ProfileActivity.this.getResources().getString(R.string.popup_menu_delete_noun));
-//                    s1.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s1.length(), 0);
-//                    s1.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s1.length(), 0);
-//                    item1.setTitle(s1);
-//                }
-
-//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem menuItem) {
-//                        if (menuItem.getItemId() == R.id.action_menu1) {
-//                            Toast.makeText(ProfileActivity.this, "수정 클릭", Toast.LENGTH_SHORT).show();
-//
-//                            UtilAPI.s_MeditationContents_temp = meditationContents;
-//
-//                            // 콘텐츠 수정 액티비티로 이동
-//                            Intent intent = new Intent(ProfileActivity.this, ContentsEditActivity.class);
-//
-//                            intent.putExtra("activity_class", "ProfileActivity");
-//
-//                            startActivity(intent);
-//                            ProfileActivity.this.overridePendingTransition(0, 0);
-//
-//                            finish();
-//
-//
-//                        } else {
-//                            // 팝업
-//                            // 친구추가
-//                            // "콘텐츠를 정말 삭제하시겠습니까? 팝업 띄운다.
-//                            AlertLineOnePopup alertDlg = new AlertLineOnePopup(ProfileActivity.this, ProfileActivity.this, AlertLineOnePopup.Dlg_Type.friend_add);
-//                            alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//                            alertDlg.show();
-//
-//                            alertDlg.iv_ok.setOnClickListener(v -> {
-//
-//                                int index_id =  Integer.parseInt((String)obj);
-//
-//                                OnEvent_Delete_Contents(meditationContents);
-//                                Toast.makeText(ProfileActivity.this,"삭제",Toast.LENGTH_SHORT).show();
-//
-//                                alertDlg.dismiss();
-//                            });
-//                            //Toast.makeText(MyContentsActivity.this, "삭제 클릭", Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        return false;
-//                    }
-//                });
-//                popupMenu.show();
             }
             break;
         }

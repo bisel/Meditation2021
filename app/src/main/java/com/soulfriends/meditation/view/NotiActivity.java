@@ -53,38 +53,41 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
         viewModel = new ViewModelProvider(this.getViewModelStore(), notiViewModelFactory).get(NotiViewModel.class);
         binding.setViewModel(viewModel);
 
-        int noti_total = 10;
-        if(noti_total == 0)
+        if(NetServiceManager.getinstance().mDetailAlarmDataList.size() == 0)
         {
             // 알림 없는 경우 해당
             binding.recyclerview.setVisibility(View.GONE);
             binding.layoutAlert.setVisibility(View.VISIBLE);
         }
         else {
+
             NetServiceManager.getinstance().setOnOpenAlarmListListener(new NetServiceManager.OnOpenAlarmListListener() {
                 @Override
                 public void onOpenAlarmList(boolean validate) {
-                        // TRUE가 오면... 처리
+                    // TRUE가 오면... 처리
+                    if (validate) {
+                    }
                 }
             });
             NetServiceManager.getinstance().openAlarmList();
-
 
             // 알림 있는 경우 해당
 
             binding.recyclerview.setVisibility(View.VISIBLE);
             binding.layoutAlert.setVisibility(View.GONE);
-            
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+            LinearLayoutManager layoutManager = new LinearLayoutManager(NotiActivity.this, LinearLayoutManager.VERTICAL, false);
             //rcv.setLayoutManager(layoutManager);
 
             list_noti = ItemList();
-            notiAdapter = new NotiAdapter(list_noti, this, this);
+            notiAdapter = new NotiAdapter(list_noti, NotiActivity.this, NotiActivity.this);
 
             binding.recyclerview.setAdapter(notiAdapter);
             binding.recyclerview.setLayoutManager(layoutManager);
             binding.recyclerview.setNestedScrollingEnabled(false);
         }
+
+
     }
 
 //-------------------------------------------------

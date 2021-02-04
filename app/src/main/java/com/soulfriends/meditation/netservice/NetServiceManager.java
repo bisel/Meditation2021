@@ -3566,7 +3566,7 @@ public class NetServiceManager {
     }
 
     // contentscharinfo의 배경태그를 넣어주면 해당 id
-    String GetKindByBgTagName(String tagName){
+    public String GetKindByBgTagName(String tagName){
         int dataNum = mBgTagDataList.size();
         for(int i = 0; i < dataNum; i++){
             if(mBgTagDataList.get(i).tag.equals(tagName)){

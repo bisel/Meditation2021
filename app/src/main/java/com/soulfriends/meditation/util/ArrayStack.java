@@ -35,7 +35,10 @@ public class ArrayStack {
     // 스택의 가장 위의 데이터 반환
     public Object peek(){
 
-        if(empty()) throw new ArrayIndexOutOfBoundsException(top);
+        if(empty())
+        {
+            return null;
+        }
 
         return stackArray[top];
     }

@@ -97,6 +97,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
     public AlertLineOneOkPopup alertDlg_ok;
 
+    private boolean bEntryFromMyContentsUpload = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,6 +166,12 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 binding.layoutBaseMy.setVisibility(View.VISIBLE);
                 binding.layoutBaseFriend.setVisibility(View.GONE);
 
+                // 내가 만든 콘텐츠 업로드에서 들어온 경우에는
+                // 4. My에서 생성 및 수정된 소셜 콘텐츠가 업로드 성공되면 자동 플레이가 되는데 Back키를 눌렀거나,
+                //    Back UI를 눌렀을 경우 플레이되는 소셜 재생을 멈춰야 함.
+                // 정보 받기
+                Intent intent = getIntent();
+                bEntryFromMyContentsUpload = intent.getBooleanExtra("contents_upload", false);
 
             }
             break;
@@ -409,8 +417,9 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                     NetServiceManager.getinstance().delUserProfileMyContents(meditationContents.uid);
 
                     // 플레이어 강제 종료처리
-                    meditationAudioManager.stop();
-                    meditationAudioManager.unbind();
+                    MeditationAudioManager.stop_ext();
+                    //meditationAudioManager.stop();
+                    //meditationAudioManager.unbind();
 
                     onBackPressed();
                     //Toast.makeText(getApplicationContext(),"삭제 성공",Toast.LENGTH_SHORT).show();
@@ -567,6 +576,13 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
                 // MainActivity 이동
                 //ChangeActivity(MainActivity.class);
+
+                if(bEntryFromMyContentsUpload)
+                {
+                    // 마이 콘텐츠 생성, 수정 업로드 일 경우 플레이어 종료하도록 한다.
+                    MeditationAudioManager.stop_ext();
+                }
+
                 ActivityStack.instance().OnBack(this);
             }
             break;
@@ -695,8 +711,9 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                     // 콘텐츠 수정 액티비티로 이동
 
                     // 플레이어 강제 종료처리
-                    meditationAudioManager.stop();
-                    meditationAudioManager.unbind();
+                    MeditationAudioManager.stop_ext();
+                    //meditationAudioManager.stop();
+                    //meditationAudioManager.unbind();
 
                     UtilAPI.s_MeditationContents_temp = meditationContents;
                     //ActivityStack.instance().Push(PlayerActivity.this, ""); // 메인액티비티여야 된다.
@@ -939,6 +956,12 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
     @Override // 2020.12.20 , Close 버튼과 동일
     public void onBackPressed() {
+
+        if(bEntryFromMyContentsUpload)
+        {
+            // 마이 콘텐츠 생성, 수정 업로드 일 경우 플레이어 종료하도록 한다.
+            MeditationAudioManager.stop_ext();
+        }
 
         ActivityStack.instance().OnBack(this);
         //ChangeActivity(MainActivity.class);

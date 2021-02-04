@@ -173,6 +173,50 @@ public class ChildItemExtAdapter extends RecyclerView.Adapter{
             bind.ivBadge.setVisibility(View.VISIBLE);
         }
 
+        // 콘텐츠 상태
+        // 콘텐츠 인덱스를 받아서 콘텐츠 상태 표시를 해야 한다.
+        int contents_state = childItemExtViewModel.contentskind;
+        if(contents_state == 0)
+        {
+            bind.ivState.setVisibility(View.GONE);
+        }
+        else {
+
+            bind.ivState.setVisibility(View.VISIBLE);
+            switch (contents_state) {
+                case 1: {
+                    // 명상
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_med);
+                }
+                break;
+                case 2: {
+                    // 수면 명상
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_sleep_md);
+                }
+                break;
+                case 3: {
+                    // 북수면
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_bsleep);
+                }
+                break;
+                case 4: {
+                    // 음악
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_music);
+                }
+                break;
+                case 5: {
+                    // 수면음악
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_sleep_ms);
+                }
+                break;
+                case 6: {
+                    // 자연소리
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_nature);
+                }
+                break;
+            }
+        }
+
 
         FrameLayout frame = bind.frameLayout;
         frame.setOnClickListener(v -> {

@@ -94,9 +94,11 @@ public class IntroActivity extends AppCompatActivity {
             }
             else {
 
+                //this.overridePendingTransition(0, 0);
                 this.startActivity(new Intent(this, LoadingActivity.class));
 
-                //this.overridePendingTransition(0, 0);
+                // 2021_0205 로딩 액티비티 애니 안되도록 처리
+                this.overridePendingTransition(0, 0);
 
                 //this.finish();
             }

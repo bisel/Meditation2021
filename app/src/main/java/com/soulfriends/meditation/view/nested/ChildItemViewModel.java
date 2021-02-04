@@ -3,7 +3,14 @@ package com.soulfriends.meditation.view.nested;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.model.MeditationContents;
+import com.soulfriends.meditation.model.MeditationContentsCharInfo;
+import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.parser.BgTagData;
+import com.soulfriends.meditation.util.UtilAPI;
+
+import java.util.ArrayList;
 
 public class ChildItemViewModel extends ViewModel {
     public MutableLiveData<MeditationContents> entity = new MutableLiveData<>();
@@ -26,6 +33,9 @@ public class ChildItemViewModel extends ViewModel {
     {
         return category_subtype;
     }
+
+    // 콘텐츠 종류
+    public int contentskind;
 
     public ChildItemViewModel(MeditationContents entity_data, int category_subtype, int count) {
 
@@ -54,6 +64,39 @@ public class ChildItemViewModel extends ViewModel {
             str_play_time =String.valueOf(minute) + "분";
         }
         playtime.setValue(str_play_time);
+
+
+        // 콘텐츠 상태
+        // 콘텐츠 인덱스를 받아서 콘텐츠 상태 표시를 해야 한다.
+
+        // 1. 콘텐츠별로 달모양 오류와 관련해서
+        // - 소셜콘텐츠와 소셜콘텐츠가 아닐경우에따라 처리 분리 필요
+        // 1) 소셜콘텐츠 : MeditationContents Class의 contentkind에 저장되어 있으므로 이용.
+        // 2) 일반콘텐츠 : getMeditationContentsCharInfo 함수를 이용해서 해당 ID의 MeditationContentsCharInfo의 kind
+        // 정보를 얻고 다시 GetKindByBgTagName을 이용해서 해당 id를 받아서
+        // 다시 int로 변환해서 사용해야 한다.
+
+
+        if(meditationContents.ismycontents == 0)
+        {
+            //  0 : 기본 제공
+            MeditationContentsCharInfo info = NetServiceManager.getinstance().getMeditationContentsCharInfo(meditationContents.uid);
+
+            if(info == null)
+            {
+                int xx = 0;
+            }
+            else
+            {
+                contentskind = Integer.parseInt(NetServiceManager.getinstance().GetKindByBgTagName(info.kind));
+            }
+        }
+        else
+        {
+            //  1 : 소셜 콘텐츠
+            contentskind = meditationContents.contentskind;
+        }
+
     }
 
     public MutableLiveData<MeditationContents> getEntity() {

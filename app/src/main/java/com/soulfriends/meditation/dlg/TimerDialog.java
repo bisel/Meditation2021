@@ -29,17 +29,6 @@ public class TimerDialog extends Dialog {
         this.activity = activity;
     }
 
-    private void exitProgram() {
-        // 종료
-
-        // 태스크를 백그라운드로 이동
-        // moveTaskToBack(true);
-
-        ActivityCompat.finishAffinity(UtilAPI.scanForActivity(context));
-        //Activity.finishAffinity();
-        System.exit(0);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -56,40 +45,24 @@ public class TimerDialog extends Dialog {
         ImageView iv_ok = findViewById(R.id.iv_ok);
         iv_ok.setOnClickListener(v -> {
 
-            if(ActivityStack.instance().Peek().equals("PlayerActivity"))
-            {
-                ActivityStack.instance().OnBack(this.activity);
-            }
-            else if(ActivityStack.instance().Peek().equals("TimerActivity"))
-            {
-                ActivityStack.instance().OnBack(this.activity);
-                ActivityStack.instance().OnBack(this.activity);
+            if(ActivityStack.instance().Peek() != null) {
+                if (ActivityStack.instance().Peek().equals("PlayerActivity")) {
+                    ActivityStack.instance().OnBack(this.activity);
+                } else if (ActivityStack.instance().Peek().equals("TimerActivity")) {
+                    ActivityStack.instance().OnBack(this.activity);
+                    ActivityStack.instance().OnBack(this.activity);
+                } else {
+
+                    activity.finish();
+                    activity.overridePendingTransition(0, 0);
+                }
             }
             else
             {
 
-                // 팝업 닫기만 한다.
+                activity.finish();
+                activity.overridePendingTransition(0, 0);
             }
-
-//            activity.finish();
-//
-//            // player 이면 메인 액티비티로
-//            // timer activity /  contentsinfo activity 일 경우에는 홈으로 이동 처리를 한다.
-//
-//            ArrayList<Activity> ListActivity = UtilAPI.GetActivityInPlayerList();
-//            if(ListActivity.size() > 0)
-//            {
-//                // 홈으로 이동
-//                Intent intent = new Intent(UtilAPI.GetActivity(), MainActivity.class);
-//                UtilAPI.GetActivity().startActivity(intent);
-//
-//                for(int i = 0; i < ListActivity.size(); i++)
-//                {
-//                    ListActivity.get(i).finish();
-//                }
-//
-//                UtilAPI.ClearActivityInPlayerList();
-//            }
 
             this.dismiss();
 

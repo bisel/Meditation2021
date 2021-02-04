@@ -505,6 +505,9 @@ public class MainActivity extends BaseActivity implements ResultListener {
                 this.overridePendingTransition(0, 0);
                 finish();
 
+//                Intent intent = new Intent(UtilAPI.GetActivity() , TimerDialogActivity.class);
+//                UtilAPI.GetActivity().startActivity(intent);
+
                 //ActivityStack.instance().Push(MyContentsActivity.this, ""); // 메인액티비티여야 된다.
 
                 //ActivityStack.instance().Push(this, "");

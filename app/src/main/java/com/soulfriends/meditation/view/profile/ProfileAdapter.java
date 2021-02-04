@@ -67,29 +67,32 @@ public class ProfileAdapter extends RecyclerView.Adapter{
         UtilAPI.load_imageEX(this.context, profileItemViewModel.meditationContents.thumbnail, bind.imgChildItem, profileItemViewModel.meditationContents);
 
         //  0 : 기본 제공  1 : 소셜 콘텐츠
-        if(profileItemViewModel.meditationContents.ismycontents == 0)
-        {
-            // 0 : 기본 제공
 
-            bind.ivModify.setVisibility(View.GONE);
+        bind.ivModify.setVisibility(profileItemViewModel.bShow_ivModify);
 
-
-        }
-        else
-        {
-            // 1 : 소셜 콘텐츠
-            // 2021.02.02
-            if(profileItemViewModel.meditationContents.authoruid.equals(NetServiceManager.getinstance().getUserProfile().uid)){
-                UtilAPI.s_playerMode = UtilAPI.PlayerMode.my;
-
-                bind.ivModify.setVisibility(View.VISIBLE);
-
-            }else{
-                UtilAPI.s_playerMode = UtilAPI.PlayerMode.friend;
-
-                bind.ivModify.setVisibility(View.GONE);
-            }
-        }
+//        if(profileItemViewModel.meditationContents.ismycontents == 0)
+//        {
+//            // 0 : 기본 제공
+//
+//            bind.ivModify.setVisibility(View.GONE);
+//
+//
+//        }
+//        else
+//        {
+//            // 1 : 소셜 콘텐츠
+//            // 2021.02.02
+//            if(profileItemViewModel.meditationContents.authoruid.equals(NetServiceManager.getinstance().getUserProfile().uid)){
+//                UtilAPI.s_playerMode = UtilAPI.PlayerMode.my;
+//
+//                bind.ivModify.setVisibility(View.VISIBLE);
+//
+//            }else{
+//                UtilAPI.s_playerMode = UtilAPI.PlayerMode.friend;
+//
+//                bind.ivModify.setVisibility(View.GONE);
+//            }
+//        }
 
 //        if(profileItemViewModel.meditationContents.thumbnail_uri == null)
 //        {
@@ -109,45 +112,49 @@ public class ProfileAdapter extends RecyclerView.Adapter{
 
         // 콘텐츠 상태
         // 콘텐츠 인덱스를 받아서 콘텐츠 상태 표시를 해야 한다.
-        int contents_state = profileItemViewModel.meditationContents.contentskind;
-        switch(contents_state)
+
+
+        int contents_state = profileItemViewModel.contentskind;
+        if(contents_state == 0)
         {
-            case 1:
-            {
-                // 명상
-                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_med);
+            bind.ivState.setVisibility(View.GONE);
+        }
+        else {
+
+            bind.ivState.setVisibility(View.VISIBLE);
+
+            switch (contents_state) {
+                case 1: {
+                    // 명상
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_med);
+                }
+                break;
+                case 2: {
+                    // 수면 명상
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_sleep_md);
+                }
+                break;
+                case 3: {
+                    // 북수면
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_bsleep);
+                }
+                break;
+                case 4: {
+                    // 음악
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_music);
+                }
+                break;
+                case 5: {
+                    // 수면음악
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_sleep_ms);
+                }
+                break;
+                case 6: {
+                    // 자연소리
+                    UtilAPI.setImage(context, bind.ivState, R.drawable.ctgr_nature);
+                }
+                break;
             }
-            break;
-            case 2:
-            {
-                // 수면 명상
-                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_sleep_md);
-            }
-            break;
-            case 3:
-            {
-                // 북수면
-                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_bsleep);
-            }
-            break;
-            case 4:
-            {
-                // 음악
-                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_music);
-            }
-            break;
-            case 5:
-            {
-                // 수면음악
-                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_sleep_ms);
-            }
-            break;
-            case 6:
-            {
-                // 자연소리
-                UtilAPI.setImage(context,bind.ivState, R.drawable.ctgr_nature);
-            }
-            break;
         }
 //        FrameLayout frame = bind.frameLayout;
 //        frame.setOnClickListener(v -> {
