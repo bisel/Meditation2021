@@ -37,6 +37,7 @@ import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.AudioPlayer;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
+import com.soulfriends.meditation.view.player.SoundPlayer;
 import com.soulfriends.meditation.viewmodel.ContentsMakeViewModel;
 import com.soulfriends.meditation.viewmodel.ContentsMakeViewModelFactory;
 
@@ -52,6 +53,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
     private ContentsMakeViewModelFactory contentsMakeViewModelFactory;
     private AlertDialog.Builder alertDialog = null;
 
+
     public enum eAudioState
     {
         audio,
@@ -62,9 +64,9 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
     private eAudioState audioState = eAudioState.audio;
 
     private boolean bCheck_TitleName = false;
-    private boolean bCheck_Thumb = false;
+    private boolean bCheck_Thumb = true;
     private boolean bCheck_Audio = false;
-    private boolean bCheck_Background = false;
+    private boolean bCheck_Background = true;
 
     private boolean bCheck_NextActive = false;
 
@@ -147,6 +149,13 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
         UtilAPI.ClearActivity_Temp();
 
         checkPermission();
+
+        //----------------------------------------------------
+        // 썹네일, 배경 디폴트 이미지 설정 iv_background_image
+        //----------------------------------------------------
+        UtilAPI.setImage(this, binding.ivPicture,R.drawable.basic_img);
+
+        UtilAPI.setImage(this, binding.ivBackgroundbt,R.drawable.bsleep_wall);
 
         //----------------------------------------------------
         // 키패드 처리
@@ -491,6 +500,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 Check_TitleEdit();
 
                 // 녹음
+                SoundPlayer.instance().playSound(0);
 
                 bAudioIng = true;
 
@@ -610,6 +620,8 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             {
                 // 다시녹음
 
+                SoundPlayer.instance().playSound(0);
+
                 // 오디오 정지
                 Stop_Audio();
 
@@ -661,6 +673,8 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
                     // 타이틀
                     intent.putExtra("titleName", viewModel.title.getValue());
+
+
                     intent.putExtra("thumnailImgName", mCurrentPhotoPath);
                     intent.putExtra("playtime", playtime_sec_audio);
 
@@ -681,8 +695,15 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                     intent.putExtra("releasedate", curdate);
 
 
-                    if (list_background_string.size() > UtilAPI.s_id_backimamge_makecontents && UtilAPI.s_id_backimamge_makecontents > -1) {
-                        intent.putExtra("backgrroundImgName", list_background_string.get(UtilAPI.s_id_backimamge_makecontents));
+                    if(UtilAPI.s_id_backimamge_makecontents > -1) {
+                        if (list_background_string.size() > UtilAPI.s_id_backimamge_makecontents && UtilAPI.s_id_backimamge_makecontents > -1) {
+                            intent.putExtra("backgrroundImgName", list_background_string.get(UtilAPI.s_id_backimamge_makecontents));
+                        }
+                    }
+                    else
+                    {
+                        // -1 디폴트 인경우
+                        intent.putExtra("backgrroundImgName", list_background_string.get(0));
                     }
 
                     this.startActivity(intent);
@@ -728,8 +749,9 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
     private void Complete_Audio()
     {
-
         // 녹음 완료 할 경우
+        SoundPlayer.instance().playSound(0);
+
         SetState_Audio(eAudioState.play);
         StopTimer();
 

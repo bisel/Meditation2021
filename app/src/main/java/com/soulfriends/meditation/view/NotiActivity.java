@@ -66,6 +66,8 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                 public void onOpenAlarmList(boolean validate) {
                     // TRUE가 오면... 처리
                     if (validate) {
+
+
                     }
                 }
             });

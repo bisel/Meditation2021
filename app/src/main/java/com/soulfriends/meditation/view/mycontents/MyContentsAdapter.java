@@ -78,6 +78,10 @@ public class MyContentsAdapter extends RecyclerView.Adapter{
             if(myContentsItemViewModel.meditationContents.thumbnail != null) {
                 UtilAPI.load_imageEX(this.context, myContentsItemViewModel.meditationContents.thumbnail, bind.imgChildItem, myContentsItemViewModel.meditationContents);
             }
+            else
+            {
+                UtilAPI.setImage(this.context, bind.imgChildItem, R.drawable.basic_img);
+            }
 //            if(myContentsItemViewModel.meditationContents.thumbnail_uri == null)
 //            {
 //                UtilAPI.load_imageEX(this.context, myContentsItemViewModel.meditationContents.thumbnail, bind.imgChildItem, myContentsItemViewModel.meditationContents);

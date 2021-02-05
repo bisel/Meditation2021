@@ -19,6 +19,7 @@ import com.soulfriends.meditation.util.PreferenceManager;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.AudioPlayer;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
+import com.soulfriends.meditation.view.player.SoundPlayer;
 
 public class IntroActivity extends AppCompatActivity {
 
@@ -68,6 +69,7 @@ public class IntroActivity extends AppCompatActivity {
         boolean sound_off = PreferenceManager.getBoolean(this,"sound_off");
 
         AudioPlayer.with(getApplicationContext());
+        SoundPlayer.with(getApplicationContext());
 
         if(sound_off) {
             // 음악 정지 상태

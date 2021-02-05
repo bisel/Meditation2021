@@ -146,14 +146,16 @@ public class ChildItemExtAdapter extends RecyclerView.Adapter{
         //String str = childItemViewModel.entity.getValue().thumbnail;
 
         //if(childItemViewModel.meditationContents.thumbnail_uri == null)
-        if(childItemExtViewModel.meditationContents.thumbnail_uri == null)
-        {
-            UtilAPI.load_imageEX(this.context, childItemExtViewModel.entity.getValue().thumbnail, bind.imgChildItem, childItemExtViewModel.meditationContents);
-        }
-        else
-        {
-            Uri uri = Uri.parse(childItemExtViewModel.meditationContents.thumbnail_uri);
-            UtilAPI.showImage(this.context, uri, childExtViewHolder.getChildItemExtBinding().imgChildItem);
+
+        if(childItemExtViewModel.meditationContents.thumbnail == null) {
+            UtilAPI.setImage(this.context, bind.imgChildItem, R.drawable.basic_img);
+        }else {
+            if (childItemExtViewModel.meditationContents.thumbnail_uri == null) {
+                UtilAPI.load_imageEX(this.context, childItemExtViewModel.entity.getValue().thumbnail, bind.imgChildItem, childItemExtViewModel.meditationContents);
+            } else {
+                Uri uri = Uri.parse(childItemExtViewModel.meditationContents.thumbnail_uri);
+                UtilAPI.showImage(this.context, uri, childExtViewHolder.getChildItemExtBinding().imgChildItem);
+            }
         }
 
         //Glide.with(this.context).load(childItemViewModel.entity.getValue().thumbnail).into(childViewHolder.getChildItemBinding().imgChildItem);

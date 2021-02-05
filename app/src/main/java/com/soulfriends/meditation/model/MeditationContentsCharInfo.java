@@ -5,6 +5,6 @@ public class MeditationContentsCharInfo {
     public String title;
     public String genre;
     public String kind;
-    public String paid;
+    public String paid;          // 기본 제공 유료 무료 여부 0, 1
     public String chartag;       // 콘텐츠 char 태그
 }

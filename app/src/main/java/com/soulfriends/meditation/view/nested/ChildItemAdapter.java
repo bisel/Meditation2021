@@ -143,14 +143,17 @@ public class ChildItemAdapter extends RecyclerView.Adapter {
         //String str = childItemViewModel.entity.getValue().thumbnail;
 
         //if(childItemViewModel.meditationContents.thumbnail_uri == null)
-        if(childItemViewModel.meditationContents.thumbnail_uri == null)
-        {
-            UtilAPI.load_imageEX(this.context, childItemViewModel.entity.getValue().thumbnail, bind.imgChildItem, childItemViewModel.meditationContents);
+
+        if(childItemViewModel.meditationContents.thumbnail == null) {
+            UtilAPI.setImage(this.context, bind.imgChildItem, R.drawable.basic_img);
         }
-        else
-        {
-            Uri uri = Uri.parse(childItemViewModel.meditationContents.thumbnail_uri);
-            UtilAPI.showImage(this.context, uri, childViewHolder.getChildItemBinding().imgChildItem);
+        else {
+            if (childItemViewModel.meditationContents.thumbnail_uri == null) {
+                UtilAPI.load_imageEX(this.context, childItemViewModel.entity.getValue().thumbnail, bind.imgChildItem, childItemViewModel.meditationContents);
+            } else {
+                Uri uri = Uri.parse(childItemViewModel.meditationContents.thumbnail_uri);
+                UtilAPI.showImage(this.context, uri, childViewHolder.getChildItemBinding().imgChildItem);
+            }
         }
 
         //Glide.with(this.context).load(childItemViewModel.entity.getValue().thumbnail).into(childViewHolder.getChildItemBinding().imgChildItem);

@@ -64,8 +64,14 @@ public class ProfileAdapter extends RecyclerView.Adapter{
 
         ProfileItemBinding bind = profileViewHolder.getProfileItemBinding();
 
-        UtilAPI.load_imageEX(this.context, profileItemViewModel.meditationContents.thumbnail, bind.imgChildItem, profileItemViewModel.meditationContents);
 
+        if(profileItemViewModel.meditationContents.thumbnail == null)
+        {
+            UtilAPI.setImage(this.context, bind.imgChildItem, R.drawable.basic_img);
+        }
+        else {
+            UtilAPI.load_imageEX(this.context, profileItemViewModel.meditationContents.thumbnail, bind.imgChildItem, profileItemViewModel.meditationContents);
+        }
         //  0 : 기본 제공  1 : 소셜 콘텐츠
 
         bind.ivModify.setVisibility(profileItemViewModel.bShow_ivModify);

@@ -40,6 +40,7 @@ import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.AudioPlayer;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
+import com.soulfriends.meditation.view.player.SoundPlayer;
 import com.soulfriends.meditation.viewmodel.ContentsEditViewModel;
 import com.soulfriends.meditation.viewmodel.ContentsEditViewModelFactory;
 import com.soulfriends.meditation.viewmodel.ContentsMakeViewModel;
@@ -161,6 +162,12 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
             // 썹네일
             binding.layoutThumbAdd.setVisibility(View.GONE);
             binding.layoutThumbImage.setVisibility(View.VISIBLE);
+
+            // null 일 경우 디폴트 처리
+            if(cur_meditationContents.thumbnail == null)
+            {
+                UtilAPI.setImage(this, binding.ivPictureImage,R.drawable.basic_img);
+            }
 
             UtilAPI.load_image(this, orig_thumbnail_uri, binding.ivPictureImage);
 
@@ -551,6 +558,7 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
                 Check_TitleEdit();
 
                 // 녹음
+                SoundPlayer.instance().playSound(0);
 
                 bAudioIng = true;
 
@@ -672,6 +680,8 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
             case R.id.iv_re_audiobt:
             {
                 // 다시녹음
+
+                SoundPlayer.instance().playSound(0);
 
                 // 오디오 정지
                 Stop_Audio();
@@ -868,7 +878,10 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
     private void Complete_Audio()
     {
         // 녹음 완료 할 경우
+        SoundPlayer.instance().playSound(0);
+
         SetState_Audio(eAudioState.play);
+
         StopTimer();
 
         // 타이틀 입력 처리
