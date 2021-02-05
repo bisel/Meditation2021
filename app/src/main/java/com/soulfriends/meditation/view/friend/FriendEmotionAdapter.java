@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.soulfriends.meditation.databinding.FriendEmotionItemBinding;
+import com.soulfriends.meditation.netservice.NetServiceUtility;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
+import com.soulfriends.meditation.util.UtilAPI;
 
 import java.util.List;
 
@@ -78,6 +80,11 @@ public class FriendEmotionAdapter extends RecyclerView.Adapter{
             bind.layoutBasebt.setVisibility(View.GONE);
             bind.layoutRequestingbt.setVisibility(View.GONE);
             bind.layoutRequestbt.setVisibility(View.VISIBLE);
+        }
+
+        // profile 이미지
+        if(friendEmotionItemViewModel.userProfile.profileimg != null && friendEmotionItemViewModel.userProfile.profileimg.length() != 0) {
+            UtilAPI.load_image_circle(context, NetServiceUtility.profieimgdir + friendEmotionItemViewModel.userProfile.profileimg, bind.ivIcon);
         }
     }
 
