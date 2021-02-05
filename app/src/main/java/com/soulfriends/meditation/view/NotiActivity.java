@@ -198,10 +198,12 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
                                 if(validate)
                                 {
-                                    // 리스트에서 삭제
-                                    list_noti.remove(pos);
-                                    notiAdapter.notifyItemRemoved(pos);
-                                    notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                    if(list_noti.size() > 0) {
+                                        // 리스트에서 삭제
+                                        list_noti.remove(pos);
+                                        notiAdapter.notifyItemRemoved(pos);
+                                        notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                    }
 
                                     //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
                                 }
@@ -224,10 +226,12 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
                                 if(validate)
                                 {
-                                    // 리스트에서 삭제
-                                    list_noti.remove(pos);
-                                    notiAdapter.notifyItemRemoved(pos);
-                                    notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                    if(list_noti.size() > 0) {
+                                        // 리스트에서 삭제
+                                        list_noti.remove(pos);
+                                        notiAdapter.notifyItemRemoved(pos);
+                                        notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                    }
 
                                     //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
                                 }
@@ -243,11 +247,11 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                     }
                 }
 
-                list_noti.remove(pos);
-                notiAdapter.notifyItemRemoved(pos);
-                notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
-
-                Toast.makeText(this, "거절" ,Toast.LENGTH_SHORT).show();
+//                list_noti.remove(pos);
+//                notiAdapter.notifyItemRemoved(pos);
+//                notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+//
+//                Toast.makeText(this, "거절" ,Toast.LENGTH_SHORT).show();
             }
             break;
             case R.id.iv_ok: {
@@ -268,10 +272,12 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
                                 if(validate)
                                 {
-                                    // 리스트에서 삭제
-                                    list_noti.remove(pos);
-                                    notiAdapter.notifyItemRemoved(pos);
-                                    notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                    if(list_noti.size() > 0) {
+                                        // 리스트에서 삭제
+                                        list_noti.remove(pos);
+                                        notiAdapter.notifyItemRemoved(pos);
+                                        notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                    }
 
                                     //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
                                 }
@@ -295,9 +301,11 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                                 if(validate)
                                 {
                                     // 리스트에서 삭제
-                                    list_noti.remove(pos);
-                                    notiAdapter.notifyItemRemoved(pos);
-                                    notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                    if(list_noti.size() > 0) {
+                                        list_noti.remove(pos);
+                                        notiAdapter.notifyItemRemoved(pos);
+                                        notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                    }
 
                                     //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
                                 }

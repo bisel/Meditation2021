@@ -35,6 +35,9 @@ public class ChildItemExtViewModel extends ViewModel {
     // 콘텐츠 종류
     public int contentskind;
 
+    // 무료, 유료 여부
+    public int paid;
+
     public ChildItemExtViewModel(MeditationContents entity_data, int category_subtype, int count) {
 
         meditationContents = entity_data;
@@ -87,6 +90,8 @@ public class ChildItemExtViewModel extends ViewModel {
             else
             {
                 contentskind = Integer.parseInt(NetServiceManager.getinstance().GetKindByBgTagName(info.kind));
+
+                paid = Integer.parseInt(info.paid);
             }
         }
         else

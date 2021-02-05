@@ -76,6 +76,16 @@ public class ProfileAdapter extends RecyclerView.Adapter{
 
         bind.ivModify.setVisibility(profileItemViewModel.bShow_ivModify);
 
+        // 잠금 상태
+        if(profileItemViewModel.paid == 1)
+        {
+            bind.contentsLock.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            bind.contentsLock.setVisibility(View.GONE);
+        }
+
 //        if(profileItemViewModel.meditationContents.ismycontents == 0)
 //        {
 //            // 0 : 기본 제공

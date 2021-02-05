@@ -33,6 +33,9 @@ public class ProfileItemViewModel extends ViewModel {
     // 가위 보여야 할지 여부
     public int bShow_ivModify = 0;
 
+    // 무료, 유료 여부
+    public int paid;
+
     public ProfileItemViewModel(MeditationContents entity_data, int category_subtype, ItemClickListenerExt listener) {
 
         meditationContents = entity_data;
@@ -66,6 +69,17 @@ public class ProfileItemViewModel extends ViewModel {
         {
             // 0 : 기본 제공
             bShow_ivModify = 0;
+
+            MeditationContentsCharInfo info = NetServiceManager.getinstance().getMeditationContentsCharInfo(meditationContents.uid);
+
+            if(info == null)
+            {
+                int xx = 0;
+            }
+            else
+            {
+                paid = Integer.parseInt(info.paid);
+            }
         }
         else
         {

@@ -173,6 +173,16 @@ public class ChildItemAdapter extends RecyclerView.Adapter {
             bind.ivBadge.setVisibility(View.VISIBLE);
         }
 
+        // 잠금 상태
+        if(childItemViewModel.paid == 1)
+        {
+            bind.contentsLock.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            bind.contentsLock.setVisibility(View.GONE);
+        }
+
         // 콘텐츠 상태
         // 콘텐츠 인덱스를 받아서 콘텐츠 상태 표시를 해야 한다.
         int contents_state = childItemViewModel.contentskind;
