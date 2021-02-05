@@ -148,7 +148,13 @@ public class MainActivity extends BaseActivity implements ResultListener {
             binding.miniLayout.setVisibility(View.VISIBLE);
 
 
-            UtilAPI.load_image(this, meditationContents.thumbnail, binding.ivMiniTitleIcon);
+            if(meditationContents.thumbnail == null)
+            {
+                UtilAPI.setImage(this, binding.ivMiniTitleIcon, R.drawable.basic_img);
+            }
+            else {
+                UtilAPI.load_image(this, meditationContents.thumbnail, binding.ivMiniTitleIcon);
+            }
 
             if (meditationAudioManager.isPlaying()) {
                 UtilAPI.setImage(this, binding.ivPlay, R.drawable.miniplay_pause_btn);
