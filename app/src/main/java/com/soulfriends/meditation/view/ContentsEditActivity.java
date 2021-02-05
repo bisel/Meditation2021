@@ -723,6 +723,9 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
 
                 if (bCheck_NextActive) {
 
+                    // 오디오 정지
+                    Stop_Audio();
+
                     // 다음 이동
 
                     // 현재 설정된 값을 다음 액티비티에 정보를 넘겨줘야 한다.

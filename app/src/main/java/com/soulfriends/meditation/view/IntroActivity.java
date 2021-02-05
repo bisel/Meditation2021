@@ -1,7 +1,17 @@
 package com.soulfriends.meditation.view;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.media.AudioAttributes;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,11 +25,15 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.AuthManager;
+import com.soulfriends.meditation.util.LocalNotificationReceiver;
 import com.soulfriends.meditation.util.PreferenceManager;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.AudioPlayer;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
 import com.soulfriends.meditation.view.player.SoundPlayer;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class IntroActivity extends AppCompatActivity {
 
@@ -149,5 +163,8 @@ public class IntroActivity extends AppCompatActivity {
 
         super.onDestroy();
     }
+
+
+
 
 }

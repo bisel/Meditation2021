@@ -604,7 +604,9 @@ public class NetServiceManager {
                         contentsdata.audio =   NetServiceUtility.mycontentsaudiodir + contentsdata.audio;
 
                         // thumnail
-                        contentsdata.thumbnail = NetServiceUtility.mycontentsthumnaildir + contentsdata.thumbnail;
+                        if(contentsdata.thumbnail != null){
+                            contentsdata.thumbnail = NetServiceUtility.mycontentsthumnaildir + contentsdata.thumbnail;
+                        }
 
                         // bg image -> bg는 이미지
                         // contentsdata.bgimg =   NetServiceUtility.bgimgdir + contentsdata.bgimg + NetServiceUtility.imgextenstion;

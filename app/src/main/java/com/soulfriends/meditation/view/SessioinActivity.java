@@ -61,7 +61,14 @@ public class SessioinActivity extends BaseActivity implements ResultListener {
         binding.setViewModel(viewModel);
 
         // 이미지
-        UtilAPI.load_image(this, meditationContents.thumbnail, binding.ivContentsImage);
+
+        if(meditationContents.thumbnail == null) {
+
+            UtilAPI.setImage(this,binding.ivContentsImage, R.drawable.basic_img);
+        }
+        else {
+            UtilAPI.load_image(this, meditationContents.thumbnail, binding.ivContentsImage);
+        }
 
         //String uid = PreferenceManager.getString(this,"uid");
 
