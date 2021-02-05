@@ -316,6 +316,18 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
     protected void onStart() {
         super.onStart();
 
+        // string
+
+        list_background_string.clear();
+
+        // string
+        list_background_string.add("bsleep_wall");
+        list_background_string.add("med_wall");
+        list_background_string.add("music_wall");
+        list_background_string.add("nature_wall");
+        list_background_string.add("sleep_md_wall");
+        list_background_string.add("sleep_ms_wall");
+
         if(UtilAPI.s_id_backimamge_makecontents > -1)
         {
             // 백그라운드 액티비티에서 이미지 id 받아옴
@@ -333,14 +345,6 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             list_background.add(R.drawable.sleep_md_wall);
             list_background.add(R.drawable.sleep_ms_wall);
 
-            // string
-            list_background_string.add("bsleep_wall");
-            list_background_string.add("med_wall");
-            list_background_string.add("music_wall");
-            list_background_string.add("nature_wall");
-            list_background_string.add("sleep_md_wall");
-            list_background_string.add("sleep_ms_wall");
-
             binding.ivBackgroundImage.setImageResource(list_background.get(UtilAPI.s_id_backimamge_makecontents));
 
             bCheck_Background = true;
@@ -348,6 +352,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
         }
         else
         {
+
             binding.layoutBackgroundAdd.setVisibility(View.VISIBLE);
 
             binding.layoutBackgroundImage.setVisibility(View.GONE);
