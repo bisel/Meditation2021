@@ -125,6 +125,20 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                     NetServiceManager.getinstance().reqSocialEmotionAllContents();
 
+
+                    //--------------------------
+                    // 1. 친구 노멀 리스트 요청
+                    //--------------------------
+
+                    NetServiceManager.getinstance().setOnRecvFriendsRequestListener(new NetServiceManager.OnRecvFriendsRequestListener() {
+                        @Override
+                        public void onRecvFriendsRequest(boolean validate) {
+                            DoEmotionFriendRequest();
+                        }
+                    });
+
+                    NetServiceManager.getinstance().recvFriendsRequestList("normal");
+
                     //------------------------------------------------
                     // 콘텐츠
                     //------------------------------------------------
@@ -195,18 +209,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                             // 5. 감정 친구 요청중
                             //  -> recvFriendsRequestList("emotion") : 감정친구 요청 리스트 받는 함수
 
-                            //--------------------------
-                            // 1. 친구 노멀 리스트 요청
-                            //--------------------------
 
-                            NetServiceManager.getinstance().setOnRecvFriendsRequestListener(new NetServiceManager.OnRecvFriendsRequestListener() {
-                                @Override
-                                public void onRecvFriendsRequest(boolean validate) {
-                                    DoEmotionFriendRequest();
-                                }
-                            });
-
-                            NetServiceManager.getinstance().recvFriendsRequestList("normal");
                         }
                     }
                 }
