@@ -1,13 +1,9 @@
 package com.soulfriends.meditation.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
@@ -136,9 +132,12 @@ public class ContentsUploadActivity extends BaseActivity {
             successContents.audio = NetServiceUtility.mycontentsaudiodir + successContents.audio;
         }
 
-        if(!successContents.thumbnail.contains("gs://")){
-            successContents.thumbnail = NetServiceUtility.mycontentsthumnaildir +  successContents.thumbnail;
+        if(successContents.thumbnail != null){
+            if(!successContents.thumbnail.contains("gs://")){
+                successContents.thumbnail = NetServiceUtility.mycontentsthumnaildir +  successContents.thumbnail;
+            }
         }
+
 
         if(isNewContents){
            NetServiceManager.getinstance().getUserProfile().mycontentslist.add(successContents.uid);

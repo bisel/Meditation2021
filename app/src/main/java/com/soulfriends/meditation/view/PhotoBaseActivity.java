@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -16,7 +15,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -309,6 +307,8 @@ public class PhotoBaseActivity extends BaseActivity {
                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                FirebaseAuth.getInstance().signOut();;
+                                PhotoBaseActivity.this.startActivity(new Intent(PhotoBaseActivity.this, LoginActivity.class));
                                 finish();
                             }
                         })
