@@ -490,12 +490,18 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
             if(friendEmotionAdapter == null) {
                 friendEmotionAdapter = new FriendEmotionAdapter(list_friend, container.getContext(), this);
+
+                friend_RecyclerViewItem.setAdapter(friendEmotionAdapter);
+                friend_RecyclerViewItem.setLayoutManager(layoutManager_friend);
+                friend_RecyclerViewItem.setNestedScrollingEnabled(false);
             }
 
             friendEmotionAdapter.SetList(list_friend);
-            friend_RecyclerViewItem.setAdapter(friendEmotionAdapter);
-            friend_RecyclerViewItem.setLayoutManager(layoutManager_friend);
-            friend_RecyclerViewItem.setNestedScrollingEnabled(false);
+
+            friendEmotionAdapter.notifyDataSetChanged();
+
+            friend_RecyclerViewItem.setVisibility(View.VISIBLE);
+
         }
         else
         {

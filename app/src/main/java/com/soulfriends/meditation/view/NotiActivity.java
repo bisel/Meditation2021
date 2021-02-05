@@ -114,6 +114,9 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
         ArrayList<MeditationDetailAlarm> list_alarm = NetServiceManager.getinstance().mDetailAlarmDataList;
 
+
+        String num = String.valueOf(list_alarm.size());
+        Toast.makeText(this, num ,Toast.LENGTH_SHORT).show();
         for (int i = 0; i < list_alarm.size(); i++)
         {
             MeditationDetailAlarm alarm = list_alarm.get(i);

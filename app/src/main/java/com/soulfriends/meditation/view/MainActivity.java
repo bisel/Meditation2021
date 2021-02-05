@@ -74,6 +74,7 @@ public class MainActivity extends BaseActivity implements ResultListener {
     protected void onStart() {
         super.onStart();
 
+        bCallAlarm = false;
 
         // 메인에서는 액티비티 스택 초기화 처리한다.
 
@@ -186,14 +187,22 @@ public class MainActivity extends BaseActivity implements ResultListener {
 
     }
 
+    private boolean bCallAlarm = false;
     private void update_alarm()
     {
+        if(bCallAlarm)
+        {
+            return;
+        }
+
         NetServiceManager.getinstance().setOnRecvMyAlarmListListener(new NetServiceManager.OnRecvMyAlarmListListener() {
             @Override
             public void onRecvMyAlarmList(boolean validate) {
 
                 if(validate)
                 {
+
+
                     ArrayList<MeditationDetailAlarm> list_alarm = NetServiceManager.getinstance().mDetailAlarmDataList;
 
                     // 새로운 알림 정보 갯수 확인
@@ -225,11 +234,14 @@ public class MainActivity extends BaseActivity implements ResultListener {
                 {
 
                 }
+                bCallAlarm = false;
             }
         });
 
         // null exception으로 인해서 주석처리함 dlsmdla
         NetServiceManager.getinstance().recvMyAlarmList();
+
+        bCallAlarm = true;
     }
 
     @Override // 2020.12.20
@@ -269,6 +281,7 @@ public class MainActivity extends BaseActivity implements ResultListener {
         viewModel = new ViewModelProvider(this.getViewModelStore(), mainViewModelFactory).get(MainViewModel.class);
         binding.setViewModel(viewModel);
 
+        bCallAlarm = false;
 
         binding.ivAlarmBg.setVisibility(View.GONE);
         binding.tvAlarmCount.setVisibility(View.GONE);

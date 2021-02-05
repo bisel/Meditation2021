@@ -183,9 +183,11 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
                         if (validate) {
                             // 삭제
                             // 리사이클 데이터 변경에따른 ui 업데이트
-                            list_friend.remove(pos);
-                            friendEditAdapter.notifyItemRemoved(pos);
-                            friendEditAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                            if(list_friend.size() > 0) {
+                                list_friend.remove(pos);
+                                friendEditAdapter.notifyItemRemoved(pos);
+                                friendEditAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                            }
 
                         } else {
 
@@ -194,10 +196,10 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
                 });
 
                 NetServiceManager.getinstance().removeFriend(NetServiceManager.getinstance().getUserProfile().uid, userProfile.uid);
-
-                list_friend.remove(pos);
-                friendEditAdapter.notifyItemRemoved(pos);
-                friendEditAdapter.notifyItemRangeChanged(pos, list_friend.size());
+//
+//                list_friend.remove(pos);
+//                friendEditAdapter.notifyItemRemoved(pos);
+//                friendEditAdapter.notifyItemRangeChanged(pos, list_friend.size());
 
 //                String msg = "id = ";
 //                msg += String.valueOf(index_id);
