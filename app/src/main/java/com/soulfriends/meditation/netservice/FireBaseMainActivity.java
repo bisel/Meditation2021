@@ -1,16 +1,15 @@
 package com.soulfriends.meditation.netservice;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.model.UserProfile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -24,12 +23,16 @@ public class FireBaseMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fire_base_main);
 
+        // billing init
+        NetServiceBillingManager.getinstance().init(this);
+
         mFBBtn = (Button) findViewById(R.id.firebaseBtn);
         mFBBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TestBilling();
 //                TestOneOtherPlayer();
-                TestMultipleOtherPlayer();
+//                TestMultipleOtherPlayer();
             }
         });
 
@@ -37,6 +40,7 @@ public class FireBaseMainActivity extends AppCompatActivity {
         mPrintFB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TestCheck();
                 Log.d("Test","OthertestValue : "+otherUserVal.age);
             }
         });
@@ -76,4 +80,17 @@ public class FireBaseMainActivity extends AppCompatActivity {
             NetServiceManager.getinstance().getOtherUserProfile(inputContentsCategorysIds.get(i));
         }
     }
+
+
+    public void TestBilling()
+    {
+        NetServiceBillingManager.getinstance().connect();
+    }
+
+    public void TestCheck()
+    {
+        NetServiceBillingManager.getinstance().checkPurchase(this);
+    }
+
+
 }

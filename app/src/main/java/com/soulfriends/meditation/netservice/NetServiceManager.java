@@ -4388,7 +4388,6 @@ public class NetServiceManager {
                 infoData.author = mUserProfile.nickname;
                 infoData.uid = curdetialdate+mUserProfile.uid;  // uid를 키를 해야 한다.
                 infoData.authoruid = mUserProfile.uid;
-
                 newContents = true;
             }
 
