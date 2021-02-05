@@ -81,7 +81,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
             LinearLayoutManager layoutManager = new LinearLayoutManager(NotiActivity.this, LinearLayoutManager.VERTICAL, false);
             //rcv.setLayoutManager(layoutManager);
 
-            list_noti = ItemList();
+            ItemList();
             notiAdapter = new NotiAdapter(list_noti, NotiActivity.this, NotiActivity.this);
 
             binding.recyclerview.setAdapter(notiAdapter);
@@ -108,9 +108,10 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 //    1 Type : 닉네임 님이 친구 신청을 했습니다.
 
 
-    private List<NotiItemViewModel> ItemList() {
+    private void ItemList() {
 
-        List list = new ArrayList<>();
+        list_noti.clear();
+
         ArrayList<MeditationDetailAlarm> list_alarm = NetServiceManager.getinstance().mDetailAlarmDataList;
 
         for (int i = 0; i < list_alarm.size(); i++)
@@ -119,7 +120,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
             NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), alarm);
 
-            list.add(notiViewModel);
+            list_noti.add(notiViewModel);
 
         }
 
@@ -159,8 +160,6 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 //                list.add(notiViewModel);
 //            }
 //        }
-
-        return list;
     }
 
     @Override
