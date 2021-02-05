@@ -4642,30 +4642,32 @@ public class NetServiceManager {
     public void delMyContents(MeditationContents delMyContents){
 
         // 1. 기존 Thumnail을 지워야 한다.
-        String[] delthumbnailSplit = delMyContents.thumbnail.split("/");
+        if(delMyContents.thumbnail != null){
+            String[] delthumbnailSplit = delMyContents.thumbnail.split("/");
+            int splitNum = delthumbnailSplit.length;
+            String delThumbnailImgName = "";
+            if(splitNum > 0){
+                delThumbnailImgName = delthumbnailSplit[splitNum-1];
+            }else{
+                delThumbnailImgName = delMyContents.thumbnail;
+            }
 
-        int splitNum = delthumbnailSplit.length;
-        String delThumbnailImgName = "";
-        if(splitNum > 0){
-            delThumbnailImgName = delthumbnailSplit[splitNum-1];
-        }else{
-            delThumbnailImgName = delMyContents.thumbnail;
+            StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(delThumbnailImgName);
+
+            // Delete the file
+            delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("del","success File");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.d("del","Failed File");
+                }
+            });
         }
 
-        StorageReference delStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(delThumbnailImgName);
-
-        // Delete the file
-        delStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                    Log.d("del","success File");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                    Log.d("del","Failed File");
-            }
-        });
 
         // 2. 기존 Sound File을 지운다.
         String[] delSndSplit = delMyContents.audio.split("/");
