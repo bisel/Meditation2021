@@ -74,7 +74,15 @@ public class ProfileAdapter extends RecyclerView.Adapter{
         }
         //  0 : 기본 제공  1 : 소셜 콘텐츠
 
-        bind.ivModify.setVisibility(profileItemViewModel.bShow_ivModify);
+        if(profileItemViewModel.bShow_ivModify == 0)
+        {
+            bind.ivModify.setVisibility(View.GONE);
+        }
+        else
+        {
+            bind.ivModify.setVisibility(View.VISIBLE);
+        }
+
 
         // 잠금 상태
         if(profileItemViewModel.paid == 1)

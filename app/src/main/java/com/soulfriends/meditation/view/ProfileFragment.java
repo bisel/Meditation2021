@@ -498,9 +498,9 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
             friendEmotionAdapter.SetList(list_friend);
 
-            friendEmotionAdapter.notifyDataSetChanged();
-
             friend_RecyclerViewItem.setVisibility(View.VISIBLE);
+
+            friendEmotionAdapter.notifyDataSetChanged();
 
         }
         else

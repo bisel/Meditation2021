@@ -130,7 +130,7 @@
 
                 <ImageView
                     android:id="@+id/iv_modify"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_above="@+id/iv_text_bar"
