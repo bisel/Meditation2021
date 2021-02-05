@@ -211,6 +211,9 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
 
                         }
+
+                        // 버튼 구성
+                        Build_Button(view);
                     }
                 }
             }
@@ -218,8 +221,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
         NetServiceManager.getinstance().recvSocialContentsExt();
 
-        // 버튼 구성
-        Build_Button(view);
+
 
         return view;
     }
