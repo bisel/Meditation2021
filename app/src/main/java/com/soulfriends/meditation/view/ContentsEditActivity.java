@@ -168,8 +168,9 @@ public class ContentsEditActivity  extends PhotoBaseActivity implements ResultLi
             {
                 UtilAPI.setImage(this, binding.ivPictureImage,R.drawable.basic_img);
             }
-
-            UtilAPI.load_image(this, orig_thumbnail_uri, binding.ivPictureImage);
+            else {
+                UtilAPI.load_image(this, orig_thumbnail_uri, binding.ivPictureImage);
+            }
 
             // 오디오
             if(orig_isRecordSndFile == 0)
