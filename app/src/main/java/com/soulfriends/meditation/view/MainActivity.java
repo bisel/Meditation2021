@@ -183,6 +183,11 @@ public class MainActivity extends BaseActivity implements ResultListener {
         binding.ivAlarmBg.setVisibility(View.GONE);
         binding.tvAlarmCount.setVisibility(View.GONE);
 
+
+    }
+
+    private void update_alarm()
+    {
         NetServiceManager.getinstance().setOnRecvMyAlarmListListener(new NetServiceManager.OnRecvMyAlarmListListener() {
             @Override
             public void onRecvMyAlarmList(boolean validate) {
@@ -372,6 +377,8 @@ public class MainActivity extends BaseActivity implements ResultListener {
     }
 
     public void changeFragment(Fragment fragment, String tagFragmentName) {
+
+        update_alarm();
 
         UtilAPI.s_StrMainFragment = tagFragmentName;
 
