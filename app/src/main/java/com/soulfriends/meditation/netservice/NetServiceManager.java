@@ -3849,7 +3849,7 @@ public class NetServiceManager {
     // 5. 친구 수락(수락후 요청들 지워야 한다.)
     private OnAcceptFriendRequestListener mAcceptFriendRequestListener = null;
     public interface OnAcceptFriendRequestListener {
-        void onAcceptFriendRequest(boolean validate);
+        void onAcceptFriendRequest(boolean validate,MeditationFriend friendAcceptInfo);
     }
     public void setOnAcceptFriendRequestListener(OnAcceptFriendRequestListener listenfunc){
         mAcceptFriendRequestListener = listenfunc;
@@ -3859,6 +3859,8 @@ public class NetServiceManager {
         MeditationFriend mEntity = new MeditationFriend();
         mEntity.friendtype = "normal";
         mEntity.releasedate = getCurDate("yyyyMMddHHmmss");
+
+        // 1. 해당 요청이 정상 적인지 파악한 후 Friend에 처리 해야 한다.
 
         mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).setValue(mEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -3884,13 +3886,13 @@ public class NetServiceManager {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 // 요청 성공
-                                                mAcceptFriendRequestListener.onAcceptFriendRequest(true);
+                                                mAcceptFriendRequestListener.onAcceptFriendRequest(true,mEntity);
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                                                mAcceptFriendRequestListener.onAcceptFriendRequest(false,null);
                                             }
                                         });
 
@@ -3899,7 +3901,7 @@ public class NetServiceManager {
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                                        mAcceptFriendRequestListener.onAcceptFriendRequest(false,null);
                                     }
                                 });
                             }
@@ -3907,7 +3909,7 @@ public class NetServiceManager {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                                mAcceptFriendRequestListener.onAcceptFriendRequest(false,null);
                             }
                         });
                     }
@@ -3915,7 +3917,7 @@ public class NetServiceManager {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                        mAcceptFriendRequestListener.onAcceptFriendRequest(false,null);
                     }
                 });
             }
@@ -3923,13 +3925,13 @@ public class NetServiceManager {
         .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                mAcceptFriendRequestListener.onAcceptFriendRequest(false,null);
             }
         });
     }
     
     
-    // 6. 감정 친구 수락 (수락후 요청들 지워야 한다.)
+    // 6. 감정 친구 수락 (수락후 요청들 지워야 한다.) -> 2021.02.09
     public void AcceptEmotionFriend(String  sendUserID, String recvUserID){
         Map<String, Object> updateMap = new HashMap<>();
         updateMap.put("friendtype", "emotion");
@@ -3961,13 +3963,13 @@ public class NetServiceManager {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 // 요청 성공
-                                                mAcceptFriendRequestListener.onAcceptFriendRequest(true);
+                                                mAcceptFriendRequestListener.onAcceptFriendRequest(true,null);
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                                                mAcceptFriendRequestListener.onAcceptFriendRequest(false,null);
                                             }
                                         });
                                     }
@@ -3975,7 +3977,7 @@ public class NetServiceManager {
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                                        mAcceptFriendRequestListener.onAcceptFriendRequest(false,null);
                                     }
                                 });
                             }
@@ -3983,7 +3985,7 @@ public class NetServiceManager {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                                mAcceptFriendRequestListener.onAcceptFriendRequest(false,null);
                             }
                         });
                     }
@@ -3991,7 +3993,7 @@ public class NetServiceManager {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                        mAcceptFriendRequestListener.onAcceptFriendRequest(false,null);
                     }
                 });
         }
@@ -3999,7 +4001,7 @@ public class NetServiceManager {
         .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                mAcceptFriendRequestListener.onAcceptFriendRequest(false);
+                mAcceptFriendRequestListener.onAcceptFriendRequest(false,null);
             }
         });
     }
@@ -5426,6 +5428,35 @@ public class NetServiceManager {
 
     // 친구 정보 얻기
     public ArrayList<MeditationDetailFriend> mDetialFriendsList = new ArrayList<MeditationDetailFriend>();
+
+    // 강제로 local Friend 추가 -> 2021.02.09 처리
+    public boolean addForceLocalFriends(UserProfile OtherUserProfile, MeditationFriend frineddata){
+        if(frineddata == null || OtherUserProfile == null)
+            return false;
+
+        MeditationDetailFriend entity = new MeditationDetailFriend();
+        entity.mUserProfile = OtherUserProfile;
+        entity.mFriendInfo = frineddata;
+        mDetialFriendsList.add(entity);
+
+        return true;
+    }
+
+    // 2021.02.09 처리
+    public boolean addForceLocalDetailFriends(String uid){
+        if(uid == null)
+            return false;
+
+        int dataNum = mDetialFriendsList.size();
+        for(int i = 0 ; i < dataNum; i++){
+            if(mDetialFriendsList.get(i).mUserProfile.uid.equals(uid)){
+                mDetialFriendsList.get(i).mFriendInfo.friendtype = "normal";
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     // 해당 uid가 감정 친구 요청중에 있는지 확인, 있다면 무슨 타입인지 알려줌. (normal, emotion)
     public String findFriends(String uid){
