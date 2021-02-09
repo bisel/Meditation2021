@@ -5443,7 +5443,7 @@ public class NetServiceManager {
     }
 
     // 2021.02.09 처리
-    public boolean addForceLocalDetailFriends(String uid){
+    public boolean addForceLocalEmotionFriends(String uid){
         if(uid == null)
             return false;
 
