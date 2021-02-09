@@ -1,13 +1,6 @@
 package com.soulfriends.meditation.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStore;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.graphics.drawable.ColorDrawable;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,25 +10,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.soulfriends.meditation.R;
-import com.soulfriends.meditation.databinding.FriendEditBinding;
 import com.soulfriends.meditation.databinding.FriendFindBinding;
 import com.soulfriends.meditation.dlg.AlertLineOnePopup;
-import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
-import com.soulfriends.meditation.view.friend.FriendEditAdapter;
-import com.soulfriends.meditation.view.friend.FriendEditItemViewModel;
-import com.soulfriends.meditation.view.friend.FriendEmotionAdapter;
-import com.soulfriends.meditation.view.friend.FriendEmotionItemViewModel;
 import com.soulfriends.meditation.view.friend.FriendFindAdapter;
 import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
-import com.soulfriends.meditation.viewmodel.FriendEditViewModel;
-import com.soulfriends.meditation.viewmodel.FriendEditViewModelFactory;
 import com.soulfriends.meditation.viewmodel.FriendFindViewModel;
 import com.soulfriends.meditation.viewmodel.FriendFindViewModelFactory;
 
@@ -143,6 +133,14 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                 // 친구 요청중에 있는지 확인
                 friend_state = 2;
             }
+
+            // 현재 상대방이 나에게 친구 요청 중 -> 2021.02.09
+            if(NetServiceManager.getinstance().findFriendsRecvRequest(userProfile.uid))
+            {
+                friend_state = 3;
+            }
+
+            // Profile UID와  OtherPlayer UID를 기준으로 확인 해야 한다.
 
             FriendFindItemViewModel friendFindItemViewModel = new FriendFindItemViewModel(this, i, userProfile, friend_state);
 

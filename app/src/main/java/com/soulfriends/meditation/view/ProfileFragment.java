@@ -1,28 +1,18 @@
 package com.soulfriends.meditation.view;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStore;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.soulfriends.meditation.R;
-import com.soulfriends.meditation.databinding.ProfileBinding;
 import com.soulfriends.meditation.dlg.AlertLineOnePopup;
 import com.soulfriends.meditation.dlg.AlertLineTwoPopup;
 import com.soulfriends.meditation.model.MeditationCategory;
@@ -31,28 +21,19 @@ import com.soulfriends.meditation.model.MeditationDetailFriend;
 import com.soulfriends.meditation.model.MeditationShowCategorys;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
-import com.soulfriends.meditation.parser.PersonResultData;
-import com.soulfriends.meditation.parser.ResultData;
 import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListener;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
-import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
-import com.soulfriends.meditation.view.friend.FriendEditAdapter;
-import com.soulfriends.meditation.view.friend.FriendEditItemViewModel;
 import com.soulfriends.meditation.view.friend.FriendEmotionAdapter;
 import com.soulfriends.meditation.view.friend.FriendEmotionItemViewModel;
-import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.view.nested.ParentItemViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentBottomItemExtViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentItemExtAdapter;
 import com.soulfriends.meditation.view.nestedext.ParentItemExtViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentMiddleItemExtViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentTopItemExtViewModel;
-import com.soulfriends.meditation.view.player.AudioPlayer;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
-import com.soulfriends.meditation.viewmodel.ProfileViewModel;
-import com.soulfriends.meditation.viewmodel.ProfileViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -478,6 +459,11 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                     if (NetServiceManager.getinstance().findEmotionFriendsRequest(meditationDetailFriend.mUserProfile.uid)) {
                         emotion_type = 1;
+                    }
+
+                    // 2021.02.09 emotion_type이 4이면 상대방이 자신에게 감정공유 요청중.
+                    if(NetServiceManager.getinstance().findEmotionFriendsRecvRequest(meditationDetailFriend.mUserProfile.uid)) {
+                        emotion_type = 4;
                     }
                 }
 

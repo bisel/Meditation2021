@@ -1,7 +1,10 @@
 package com.soulfriends.meditation.netservice;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -12,6 +15,7 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +34,8 @@ public class NetServiceBillingManager {
 
     private Activity mActivity = null;
     private BillingClient billingClient = null;
+    private String buyItemName = "payment01";
+    private String pakageName ="com.soulfriends.meditation";
     public  List<SkuDetails> mskuDetailsList = new ArrayList<SkuDetails>();
 
     private PurchasesUpdatedListener purchasesUpdatedListener = new PurchasesUpdatedListener() {
@@ -39,12 +45,15 @@ public class NetServiceBillingManager {
             if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
                     && purchases != null) {
                 for (Purchase purchase : purchases) {
-                   // handlePurchase(purchase);
+                    // handlePurchase(purchase);
+                    Log.d("payment","ok Purchase");
                 }
             } else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED) {
                 // Handle an error caused by a user cancelling the purchase flow.
+                Log.d("payment","user cancel Purchase");
             } else {
                 // Handle any other error codes.
+                Log.d("payment","error Purchase");
             }
         }
     };
@@ -122,11 +131,11 @@ public class NetServiceBillingManager {
 
                         }
                         catch (Exception e){
-                           // L.e("## 리스트 가저오기 오류" + e.toString());
+                            // L.e("## 리스트 가저오기 오류" + e.toString());
                         }
 
                     }
-        });
+                });
 
     }
 
@@ -147,6 +156,92 @@ public class NetServiceBillingManager {
         int responseCode =  billingClient.launchBillingFlow(mActivity,flowParams).getResponseCode();
 
         Log.d("showBilling","ShowBilling ERROR");
+    }
+
+
+    public static void checkPurchaseAppCache(Context context , String itemID, CheckPurchaseCallback callback)
+    {
+        BillingClient  cBillingClient = BillingClient.newBuilder(context)
+                .enablePendingPurchases()
+                .setListener((BillingResult billingResult, @Nullable List<Purchase> purchases)->{
+
+                })
+                .build();
+
+        cBillingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(BillingResult billingResult) {
+                //connection success
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //check query
+                    Purchase.PurchasesResult purchasesResult = cBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
+                    List<Purchase> list = purchasesResult.getPurchasesList();
+
+                    //앱스토어에서 정기결제 구독한 사람
+                    if (list.size() > 0 ){
+                        //제품이 하나라서 한개만 처리
+                        Purchase purchase = list.get(0);
+                        Gson gson = new Gson();
+                        BillingStateVO bsVO = gson.fromJson(purchase.getOriginalJson(), BillingStateVO.class);
+                        boolean isPerchase = false;
+                        isPerchase =  itemID.equals(bsVO.getPackageName())&&itemID.equals(bsVO.getProductId());
+                        long currentTIme = System.currentTimeMillis();  // millisecond
+                        // 정기 구독한 사람
+                        if (isPerchase){
+
+                            //시간비교
+                            long diff = currentTIme - bsVO.getPurchaseTime();
+                            int diffDays = (int)(diff/(24*60*60*1000));
+
+                            //purchase state : 중요한 녀석이다. 결제상태를 확인할 수 있다.
+                            //0 :  결제상태
+                            //1 :  취소상태
+                            //2 :  결제 보류 상태
+
+//                            switch (bsVO.getPurchaseState()){
+//                                //구독중 ...
+//                                case LifeInAppConfig.PURCHASE_STATE_PURCHASED:
+//                                    callback.onSubscribe(bsVO);
+//                                    break;
+//
+//                                // 구독이 끝나도 30일간 사용 가능
+//                                case LifeInAppConfig.PURCHASE_STATE_CANCELED:
+//                                    //30일 지나감
+//                                    if (diffDays>30){
+//                                        callback.onSubscribeEND(bsVO);
+//                                    } else {
+//                                        callback.onSubscribe(bsVO);
+//                                    }
+//                                    break;
+//
+//                                // 결제 수단문제로 구매 보류가 이뤄졌을때 ...
+//                                case LifeInAppConfig.PURCHASE_STATE_PENDING:
+//                                    callback.onSubscribePending();
+//                                    break;
+//                            }
+                        }
+                        // 정기구독 구입한적이 없는 사람
+                        else {
+                            callback.onNotPurchased("auto Renewing NOT YET");
+                        }
+                    }
+                    //앱스토어에서 정기결제 한번도 한적 없는 사람
+                    else {
+                        callback.onNotPurchased(" auto renew nothing ");
+                    }
+
+                }
+                //connection fail
+                else{
+                    callback.onUnstableServer();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+
+            }
+        });
     }
 
     private void checkInAppbilling(){
@@ -203,29 +298,35 @@ public class NetServiceBillingManager {
                             if(resultVal.equals("test")){
 
                             }
-                           // Gson gson = new Gson();
-                            //BillingStateVO bsVO = gson.fromJson(purchase.getOriginalJson(), BillingStateVO.class);
-                            //boolean isPerchase = false;
-                            //isPerchase =  pakageName.equals(bsVO.getPackageName())&&itemName.equals(bsVO.getProductId());
+                            Gson gson = new Gson();
+                            BillingStateVO bsVO = gson.fromJson(purchase.getOriginalJson(), BillingStateVO.class);
+                            boolean isPerchase = false;
+                            isPerchase =  pakageName.equals(bsVO.getPackageName())&& buyItemName.equals(bsVO.getProductId());
                             //해당앱 정기 구독한 사람
-//                            if (isPerchase){
-//                                //정기구독 유지중인 사람
-//                                if (bsVO.isAutoRenewing()){
-//
-//                                }
-//                                //정기구독 취소한사람
-//                                else {
-//
-//                                }
-//                            }
-//                            //해당앱 정기구독 구입한적이 없는 사람
-//                            else {
-//
-//                            }
+                            if (isPerchase){
+
+                                long diff = System.currentTimeMillis() - bsVO.getPurchaseTime();
+                                int diffDays = (int)(diff/(24*60*60*1000));
+
+                                //정기구독 유지중인 사람
+                                if (bsVO.isAutoRenewing()){
+                                    Log.d("billing","using billing");
+
+                                }
+                                //정기구독 취소한사람
+                                else {
+                                    Log.d("billing","cancel billing");
+                                }
+                            }
+                            //해당앱 정기구독 구입한적이 없는 사람
+                            else {
+                                Log.d("billing","no purchase billing");
+                            }
                         }
                     }
                     //앱스토어에서 정기결제 한번도 한적 없는 사람
                     else {
+                        Log.d("billing","no purchase billing");
                     }
 
                 }

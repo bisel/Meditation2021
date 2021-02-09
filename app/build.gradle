@@ -15,8 +15,8 @@ android {
         applicationId "com.soulfriends.meditation"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 18
-        versionName "1.18"
+        versionCode 19
+        versionName "1.19"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -95,6 +95,7 @@ dependencies {
     }
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
    //implementation 'com.squareup.picasso:picasso:2.71828'
 
 }

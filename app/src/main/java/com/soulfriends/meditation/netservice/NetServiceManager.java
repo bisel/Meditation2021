@@ -5291,6 +5291,10 @@ public class NetServiceManager {
     public ArrayList<String> mFriendsRequestList = new ArrayList<String>();
     public ArrayList<String> mEmotionFriendsRequestList = new ArrayList<String>();
 
+    // 남에게서 받은 친구 요청고 ㅏ감정 친구 요청 정보 얻기
+    public ArrayList<String> mFriendsRecvRequestList = new ArrayList<String>();
+    public ArrayList<String> mEmotionFriendsRecvRequestList = new ArrayList<String>();
+
     // 해당 uid가 친구 요청중에 있는지 확인
     public boolean findFriendsRequest(String uid){
         int dataNum = mFriendsRequestList.size();
@@ -5306,6 +5310,26 @@ public class NetServiceManager {
         int dataNum = mFriendsRequestList.size();
         for(int i = 0 ; i < dataNum; i++){
             if(mEmotionFriendsRequestList.get(i).equals(uid))
+                return true;
+        }
+        return false;
+    }
+
+    // 해당 uid가 나에게 친구 요청중에 있는지 확인 -> 2021.02.09
+    public boolean findFriendsRecvRequest(String uid){
+        int dataNum = mFriendsRecvRequestList.size();
+        for(int i = 0 ; i < dataNum; i++){
+            if(mFriendsRecvRequestList.get(i).equals(uid))
+                return true;
+        }
+        return false;
+    }
+
+    // 해당 uid가 나에게 감정 친구 요청중에 있는지 확인 -> 2021.02.09
+    public boolean findEmotionFriendsRecvRequest(String uid){
+        int dataNum = mEmotionFriendsRecvRequestList.size();
+        for(int i = 0 ; i < dataNum; i++){
+            if(mEmotionFriendsRecvRequestList.get(i).equals(uid))
                 return true;
         }
         return false;
@@ -5361,14 +5385,28 @@ public class NetServiceManager {
                             }else{
                                 mEmotionFriendsRequestList.add(uid);
                             }
+                        }else if(friendsrequestdata.requesttype.equals("recv")){
+                            // 해당 uid 저장
+                            String uid = friendsrequest.getKey();
+                            if(bFinalFindNormalFriend){
+                                mFriendsRecvRequestList.add(uid);
+                            }else{
+                                mEmotionFriendsRecvRequestList.add(uid);
+                            }
                         }
                     }
                     if(bFinalFindNormalFriend) mOnRecvFriendsRequestListener.onRecvFriendsRequest(true);
                     else                       mOnRecvEmotionFriendsRequestListener.onRecvEmotionFriendsRequest(true);
                 }
                 else{
-                    if(bFinalFindNormalFriend)  mDetialFriendsList.clear();
-                    else                        mEmotionFriendsRequestList.clear();
+                    if(bFinalFindNormalFriend)  {
+                        mDetialFriendsList.clear();
+                        mFriendsRecvRequestList.clear();
+                    }
+                    else {
+                        mEmotionFriendsRequestList.clear();
+                        mEmotionFriendsRecvRequestList.clear();
+                    }
 
                     if(bFinalFindNormalFriend) mOnRecvFriendsRequestListener.onRecvFriendsRequest(false);
                     else                       mOnRecvEmotionFriendsRequestListener.onRecvEmotionFriendsRequest(false);
