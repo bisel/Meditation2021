@@ -11,8 +11,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -505,26 +507,50 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 Check_TitleEdit();
 
                 // 녹음
-                SoundPlayer.instance().playSound(0);
 
                 bAudioIng = true;
 
                 // 타이틀 입력 방지
                 binding.editTitle.setEnabled(false);
 
-                NetServiceManager.getinstance().startMyContentsRecord();
-
                 SetState_Audio(eAudioState.ing);
 
                 // 녹음을 하면 업로드 파일명 초기화 처리
                 Upload_Audio_filePath = "";
 
-                // 타이머 시작
-                StartTimer();
+                //viewModel.setAudio_time("00:00");
 
-                bCheck_Audio = false;
+                MediaPlayer mp;
+                mp = MediaPlayer.create(this, R.raw.voice);
+                mp.start();
+                mp.setOnCompletionListener(m ->{
 
-                Check_NextButton();
+                    m.stop();
+
+                    //bAudioIng = true;
+
+                    // 타이틀 입력 방지
+                    //binding.editTitle.setEnabled(false);
+
+                    NetServiceManager.getinstance().startMyContentsRecord();
+
+                    //SetState_Audio(eAudioState.ing);
+
+                    // 녹음을 하면 업로드 파일명 초기화 처리
+                    //Upload_Audio_filePath = "";
+
+                    // 타이머 시작
+                    StartTimer();
+
+                    bCheck_Audio = false;
+
+                    Check_NextButton();
+
+                });
+
+                //SoundPlayer.instance().playSound(0);
+
+
 
             }
             break;
@@ -625,12 +651,14 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             {
                 // 다시녹음
 
-                SoundPlayer.instance().playSound(0);
+                //SoundPlayer.instance().playSound(0);
 
                 // 오디오 정지
                 Stop_Audio();
 
                 bStopButtonActive = false;
+
+                binding.tvContext1.setText("00:00");
 
                 Check_TitleEdit();
 
@@ -649,11 +677,21 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 // 초기화 stop 비활성화
                 UtilAPI.setImage(this, binding.ivAudioStop, R.drawable.social_create_stop_disabled);
 
-                Check_NextButton();
+                MediaPlayer mp;
+                mp = MediaPlayer.create(this, R.raw.voice);
+                mp.start();
+                mp.setOnCompletionListener(m ->{
 
-                // 타이머 시작
-                StartTimer();
+                    m.stop();
 
+
+
+                    Check_NextButton();
+
+                    // 타이머 시작
+                    StartTimer();
+
+                });
             }
             break;
 
@@ -758,7 +796,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
     private void Complete_Audio()
     {
         // 녹음 완료 할 경우
-        SoundPlayer.instance().playSound(0);
+        //SoundPlayer.instance().playSound(0);
 
         SetState_Audio(eAudioState.play);
         StopTimer();
@@ -775,6 +813,16 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
         bComplete_Audio_Record = true;
 
         NetServiceManager.getinstance().doneMyContentsRecord();
+
+        // 버튼 사운드
+        MediaPlayer mp;
+        mp = MediaPlayer.create(this, R.raw.voice);
+        mp.start();
+        mp.setOnCompletionListener(m ->{
+
+            m.stop();
+
+        });
     }
 
     private void SetState_Audio(eAudioState state)
@@ -905,13 +953,30 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             case play:
             {
                 // 재생
-                long play_time = 50; // 테스트
-                StartTimer(play_time, false, 0);
+                long play_time = audio_complete_time_milisecond;
+                StartTimer_ex(play_time, false, 0);
             }
             break;
         }
     }
 
+    public void StartTimer_ex(long time_milisecond, boolean bUseStopBt, long second_time_stopbt) {
+        this.total_time_milisecond = time_milisecond;
+
+        this.bUseStopBt = bUseStopBt;
+
+        if(bUseStopBt)
+        {
+            this.second_timemilisecond_stopbt = second_time_stopbt * 1000;
+        }
+
+        this.accum_time_milisecond = 0;
+
+        if (handlerUpdateLocation == null) {
+            handlerUpdateLocation = new Handler(Looper.getMainLooper());
+            handlerUpdateLocation.post(runnableUpdateLocation);
+        }
+    }
 
     public void StartTimer(long second_time, boolean bUseStopBt, long second_time_stopbt) {
         this.total_time_milisecond = second_time * 1000;

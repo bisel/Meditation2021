@@ -113,17 +113,24 @@ public class MeditationNotificationMgr {
 //         .setShowActionsInCompactView(0, 1)
 
 
-
-        Glide.with(context)
-                .asBitmap()
-                .load(thumbnail_url)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                        builder.setLargeIcon(resource);
-                        service.startForeground(NOTIFICATION_ID, builder.build());
-                    }
-                });
+        if(thumbnail_url == null)
+        {
+            Bitmap bm = BitmapFactory.decodeResource(resources, R.drawable.basic_img);
+            builder.setLargeIcon(bm);
+            service.startForeground(NOTIFICATION_ID, builder.build());
+        }
+        else {
+            Glide.with(context)
+                    .asBitmap()
+                    .load(thumbnail_url)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                            builder.setLargeIcon(resource);
+                            service.startForeground(NOTIFICATION_ID, builder.build());
+                        }
+                    });
+        }
 
         int xx= 0;
     }

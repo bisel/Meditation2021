@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.soulfriends.meditation.databinding.FriendEmotionItemBinding;
+import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.netservice.NetServiceUtility;
+import com.soulfriends.meditation.parser.ResultData;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -85,6 +87,21 @@ public class FriendEmotionAdapter extends RecyclerView.Adapter{
         // profile 이미지
         if(friendEmotionItemViewModel.userProfile.profileimg != null && friendEmotionItemViewModel.userProfile.profileimg.length() != 0) {
             UtilAPI.load_image_circle(context, NetServiceUtility.profieimgdir + friendEmotionItemViewModel.userProfile.profileimg, bind.ivIcon);
+        }
+
+        // 이모티콘
+        ResultData resultData = NetServiceManager.getinstance().getResultData(friendEmotionItemViewModel.userProfile.emotiontype);
+
+        if (resultData.id > 0) {
+            String str_id = "";
+            if (resultData.id < 10) {
+                str_id = "0" + String.valueOf(resultData.id);
+            } else {
+                str_id = String.valueOf(resultData.id);
+            }
+            String strEmoti = "emoti_" + str_id;
+            int res_id_1 = context.getResources().getIdentifier(strEmoti, "drawable", context.getPackageName());
+            UtilAPI.setImage(context, bind.ivEmoticon, res_id_1); //iv_emoticon
         }
     }
 

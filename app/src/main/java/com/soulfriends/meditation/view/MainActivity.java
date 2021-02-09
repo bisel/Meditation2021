@@ -26,6 +26,7 @@ import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.parser.ResultData;
 import com.soulfriends.meditation.util.ActivityStack;
+import com.soulfriends.meditation.util.Notification;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.AudioPlayer;
@@ -282,6 +283,11 @@ public class MainActivity extends BaseActivity implements ResultListener {
         binding.setViewModel(viewModel);
 
         bCallAlarm = false;
+
+
+        Notification.with(this, this);
+
+        Notification.instance().Register();
 
         binding.ivAlarmBg.setVisibility(View.GONE);
         binding.tvAlarmCount.setVisibility(View.GONE);

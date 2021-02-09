@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.soulfriends.meditation.databinding.FriendEditItemBinding;
+import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.netservice.NetServiceUtility;
+import com.soulfriends.meditation.parser.ResultData;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -67,6 +69,8 @@ public class FriendEditAdapter extends RecyclerView.Adapter{
         if(friendEditItemViewModel.userProfile.profileimg != null && friendEditItemViewModel.userProfile.profileimg.length() != 0) {
             UtilAPI.load_image_circle(context, NetServiceUtility.profieimgdir + friendEditItemViewModel.userProfile.profileimg, bind.ivIcon);
         }
+
+
     }
 
     @Override

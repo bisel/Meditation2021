@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.model.MeditationCategory;
 import com.soulfriends.meditation.model.MeditationContents;
+import com.soulfriends.meditation.model.MeditationContentsCharInfo;
 import com.soulfriends.meditation.model.MeditationShowCategorys;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
@@ -227,21 +228,72 @@ public class MusicFragment extends Fragment implements ItemClickListener {
                 }
             }
 
-            //  0 : 기본 제공  1 : 소셜 콘텐츠
-            UtilAPI.s_playerMode = UtilAPI.PlayerMode.base;
+            // 콘텐츠 (기본, 유료, 무료)등에 따라 화면 이동 처리 구분
+            if(meditationContents.ismycontents == 0)
+            {
+                //  0 : 기본 제공
+                MeditationContentsCharInfo info = NetServiceManager.getinstance().getMeditationContentsCharInfo(meditationContents.uid);
 
-            NetServiceManager.getinstance().setCur_contents(meditationContents);
+                // 무료, 유료 여부
+                int paid;
+                if(info == null)
+                {
+                    int xx = 0;
+                }
+                else
+                {
+                    paid = Integer.parseInt(info.paid);
 
-            //String str = meditationContents.uid;
-            //Toast.makeText(this.getContext(), str, Toast.LENGTH_SHORT).show();
+                    if(paid == 1)
+                    {
+                        // 유료 일 경우
+                        // 상점으로
+                        ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
 
-            ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), InAppActivity.class);
+                        getActivity().startActivity(intent);
 
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), PlayerActivity.class);
-            getActivity().startActivity(intent);
+                        getActivity().finish();
+                    }
+                    else
+                    {
+                        //  0 : 기본 제공
+                        // 무료인 경우 해당
+                        // 플레이 화면
+                        UtilAPI.s_playerMode = UtilAPI.PlayerMode.base;
 
-            getActivity().finish();
+                        NetServiceManager.getinstance().setCur_contents(meditationContents);
+
+                        ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), PlayerActivity.class);
+                        getActivity().startActivity(intent);
+
+                        getActivity().finish();
+                    }
+                }
+            }
+            else {
+
+                //  1 : 소셜 콘텐츠
+                if(meditationContents.authoruid.equals(NetServiceManager.getinstance().getUserProfile().uid)){
+                    UtilAPI.s_playerMode = UtilAPI.PlayerMode.my;
+                }else{
+                    UtilAPI.s_playerMode = UtilAPI.PlayerMode.friend;
+                }
+
+                NetServiceManager.getinstance().setCur_contents(meditationContents);
+
+                ActivityStack.instance().Push(getActivity(), ""); // 메인액티비티여야 된다.
+
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), PlayerActivity.class);
+                getActivity().startActivity(intent);
+
+                getActivity().finish();
+            }
         }
     }
 }

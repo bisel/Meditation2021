@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.FriendEditBinding;
 import com.soulfriends.meditation.databinding.InAppBinding;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.viewmodel.FriendEditViewModel;
@@ -52,10 +53,7 @@ public class InAppActivity extends BaseActivity implements ResultListener {
         switch (id) {
             case R.id.iv_close: {
 
-                // 닫기 버튼
-                finish();
-
-                Toast.makeText(getApplicationContext(),"close",Toast.LENGTH_SHORT).show();
+                onBackPressed();
 
             }
             break;
@@ -112,6 +110,6 @@ public class InAppActivity extends BaseActivity implements ResultListener {
     @Override
     public void onBackPressed() {
 
-        finish();
+        ActivityStack.instance().OnBack(this);
     }
 }

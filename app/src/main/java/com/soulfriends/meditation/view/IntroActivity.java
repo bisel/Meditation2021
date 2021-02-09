@@ -26,6 +26,7 @@ import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.AuthManager;
 import com.soulfriends.meditation.util.LocalNotificationReceiver;
+import com.soulfriends.meditation.util.Notification;
 import com.soulfriends.meditation.util.PreferenceManager;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.AudioPlayer;
@@ -83,7 +84,11 @@ public class IntroActivity extends AppCompatActivity {
         boolean sound_off = PreferenceManager.getBoolean(this,"sound_off");
 
         AudioPlayer.with(getApplicationContext());
-        SoundPlayer.with(getApplicationContext());
+        //SoundPlayer.with(getApplicationContext());
+
+        //Notification.with(getApplicationContext(), this);
+
+        //Notification.instance().Register();
 
         if(sound_off) {
             // 음악 정지 상태

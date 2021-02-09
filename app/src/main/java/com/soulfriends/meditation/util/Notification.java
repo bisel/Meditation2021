@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public class Notification {
@@ -23,6 +24,8 @@ public class Notification {
 
     private Context context;
     private Activity activity;
+
+    private boolean s_test = true;
 
     public static Notification instance(){
         return instance;
@@ -39,6 +42,99 @@ public class Notification {
 
         this.context = context;
         this.activity = activity;
+    }
+
+    private int getRandomNumber(int min,int max) {
+        return (new Random()).nextInt((max - min) + 1) + min;
+    }
+
+    public void Register() {
+        // 기획상 30일 만 등록하도록 한다.
+        // 현재 게임 시간 기준으로
+
+
+        if (s_test)
+        {
+            // 테스트 목적
+
+            ClearNotifications();
+
+            String str_title = "힐링 타이틀";
+
+            String str_msg_0 = "제목 1";
+            String str_msg_1 = "제목 2";
+            String str_msg_2 = "제목 3";
+
+
+            float daytime_01 = 20;// 시간 * 분 * 초 * 밀리
+            SendNotification(1, daytime_01, str_title, str_msg_0);
+
+            float daytime_02 = 40;// 시간 * 분 * 초 * 밀리
+            SendNotification(2, daytime_02, str_title, str_msg_1);
+
+            float daytime_03 = 60;// 시간 * 분 * 초 * 밀리
+            SendNotification(3, daytime_03, str_title, str_msg_2);
+
+            float daytime_04 = 80;// 시간 * 분 * 초 * 밀리
+            SendNotification(4, daytime_04, str_title, str_msg_0);
+
+            float daytime_05 = 100;// 시간 * 분 * 초 * 밀리
+            SendNotification(5, daytime_05, str_title, str_msg_1);
+
+            return;
+        }
+
+        float curtime = 0;
+
+        float daytime = 24 * 60 * 60;// 시간 * 분 * 초 * 밀리
+
+        // 10초 마다 테스트
+        //float daytime = 10 ;// 시간 * 분 * 초 * 밀리
+
+        String str_msg_0 = "";
+        String str_msg_1 = "";
+        String str_msg_2 = "";
+
+        String str_title = "";
+
+        for (int i = 0; i < 30; i++) {
+            curtime += 1.0f;
+
+            //curtime += daytime;
+
+            int rand = getRandomNumber(0, 2 + 1); // 0 ~ 2
+            switch (rand) {
+                case 0: {
+                    SendNotification(i, curtime, str_title, str_msg_0);
+                }
+                break;
+                case 1: {
+                    SendNotification(i, curtime, str_title, str_msg_1);
+                }
+                break;
+                case 2: {
+                    SendNotification(i, curtime, str_title, str_msg_2);
+                }
+                break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void SendNotification(int id, float delay, String title, String message)
+    {
+        int sound = 1;
+        int vibrate = 1;
+        int lights = 1;
+        int bgColor = 0;
+
+        String channel = "default";
+        String largeIconResource = "logo_icon.png";//""l_icon";//s_icon.png 확장자 빼고 이름만
+        String smallIconResource = "logo_icon.png";//"s_icon"; //s_icon.png 확장자 빼고 이름만
+        String bundle = "com.soulfriends.meditation";
+
+        SetNotification(channel, bundle, largeIconResource, smallIconResource, title, message, id, delay, sound, vibrate, lights, bgColor);
     }
 
     private Set<String> channels = new HashSet<>();
@@ -96,7 +192,18 @@ public class Notification {
         //Log.v("01", "SetNotification 01");
         //long delayMs = (long)_delayMs;
 
-        long delayMs = 24 * 60 * 60 * (long)_delayMs;
+
+        long delayMs = 0;
+        if(s_test)
+        {
+            //delayMs = 60 * (long)_delayMs;
+            delayMs = (long)_delayMs;
+        }
+        else
+        {
+            delayMs = 24 * 60 * 60 * (long)_delayMs;
+        }
+        //long delayMs = 24 * 60 * 60 * (long)_delayMs;
         //long delayMs = 60 * (long)_delayMs;
 
         delayMs *= 1000;
@@ -149,7 +256,7 @@ public class Notification {
         am.cancel(pendingIntent);
     }
 
-    public void ClearNotifications(int id)
+    public void ClearNotifications()
     {
         Activity currentActivity = activity;
         NotificationManager nm = (NotificationManager)currentActivity.getSystemService(Context.NOTIFICATION_SERVICE);
