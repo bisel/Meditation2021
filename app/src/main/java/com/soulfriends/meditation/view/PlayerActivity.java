@@ -874,6 +874,19 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         // 상태에 따라서 ui 표시를 하고
     }
 
+    public void SendFriendState()
+    {
+        NetServiceManager.getinstance().setOnRecvFriendsListener(new NetServiceManager.OnRecvFriendsListener() {
+            @Override
+            public void onRecvFriends(boolean validate) {
+
+                SetFriendState();
+            }
+        });
+
+        NetServiceManager.getinstance().recvFriendsList();
+    }
+
     public void RequestFriendState() {
         switch (friend_state) {
             case 0: {
@@ -892,7 +905,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                             alertDlg_ok.show();
                             alertDlg_ok.iv_ok.setOnClickListener(v -> {
 
-                                SetFriendState();
+                                SendFriendState();
 
                                 //UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_requested);
                                 alertDlg_ok.dismiss();
@@ -925,7 +938,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                             alertDlg_ok.show();
                             alertDlg_ok.iv_ok.setOnClickListener(v -> {
 
-                                SetFriendState();
+                                SendFriendState();
                                 alertDlg_ok.dismiss();
                             });
 
@@ -955,7 +968,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                             alertDlg_ok.show();
                             alertDlg_ok.iv_ok.setOnClickListener(v -> {
 
-                                SetFriendState();
+                                SendFriendState();
                                 alertDlg_ok.dismiss();
                             });
                             ////UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);

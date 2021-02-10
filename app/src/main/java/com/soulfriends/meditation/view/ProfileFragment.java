@@ -475,6 +475,10 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                 if (res.equals("normal")) {
                     // 감정공유 +
                     emotion_type = 2;
+                    // 2021.02.09 emotion_type이 4이면 상대방이 자신에게 감정공유 요청중.
+                    if(NetServiceManager.getinstance().findEmotionFriendsRecvRequest(meditationDetailFriend.mUserProfile.uid)) {
+                        emotion_type = 3;
+                    }
                 } else if (res.equals("emotion")) {
                     // 감정상태
                     emotion_type = 0;
@@ -483,11 +487,6 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                     if (NetServiceManager.getinstance().findEmotionFriendsRequest(meditationDetailFriend.mUserProfile.uid)) {
                         emotion_type = 1;
-                    }
-
-                    // 2021.02.09 emotion_type이 4이면 상대방이 자신에게 감정공유 요청중.
-                    if(NetServiceManager.getinstance().findEmotionFriendsRecvRequest(meditationDetailFriend.mUserProfile.uid)) {
-                        emotion_type = 4;
                     }
                 }
 
