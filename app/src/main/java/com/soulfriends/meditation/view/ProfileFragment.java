@@ -97,7 +97,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         layout_friend_bts.setVisibility(View.GONE);
 
 
-
+        // 초기값
+        bFocusTab = 0;
 
         //------------------------------------------------
         // 소셜 정보 요청
