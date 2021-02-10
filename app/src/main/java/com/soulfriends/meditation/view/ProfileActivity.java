@@ -398,8 +398,15 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
         // 썹네일 성공시
         // 이미지 show
 
-        binding.ivPicture.setImageURI(albumURI);
+       // binding.ivPicture.setImageURI(albumURI);
 
+        NetServiceManager.getinstance().setOnRecvValProfileListener(new NetServiceManager.OnRecvValProfileListener() {
+            @Override
+            public void onRecvValProfile(boolean validate) {
+
+                binding.ivPicture.setImageURI(albumURI);
+            }
+        });
         NetServiceManager.getinstance().sendValNewProfileExt(userProfile, null, null, mCurrentPhotoPath);
 
     }

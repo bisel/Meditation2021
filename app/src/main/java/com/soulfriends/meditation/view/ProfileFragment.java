@@ -65,6 +65,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
     private ViewGroup container;
 
+    private RecyclerView RecyclerView_friend;
+
     private int bFocusTab = 0;
 
     public ProfileFragment() {
@@ -96,6 +98,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
         layout_friend_bts.setVisibility(View.GONE);
 
+
+        RecyclerView_friend = view.findViewById(R.id.recyclerview_friend);
 
         // 초기값
         bFocusTab = 0;
@@ -491,14 +495,15 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                 friend_RecyclerViewItem.setAdapter(friendEmotionAdapter);
                 friend_RecyclerViewItem.setLayoutManager(layoutManager_friend);
                 friend_RecyclerViewItem.setNestedScrollingEnabled(false);
-           // }
+            //}
 
             friendEmotionAdapter.SetList(list_friend);
             if(bFocusTab == 1) {
                 friend_RecyclerViewItem.setVisibility(View.VISIBLE);
             }
 
-            //friendEmotionAdapter.in
+
+            RecyclerView_friend.invalidate();
             friendEmotionAdapter.notifyDataSetChanged();
 
         }
