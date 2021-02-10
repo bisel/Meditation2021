@@ -221,7 +221,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         //------------------------------------------------
         ivContentsBt.setOnClickListener(v -> {
 
-            //if(bFocusTab == 0) return; //중복방지
+           // if(bFocusTab == 0) return; //중복방지
             bFocusTab = 0;
 
             this.contents_RecyclerViewItem.setVisibility(View.VISIBLE);
@@ -230,6 +230,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
             layout_friend_bts.setVisibility(View.GONE);
             layout_friend_no.setVisibility(View.GONE);
+
+            friend_RecyclerViewItem.setVisibility(View.GONE);
 
             UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg);
             UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg_selected);
@@ -246,6 +248,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             bFocusTab = 1;
 
             this.contents_RecyclerViewItem.setVisibility(View.GONE);
+            friend_RecyclerViewItem.setVisibility(View.VISIBLE);
 
             layout_friend_bts.setVisibility(View.VISIBLE);
 
@@ -261,6 +264,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             //--------------------------
             // 1. 친구 노멀 리스트 요청
             //--------------------------
+
+
 
             NetServiceManager.getinstance().setOnRecvFriendsRequestListener(new NetServiceManager.OnRecvFriendsRequestListener() {
                 @Override
@@ -480,18 +485,20 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                 }
             }
 
-            if(friendEmotionAdapter == null) {
+            //if(friendEmotionAdapter == null) {
                 friendEmotionAdapter = new FriendEmotionAdapter(list_friend, container.getContext(), this);
 
                 friend_RecyclerViewItem.setAdapter(friendEmotionAdapter);
                 friend_RecyclerViewItem.setLayoutManager(layoutManager_friend);
                 friend_RecyclerViewItem.setNestedScrollingEnabled(false);
-            }
+           // }
 
             friendEmotionAdapter.SetList(list_friend);
+            if(bFocusTab == 1) {
+                friend_RecyclerViewItem.setVisibility(View.VISIBLE);
+            }
 
-            friend_RecyclerViewItem.setVisibility(View.VISIBLE);
-
+            //friendEmotionAdapter.in
             friendEmotionAdapter.notifyDataSetChanged();
 
         }
@@ -500,7 +507,9 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             friend_RecyclerViewItem.setVisibility(View.GONE);
             layout_friend_bts.setVisibility(View.GONE);
 
-            layout_friend_no.setVisibility(View.VISIBLE);
+            if(bFocusTab == 1) {
+                layout_friend_no.setVisibility(View.VISIBLE);
+            }
         }
     }
 
