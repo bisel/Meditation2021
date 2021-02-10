@@ -50,10 +50,11 @@ public class PsychologyListActivity extends BaseActivity implements ResultListen
 
         // 목소리 유료 여부에 따라 분리
 
-        boolean bPayUser = false; //<-- 유료 유저 인 여부 / 값을 받아서 처리를 해야 한다.
+        //boolean bPayUser = false; //<-- 유료 유저 인 여부 / 값을 받아서 처리를 해야 한다.
+        //if(bPayUser)
 
-
-        if(bPayUser)
+        UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
+        if(userProfile.isPayUser == 1)
         {
             // layout_voice_enable;
             // layout_voice_lock;
@@ -63,11 +64,11 @@ public class PsychologyListActivity extends BaseActivity implements ResultListen
             // 리셋됨, 완료 시 완료된 내용으로 검사 카드 변경되고 비
             // 활성화 처리함
 
-            binding.layoutVoiceEnable.setVisibility(View.GONE);
+            binding.layoutVoiceEnable.setVisibility(View.VISIBLE);
             binding.layoutVoiceLock.setVisibility(View.GONE);
             binding.layoutVoice1day.setVisibility(View.GONE);
 
-            UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
+            //UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
 
             String voice_result_time = userProfile.finalvoicetestdate; // 보이스 테스트 시간이 들어 있어야 한다.
 
@@ -92,6 +93,7 @@ public class PsychologyListActivity extends BaseActivity implements ResultListen
 
                         bVoiceEvent = false;
 
+                        binding.layoutVoiceEnable.setVisibility(View.GONE);
                         binding.layoutVoice1day.setVisibility(View.VISIBLE);
 
                         //UtilAPI.setImage(this, binding.ivVoiceButton, R.drawable.test_voice_com);
@@ -100,7 +102,7 @@ public class PsychologyListActivity extends BaseActivity implements ResultListen
             }
             else
             {
-                //bVoiceEvent = true;
+                bVoiceEvent = true;
 
                 //UtilAPI.setImage(this, binding.ivVoiceButton, R.drawable.test_voice);
             }
@@ -147,7 +149,7 @@ public class PsychologyListActivity extends BaseActivity implements ResultListen
                 finish(); // 2020.12.08
             }
             break;
-            case R.id.layout_voice_enable: {
+            case R.id.iv_voice_button: {
                 // 목소리 검사 가능
 
                 // 일단 주석 처리
@@ -199,7 +201,7 @@ public class PsychologyListActivity extends BaseActivity implements ResultListen
                 startActivity(intent);
             }
             break;
-            case R.id.layout_voice_1day: {
+            case R.id.iv_voice_button_1day: {
                 // 목소리 검사 가능
                 // 1일 한번
                 // 터치시 팝업

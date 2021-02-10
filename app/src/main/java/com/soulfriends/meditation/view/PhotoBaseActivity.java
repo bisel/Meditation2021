@@ -146,7 +146,7 @@ public class PhotoBaseActivity extends BaseActivity {
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         sendBroadcast(mediaScanIntent);
-        Toast.makeText(this, "사진이 앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "사진이 앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -257,7 +257,7 @@ public class PhotoBaseActivity extends BaseActivity {
             case SELECT_AUDIO: {
                 if (resultCode == Activity.RESULT_OK) {
 
-                    Toast.makeText(this, "오디오 파일 선택", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "오디오 파일 선택", Toast.LENGTH_SHORT).show();
                     Uri uri = data.getData();
                     String path = getPath(uri);
                     String name = getName(uri);

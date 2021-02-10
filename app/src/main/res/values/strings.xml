@@ -280,6 +280,7 @@
     <string name="contentsmake_gallery">갤러리</string>
     <string name="contentsmake_photo">사진촬영</string>
     <string name="contentsmake_audio_30">30초 이상 녹음해주세요.</string>
+    <string name="contentsmake_audio_exception">지원되는 재생시간이 아닙니다.</string>
 
 
     <!-- friend edit activity 친구편집-->

@@ -85,7 +85,7 @@ public class ProfileAdapter extends RecyclerView.Adapter{
 
 
         // 잠금 상태
-        if(profileItemViewModel.paid == 1)
+        if(profileItemViewModel.paid == 1 && NetServiceManager.getinstance().getUserProfile().isPayUser == 0)
         {
             bind.contentsLock.setVisibility(View.VISIBLE);
         }

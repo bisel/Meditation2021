@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.FriendEditBinding;
 import com.soulfriends.meditation.databinding.InAppBinding;
+import com.soulfriends.meditation.model.UserProfile;
+import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -45,6 +47,11 @@ public class InAppActivity extends BaseActivity implements ResultListener {
         }
         viewModel = new ViewModelProvider(this.getViewModelStore(), inAppViewModelFactory).get(InAppViewModel.class);
         binding.setViewModel(viewModel);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -95,7 +102,22 @@ public class InAppActivity extends BaseActivity implements ResultListener {
                     // 1개월 구입
                 }
 
-                Toast.makeText(getApplicationContext(),"무제한 이용",Toast.LENGTH_SHORT).show();
+
+                UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
+                userProfile.isPayUser = 1;
+
+                NetServiceManager.getinstance().setOnRecvValProfileListener(new NetServiceManager.OnRecvValProfileListener() {
+                    @Override
+                    public void onRecvValProfile(boolean validate) {
+
+                        ActivityStack.instance().OnBack(InAppActivity.this);
+
+                    }
+                });
+
+                NetServiceManager.getinstance().sendValProfile(userProfile);
+
+                //Toast.makeText(getApplicationContext(),"무제한 이용",Toast.LENGTH_SHORT).show();
 
             }
             break;

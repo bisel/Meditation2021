@@ -219,17 +219,6 @@ public class HomeFragment extends Fragment implements ItemClickListener {
 
             //UtilAPI.Start_PlayerCheck(meditationContents.uid);
 
-            // 다른 경우
-            if(NetServiceManager.getinstance().getCur_contents() != null ) {
-                if (NetServiceManager.getinstance().getCur_contents().uid != meditationContents.uid) {
-                    MeditationAudioManager.with(getActivity()).stop();
-                    if(MeditationAudioManager.with(getActivity()).getServiceBound()) {
-                        MeditationAudioManager.with(getActivity()).unbind();
-                    }
-                }
-            }
-
-
             // 콘텐츠 (기본, 유료, 무료)등에 따라 화면 이동 처리 구분
             if(meditationContents.ismycontents == 0)
             {
@@ -246,7 +235,7 @@ public class HomeFragment extends Fragment implements ItemClickListener {
                 {
                     paid = Integer.parseInt(info.paid);
 
-                    if(paid == 1)
+                    if(paid == 1 && NetServiceManager.getinstance().getUserProfile().isPayUser == 0)
                     {
                         // 유료 일 경우 
                         // 상점으로
@@ -262,7 +251,18 @@ public class HomeFragment extends Fragment implements ItemClickListener {
                     {
                         //  0 : 기본 제공
                         // 무료인 경우 해당
-                        // 플레이 화면 
+                        // 플레이 화면
+
+                        // 다른 경우
+                        if(NetServiceManager.getinstance().getCur_contents() != null ) {
+                            if (NetServiceManager.getinstance().getCur_contents().uid != meditationContents.uid) {
+                                MeditationAudioManager.with(getActivity()).stop();
+                                if(MeditationAudioManager.with(getActivity()).getServiceBound()) {
+                                    MeditationAudioManager.with(getActivity()).unbind();
+                                }
+                            }
+                        }
+
                         UtilAPI.s_playerMode = UtilAPI.PlayerMode.base;
 
                         NetServiceManager.getinstance().setCur_contents(meditationContents);
@@ -278,6 +278,16 @@ public class HomeFragment extends Fragment implements ItemClickListener {
                 }
             }
             else {
+
+                // 다른 경우
+                if(NetServiceManager.getinstance().getCur_contents() != null ) {
+                    if (NetServiceManager.getinstance().getCur_contents().uid != meditationContents.uid) {
+                        MeditationAudioManager.with(getActivity()).stop();
+                        if(MeditationAudioManager.with(getActivity()).getServiceBound()) {
+                            MeditationAudioManager.with(getActivity()).unbind();
+                        }
+                    }
+                }
 
                 //  1 : 소셜 콘텐츠
                 if(meditationContents.authoruid.equals(NetServiceManager.getinstance().getUserProfile().uid)){
