@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -68,6 +69,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
     private RecyclerView RecyclerView_friend;
 
     private int bFocusTab = 0;
+
+    private List list_friend_GUID = new ArrayList<>();
 
     public ProfileFragment() {
     }
@@ -189,6 +192,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                             layout_friend_bts.setVisibility(View.VISIBLE);
 
+                            list_friend_GUID.clear();
+                            list_friend.clear();
 
                             UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg_selected);
                             UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg);
@@ -225,7 +230,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         //------------------------------------------------
         ivContentsBt.setOnClickListener(v -> {
 
-           // if(bFocusTab == 0) return; //중복방지
+            if(bFocusTab == 0) return; //중복방지
             bFocusTab = 0;
 
             this.contents_RecyclerViewItem.setVisibility(View.VISIBLE);
@@ -248,8 +253,11 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
         ivFriendBt.setOnClickListener(v -> {
 
-            //if(bFocusTab == 1) return; //중복방지
+            if(bFocusTab == 1) return; //중복방지
             bFocusTab = 1;
+
+            list_friend_GUID.clear();
+            list_friend.clear();
 
             this.contents_RecyclerViewItem.setVisibility(View.GONE);
             friend_RecyclerViewItem.setVisibility(View.VISIBLE);
@@ -443,6 +451,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         NetServiceManager.getinstance().recvFriendsList();
     }
 
+
     private void DoFriendList()
     {
         // 콘텐츠 탭일 경우는 리턴하도록 처리해야만 된다.
@@ -450,7 +459,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
        // if(UtilAPI.s_StrFragment_Profile_Tab == UtilAPI.TAB_CONTENTS) return;
 
-        list_friend.clear();
+        //list_friend.clear();
 
         ArrayList<MeditationDetailFriend> list_user = NetServiceManager.getinstance().mDetialFriendsList;
 
@@ -485,17 +494,26 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                 if (emotion_type > -1) {
                     FriendEmotionItemViewModel friendEmotionItemViewModel = new FriendEmotionItemViewModel(this, count, meditationDetailFriend.mUserProfile, emotion_type);
                     count++;
-                    list_friend.add(friendEmotionItemViewModel);
+
+
+                    //String test_str = "갯수 = " + String.valueOf(list_user.size());
+                    //Toast.makeText(getActivity(), test_str, Toast.LENGTH_SHORT).show();
+
+                    if(!list_friend_GUID.contains(meditationDetailFriend.mUserProfile.uid)) {
+                        list_friend.add(friendEmotionItemViewModel);
+
+                        list_friend_GUID.add(meditationDetailFriend.mUserProfile.uid);
+                    }
                 }
             }
 
-            //if(friendEmotionAdapter == null) {
+            if(friendEmotionAdapter == null) {
                 friendEmotionAdapter = new FriendEmotionAdapter(list_friend, container.getContext(), this);
 
                 friend_RecyclerViewItem.setAdapter(friendEmotionAdapter);
                 friend_RecyclerViewItem.setLayoutManager(layoutManager_friend);
                 friend_RecyclerViewItem.setNestedScrollingEnabled(false);
-            //}
+            }
 
             friendEmotionAdapter.SetList(list_friend);
             if(bFocusTab == 1) {
@@ -505,6 +523,9 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
             RecyclerView_friend.invalidate();
             friendEmotionAdapter.notifyDataSetChanged();
+            friend_RecyclerViewItem.setAdapter(friendEmotionAdapter);
+            friend_RecyclerViewItem.setLayoutManager(layoutManager_friend);
+            friend_RecyclerViewItem.setNestedScrollingEnabled(false);
 
         }
         else

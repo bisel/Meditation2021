@@ -849,18 +849,27 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 friend_state = 1;
                 UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_friend);
             } else {
-                // 친구 아닌 상태
-                // 친구 추가
-                friend_state = 0;
-                UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_addfriend);
+
+                // 현재 친구 요청 리스트
+                if (NetServiceManager.getinstance().findFriendsRequest(UtilAPI.s_userProfile_friend.uid)) {
+                    // 친구 요청중에 있는지 확인
+                    friend_state = 2;
+                    UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_requested);
+                }
+                else {
+                    // 친구 아닌 상태
+                    // 친구 추가
+                    friend_state = 0;
+                    UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_addfriend);
+                }
             }
 
             // 현재 친구 요청 리스트
-            if (NetServiceManager.getinstance().findFriendsRequest(UtilAPI.s_userProfile_friend.uid)) {
-                // 친구 요청중에 있는지 확인
-                friend_state = 2;
-                UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_requested);
-            }
+//            if (NetServiceManager.getinstance().findFriendsRequest(UtilAPI.s_userProfile_friend.uid)) {
+//                // 친구 요청중에 있는지 확인
+//                friend_state = 2;
+//                UtilAPI.setImage(this, binding.ivFriendState, R.drawable.player_requested);
+//            }
         }
         // 상태에 따라서 ui 표시를 하고
     }
@@ -883,10 +892,13 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                             alertDlg_ok.show();
                             alertDlg_ok.iv_ok.setOnClickListener(v -> {
 
+                                SetFriendState();
+
+                                //UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_requested);
                                 alertDlg_ok.dismiss();
                             });
 
-                            UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_requested);
+                            //UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_requested);
 
 
                             //Toast.makeText(PlayerActivity.this, "친구로 요청중입니다.", Toast.LENGTH_SHORT).show();
@@ -913,10 +925,11 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                             alertDlg_ok.show();
                             alertDlg_ok.iv_ok.setOnClickListener(v -> {
 
+                                SetFriendState();
                                 alertDlg_ok.dismiss();
                             });
 
-                            UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);
+                           // UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);
                             //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
                         } else {
 
@@ -942,9 +955,10 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                             alertDlg_ok.show();
                             alertDlg_ok.iv_ok.setOnClickListener(v -> {
 
+                                SetFriendState();
                                 alertDlg_ok.dismiss();
                             });
-                            UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);
+                            ////UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);
                             //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
                         } else {
 

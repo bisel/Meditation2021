@@ -43,7 +43,10 @@ public class ProfileItemViewModel extends ViewModel {
         this.listener = listener;
 
         // 타이틀
-        title.setValue(entity_data.title);
+
+        if(entity_data.title != null) {
+            title.setValue(entity_data.title);
+        }
 
         // 초
         float play_time_second = Float.valueOf(entity_data.playtime);
