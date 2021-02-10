@@ -263,6 +263,15 @@ public class TimerActivity extends BaseActivity implements ResultListener {
                 total_second_time += (picker_minute_index + 1) * 5 * 60; // 여기서 5는 5분 간격띄우기 때문에 순수 인덱스에다 5를 곱함.
 
 
+                // 다르다면 타이머 종료 처리한다.
+               // if(MeditationAudioManager.isPlaying())
+
+                if(!MeditationAudioManager.getinstance().getServiceBound())
+                {
+                    MeditationAudioManager.getinstance().StopTimer();
+                    return;
+                }
+
                 MeditationAudioManager.getinstance().StartTimer(total_second_time);
 
                 // 타이머 설정되게 되면 무한루프 on 처리한다. 2021_0204
