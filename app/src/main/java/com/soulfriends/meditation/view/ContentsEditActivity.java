@@ -98,7 +98,7 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
 
     //
     public String orig_title;                // 콘텐츠 제목
-    public String orig_thumbnail_uri;        // thumnail http 용 url
+    public String orig_thumbnail;            // thumnail
     public String orig_playtime;             // 콘텐츠 재생 시간(s)
     public int orig_isRecordSndFile = 0;     // 0 : 음악파일로  1 : 녹음한 걸로 소셜 콘텐츠 만듬 // IsSndFile
     public String orig_audio;                // audio 파일
@@ -141,7 +141,7 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
         if (cur_meditationContents != null) {
             // 이전 값을 저장
             orig_title = cur_meditationContents.title;
-            orig_thumbnail_uri = cur_meditationContents.thumbnail_uri;
+            orig_thumbnail = cur_meditationContents.thumbnail;
             orig_playtime = cur_meditationContents.playtime;
             orig_isRecordSndFile = cur_meditationContents.isRecordSndFile;
             orig_audio = cur_meditationContents.audio;
@@ -165,7 +165,7 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
             if (cur_meditationContents.thumbnail == null) {
                 UtilAPI.setImage(this, binding.ivPictureImage, R.drawable.basic_img);
             } else {
-                UtilAPI.load_image(this, orig_thumbnail_uri, binding.ivPictureImage);
+                UtilAPI.load_image(this, orig_thumbnail, binding.ivPictureImage);
             }
 
             // 오디오

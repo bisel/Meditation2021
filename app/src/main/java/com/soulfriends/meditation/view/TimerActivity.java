@@ -217,7 +217,8 @@ public class TimerActivity extends BaseActivity implements ResultListener {
                 NetServiceManager.getinstance().setCur_contents_timer(null);
 
                 viewModel.setStrCurTime("00 : 00");
-                binding.tvHourminute.setTextColor(Color.parseColor("#000000"));
+                //binding.tvHourminute.setTextColor(Color.parseColor("#000000"));
+                binding.tvHourminute.setTextColor(Color.parseColor("#FFFFFF"));
 
             }
             break;
@@ -241,7 +242,8 @@ public class TimerActivity extends BaseActivity implements ResultListener {
                 binding.buttonTimerStart.setVisibility(View.VISIBLE);
 
                 viewModel.setStrCurTime("00 : 00");
-                binding.tvHourminute.setTextColor(Color.parseColor("#000000"));
+                //binding.tvHourminute.setTextColor(Color.parseColor("#000000"));
+                binding.tvHourminute.setTextColor(Color.parseColor("#FFFFFF"));
 
             }
             break;
