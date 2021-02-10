@@ -220,7 +220,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         //------------------------------------------------
         ivContentsBt.setOnClickListener(v -> {
 
-            if(bFocusTab == 0) return; //중복방지
+            //if(bFocusTab == 0) return; //중복방지
             bFocusTab = 0;
 
             this.contents_RecyclerViewItem.setVisibility(View.VISIBLE);
@@ -241,7 +241,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
         ivFriendBt.setOnClickListener(v -> {
 
-            if(bFocusTab == 1) return; //중복방지
+            //if(bFocusTab == 1) return; //중복방지
             bFocusTab = 1;
 
             this.contents_RecyclerViewItem.setVisibility(View.GONE);
@@ -437,6 +437,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
     {
         // 콘텐츠 탭일 경우는 리턴하도록 처리해야만 된다.
         if(bFocusTab == 0) return;
+
+       // if(UtilAPI.s_StrFragment_Profile_Tab == UtilAPI.TAB_CONTENTS) return;
 
         list_friend.clear();
 
