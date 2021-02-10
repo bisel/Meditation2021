@@ -4216,9 +4216,9 @@ public class NetServiceManager {
         SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMdd" );
         Date date_now = new Date(System.currentTimeMillis());
         String curdate = format_date.format(date_now);
-        String curimgName = mUserProfile.uid + "_" + curdate + ".aac";
+        String curSndName = mUserProfile.uid + "_" + curdate + ".aac";
 
-        mMyContentsPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+curimgName;
+        mMyContentsPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+curSndName;
 
         Log.d("TAG", "file path is " + mMyContentsPath);
         mMycContentsRecorder.setOutputFile(mMyContentsPath);
@@ -4366,11 +4366,11 @@ public class NetServiceManager {
     //
     //  emotion에 따라서 healing Tag을 업데이트 해야 한다.
 
-    public void sendValSocialMeditationContents(MeditationContents socialcontents, String titleName, String thumnailImgName,String playtime, int IsSndFile,String SndFileName, String releasedate, String backgrroundImgName,String genre,String emotion){
+    public void sendValSocialMeditationContents(MeditationContents socialcontents, String titleName, String thumnailImgName,String playtime, int IsRecordSnd,String SndFileName, String releasedate, String backgrroundImgName,String genre,String emotion){
         if(this.mOnRecvValMeditationContentsListener != null){
-            SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMdd" );
-            Date date_now = new Date(System.currentTimeMillis());
-            String curdate = format_date.format(date_now);
+            //SimpleDateFormat format_date = new SimpleDateFormat ( "yyyyMMdd" );
+            //Date date_now = new Date(System.currentTimeMillis());
+            //String curdate = format_date.format(date_now);
 
             SimpleDateFormat format_detail_date =new SimpleDateFormat("yyyyMMddHHmmss");
             Date date_detail_now = new Date(System.currentTimeMillis());
@@ -4414,9 +4414,9 @@ public class NetServiceManager {
             }
 
             // 저장된 사운드 파일인지 확인
-            if(IsSndFile != -1){
-                infoData.isRecordSndFile = IsSndFile;
-                updateMap.put("isRecordSndFile", IsSndFile);
+            if(IsRecordSnd != -1){
+                infoData.isRecordSndFile = IsRecordSnd;
+                updateMap.put("isRecordSndFile", IsRecordSnd);
             }
 
             // 장르 처리
@@ -4457,7 +4457,7 @@ public class NetServiceManager {
                 if(finalNewContents){
                     File upfile = new File(thumnailImgName);
                     Uri thumbnailImgUri = Uri.fromFile(upfile);
-                    String curimgName = mUserProfile.uid + "_" + curdate + "_" + thumbnailImgUri.getLastPathSegment(); // uploadimageName
+                    String curimgName = mUserProfile.uid + "_" + curdetialdate + "_" + thumbnailImgUri.getLastPathSegment(); // uploadimageName
 
                     StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(curimgName);
                     UploadTask task = storageRef.putFile(thumbnailImgUri);
@@ -4497,7 +4497,7 @@ public class NetServiceManager {
                             public void onSuccess(Void aVoid) {
                                 File upfile = new File(thumnailImgName);
                                 Uri thumbnailImgUri = Uri.fromFile(upfile);
-                                String curimgName = mUserProfile.uid + "_" + curdate + "_" + thumbnailImgUri.getLastPathSegment(); // uploadimageName
+                                String curimgName = mUserProfile.uid + "_" + curdetialdate + "_" + thumbnailImgUri.getLastPathSegment(); // uploadimageName
 
                                 StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsthumnaildir).child(curimgName);
                                 UploadTask task = storageRef.putFile(thumbnailImgUri);
@@ -4548,16 +4548,25 @@ public class NetServiceManager {
                 if(newContents){
                     File upSoundfile = new File(SndFileName);
                     Uri SoundUri = Uri.fromFile(upSoundfile);
-                    String curSndName = mUserProfile.uid + "_" + curdate + "_" + SoundUri.getLastPathSegment();
+                    String curSndName = "";
+
+                    if(IsRecordSnd == 1){
+                        curSndName =  SoundUri.getLastPathSegment();
+                    }else{
+                        curSndName = mUserProfile.uid + "_" + curdetialdate + "_" + SoundUri.getLastPathSegment();
+                    }
+
 
                     StorageReference sndStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(curSndName);
                     UploadTask sndTask = sndStorageRef.putFile(SoundUri);
 
+                    String finalCurSndName = curSndName;
+
                     sndTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            finalInfoData.audio = curSndName;
-                            updateMap.put("audio", curSndName);
+                            finalInfoData.audio = finalCurSndName;
+                            updateMap.put("audio", finalCurSndName);
                             notifyDoneUpload(finalInfoData,2,updateMap, finalNewContents);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -4585,15 +4594,22 @@ public class NetServiceManager {
                             public void onSuccess(Void aVoid) {
                                 File upSoundfile = new File(SndFileName);
                                 Uri SoundUri = Uri.fromFile(upSoundfile);
-                                String curSndName = mUserProfile.uid + "_" + curdate + "_" + SoundUri.getLastPathSegment();
+                                String curSndName = "";
+
+                                if(IsRecordSnd == 1){
+                                    curSndName =  SoundUri.getLastPathSegment();
+                                }else{
+                                    curSndName = mUserProfile.uid + "_" + curdetialdate + "_" + SoundUri.getLastPathSegment();
+                                }
 
                                 StorageReference sndStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl(mycontentsaudiodir).child(curSndName);
                                 UploadTask sndTask = sndStorageRef.putFile(SoundUri);
+                                String finalCurSndName = curSndName;
                                 sndTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        finalInfoData.audio = curSndName;
-                                        updateMap.put("audio", curSndName);
+                                        finalInfoData.audio = finalCurSndName;
+                                        updateMap.put("audio", finalCurSndName);
                                         notifyDoneUpload(finalInfoData,2,updateMap, finalNewContents);
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
