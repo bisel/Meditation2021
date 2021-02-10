@@ -691,10 +691,7 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
 
                 bCheck_Audio = false;
 
-                // 기존 파일을 삭제 처리한다.
-                NetServiceManager.getinstance().delMyContentsRecordFile();
 
-                NetServiceManager.getinstance().startMyContentsRecord();
 
                 bComplete_Audio_Record = false;
 
@@ -714,6 +711,10 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
 
                     m.stop();
 
+                    // 기존 파일을 삭제 처리한다.
+                    NetServiceManager.getinstance().delMyContentsRecordFile();
+
+                    NetServiceManager.getinstance().startMyContentsRecord();
 
                     Check_NextButton();
 

@@ -655,11 +655,6 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
                 bCheck_Audio = false;
 
-                // 기존 파일을 삭제 처리한다.
-                NetServiceManager.getinstance().delMyContentsRecordFile();
-
-                NetServiceManager.getinstance().startMyContentsRecord();
-
                 bComplete_Audio_Record = false;
 
                 SetState_Audio(eAudioState.ing);
@@ -681,6 +676,11 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
 
                     Check_NextButton();
+
+                    // 기존 파일을 삭제 처리한다.
+                    NetServiceManager.getinstance().delMyContentsRecordFile();
+
+                    NetServiceManager.getinstance().startMyContentsRecord();
 
                     // 타이머 시작
                     StartTimer();

@@ -266,7 +266,7 @@ public class TimerActivity extends BaseActivity implements ResultListener {
                 // 다르다면 타이머 종료 처리한다.
                // if(MeditationAudioManager.isPlaying())
 
-                if(!MeditationAudioManager.getinstance().getServiceBound())
+                if(!MeditationAudioManager.getinstance().getServiceBind())
                 {
                     MeditationAudioManager.getinstance().StopTimer();
                     return;

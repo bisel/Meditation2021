@@ -30,6 +30,9 @@ public class MeditationAudioManager {
     private boolean serviceBind = false;
 
 
+    public boolean getServiceBind() {
+        return serviceBind;
+    }
 
     public boolean getServiceBound() {
         return serviceBound;
