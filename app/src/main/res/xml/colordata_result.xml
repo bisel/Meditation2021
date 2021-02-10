@@ -12,7 +12,7 @@
 		<colorsphere>2번 칼라</colorsphere>
 		<emotion>기쁨</emotion>
 		<emotionid>1</emotionid>
-		<score>45</score>
+		<score>74</score>
 	</colordata>
 	<colordata>
 		<id>3</id>
@@ -40,7 +40,7 @@
 		<colorsphere>6번 칼라</colorsphere>
 		<emotion>화남</emotion>
 		<emotionid>14</emotionid>
-		<score>55</score>
+		<score>69</score>
 	</colordata>
 	<colordata>
 		<id>7</id>
@@ -68,7 +68,7 @@
 		<colorsphere>10번 칼라</colorsphere>
 		<emotion>짜증</emotion>
 		<emotionid>12</emotionid>
-		<score>79</score>
+		<score>72</score>
 	</colordata>
 	<colordata>
 		<id>11</id>
@@ -103,35 +103,35 @@
 		<colorsphere>15번 칼라</colorsphere>
 		<emotion>불쾌한</emotion>
 		<emotionid>11</emotionid>
-		<score>72</score>
+		<score>93</score>
 	</colordata>
 	<colordata>
 		<id>16</id>
 		<colorsphere>16번 칼라</colorsphere>
 		<emotion>화남</emotion>
 		<emotionid>14</emotionid>
-		<score>50</score>
+		<score>55</score>
 	</colordata>
 	<colordata>
 		<id>17</id>
 		<colorsphere>17번 칼라</colorsphere>
 		<emotion>분노</emotion>
 		<emotionid>16</emotionid>
-		<score>66</score>
+		<score>88</score>
 	</colordata>
 	<colordata>
 		<id>18</id>
 		<colorsphere>18번 칼라</colorsphere>
 		<emotion>기쁨</emotion>
 		<emotionid>1</emotionid>
-		<score>40</score>
+		<score>68</score>
 	</colordata>
 	<colordata>
 		<id>19</id>
 		<colorsphere>19번 칼라</colorsphere>
 		<emotion>차분함</emotion>
 		<emotionid>4</emotionid>
-		<score>40</score>
+		<score>81</score>
 	</colordata>
 	<colordata>
 		<id>20</id>
@@ -152,14 +152,14 @@
 		<colorsphere>22번 칼라</colorsphere>
 		<emotion>공격적인</emotion>
 		<emotionid>15</emotionid>
-		<score>35</score>
+		<score>70</score>
 	</colordata>
 	<colordata>
 		<id>23</id>
 		<colorsphere>23번 칼라</colorsphere>
 		<emotion>의욕적인</emotion>
 		<emotionid>2</emotionid>
-		<score>25</score>
+		<score>78</score>
 	</colordata>
 	<colordata>
 		<id>24</id>
@@ -208,7 +208,7 @@
 		<colorsphere>30번 칼라</colorsphere>
 		<emotion>스트레스</emotion>
 		<emotionid>6</emotionid>
-		<score>90</score>
+		<score>83</score>
 	</colordata>
 	<colordata>
 		<id>31</id>
@@ -236,7 +236,7 @@
 		<colorsphere>34번 칼라</colorsphere>
 		<emotion>차분함</emotion>
 		<emotionid>4</emotionid>
-		<score>40</score>
+		<score>74</score>
 	</colordata>
 	<colordata>
 		<id>35</id>

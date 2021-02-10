@@ -2977,8 +2977,8 @@ public class NetServiceManager {
                 }
             }
 
-            // 긍정리스트 총합이 70%이상이어야 긍정이다.
-            float determinePositiveRatio = 0.7f;
+            // 긍정리스트 총합이 70%이상이어야 긍정이다. -> 50%로 수정 2021.02.10
+            float determinePositiveRatio = 0.5f; //0.7f;
             boolean emotionPositive = false;
             float totoalEmotionScore = (float)(positiveEmotionScore + negativeEmotionScore);
             float positiveEmotionRatio = (float)positiveEmotionScore / totoalEmotionScore;
