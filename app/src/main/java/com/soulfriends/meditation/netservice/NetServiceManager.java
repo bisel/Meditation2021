@@ -5325,10 +5325,33 @@ public class NetServiceManager {
 
     // 해당 uid가 감정 친구 요청중에 있는지 확인
     public boolean findEmotionFriendsRequest(String uid){
-        int dataNum = mFriendsRequestList.size();
+        int dataNum = mEmotionFriendsRequestList.size();
         for(int i = 0 ; i < dataNum; i++){
             if(mEmotionFriendsRequestList.get(i).equals(uid))
                 return true;
+        }
+        return false;
+    }
+
+    // 해당 uid 친구 요청 local 삭제
+    public boolean removeLocalFriendsRequest(String uid){
+        int dataNum = mFriendsRequestList.size();
+        for(int i = 0 ; i < dataNum; i++){
+            if(mFriendsRequestList.get(i).equals(uid))
+                mFriendsRequestList.remove(i);
+                return true;
+        }
+        return false;
+    }
+
+
+    // 해당 uid 감정 친구 요청 local 삭제
+    public boolean removeLocalEmotionFriendsRequest(String uid){
+        int dataNum = mEmotionFriendsRequestList.size();
+        for(int i = 0 ; i < dataNum; i++){
+            if(mEmotionFriendsRequestList.get(i).equals(uid))
+                mEmotionFriendsRequestList.remove(i);
+            return true;
         }
         return false;
     }
