@@ -968,11 +968,16 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                             alertDlg_ok.show();
                             alertDlg_ok.iv_ok.setOnClickListener(v -> {
 
-                                SendFriendState();
+                                NetServiceManager.getinstance().removeLocalFriendsRequest(UtilAPI.s_userProfile_friend.uid);
+
+
+                                SetFriendState();
+
                                 alertDlg_ok.dismiss();
+                                //friend_state = 0;
+                                //UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);
+
                             });
-                            ////UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);
-                            //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
                         } else {
 
                         }
