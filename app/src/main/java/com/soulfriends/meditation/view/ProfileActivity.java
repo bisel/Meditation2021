@@ -400,6 +400,8 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
 
         binding.ivPicture.setImageURI(albumURI);
 
+        NetServiceManager.getinstance().sendValNewProfileExt(userProfile, null, null, mCurrentPhotoPath);
+
     }
     @Override
     public void onItemClick(View view, Object obj, int pos) {

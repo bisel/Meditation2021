@@ -436,7 +436,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
     private void DoFriendList()
     {
         // 콘텐츠 탭일 경우는 리턴하도록 처리해야만 된다.
-        if(bFocusTab == 0) return;
+        //if(bFocusTab == 0) return;
 
        // if(UtilAPI.s_StrFragment_Profile_Tab == UtilAPI.TAB_CONTENTS) return;
 
