@@ -447,7 +447,7 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                     // 찾기
                     Find_Friend();
 
-                    Toast.makeText(this, "친구 검색 중", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "친구 검색 중", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -456,7 +456,10 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                     binding.recyclerview.setVisibility(View.GONE);
                 }
 
+                hideKeyBoard();
                 binding.editText.clearFocus();
+
+
 
             }
             break;

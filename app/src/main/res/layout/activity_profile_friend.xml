@@ -162,6 +162,7 @@
                         android:layout_width="320dp"
                         android:layout_height="142dp"
                         android:layout_marginTop="30dp"
+                        android:visibility="visible"
                         android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -421,7 +422,7 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/imageView14"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+                                app:layout_constraintTop_toBottomOf="@+id/tv_my_state" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView

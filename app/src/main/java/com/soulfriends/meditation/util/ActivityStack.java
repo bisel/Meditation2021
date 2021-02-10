@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.soulfriends.meditation.view.FriendEditActivity;
+import com.soulfriends.meditation.view.FriendFindActivity;
 import com.soulfriends.meditation.view.MainActivity;
 import com.soulfriends.meditation.view.MyContentsActivity;
 import com.soulfriends.meditation.view.PlayerActivity;
@@ -106,6 +107,13 @@ public class ActivityStack {
             case "FriendEditActivity":
             {
                 activity.startActivity(new Intent(activity, FriendEditActivity.class));
+                activity.overridePendingTransition(0, 0);
+                activity.finish();
+            }
+            break;
+            case "FriendFindActivity":
+            {
+                activity.startActivity(new Intent(activity, FriendFindActivity.class));
                 activity.overridePendingTransition(0, 0);
                 activity.finish();
             }
