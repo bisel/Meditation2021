@@ -284,10 +284,10 @@ public class MainActivity extends BaseActivity implements ResultListener {
 
         bCallAlarm = false;
 
+        //Notification.with(this, this);
 
-        Notification.with(this, this);
+        //Notification.instance().Register();
 
-        Notification.instance().Register();
 
         binding.ivAlarmBg.setVisibility(View.GONE);
         binding.tvAlarmCount.setVisibility(View.GONE);
@@ -593,6 +593,22 @@ public class MainActivity extends BaseActivity implements ResultListener {
 
         switch (status) {
 
+            case PlaybackStatus.ERROR: {
+
+                miniPlaying = false;
+
+                // 프레임 레이어 조절
+                UtilAPI.setMarginBottom(this, binding.container, 0);
+
+                MeditationAudioManager.stop();
+                meditationAudioManager.unbind();
+
+                binding.miniLayout.setVisibility(View.GONE);
+
+                //  배경음악 플레이
+                CallWithDelay_FormStopNoti(400, this);
+            }
+            break;
             case PlaybackStatus.TRACK_CHANGE: {
             }
             break;

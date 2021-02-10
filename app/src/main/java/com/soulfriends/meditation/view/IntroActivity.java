@@ -80,15 +80,13 @@ public class IntroActivity extends AppCompatActivity {
         //FirebaseAuth.getInstance().signOut();
 
         // 배경음
-
         boolean sound_off = PreferenceManager.getBoolean(this,"sound_off");
 
         AudioPlayer.with(getApplicationContext());
-        //SoundPlayer.with(getApplicationContext());
 
-        //Notification.with(getApplicationContext(), this);
+        Notification.with(this, this);
 
-        //Notification.instance().Register();
+        Notification.instance().Register();
 
         if(sound_off) {
             // 음악 정지 상태
@@ -97,6 +95,19 @@ public class IntroActivity extends AppCompatActivity {
 
             // 음악 플레이 상태
             AudioPlayer.instance().playSound(R.raw.bgm, 1.0f);
+        }
+
+        // 노티
+        boolean notification_off = PreferenceManager.getBoolean(this,"notification_off");
+
+        if(notification_off) {
+            // 노티 off 상태
+        }
+        else {
+            // 노티 on 상태
+            Notification.with(this, this);
+
+            Notification.instance().Register();
         }
 
         UtilAPI.SetActivity(this);
@@ -131,7 +142,6 @@ public class IntroActivity extends AppCompatActivity {
             //this.finish();
         }
     }
-
 
     public void CallWithDelay(long miliseconds, final Activity activity, Boolean bLogin) {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {

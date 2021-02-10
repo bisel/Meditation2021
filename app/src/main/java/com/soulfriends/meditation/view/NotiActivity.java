@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.NotiBinding;
 import com.soulfriends.meditation.model.MeditationDetailAlarm;
+import com.soulfriends.meditation.model.MeditationFriend;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
@@ -270,7 +271,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
                         NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
                             @Override
-                            public void onAcceptFriendRequest(boolean validate) {
+                            public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo) {
 
                                 if(validate)
                                 {
@@ -298,7 +299,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
                         NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
                             @Override
-                            public void onAcceptFriendRequest(boolean validate) {
+                            public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo) {
 
                                 if(validate)
                                 {

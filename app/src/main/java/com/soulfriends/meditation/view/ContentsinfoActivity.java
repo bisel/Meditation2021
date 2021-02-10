@@ -103,6 +103,14 @@ public class ContentsinfoActivity extends BaseActivity implements ResultListener
     @Subscribe
     public void onEvent(String status) {
         switch (status) {
+            case PlaybackStatus.ERROR: {
+
+                // 인터넷 연결 끊었을 경우 해당
+                // MainActivity 이동
+                ActivityStack.instance().Pop();
+                ActivityStack.instance().OnBack(this);
+            }
+            break;
             case PlaybackStatus.STOPPED: {
 
                 // 음악이 끝난 경우 발생되는 이벤트

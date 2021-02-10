@@ -144,6 +144,14 @@ public class TimerActivity extends BaseActivity implements ResultListener {
     public void onEvent(String status) {
 
         switch (status) {
+            case PlaybackStatus.ERROR: {
+
+                // 인터넷 연결 끊었을 경우 해당
+                // MainActivity 이동
+                ActivityStack.instance().Pop();
+                ActivityStack.instance().OnBack(this);
+            }
+            break;
             case PlaybackStatus.TIMER_COUNT: {
 
 

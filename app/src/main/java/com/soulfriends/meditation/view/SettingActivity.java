@@ -21,6 +21,7 @@ import com.soulfriends.meditation.databinding.SettingBinding;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.AuthManager;
+import com.soulfriends.meditation.util.Notification;
 import com.soulfriends.meditation.util.PreferenceManager;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -54,7 +55,7 @@ public class SettingActivity extends BaseActivity implements ResultListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
         binding.setLifecycleOwner(this);
 
-        boolean bool_noti = PreferenceManager.getBoolean(this,"bool_noti");
+        boolean notification_off = PreferenceManager.getBoolean(this,"notification_off");
         boolean sound_off = PreferenceManager.getBoolean(this,"sound_off");
 
         if (settingViewModelFactory == null) {
@@ -65,6 +66,7 @@ public class SettingActivity extends BaseActivity implements ResultListener {
 
         // switch 초기값 설정
         binding.switchSound.setChecked(!sound_off);
+        binding.switchNoti2.setChecked(!notification_off);
 
         //switch_scale_x = binding.switchSound.getScaleX();
         //switch_scale_y = binding.switchSound.getScaleY();
@@ -189,14 +191,17 @@ public class SettingActivity extends BaseActivity implements ResultListener {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if(isChecked) {
-                PreferenceManager.setBoolean(buttonView.getContext(),"bool_noti", true);
+                PreferenceManager.setBoolean(buttonView.getContext(),"notification_off", true);
 
-                Toast.makeText(getApplicationContext(),"noti true",Toast.LENGTH_SHORT).show();
+                Notification.instance().Register();
+
+               // Toast.makeText(getApplicationContext(),"noti true",Toast.LENGTH_SHORT).show();
             }
             else {
-                PreferenceManager.setBoolean(buttonView.getContext(),"bool_noti", false);
+                PreferenceManager.setBoolean(buttonView.getContext(),"notification_off", false);
 
-                Toast.makeText(getApplicationContext(),"noti false",Toast.LENGTH_SHORT).show();
+                Notification.instance().ClearNotifications();
+                //Toast.makeText(getApplicationContext(),"noti false",Toast.LENGTH_SHORT).show();
 
             }
         }

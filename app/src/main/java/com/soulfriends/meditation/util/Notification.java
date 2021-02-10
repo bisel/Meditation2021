@@ -25,7 +25,7 @@ public class Notification {
     private Context context;
     private Activity activity;
 
-    private boolean s_test = true;
+    private boolean s_test = false;
 
     public static Notification instance(){
         return instance;
@@ -84,23 +84,18 @@ public class Notification {
             return;
         }
 
+        ClearNotifications();
+
         float curtime = 0;
 
-        float daytime = 24 * 60 * 60;// 시간 * 분 * 초 * 밀리
+        String str_title = "힐링 타이틀";
 
-        // 10초 마다 테스트
-        //float daytime = 10 ;// 시간 * 분 * 초 * 밀리
+        String str_msg_0 = "제목 1";
+        String str_msg_1 = "제목 2";
+        String str_msg_2 = "제목 3";
 
-        String str_msg_0 = "";
-        String str_msg_1 = "";
-        String str_msg_2 = "";
-
-        String str_title = "";
-
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 30; i++) { // 30
             curtime += 1.0f;
-
-            //curtime += daytime;
 
             int rand = getRandomNumber(0, 2 + 1); // 0 ~ 2
             switch (rand) {
@@ -130,8 +125,8 @@ public class Notification {
         int bgColor = 0;
 
         String channel = "default";
-        String largeIconResource = "logo_icon.png";//""l_icon";//s_icon.png 확장자 빼고 이름만
-        String smallIconResource = "logo_icon.png";//"s_icon"; //s_icon.png 확장자 빼고 이름만
+        String largeIconResource = "logo_icon";//""l_icon";//s_icon.png 확장자 빼고 이름만
+        String smallIconResource = "s_icon";//"s_icon"; //s_icon.png 확장자 빼고 이름만
         String bundle = "com.soulfriends.meditation";
 
         SetNotification(channel, bundle, largeIconResource, smallIconResource, title, message, id, delay, sound, vibrate, lights, bgColor);
@@ -202,6 +197,8 @@ public class Notification {
         else
         {
             delayMs = 24 * 60 * 60 * (long)_delayMs;
+
+            //delayMs = 20 * (long)_delayMs;
         }
         //long delayMs = 24 * 60 * 60 * (long)_delayMs;
         //long delayMs = 60 * (long)_delayMs;

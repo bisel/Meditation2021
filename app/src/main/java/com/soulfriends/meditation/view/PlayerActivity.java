@@ -509,6 +509,12 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         strPlaybackStatus = status;
 
         switch (status) {
+            case PlaybackStatus.ERROR: {
+
+                // 인터넷 연결 끊었을 경우 해당
+                ActivityStack.instance().OnBack(this);
+            }
+            break;
             case PlaybackStatus.IDLE:
                 break;
 

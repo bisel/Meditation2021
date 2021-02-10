@@ -250,6 +250,7 @@
     <string name="friendemotion_emotionstate">감정상태</string>
     <string name="friendemotion_emotionrequesting">감정공유 요청 중</string>
     <string name="friendemotion_emotionrequest">감정공유 요청</string>
+    <string name="friendemotion_emotionrequest_answer">감정공유 응답</string>
 
 
     <!-- friend find activity  친구 검색 -->
@@ -259,6 +260,7 @@
     <string name="friendfind_add">친구추가</string>
     <string name="friendfind_friend">친구</string>
     <string name="friendfind_request">친구 요청 중</string>
+    <string name="friendfind_request_answer">친구요청 응답</string>
 
     <!-- contents make activity 콘텐츠 제작-->
     <string name="contentsmake_title">콘텐츠 제작</string>
@@ -393,4 +395,7 @@
     <string name="popup_menu_modify_noun">수정</string>
     <string name="popup_menu_delete_noun">삭제</string>
 
+    <!-- already dialog  -->
+    <string name="dialog_already_friend">님이 이미 친구 신청을 했습니다.</string>
+    <string name="dialog_already_emotion">님이 이미 감정공유를 요청했습니다.</string>
 </resources>

@@ -61,6 +61,7 @@ public class FriendFindAdapter extends RecyclerView.Adapter{
             bind.layoutAddbt.setVisibility(View.VISIBLE);
             bind.layoutBt.setVisibility(View.GONE);
             bind.layoutRequestbt.setVisibility(View.GONE);
+            bind.layoutRequestAnswerbt.setVisibility(View.GONE);
         }
         else if(friendFindItemViewModel.friend_state == 1)
         {
@@ -68,13 +69,23 @@ public class FriendFindAdapter extends RecyclerView.Adapter{
             bind.layoutAddbt.setVisibility(View.GONE);
             bind.layoutBt.setVisibility(View.VISIBLE);
             bind.layoutRequestbt.setVisibility(View.GONE);
+            bind.layoutRequestAnswerbt.setVisibility(View.GONE);
         }
-        else
+        else if(friendFindItemViewModel.friend_state == 3)
+        {
+            //  현재 상대방이 나에게 친구 요청 중 -> 2021.02.09
+            bind.layoutAddbt.setVisibility(View.GONE);
+            bind.layoutBt.setVisibility(View.GONE);
+            bind.layoutRequestbt.setVisibility(View.GONE);
+            bind.layoutRequestAnswerbt.setVisibility(View.VISIBLE);
+        }
+        else //2
         {
             // 친구 요청 중
             bind.layoutAddbt.setVisibility(View.GONE);
             bind.layoutBt.setVisibility(View.GONE);
             bind.layoutRequestbt.setVisibility(View.VISIBLE);
+            bind.layoutRequestAnswerbt.setVisibility(View.GONE);
         }
 
         // profile 이미지

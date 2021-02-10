@@ -68,6 +68,7 @@ public class FriendEmotionAdapter extends RecyclerView.Adapter{
             bind.layoutBasebt.setVisibility(View.VISIBLE);
             bind.layoutRequestingbt.setVisibility(View.GONE);
             bind.layoutRequestbt.setVisibility(View.GONE);
+            bind.layoutRequestAnswerbt.setVisibility(View.GONE);
         }
         else if(friendEmotionItemViewModel.emotion_state == 1)
         {
@@ -75,6 +76,15 @@ public class FriendEmotionAdapter extends RecyclerView.Adapter{
             bind.layoutBasebt.setVisibility(View.GONE);
             bind.layoutRequestingbt.setVisibility(View.VISIBLE);
             bind.layoutRequestbt.setVisibility(View.GONE);
+            bind.layoutRequestAnswerbt.setVisibility(View.GONE);
+        }
+        else if(friendEmotionItemViewModel.emotion_state == 3)
+        {
+            // 감정공유 응답
+            bind.layoutBasebt.setVisibility(View.GONE);
+            bind.layoutRequestingbt.setVisibility(View.GONE);
+            bind.layoutRequestbt.setVisibility(View.GONE);
+            bind.layoutRequestAnswerbt.setVisibility(View.VISIBLE);
         }
         else
         {
@@ -82,6 +92,7 @@ public class FriendEmotionAdapter extends RecyclerView.Adapter{
             bind.layoutBasebt.setVisibility(View.GONE);
             bind.layoutRequestingbt.setVisibility(View.GONE);
             bind.layoutRequestbt.setVisibility(View.VISIBLE);
+            bind.layoutRequestAnswerbt.setVisibility(View.GONE);
         }
 
         // profile 이미지
