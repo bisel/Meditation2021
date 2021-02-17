@@ -3,43 +3,35 @@ package com.soulfriends.meditation.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.text.Layout;
-import android.text.SpannableString;
-import android.text.style.AlignmentSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ui.PlayerControlView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.PlayerBinding;
 import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
-import com.soulfriends.meditation.dlg.AlertLineOnePopup;
 import com.soulfriends.meditation.dlg.MenuModifyPopup;
-import com.soulfriends.meditation.dlg.MenuPopup;
 import com.soulfriends.meditation.dlg.MenuReportPopup;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.UserProfile;
@@ -49,18 +41,11 @@ import com.soulfriends.meditation.util.PreferenceManager;
 import com.soulfriends.meditation.util.RecvEventListener;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
-import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.view.player.AudioPlayer;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
 import com.soulfriends.meditation.view.player.PlaybackStatus;
 import com.soulfriends.meditation.viewmodel.PlayerViewModel;
 import com.soulfriends.meditation.viewmodel.PlayerViewModelFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ui.PlayerControlView;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -230,7 +215,14 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
         // 좋아요 표시
         String uid = NetServiceManager.getinstance().getUserProfile().uid;
-        reactionCode = NetServiceManager.getinstance().reqContentsFavoriteEvent(uid, meditationContents.uid);
+
+        // 2021.02.17
+        if(meditationContents.ismycontents == 1){
+            reactionCode = NetServiceManager.getinstance().reqSocialContentsFavoriteEvent(uid, meditationContents.uid);
+        }else{
+            reactionCode = NetServiceManager.getinstance().reqContentsFavoriteEvent(uid, meditationContents.uid);
+        }
+
         if (reactionCode == 1) {
             // 좋아요
             // good 활성화

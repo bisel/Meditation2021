@@ -19,6 +19,7 @@
         android:roundIcon="@mipmap/ic_realicon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MindSpace"
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="adjustResize">
 

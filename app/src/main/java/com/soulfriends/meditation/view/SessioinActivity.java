@@ -73,7 +73,12 @@ public class SessioinActivity extends BaseActivity implements ResultListener {
         //String uid = PreferenceManager.getString(this,"uid");
 
         String uid = NetServiceManager.getinstance().getUserProfile().uid;
-        reactiionCode = NetServiceManager.getinstance().reqContentsFavoriteEvent(uid, meditationContents.uid);
+
+        if(meditationContents.ismycontents == 1){
+            reactiionCode = NetServiceManager.getinstance().reqSocialContentsFavoriteEvent(uid, meditationContents.uid);
+        }else{
+            reactiionCode = NetServiceManager.getinstance().reqContentsFavoriteEvent(uid, meditationContents.uid);
+        }
 
         reactiionCode_orig = reactiionCode;
 

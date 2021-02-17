@@ -1763,6 +1763,26 @@ public class NetServiceManager {
         return 0;
     }
 
+    // 해당 콘텐츠의 해당 유저의 favorite여부 0: Default 1 : 좋아요, 2: 싫어요
+    public int reqSocialContentsFavoriteEvent(String uid, String contentid)
+    {
+        int itemsize= mSocialContentsList.size();
+
+        for(int i = 0; i < itemsize;i++) {
+            MeditationContents contents = mSocialContentsList.get(i);
+            if(contents.uid.equals(contentid)){
+                Integer value =  contents.states.get(uid);
+                if(value == null){
+                    return 0;
+                }
+                return value.intValue();
+            }
+        }
+
+        return 0;
+    }
+
+
     // 즐겨찾기 여부 : false - 즐겨찾기 안되어 있음. true - 즐겨찾기 되어있음
     public Boolean reqFavoriteContents(String contentid)
     {
@@ -4561,6 +4581,8 @@ public class NetServiceManager {
                     UploadTask sndTask = sndStorageRef.putFile(SoundUri);
 
                     String finalCurSndName = curSndName;
+
+                    FirebaseStorage.getInstance().setMaxUploadRetryTimeMillis(2000);
 
                     sndTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
