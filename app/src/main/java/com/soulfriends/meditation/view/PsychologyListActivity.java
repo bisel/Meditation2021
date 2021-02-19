@@ -44,6 +44,9 @@ public class PsychologyListActivity extends BaseActivity implements ResultListen
         viewModel = new ViewModelProvider(this.getViewModelStore(), psychologyListViewModelFactory).get(PsychologyListViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         // service onevent PlaybackStatus.STOPPED_END 체크
         UtilAPI.s_bEvent_service_main = false;
         UtilAPI.s_bEvent_service_player = false;

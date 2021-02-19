@@ -39,6 +39,9 @@ public class InAppActivity extends BaseActivity implements ResultListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_in_app);
         binding.setLifecycleOwner(this);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         // 디폴트 선택
         select_id = 0;
 

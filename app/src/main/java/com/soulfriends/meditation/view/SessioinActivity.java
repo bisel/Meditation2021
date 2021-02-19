@@ -60,6 +60,9 @@ public class SessioinActivity extends BaseActivity implements ResultListener {
         viewModel = new ViewModelProvider(this.getViewModelStore(), sessionViewModelFactory).get(SessionViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         // 이미지
 
         if(meditationContents.thumbnail == null) {

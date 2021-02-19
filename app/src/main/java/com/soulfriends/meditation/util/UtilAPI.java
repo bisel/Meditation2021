@@ -3,6 +3,7 @@ package com.soulfriends.meditation.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -28,6 +29,39 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.soulfriends.meditation.model.MeditationContents;
+import com.soulfriends.meditation.view.ContentsEditActivity;
+import com.soulfriends.meditation.view.ContentsEmotionSelActivity;
+import com.soulfriends.meditation.view.ContentsMakeActivity;
+import com.soulfriends.meditation.view.ContentsUploadActivity;
+import com.soulfriends.meditation.view.ContentsinfoActivity;
+import com.soulfriends.meditation.view.FriendEditActivity;
+import com.soulfriends.meditation.view.FriendFindActivity;
+import com.soulfriends.meditation.view.InAppActivity;
+import com.soulfriends.meditation.view.IntroActivity;
+import com.soulfriends.meditation.view.LoadingActivity;
+import com.soulfriends.meditation.view.LoginActivity;
+import com.soulfriends.meditation.view.MainActivity;
+import com.soulfriends.meditation.view.MyContentsActivity;
+import com.soulfriends.meditation.view.NetDialogActivity;
+import com.soulfriends.meditation.view.NotiActivity;
+import com.soulfriends.meditation.view.PlayerActivity;
+import com.soulfriends.meditation.view.ProfileActivity;
+import com.soulfriends.meditation.view.ProfileFriendActivity;
+import com.soulfriends.meditation.view.PsychologyCharacterDetailActivity;
+import com.soulfriends.meditation.view.PsychologyCharacterListActivity;
+import com.soulfriends.meditation.view.PsychologyCharacterResultActivity;
+import com.soulfriends.meditation.view.PsychologyCharacterTestActivity;
+import com.soulfriends.meditation.view.PsychologyColorTestActivity;
+import com.soulfriends.meditation.view.PsychologyDetailActivity;
+import com.soulfriends.meditation.view.PsychologyFeelingTestActivity;
+import com.soulfriends.meditation.view.PsychologyListActivity;
+import com.soulfriends.meditation.view.PsychologyResultActivity;
+import com.soulfriends.meditation.view.PsychologyVoiceTestActivity;
+import com.soulfriends.meditation.view.SessioinActivity;
+import com.soulfriends.meditation.view.SettingActivity;
+import com.soulfriends.meditation.view.TimerActivity;
+import com.soulfriends.meditation.view.UserinfoActivity;
+import com.soulfriends.meditation.view.UserinfoExtActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -339,8 +373,181 @@ public class UtilAPI {
     }
 
 
+    //-----------------------------------------------------------------------------
+    //
+    // 인터넷 연결 상태
+    //
+    //-----------------------------------------------------------------------------
+    public static boolean s_bShowNetConnection = false;
+    public static String s_ActivityName_NetConnection = "";
+    private static Activity s_activity_NetConnection;
+
+    public static void SetNetConnection_Activity(Activity activity)
+    {
+        s_activity_NetConnection = activity;
+
+        s_ActivityName_NetConnection = activity.getClass().getSimpleName();
+    }
+
+    public static void showNetConnectionDlg() {
+
+        if (!s_bShowNetConnection) {
+            Intent intent = new Intent(GetActivity(), NetDialogActivity.class);
+            GetActivity().startActivity(intent);
+            s_bShowNetConnection = true;
+        }
+    }
+
+    public static void startActivity_NetConnection( Activity activity)
+    {
+        // 이전 화면 finish
+        if(s_activity_NetConnection != null)
+        {
+            if(s_ActivityName_NetConnection.equals("IntroActivity"))
+            {
+            }
+            else {
+                s_activity_NetConnection.finish();
+            }
+        }
+
+        // new 화면
+        //Activity activity = GetActivity();
+        if(s_ActivityName_NetConnection.length() > 0) {
+            switch (s_ActivityName_NetConnection) {
+                case "ContentsEditActivity": {
+                    activity.startActivity(new Intent(activity, ContentsEditActivity.class));
+                }
+                break;
+                case "ContentsEmotionSelActivity": {
+                    activity.startActivity(new Intent(activity, ContentsEmotionSelActivity.class));
+                }
+                break;
+                case "ContentsinfoActivity": {
+                    activity.startActivity(new Intent(activity, ContentsinfoActivity.class));
+                }
+                break;
+                case "ContentsMakeActivity": {
+                    activity.startActivity(new Intent(activity, ContentsMakeActivity.class));
+                }
+                break;
+                case "ContentsUploadActivity": {
+                    activity.startActivity(new Intent(activity, ContentsUploadActivity.class));
+                }
+                break;
+                case "FriendEditActivity": {
+                    activity.startActivity(new Intent(activity, FriendEditActivity.class));
+                }
+                break;
+                case "FriendFindActivity": {
+                    activity.startActivity(new Intent(activity, FriendFindActivity.class));
+                }
+                break;
+                case "InAppActivity": {
+                    activity.startActivity(new Intent(activity, InAppActivity.class));
+                }
+                break;
+                case "IntroActivity": {
+
+                    ((IntroActivity)s_activity_NetConnection).Refresh();
+                    //activity.startActivity(new Intent(activity, IntroActivity.class));
+                }
+                break;
+                case "LoadingActivity": {
+                    activity.startActivity(new Intent(activity, LoadingActivity.class));
+                }
+                break;
+                case "LoginActivity": {
+                    activity.startActivity(new Intent(activity, LoginActivity.class));
+                }
+                break;
+                case "MainActivity": {
+                    activity.startActivity(new Intent(activity, MainActivity.class));
+                }
+                break;
+                case "MyContentsActivity": {
+                    activity.startActivity(new Intent(activity, MyContentsActivity.class));
+                }
+                break;
+                case "NotiActivity": {
+                    activity.startActivity(new Intent(activity, NotiActivity.class));
+                }
+                break;
+                case "PlayerActivity": {
+                    activity.startActivity(new Intent(activity, PlayerActivity.class));
+                }
+                break;
+                case "ProfileActivity": {
+                    activity.startActivity(new Intent(activity, ProfileActivity.class));
+                }
+                break;
+                case "ProfileFriendActivity": {
+                    activity.startActivity(new Intent(activity, ProfileFriendActivity.class));
+                }
+                break;
+                case "PsychologyCharacterDetailActivity": {
+                    activity.startActivity(new Intent(activity, PsychologyCharacterDetailActivity.class));
+                }
+                break;
+                case "PsychologyCharacterResultActivity": {
+                    activity.startActivity(new Intent(activity, PsychologyCharacterResultActivity.class));
+                }
+                break;
+                case "PsychologyCharacterTestActivity": {
+                    activity.startActivity(new Intent(activity, PsychologyCharacterTestActivity.class));
+                }
+                break;
+                case "PsychologyColorTestActivity": {
+                    activity.startActivity(new Intent(activity, PsychologyColorTestActivity.class));
+                }
+                break;
+                case "PsychologyDetailActivity": {
+                    activity.startActivity(new Intent(activity, PsychologyDetailActivity.class));
+                }
+                break;
+                case "PsychologyFeelingTestActivity": {
+                    activity.startActivity(new Intent(activity, PsychologyFeelingTestActivity.class));
+                }
+                break;
+                case "PsychologyListActivity": {
+                    activity.startActivity(new Intent(activity, PsychologyListActivity.class));
+                }
+                break;
+                case "PsychologyVoiceTestActivity": {
+                    activity.startActivity(new Intent(activity, PsychologyVoiceTestActivity.class));
+                }
+                break;
+                case "SessioinActivity": {
+                    activity.startActivity(new Intent(activity, SessioinActivity.class));
+                }
+                break;
+                case "SettingActivity": {
+                    activity.startActivity(new Intent(activity, SettingActivity.class));
+                }
+                break;
+                case "TimerActivity": {
+                    activity.startActivity(new Intent(activity, TimerActivity.class));
+                }
+                break;
+                case "UserinfoActivity": {
+                    activity.startActivity(new Intent(activity, UserinfoActivity.class));
+                }
+                break;
+                case "UserinfoExtActivity": {
+                    activity.startActivity(new Intent(activity, UserinfoExtActivity.class));
+                }
+                break;
+            }
+        }
+    }
+
     public static void Init()
     {
+        s_bShowNetConnection = false;
+        s_ActivityName_NetConnection = "";
+        s_activity_NetConnection = null;
+
+
         s_bEvent_service = false;
         s_bEvent_service_main = false;
         s_bEvent_service_player = false;

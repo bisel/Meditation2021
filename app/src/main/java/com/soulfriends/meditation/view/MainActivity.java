@@ -284,6 +284,9 @@ public class MainActivity extends BaseActivity implements ResultListener {
         viewModel = new ViewModelProvider(this.getViewModelStore(), mainViewModelFactory).get(MainViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         bCallAlarm = false;
 
         //Notification.with(this, this);

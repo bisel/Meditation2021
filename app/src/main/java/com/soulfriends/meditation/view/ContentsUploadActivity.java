@@ -35,6 +35,9 @@ public class ContentsUploadActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contents_upload);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         // 정보 받기
         Intent intent = getIntent();
 

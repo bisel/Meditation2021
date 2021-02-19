@@ -48,7 +48,8 @@ public class PsychologyResultActivity extends BaseActivity implements ResultList
         viewModel = new ViewModelProvider(this.getViewModelStore(), psychologyResultViewModelFactory).get(PsychologyResultViewModel.class);
         binding.setViewModel(viewModel);
 
-
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
 
 
 

@@ -114,6 +114,13 @@ public class FriendEmotionAdapter extends RecyclerView.Adapter{
             int res_id_1 = context.getResources().getIdentifier(strEmoti, "drawable", context.getPackageName());
             UtilAPI.setImage(context, bind.ivEmoticon, res_id_1); //iv_emoticon
         }
+        else
+        {
+            // 물음표 이모티콘 표시(색상 다르게, 파란색(my 버튼 색)
+            String strEmoti = "ctgr_music";
+            int res_id_1 = context.getResources().getIdentifier(strEmoti, "drawable", context.getPackageName());
+            UtilAPI.setImage(context, bind.ivEmoticon, res_id_1); //iv_emoticon
+        }
     }
 
     @Override

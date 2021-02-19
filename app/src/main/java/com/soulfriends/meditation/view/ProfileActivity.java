@@ -90,6 +90,8 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
         viewModel = new ViewModelProvider(this.getViewModelStore(), profileViewModelFactory).get(ProfileViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
 
         meditationShowCategorys = NetServiceManager.getinstance().reqMediationType(1, false);
 

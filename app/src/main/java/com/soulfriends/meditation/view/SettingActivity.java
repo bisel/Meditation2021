@@ -64,6 +64,9 @@ public class SettingActivity extends BaseActivity implements ResultListener {
         viewModel = new ViewModelProvider(this.getViewModelStore(), settingViewModelFactory).get(SettingViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         // switch 초기값 설정
         binding.switchSound.setChecked(!sound_off);
         binding.switchNoti2.setChecked(!notification_off);

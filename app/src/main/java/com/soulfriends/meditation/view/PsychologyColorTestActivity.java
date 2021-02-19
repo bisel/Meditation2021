@@ -19,6 +19,7 @@ import com.soulfriends.meditation.databinding.PsychologyColorTestBinding;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.parser.QuestionData;
 import com.soulfriends.meditation.util.ResultListener;
+import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.viewmodel.PsychologyColorTestViewModel;
 import com.soulfriends.meditation.viewmodel.PsychologyColorTestViewModelFactory;
 
@@ -57,6 +58,9 @@ public class PsychologyColorTestActivity extends BaseActivity implements ResultL
         }
         viewModel = new ViewModelProvider(this.getViewModelStore(), psychologyColorTestViewModelFactory).get(PsychologyColorTestViewModel.class);
         binding.setViewModel(viewModel);
+
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
 
         list_page_selectid = new ArrayList<Integer>();
         questionData_list = xmlParser(R.xml.questiondata_result);

@@ -6148,6 +6148,11 @@ public class NetServiceManager {
     //=================================================
 
     // 빌링 처리
+
+    public void showNetConnectionDlg()
+    {
+        UtilAPI.showNetConnectionDlg();
+    }
 }
 
 

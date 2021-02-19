@@ -76,6 +76,9 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
         viewModel = new ViewModelProvider(this.getViewModelStore(), userinfoViewModelFactory).get(UserinfoViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         bSuccess_nickname = false;
         bSuccess_gender = false;
 

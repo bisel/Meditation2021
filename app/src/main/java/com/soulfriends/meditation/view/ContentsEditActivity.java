@@ -121,6 +121,8 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_contents_edit);
         binding.setLifecycleOwner(this);
 
@@ -130,6 +132,9 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
         viewModel = new ViewModelProvider(this.getViewModelStore(), contentsEditViewModelFactory).get(ContentsEditViewModel.class);
         binding.setViewModel(viewModel);
 
+
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
 
         // 정보 받기
         Intent intent = getIntent();

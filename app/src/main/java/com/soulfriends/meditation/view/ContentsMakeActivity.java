@@ -105,6 +105,9 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
         viewModel = new ViewModelProvider(this.getViewModelStore(), contentsMakeViewModelFactory).get(ContentsMakeViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         // default
         binding.layoutThumbAdd.setVisibility(View.VISIBLE);
 

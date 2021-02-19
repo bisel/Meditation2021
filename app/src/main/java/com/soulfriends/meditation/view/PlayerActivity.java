@@ -101,7 +101,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         viewModel = new ViewModelProvider(this.getViewModelStore(), playerViewModelFactory).get(PlayerViewModel.class);
         binding.setViewModel(viewModel);
 
-        // bg
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
 
         // string
 

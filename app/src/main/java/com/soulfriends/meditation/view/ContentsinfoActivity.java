@@ -57,6 +57,8 @@ public class ContentsinfoActivity extends BaseActivity implements ResultListener
         viewModel = new ViewModelProvider(this.getViewModelStore(), contentsinfoViewModelFactory).get(ContentsinfoViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
 
         // image
         if(!meditationContents.publisher.isEmpty())

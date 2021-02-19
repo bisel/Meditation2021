@@ -20,6 +20,7 @@ import com.soulfriends.meditation.databinding.PsychologyFeelingTestBinding;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ResultListener;
+import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.viewmodel.PsychologyFeelingTestViewModel;
 import com.soulfriends.meditation.viewmodel.PsychologyFeelingTestViewModelFactory;
 
@@ -47,6 +48,9 @@ public class PsychologyFeelingTestActivity extends BaseActivity implements Resul
         viewModel = new ViewModelProvider(this.getViewModelStore(), psychologyFeelingTestViewModelFactory).get(PsychologyFeelingTestViewModel.class);
         binding.setViewModel(viewModel);
         //initRecyclerView();
+
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
 
         //
         UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();

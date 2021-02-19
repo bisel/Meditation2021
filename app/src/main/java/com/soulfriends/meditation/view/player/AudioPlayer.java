@@ -134,7 +134,6 @@ public class AudioPlayer {
         return res;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void playSound(int sounRes, float volume) {
 
         if (simpleExoPlayer == null) {

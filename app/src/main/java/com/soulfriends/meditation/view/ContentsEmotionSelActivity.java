@@ -76,6 +76,9 @@ public class ContentsEmotionSelActivity extends BaseActivity implements ResultLi
         viewModel = new ViewModelProvider(this.getViewModelStore(), contentsEmotionSelViewModelFactory).get(ContentsEmotionSelViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         // 정보 받기
         Intent intent = getIntent();
 

@@ -49,6 +49,9 @@ public class PsychologyCharacterTestActivity extends BaseActivity implements Res
         viewModel = new ViewModelProvider(this.getViewModelStore(), psychologyCharacterTestViewModelFactory).get(PsychologyCharacterTestViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         list_page_selectid = new ArrayList<Integer>();
         questionData_list = NetServiceManager.getinstance().getPersonQuestionDataList();
         curPageIndex = 0;

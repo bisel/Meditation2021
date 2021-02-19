@@ -52,6 +52,9 @@ public class TimerActivity extends BaseActivity implements ResultListener {
         viewModel = new ViewModelProvider(this.getViewModelStore(), timerViewModelFactory).get(TimerViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         // 시간
         binding.textViewHour.setTextColor(Color.WHITE);
 

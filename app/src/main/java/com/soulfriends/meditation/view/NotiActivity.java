@@ -19,6 +19,7 @@ import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
+import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.friend.FriendEditAdapter;
 import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.view.noti.NotiAdapter;
@@ -53,6 +54,9 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
         }
         viewModel = new ViewModelProvider(this.getViewModelStore(), notiViewModelFactory).get(NotiViewModel.class);
         binding.setViewModel(viewModel);
+
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
 
         if(NetServiceManager.getinstance().mDetailAlarmDataList.size() == 0)
         {

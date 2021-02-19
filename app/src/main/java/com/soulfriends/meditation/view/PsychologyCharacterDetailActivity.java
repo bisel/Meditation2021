@@ -44,6 +44,9 @@ public class PsychologyCharacterDetailActivity extends BaseActivity implements R
         viewModel = new ViewModelProvider(this.getViewModelStore(), psychologyCharacterDetailViewModelFactory).get(PsychologyCharacterDetailViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         // 이모티콘 타입에 따라 결과 보이도록 한다.
         UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
         int chartype = userProfile.chartype;

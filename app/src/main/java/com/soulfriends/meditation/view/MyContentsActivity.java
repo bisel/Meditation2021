@@ -79,6 +79,8 @@ public class MyContentsActivity extends BaseActivity implements ResultListener, 
         viewModel = new ViewModelProvider(this.getViewModelStore(), myContentsViewModelFactory).get(MyContentsViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
 
         meditationShowCategorys = NetServiceManager.getinstance().reqMediationType(1, false);
 

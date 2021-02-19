@@ -57,6 +57,9 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
         viewModel = new ViewModelProvider(this.getViewModelStore(), friendEditViewModelFactory).get(FriendEditViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         //rcv.setLayoutManager(layoutManager);
 

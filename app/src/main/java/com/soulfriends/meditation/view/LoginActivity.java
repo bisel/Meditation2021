@@ -84,6 +84,9 @@ public class LoginActivity extends AppCompatActivity implements ResultListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         binding.setLifecycleOwner(this);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         userLogin = new UserLogin();
 
         if (loginViewModelFactory == null) {

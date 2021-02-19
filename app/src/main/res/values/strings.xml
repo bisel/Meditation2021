@@ -404,5 +404,10 @@
     <string name="dialog_already_friend">님이 이미 친구 신청을 했습니다.</string>
     <string name="dialog_already_emotion">님이 이미 감정공유를 요청했습니다.</string>
 
+    <!-- already net  -->
+    <string name="dialog_net_title">접속이 원활하지 않습니다.</string>
+    <string name="dialog_net_app">앱종료</string>
+    <string name="dialog_net_setting">세팅</string>
+
 
 </resources>

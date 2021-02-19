@@ -81,6 +81,8 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
         viewModel = new ViewModelProvider(this.getViewModelStore(), profileFriendViewModelFactory).get(ProfileFriendViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
 
         meditationShowCategorys = NetServiceManager.getinstance().reqMediationType(1, false);
 
@@ -191,6 +193,7 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
         String res = NetServiceManager.getinstance().findFriends(userProfile.uid);
         if (res.equals("emotion")) {
 
+            // 감정 공유한 상태
             if (userProfile.emotiontype > 0) {
 
                 binding.layFeel.setVisibility(View.VISIBLE);
@@ -225,8 +228,15 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
                     UtilAPI.setImage(this, binding.ivIcon, res_id_1);
                 }
             } else {
-                binding.layFeel.setVisibility(View.GONE);
-                binding.tvStateQuest.setVisibility(View.GONE);
+                binding.layFeel.setVisibility(View.VISIBLE);
+                binding.tvStateQuest.setVisibility(View.VISIBLE);
+
+                String strEmoti = "ctgr_music";
+                int res_id_1 = this.getResources().getIdentifier(strEmoti, "drawable", this.getPackageName());
+                UtilAPI.setImage(this, binding.ivIcon, res_id_1);
+
+                binding.textView3.setVisibility(View.GONE);
+                binding.imageView14.setVisibility(View.GONE);
             }
 
             // 성격상태 처리
@@ -266,8 +276,15 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
                     UtilAPI.setImage(this, binding.ivCharIcon, res_id_1);
                 }
             } else {
-                binding.layCharacter.setVisibility(View.GONE);
-                binding.tvStateCharQuest.setVisibility(View.GONE);
+                binding.layCharacter.setVisibility(View.VISIBLE);
+                binding.tvStateCharQuest.setVisibility(View.VISIBLE);
+
+                String strEmoti = "ctgr_music";
+                int res_id_1 = this.getResources().getIdentifier(strEmoti, "drawable", this.getPackageName());
+                UtilAPI.setImage(this, binding.ivCharIcon, res_id_1);
+
+                binding.textView6.setVisibility(View.GONE);
+                binding.ivDetailbg.setVisibility(View.GONE);
             }
         }
         else

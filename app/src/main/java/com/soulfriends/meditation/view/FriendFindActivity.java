@@ -62,6 +62,9 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
         viewModel = new ViewModelProvider(this.getViewModelStore(), friendFindViewModelFactory).get(FriendFindViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         //rcv.setLayoutManager(layoutManager);
 

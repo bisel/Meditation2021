@@ -65,6 +65,11 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
+        Refresh();
+    }
+
+    public void Refresh()
+    {
         bLogin = authManager.IsLogin(this);
 
         CallWithDelay(2000, this, bLogin);
@@ -111,35 +116,51 @@ public class IntroActivity extends AppCompatActivity {
         }
 
         UtilAPI.SetActivity(this);
+
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
+
     }
 
     public void Do(Boolean bLogin)
     {
-        if (bLogin) {
+        //--------------------------------------------------
+        //  인터넷 연결 안되는 상황일 때 앱 실행 시
+        //--------------------------------------------------
+        if(UtilAPI.isConnected(this) == 0) {
+            Intent intent = new Intent(this, NetDialogActivity.class);
+            this.startActivity(intent);
 
-            String uid = PreferenceManager.getString(this,"uid");
-            if(uid.isEmpty() || uid.length() == 0)
-            {
+            this.overridePendingTransition(0, 0);
+
+           // this.finish();
+        }
+        else {
+            if (bLogin) {
+
+                String uid = PreferenceManager.getString(this, "uid");
+                if (uid.isEmpty() || uid.length() == 0) {
+                    this.startActivity(new Intent(this, LoginActivity.class));
+
+                    //this.finish();
+                } else {
+
+                    //this.overridePendingTransition(0, 0);
+                    this.startActivity(new Intent(this, LoadingActivity.class));
+
+                    // 2021_0205 로딩 액티비티 애니 안되도록 처리
+                    this.overridePendingTransition(0, 0);
+
+                    //this.finish();
+                }
+
+            } else {
+
                 this.startActivity(new Intent(this, LoginActivity.class));
 
                 //this.finish();
             }
-            else {
-
-                //this.overridePendingTransition(0, 0);
-                this.startActivity(new Intent(this, LoadingActivity.class));
-
-                // 2021_0205 로딩 액티비티 애니 안되도록 처리
-                this.overridePendingTransition(0, 0);
-
-                //this.finish();
-            }
-
-        } else {
-
-            this.startActivity(new Intent(this, LoginActivity.class));
-
-            //this.finish();
         }
     }
 
@@ -164,8 +185,6 @@ public class IntroActivity extends AppCompatActivity {
         //super.onBackPressed();
     }
 
-
-
     @Override
     protected void onDestroy() {
 
@@ -178,8 +197,5 @@ public class IntroActivity extends AppCompatActivity {
 
         super.onDestroy();
     }
-
-
-
 
 }

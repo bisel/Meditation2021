@@ -75,6 +75,9 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
         viewModel = new ViewModelProvider(this.getViewModelStore(), userinfoExtViewModelFactory).get(UserinfoExtViewModel.class);
         binding.setViewModel(viewModel);
 
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
+
         bSuccess_nickname = false;
         bSuccess_gender = false;
 

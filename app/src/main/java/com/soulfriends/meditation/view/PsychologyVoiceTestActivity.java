@@ -24,6 +24,7 @@ import com.soulfriends.meditation.dlg.VoiceDialog;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.parser.VoiceData;
 import com.soulfriends.meditation.util.ResultListener;
+import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.player.AudioPlayer;
 import com.soulfriends.meditation.view.player.MeditationAudioManager;
 import com.soulfriends.meditation.viewmodel.PsychologyVoiceTestViewModel;
@@ -63,6 +64,9 @@ public class PsychologyVoiceTestActivity extends BaseActivity implements ResultL
         }
         viewModel = new ViewModelProvider(this.getViewModelStore(), psychologyVoiceTestViewModelFactory).get(PsychologyVoiceTestViewModel.class);
         binding.setViewModel(viewModel);
+
+        // network
+        UtilAPI.SetNetConnection_Activity(this);
 
         bShowVoicePopup = false;
         bShowVoicePopUpInExceptionVoiceTest = false;
