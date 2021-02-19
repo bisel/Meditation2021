@@ -164,6 +164,13 @@ public class SettingActivity extends BaseActivity implements ResultListener {
 
             }
             break;
+            case R.id.tv_profile_change1:
+            {
+                this.startActivity(new Intent(this, UserinfoExtActivity.class));
+                this.overridePendingTransition(0, 0);
+                //finish();
+            }
+            break;
         }
     }
 

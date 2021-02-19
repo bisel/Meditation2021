@@ -71,6 +71,7 @@
             android:fontFamily="@font/font_notosanskr_regular"
             android:gravity="left"
             android:maxLines="1"
+
             android:background="@android:color/transparent"
             android:hint="@string/contentsmake_titleinput"
             android:imeOptions="actionDone"
@@ -84,6 +85,19 @@
             app:layout_constraintEnd_toEndOf="@+id/iv_titlebg"
             app:layout_constraintStart_toStartOf="@+id/iv_titlebg"
             app:layout_constraintTop_toTopOf="@+id/iv_titlebg" />
+
+        <ImageView
+            android:id="@+id/iv_titlebg_over"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:visibility="gone"
+            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            android:background="@null"
+            />
 
         <TextView
             android:id="@+id/tv_thumb"

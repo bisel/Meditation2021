@@ -4,427 +4,462 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data class="UserinfoExtBinding">
+
         <variable
             name="viewModel"
             type="com.soulfriends.meditation.viewmodel.UserinfoExtViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ll"
+    <LinearLayout
+        android:id="@+id/layout_scroll_ex"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#1b1e2c"
-        app:layout_constraintBottom_toTopOf="@+id/tv_introduction"
-        app:layout_constraintTop_toTopOf="@+id/tv_introduction"
-        tools:context=".view.UserinfoActivity">
 
-        <FrameLayout
-            android:id="@+id/ic_close"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="26dp"
-            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/tv_introduction"
+            app:layout_constraintTop_toTopOf="@+id/tv_introduction"
+            >
+
+            <FrameLayout
+                android:id="@+id/ic_close"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="26dp"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="11.4dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:clickable="false"
+                    app:srcCompat="@drawable/back_btn" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="9sp"
+                android:text="@string/member_info"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:layout_width="11.4dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:clickable="false"
-                app:srcCompat="@drawable/back_btn" />
+                android:id="@+id/button_ok"
+                android:layout_width="44dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/btn_member_disable"
+                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                app:layout_constraintEnd_toStartOf="@+id/guideline23"
+                app:layout_constraintTop_toTopOf="parent">
 
-        </FrameLayout>
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            </ImageView>
 
-            android:fontFamily="@font/font_notosanskr_regular"
-            android:includeFontPadding="false"
-            android:lineSpacingExtra="9sp"
-            android:text="@string/member_info"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:fillViewport="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_marginTop="19dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title">
-
-            <LinearLayout
-                android:id="@+id/layout"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_save"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_alignParentTop="true"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/member_info_save"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/button_ok"
+                app:layout_constraintEnd_toEndOf="@+id/button_ok"
+                app:layout_constraintStart_toStartOf="@+id/button_ok"
+                app:layout_constraintTop_toTopOf="@+id/button_ok" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+            <!--        <LinearLayout-->
+            <!--            android:id="@+id/layout_scroll_ex"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:layout_centerVertical="true"-->
+            <!--            android:layout_marginTop="19dp"-->
+            <!--            android:orientation="vertical"-->
+            <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--            app:layout_constraintEnd_toEndOf="parent"-->
+            <!--            app:layout_constraintStart_toStartOf="parent"-->
+            <!--            app:layout_constraintTop_toBottomOf="@+id/tv_title">-->
+
+            <!--            android:layout_height="0dp"-->
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:fillViewport="true"
+                android:layout_marginTop="19dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title">
+
+                <LinearLayout
+                    android:id="@+id/layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/iv_picture"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginTop="23dp"
-                        android:src="@drawable/register_profile_img"
-                        android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
-                        app:civ_border_color="#FF000000"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-<!--                        app:civ_border_width="2dp"-->
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/iv_picture"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginTop="23dp"
+                            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                            android:src="@drawable/register_profile_img"
+                            app:civ_border_color="#FF000000"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/iv_picture"-->
-<!--                        android:layout_width="100dp"-->
-<!--                        android:layout_height="100dp"-->
-<!--                        android:layout_marginTop="23dp"-->
-<!--                        android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        app:srcCompat="@drawable/register_profile_img" />-->
+                        <!--                        app:civ_border_width="2dp"-->
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:orientation="vertical"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline13"
-                        app:layout_constraintStart_toStartOf="@+id/guideline12"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_picture">
+                        <!--                    <ImageView-->
+                        <!--                        android:id="@+id/iv_picture"-->
+                        <!--                        android:layout_width="100dp"-->
+                        <!--                        android:layout_height="100dp"-->
+                        <!--                        android:layout_marginTop="23dp"-->
+                        <!--                        android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"-->
+                        <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+                        <!--                        app:layout_constraintStart_toStartOf="parent"-->
+                        <!--                        app:layout_constraintTop_toTopOf="parent"-->
+                        <!--                        app:srcCompat="@drawable/register_profile_img" />-->
 
-                        <TextView
-                            android:id="@+id/tv_nickname"
-                            android:layout_width="wrap_content"
-                            android:layout_height="20dp"
-                            android:layout_gravity="left"
-                            android:fontFamily="@font/font_notosanskr_medium"
-                            android:includeFontPadding="false"
-                            android:lineSpacingExtra="6sp"
-                            android:text="@string/nickname"
-                            android:textColor="@color/white"
-                            android:textSize="14sp" />
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/linearLayout6"
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:id="@+id/linearLayout3"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp">
+                            android:layout_marginTop="20dp"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline13"
+                            app:layout_constraintStart_toStartOf="@+id/guideline12"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_picture">
 
-                            <ImageView
-                                android:id="@+id/iv_edit_bg"
-                                android:layout_width="0dp"
-                                android:layout_height="39dp"
-                                android:layout_marginEnd="8dp"
-                                android:layout_marginRight="8dp"
-                                android:background="@drawable/nickname_field"
-                                app:layout_constraintEnd_toStartOf="@+id/button_nickname"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <EditText
-                                android:id="@+id/edit_nickname"
-                                android:layout_width="0dp"
-                                android:layout_height="40dp"
-                                android:layout_marginStart="14dp"
-                                android:layout_marginLeft="14dp"
-                                android:layout_marginEnd="8dp"
-                                android:layout_marginRight="8dp"
-                                android:background="@null"
-                                android:ems="10"
-                                android:imeOptions="actionDone"
-
-                                android:fontFamily="@font/font_notosanskr_regular"
-                                android:includeFontPadding="false"
-                                android:inputType="textPersonName"
-                                android:lineSpacingExtra="6sp"
-                                android:maxLength="6"
-                                android:maxLines="1"
-                                android:text="@={viewModel.nickname}"
-                                android:textColor="@color/white"
-                                android:textSize="14sp"
-                                app:layout_constraintEnd_toStartOf="@+id/button_nickname"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                            <!--                android:text="@={viewModel.nickname}"-->
-                            <Button
-                                android:id="@+id/button_nickname"
-                                android:layout_width="90dp"
-                                android:layout_height="40dp"
-                                android:background="@drawable/nickcheck_btn_disabled"
+                            <TextView
+                                android:id="@+id/tv_nickname"
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:layout_gravity="left"
                                 android:fontFamily="@font/font_notosanskr_medium"
                                 android:includeFontPadding="false"
                                 android:lineSpacingExtra="6sp"
-                                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
-                                android:text="@string/double_check"
-                                android:textSize="12sp"
-                                app:backgroundTint="@null"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/edit_nickname"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <!--            <TextView-->
-                        <!--                android:id="@+id/tv_excep_nickname"-->
-                        <!--                android:layout_width="match_parent"-->
-                        <!--                android:layout_height="wrap_content"-->
-                        <!--                android:layout_marginTop="10dp"-->
-                        <!--                android:text="@string/excep_nickname"-->
-                        <!--                android:textColor="#FFFFFF"-->
-                        <!--                android:textSize="12sp"-->
-                        <!--                android:visibility="gone" />-->
-
-                        <TextView
-                            android:id="@+id/tv_check_nickname"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/font_notosanskr_regular"
-                            android:includeFontPadding="false"
-                            android:lineSpacingExtra="6sp"
-                            android:text="@string/excep_nickname"
-                            android:textColor="#a1cae8"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline13"
-                        app:layout_constraintStart_toStartOf="@+id/guideline12"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
-
-                        <TextView
-                            android:id="@+id/textView4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:fontFamily="@font/font_notosanskr_medium"
-                            android:includeFontPadding="false"
-                            android:text="@string/gender"
-                            android:textColor="@color/white"
-                            android:textSize="14sp" />
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/linearLayout7"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="8dp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <Button
-                                android:id="@+id/button_man"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="4dp"
-                                android:layout_marginRight="4dp"
-                                android:background="@drawable/man"
-                                android:fontFamily="@font/font_notosanskr_regular"
-                                android:includeFontPadding="false"
-                                android:lineSpacingExtra="6sp"
-                                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
-                                android:text="@string/gender_man"
+                                android:text="@string/nickname"
                                 android:textColor="@color/white"
-                                android:textSize="14sp"
-                                app:backgroundTint="@null"
-                                app:layout_constraintEnd_toStartOf="@+id/button_woman"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                android:textSize="14sp" />
 
-                            <Button
-                                android:id="@+id/button_woman"
-                                android:layout_width="0dp"
-                                android:layout_height="40dp"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginLeft="4dp"
-                                android:background="@drawable/man"
-                                android:fontFamily="@font/font_notosanskr_regular"
-                                android:includeFontPadding="false"
-                                android:lineSpacingExtra="6sp"
-                                android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
-                                android:text="@string/gender_woman"
-                                android:textColor="@color/white"
-                                android:textSize="14sp"
-                                app:backgroundTint="@null"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/button_man" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <TextView
-                            android:id="@+id/tv_gender_select"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_marginTop="6dp"
-                            android:layout_weight="1"
-                            android:text="@string/gender_select"
-                            android:textColor="#e5b6ad"
-                            android:textSize="12sp"
-                            android:visibility="gone" />
-
-
-                        <TextView
-                            android:id="@+id/tv_introduction"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_marginTop="48dp"
-                            android:fontFamily="@font/font_notosanskr_medium"
-                            android:includeFontPadding="false"
-                            android:text="@string/userinfo_myintrodution"
-                            android:textColor="@color/white"
-                            android:textSize="14sp" />
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="86dp">
-
-                            <ImageView
-                                android:id="@+id/iv_Introduction_bg"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/linearLayout6"
                                 android:layout_width="match_parent"
-                                android:layout_height="153dp"
-                                android:scaleType="fitXY"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:srcCompat="@drawable/about_field" />
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp">
 
-                            <EditText
-                                android:id="@+id/edit_introdution"
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:layout_marginLeft="14dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginRight="14dp"
-                                android:layout_marginBottom="10dp"
-                                android:background="@null"
-                                android:ems="10"
+                                <ImageView
+                                    android:id="@+id/iv_edit_bg"
+                                    android:layout_width="0dp"
+                                    android:layout_height="39dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginRight="8dp"
+                                    android:background="@drawable/nickname_field"
+                                    app:layout_constraintEnd_toStartOf="@+id/button_nickname"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <EditText
+                                    android:id="@+id/edit_nickname"
+                                    android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginStart="14dp"
+                                    android:layout_marginLeft="14dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginRight="8dp"
+                                    android:background="@null"
+                                    android:ems="10"
+                                    android:fontFamily="@font/font_notosanskr_regular"
+
+                                    android:imeOptions="actionDone"
+                                    android:includeFontPadding="false"
+                                    android:inputType="textPersonName"
+                                    android:lineSpacingExtra="6sp"
+                                    android:maxLength="6"
+                                    android:maxLines="1"
+                                    android:text="@={viewModel.nickname}"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    app:layout_constraintEnd_toStartOf="@+id/button_nickname"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                                <!--                android:text="@={viewModel.nickname}"-->
+                                <Button
+                                    android:id="@+id/button_nickname"
+                                    android:layout_width="90dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/nickcheck_btn_disabled"
+                                    android:fontFamily="@font/font_notosanskr_medium"
+                                    android:includeFontPadding="false"
+                                    android:lineSpacingExtra="6sp"
+                                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                                    android:text="@string/double_check"
+                                    android:textSize="12sp"
+                                    app:backgroundTint="@null"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/edit_nickname"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <!--            <TextView-->
+                            <!--                android:id="@+id/tv_excep_nickname"-->
+                            <!--                android:layout_width="match_parent"-->
+                            <!--                android:layout_height="wrap_content"-->
+                            <!--                android:layout_marginTop="10dp"-->
+                            <!--                android:text="@string/excep_nickname"-->
+                            <!--                android:textColor="#FFFFFF"-->
+                            <!--                android:textSize="12sp"-->
+                            <!--                android:visibility="gone" />-->
+
+                            <TextView
+                                android:id="@+id/tv_check_nickname"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:layout_marginTop="8dp"
                                 android:fontFamily="@font/font_notosanskr_regular"
-                                android:gravity="left|top"
-                                android:hint="@string/userinfo_myintrodution_edit"
-                                android:imeOptions="actionDone"
                                 android:includeFontPadding="false"
-                                android:inputType="textMultiLine"
                                 android:lineSpacingExtra="6sp"
-                                android:maxLines="3"
-                                android:text="@={viewModel.introduction}"
+                                android:text="@string/excep_nickname"
+                                android:textColor="#a1cae8"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline13"
+                            app:layout_constraintStart_toStartOf="@+id/guideline12"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+                            <TextView
+                                android:id="@+id/textView4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:fontFamily="@font/font_notosanskr_medium"
+                                android:includeFontPadding="false"
+                                android:text="@string/gender"
                                 android:textColor="@color/white"
-                                android:textSize="14sp"
-                                app:layout_constraintBottom_toBottomOf="@+id/iv_Introduction_bg"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                android:textSize="14sp" />
 
-<!--                            android:text="@={viewModel.introduction}"-->
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/linearLayout7"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center"
+                                android:orientation="horizontal">
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                                <Button
+                                    android:id="@+id/button_man"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="4dp"
+                                    android:layout_marginRight="4dp"
+                                    android:background="@drawable/man"
+                                    android:fontFamily="@font/font_notosanskr_regular"
+                                    android:includeFontPadding="false"
+                                    android:lineSpacingExtra="6sp"
+                                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                                    android:text="@string/gender_man"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    app:backgroundTint="@null"
+                                    app:layout_constraintEnd_toStartOf="@+id/button_woman"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
 
-                    </LinearLayout>
+                                <Button
+                                    android:id="@+id/button_woman"
+                                    android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_marginLeft="4dp"
+                                    android:background="@drawable/man"
+                                    android:fontFamily="@font/font_notosanskr_regular"
+                                    android:includeFontPadding="false"
+                                    android:lineSpacingExtra="6sp"
+                                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                                    android:text="@string/gender_woman"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    app:backgroundTint="@null"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/button_man" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline12"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="20dp" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline13"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_end="20dp" />
+                            <TextView
+                                android:id="@+id/tv_gender_select"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:layout_marginTop="6dp"
+                                android:layout_weight="1"
+                                android:text="@string/gender_select"
+                                android:textColor="#e5b6ad"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
 
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center|bottom"
-                        android:indeterminateDrawable="@drawable/progress_rotate"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/imageView21"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/iv_picture"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_picture"
-                        app:srcCompat="@drawable/profile_editphoto" />
+                            <TextView
+                                android:id="@+id/tv_introduction"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:layout_marginTop="48dp"
+                                android:fontFamily="@font/font_notosanskr_medium"
+                                android:includeFontPadding="false"
+                                android:text="@string/userinfo_myintrodution"
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
-        </ScrollView>
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="86dp">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline22"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="20dp" />
+                                <ImageView
+                                    android:id="@+id/iv_Introduction_bg"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="88dp"
+                                    android:scaleType="fitXY"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:srcCompat="@drawable/about_field" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline23"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="20dp" />
+                                <EditText
+                                    android:id="@+id/edit_introdution"
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:layout_marginLeft="14dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginRight="14dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:background="@null"
+                                    android:ems="10"
+                                    android:fontFamily="@font/font_notosanskr_regular"
+                                    android:gravity="left|top"
+                                    android:hint="@string/userinfo_myintrodution_edit"
+                                    android:imeOptions="actionDone"
+                                    android:includeFontPadding="false"
+                                    android:inputType="textMultiLine"
+                                    android:lineSpacingExtra="0sp"
+                                    android:maxLength="80"
+                                    android:maxLines="4"
+                                    android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
+                                    android:text="@={viewModel.introduction}"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    app:layout_constraintBottom_toBottomOf="@+id/iv_Introduction_bg"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/button_ok"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/btn_member_disable"
-            android:fontFamily="@font/font_notosanskr_regular"
-            android:includeFontPadding="false"
-            android:lineSpacingExtra="8sp"
-            android:onClick="@{(v)-> viewModel.OnClick_Select(v)}"
-            android:text="@string/member_info_save"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline23"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline22">
+                                <!--                            android:text="@={viewModel.introduction}"-->
+                                <!--                            android:text="@={viewModel.introduction}"-->
 
-        </Button>
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                        </LinearLayout>
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_begin="20dp" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_end="20dp" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center|bottom"
+                            android:indeterminateDrawable="@drawable/progress_rotate"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/imageView21"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_picture"
+                            app:layout_constraintEnd_toEndOf="@+id/iv_picture"
+                            app:srcCompat="@drawable/profile_editphoto" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+            </ScrollView>
+            <!--        </LinearLayout>-->
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="20dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="20dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

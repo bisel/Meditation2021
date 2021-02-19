@@ -44,6 +44,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.UserinfoExtActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.InAppActivity"
@@ -234,6 +235,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.UserinfoActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="portrait">
 
             <!-- <intent-filter> -->

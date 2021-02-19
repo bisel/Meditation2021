@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -316,6 +317,26 @@ public class UtilAPI {
     }
 
 
+    public static int isConnected(Context context)
+    {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if(ni != null && ni.isConnected())
+        {
+            if(ni.getType() == ConnectivityManager.TYPE_MOBILE)
+            {
+                // 3g, 4g 인 경우
+                return 1;
+            }
+            else if(ni.getType() == ConnectivityManager.TYPE_WIFI)
+            {
+                // wifi 인 경우
+                return 2;
+            }
+        }
+        // 연결 안됨
+        return 0;
+    }
 
 
     public static void Init()

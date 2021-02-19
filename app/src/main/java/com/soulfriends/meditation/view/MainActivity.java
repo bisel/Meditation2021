@@ -3,6 +3,7 @@ package com.soulfriends.meditation.view;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +20,7 @@ import androidx.lifecycle.ViewModelStore;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.MainBinding;
+import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
 import com.soulfriends.meditation.dlg.PsychologyDlg;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.MeditationDetailAlarm;
@@ -387,6 +389,10 @@ public class MainActivity extends BaseActivity implements ResultListener {
             }
             break;
             case UtilAPI.FRAGMENT_PROFILE: {
+
+                //소셜 메뉴 누르면 기본 콘텐츠가 보이게 수정
+                UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
+
                 changeFragment(profileFragment, "ProfileFragment");
 
                 bottomNavigationView.setSelectedItemId(R.id.profile_fragment);
@@ -537,9 +543,9 @@ public class MainActivity extends BaseActivity implements ResultListener {
                 this.overridePendingTransition(0, 0);
                 finish();
 
-                //this.startActivity(new Intent(this, InAppActivity.class));
-                //this.overridePendingTransition(0, 0);
-                //finish();
+//                this.startActivity(new Intent(this, InAppActivity.class));
+//                this.overridePendingTransition(0, 0);
+//                finish();
 
 //                Intent intent = new Intent(UtilAPI.GetActivity() , TimerDialogActivity.class);
 //                UtilAPI.GetActivity().startActivity(intent);
@@ -599,18 +605,28 @@ public class MainActivity extends BaseActivity implements ResultListener {
 
             case PlaybackStatus.ERROR: {
 
-                miniPlaying = false;
+                AlertLineOneOkPopup alertDlg = new AlertLineOneOkPopup(this, this, AlertLineOneOkPopup.Dlg_Type.error_retry);
+                alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                alertDlg.show();
 
-                // 프레임 레이어 조절
-                UtilAPI.setMarginBottom(this, binding.container, 0);
+                alertDlg.iv_ok.setOnClickListener(v -> {
 
-                MeditationAudioManager.stop();
-                meditationAudioManager.unbind();
+                    miniPlaying = false;
 
-                binding.miniLayout.setVisibility(View.GONE);
+                    // 프레임 레이어 조절
+                    UtilAPI.setMarginBottom(this, binding.container, 0);
 
-                //  배경음악 플레이
-                CallWithDelay_FormStopNoti(400, this);
+                    MeditationAudioManager.stop();
+                    meditationAudioManager.unbind();
+
+                    binding.miniLayout.setVisibility(View.GONE);
+
+                    //  배경음악 플레이
+                    CallWithDelay_FormStopNoti(400, this);
+
+                    alertDlg.dismiss();
+                });
+
             }
             break;
             case PlaybackStatus.TRACK_CHANGE: {
@@ -674,14 +690,14 @@ public class MainActivity extends BaseActivity implements ResultListener {
             case PlaybackStatus.STOP_TIMER: {
 
                 // 프레임 레이어 조절
-                UtilAPI.setMarginBottom(this, binding.container, 0);
+                //UtilAPI.setMarginBottom(this, binding.container, 0);
 
-                binding.miniLayout.setVisibility(View.GONE);//mini_layout
+                //binding.miniLayout.setVisibility(View.GONE);//mini_layout
 
-                //  배경음악 플레이
-                if (AudioPlayer.instance() != null) {
-                    AudioPlayer.instance().update();
-                }
+//                //  배경음악 플레이
+//                if (AudioPlayer.instance() != null) {
+//                    AudioPlayer.instance().update();
+//                }
             }
             break;
         }

@@ -2,6 +2,7 @@ package com.soulfriends.meditation.view;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelStore;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.TimerBinding;
+import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ResultListener;
@@ -148,14 +150,25 @@ public class TimerActivity extends BaseActivity implements ResultListener {
 
                 // 인터넷 연결 끊었을 경우 해당
                 // MainActivity 이동
-                ActivityStack.instance().Pop();
-                ActivityStack.instance().OnBack(this);
+                AlertLineOneOkPopup alertDlg = new AlertLineOneOkPopup(this, this, AlertLineOneOkPopup.Dlg_Type.error_retry);
+                alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                alertDlg.show();
+
+                alertDlg.iv_ok.setOnClickListener(v -> {
+
+                    MeditationAudioManager.stop_ext();
+
+                    ActivityStack.instance().Pop();
+                    ActivityStack.instance().OnBack(this);
+
+                    alertDlg.dismiss();
+                });
             }
             break;
             case PlaybackStatus.TIMER_COUNT: {
 
 
-                String strTimerCount = MeditationAudioManager.getinstance().GetStrTimerCount();
+                String strTimerCount = MeditationAudioManager.GetStrTimerCount();
                 viewModel.setStrCurTime(strTimerCount);
             }
             break;
@@ -164,7 +177,7 @@ public class TimerActivity extends BaseActivity implements ResultListener {
                 // 음악이 끝난 경우 발생되는 이벤트
 
                 // 플레이 위치 초기화
-                MeditationAudioManager.getinstance().idle_start();
+                MeditationAudioManager.idle_start();
 
                 // MainActivity 이동
                 ActivityStack.instance().Pop();
@@ -176,7 +189,7 @@ public class TimerActivity extends BaseActivity implements ResultListener {
             case PlaybackStatus.STOP_NOTI: {
 
                 // 노티에서 정지 이벤트  발생된 경우
-                MeditationAudioManager.getinstance().stop();
+                MeditationAudioManager.stop();
                 MeditationAudioManager.getinstance().unbind();
 
                 // MainActivity 이동
@@ -250,10 +263,10 @@ public class TimerActivity extends BaseActivity implements ResultListener {
             case R.id.button_timer_start: {
                 // 시작
 
-                binding.buttonTimerEndActivity.setVisibility(View.VISIBLE); // 타이머 종료 활성화  -> 보이게
-                binding.buttonTimerEndDeactivity.setVisibility(View.GONE);  // 타이머 종료 비활성화  ->  안보이게
-                binding.buttonTimerNew.setVisibility(View.VISIBLE); // 새타이머 설정 -> 보이게
-                binding.buttonTimerStart.setVisibility(View.GONE);  // 시작 -> 안보이게
+//                binding.buttonTimerEndActivity.setVisibility(View.VISIBLE); // 타이머 종료 활성화  -> 보이게
+//                binding.buttonTimerEndDeactivity.setVisibility(View.GONE);  // 타이머 종료 비활성화  ->  안보이게
+//                binding.buttonTimerNew.setVisibility(View.VISIBLE); // 새타이머 설정 -> 보이게
+//                binding.buttonTimerStart.setVisibility(View.GONE);  // 시작 -> 안보이게
 
                 viewModel.setStrCurTime("00 : 00");
                 binding.tvHourminute.setTextColor(Color.parseColor("#40aeff"));
@@ -283,6 +296,9 @@ public class TimerActivity extends BaseActivity implements ResultListener {
                 //MeditationAudioManager.getinstance().StartTimer(10);
 
                 NetServiceManager.getinstance().setCur_contents_timer(NetServiceManager.getinstance().getCur_contents());
+
+                // 타이머 설정에서 시작 버튼 누르면 바로 플레이 화면으로 이동하여 타이머 시작 되게 수정
+                ActivityStack.instance().OnBack(this);
 
             }
             break;

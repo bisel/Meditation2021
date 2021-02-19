@@ -114,13 +114,7 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
         }
 
 
-        // 프로필 사진
-        if(userProfile.profileimg_uri !=null && userProfile.profileimg_uri.length() > 0) {
 
-            String image_uri = userProfile.profileimg_uri;
-
-            UtilAPI.load_image_circle(this, image_uri, binding.ivPicture);
-        }
         
         //----------------------------------------------
         // 최근 체험 콘텐츠
@@ -224,6 +218,15 @@ public class ProfileActivity extends PhotoBaseActivity implements ResultListener
 
         viewModel.Update();
 
+
+        // 프로필 사진
+        if(userProfile.profileimg_uri !=null && userProfile.profileimg_uri.length() > 0) {
+
+            String image_uri = userProfile.profileimg_uri;
+
+            UtilAPI.load_image_circle(this, image_uri, binding.ivPicture);
+        }
+        
         if (userProfile.emotiontype > 0) {
 
             binding.layFeel.setVisibility(View.VISIBLE);

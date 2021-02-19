@@ -73,7 +73,7 @@ public class InAppActivity extends BaseActivity implements ResultListener {
 
                 select_id = 0;
 
-                Toast.makeText(getApplicationContext(),"12개월 buy",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"12개월 buy",Toast.LENGTH_SHORT).show();
 
             }
             break;
@@ -85,7 +85,7 @@ public class InAppActivity extends BaseActivity implements ResultListener {
                 select_id = 1;
 
                 // 1개월 구입
-                Toast.makeText(getApplicationContext(),"1개월 buy",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"1개월 buy",Toast.LENGTH_SHORT).show();
 
             }
             break;

@@ -36,10 +36,10 @@ public class TimerDialog extends Dialog {
         setContentView(R.layout.dialog_timer);
 
 
-        //  배경음악 플레이
-        if (AudioPlayer.instance() != null) {
-            AudioPlayer.instance().update();
-        }
+//        //  배경음악 플레이
+//        if (AudioPlayer.instance() != null) {
+//            AudioPlayer.instance().update();
+//        }
 
         // ok
         ImageView iv_ok = findViewById(R.id.iv_ok);
@@ -65,6 +65,11 @@ public class TimerDialog extends Dialog {
             }
 
             this.dismiss();
+
+            //  배경음악 플레이
+            if (AudioPlayer.instance() != null) {
+                AudioPlayer.instance().update();
+            }
 
         });
 

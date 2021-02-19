@@ -441,11 +441,26 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
             }
             break;
 
+            case R.id.iv_titlebg_over:
+            {
+                if (audioState == eAudioState.ing) {
+                    // 녹음 중이면 클릭이 안되도록 처리한다.
+
+                    String str_msg = this.getResources().getString(R.string.contentsmake_audioing_exception);
+                    Toast.makeText(getApplicationContext(),str_msg, Toast.LENGTH_SHORT).show();
+                    break;
+                }
+            }
+            break;
+
             case R.id.iv_background_image:
             case R.id.iv_backgroundbt: {
 
                 if (audioState == eAudioState.ing) {
                     // 녹음 중이면 클릭이 안되도록 처리한다.
+
+                    String str_msg = this.getResources().getString(R.string.contentsmake_audioing_exception);
+                    Toast.makeText(getApplicationContext(),str_msg, Toast.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -470,6 +485,8 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
                 if (audioState == eAudioState.ing) {
                     // 녹음 중이면 클릭이 안되도록 처리한다.
+                    String str_msg = this.getResources().getString(R.string.contentsmake_audioing_exception);
+                    Toast.makeText(getApplicationContext(),str_msg, Toast.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -513,6 +530,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
                 // 타이틀 입력 방지
                 binding.editTitle.setEnabled(false);
+                binding.ivTitlebgOver.setVisibility(View.VISIBLE);
 
                 SetState_Audio(eAudioState.ing);
 
@@ -580,6 +598,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
                 } else {
                     // 타이틀 입력 방지
                     binding.editTitle.setEnabled(false);
+                    binding.ivTitlebgOver.setVisibility(View.VISIBLE);
 
                     // 녹음 진행하고 30 초 이전 이면 녹음 취소 팝업이 나오도록 한다.
                     if (accum_time_milisecond < 30 * 1000) {
@@ -651,6 +670,10 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
                 binding.tvContext1.setText("00:00");
 
+                // 타이틀 입력 처리
+                binding.editTitle.setEnabled(false);
+                binding.ivTitlebgOver.setVisibility(View.VISIBLE);
+
                 Check_TitleEdit();
 
                 bCheck_Audio = false;
@@ -693,6 +716,8 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
                 if (audioState == eAudioState.ing) {
                     // 녹음 중이면 클릭이 안되도록 처리한다.
+
+
                     break;
                 }
 
@@ -788,6 +813,7 @@ public class ContentsMakeActivity extends PhotoBaseActivity implements ResultLis
 
         // 타이틀 입력 처리
         binding.editTitle.setEnabled(true);
+        binding.ivTitlebgOver.setVisibility(View.GONE);
 
         bAudioIng = false;
 

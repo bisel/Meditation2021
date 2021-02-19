@@ -54,7 +54,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="84dp"
         android:scaleType="fitXY"
-        android:background="@drawable/social_mnbg"
+        android:background="@drawable/social_mnbg_selected"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:scaleType="fitXY"
-        android:background="@drawable/social_mnbg_selected"
+        android:background="@drawable/social_mnbg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toTopOf="parent" />

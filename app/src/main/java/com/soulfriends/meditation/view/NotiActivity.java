@@ -117,7 +117,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
 
         String num = String.valueOf(list_alarm.size());
-        Toast.makeText(this, num ,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, num ,Toast.LENGTH_SHORT).show();
         for (int i = 0; i < list_alarm.size(); i++)
         {
             MeditationDetailAlarm alarm = list_alarm.get(i);

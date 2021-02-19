@@ -22,6 +22,7 @@ public class AlertLineOneOkPopup extends Dialog {
         contents_error,             // 콘텐츠에 오류가 발생하여 재생할 수 없습니다.
         friend_request,             // 친구 요청 했습니다.
         friend_cancelled,           // 친구가 취소되었습니다.
+        error_retry                 // 지금은 이 요청을 처리할 수 없습니다. \n 다시 시도해주세요
     }
     private Activity activity;
     private Context context;
@@ -85,6 +86,11 @@ public class AlertLineOneOkPopup extends Dialog {
             case friend_cancelled:
             {
                 text_id = R.string.dialog_friend_cancelled;
+            }
+            break;
+            case error_retry:
+            {
+                text_id = R.string.dialog_error_retry;
             }
             break;
         }

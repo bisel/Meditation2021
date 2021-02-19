@@ -182,8 +182,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                             layout_friend_bts.setVisibility(View.GONE);
                             layout_friend_no.setVisibility(View.GONE);
 
-                            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg);
-                            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg_selected);
+                            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg_selected);
+                            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg);
                         }
                         else
                         {
@@ -195,8 +195,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                             list_friend_GUID.clear();
                             list_friend.clear();
 
-                            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg_selected);
-                            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg);
+                            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg);
+                            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg_selected);
 
                             // 2. 현재 친구 리스트 : 친구 인지 아닌지 판별 , 감정친구인지
                             //  -> recvFriendsRequestList(normal) : 어느 특정 시작 시점
@@ -242,8 +242,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
             friend_RecyclerViewItem.setVisibility(View.GONE);
 
-            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg);
-            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg_selected);
+            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg_selected);
+            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg);
 
         });
 
@@ -265,8 +265,8 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             layout_friend_bts.setVisibility(View.VISIBLE);
 
 
-            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg_selected);
-            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg);
+            UtilAPI.setImage(getContext(), ivContentsBt, R.drawable.social_mnbg);
+            UtilAPI.setImage(getContext(), ivFriendBt, R.drawable.social_mnbg_selected);
 
             // 2. 현재 친구 리스트 : 친구 인지 아닌지 판별 , 감정친구인지
             //  -> recvFriendsRequestList(normal) : 어느 특정 시작 시점
@@ -758,6 +758,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
         switch(view.getId())
         {
             case R.id.tv_nickname:
+            case R.id.iv_basebt:
             case R.id.iv_icon:
             {
                 // 프로필과 닉네임 선택시 친구 프로필로 이동 처리
@@ -821,6 +822,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             }
             break;
 
+            case R.id.iv_ingbt:
             case R.id.ic_close_ing:
             {
                 // 감정 공유 요청중
@@ -869,6 +871,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             }
             break;
 
+            case R.id.iv_requestbt:
             case R.id.ic_close_req:
             {
                 // 감정 공유 요청
@@ -915,6 +918,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             }
             break;
 
+            case R.id.iv_request_answerbt:
             case R.id.ic_close_answer_req:
             {
                 // 감정 공유 응답

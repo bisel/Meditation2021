@@ -10,6 +10,7 @@ import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.netservice.NetServiceUtility;
+import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.UtilAPI;
 
 public class ContentsUploadActivity extends BaseActivity {
@@ -52,6 +53,23 @@ public class ContentsUploadActivity extends BaseActivity {
         contents_mode = intent.getIntExtra("contents_mode", 0);
 
         // 추후 수정일 경우에는 null 이 아니므로 고려해야함.
+
+        if(UtilAPI.isConnected(this) == 0)
+        {
+            //인터넷 연결 안될 경우
+            AlertLineOneOkPopup alertDlg = new AlertLineOneOkPopup(this, this, AlertLineOneOkPopup.Dlg_Type.error_retry);
+            alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            alertDlg.show();
+
+            alertDlg.iv_ok.setOnClickListener(v -> {
+
+                finish();
+
+                alertDlg.dismiss();
+            });
+            return;
+        }
+
 
         NetServiceManager.getinstance().setOnRecvValMeditationContentsListener(new NetServiceManager.OnRecvValMeditationContentsListener() {
             @Override

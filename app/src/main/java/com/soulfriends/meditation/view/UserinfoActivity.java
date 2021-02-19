@@ -3,12 +3,20 @@ package com.soulfriends.meditation.view;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Spanned;
+import android.text.TextWatcher;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -26,6 +34,7 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.UserinfoBinding;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
+import com.soulfriends.meditation.util.HeightProvider;
 import com.soulfriends.meditation.util.PreferenceManager;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
@@ -160,47 +169,35 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
             }
         });
 
-        //----------------------------------------------------
-        // 키패드 처리
-        //----------------------------------------------------
-        binding.ll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        binding.editIntrodution.addTextChangedListener(new TextWatcher() {
+            String textBeforeEdit = "";
+
             @Override
-            public void onGlobalLayout() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                textBeforeEdit = s.toString();
+            }
 
-                Rect r = new Rect();
-                binding.ll.getWindowVisibleDisplayFrame(r);
-                int screenHeight = binding.ll.getRootView().getHeight();
-                int keypadHeight = screenHeight - r.bottom;
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
-                if (keypadBaseHeight == 0) {
-                    keypadBaseHeight = keypadHeight;
-                }
+            @Override
+            public void afterTextChanged(Editable s) {
+                String str = s.toString();
 
-                if (keypadHeight > screenHeight * 0.15) {
-                    // 키보드 열렸을 때
-                    if (!isKeyboardShowing) {
-                        isKeyboardShowing = true;
-
-                        binding.ll.setPadding(0, 0, 0, (int) (keypadHeight * 0.5));
-                        int height = keypadHeight - keypadBaseHeight;
-                    }
-                } else {
-                    // 키보드가 닫혔을 때
-                    if (isKeyboardShowing) {
-
-
-                        binding.editNickname.clearFocus();
-                        binding.editIntrodution.clearFocus();
-
-                        isKeyboardShowing = false;
-                        binding.ll.setPadding(0, 0, 0, 0);
-
-
-                    }
+                if (binding.editIntrodution.getLineCount() > 4)
+                {
+                    binding.editIntrodution.setText(textBeforeEdit);
+                    binding.editIntrodution.setSelection(binding.editIntrodution.length());
+                    String str_res = getResources().getString(R.string.userinfo_editline_exception);
+                    Toast.makeText(UserinfoActivity.this, str_res, Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+
+        UpdateKey();
     }
 
     private void DoRecvContents(boolean validate)
@@ -382,6 +379,7 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
                 Check_IsButton();
             }
             break;
+
             case R.id.button_woman: {
 
                 Check_EditFocus_OnButton();
@@ -461,7 +459,41 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
         }
     }
 
+    private void UpdateKey()
+    {
+        new HeightProvider(this, getWindowManager(), binding.layoutScrollEx, new HeightProvider.KeyboardHeightListener() {
+            @Override
+            public void onKeyboardHeightChanged(int keyboardHeight, boolean keyboardOpen, boolean isLandscape) {
 
+                if(binding.editNickname.isFocused()) {
+                }
+                else
+                {
+                    ViewGroup.LayoutParams layoutParams = binding.scrollView.getLayoutParams();
+                    Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+                    Point point = new Point();
+                    display.getSize(point);
+                    int height = point.y;
+
+                    final int height_top = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 86, UserinfoActivity.this.getResources().getDisplayMetrics());
+                    layoutParams.height = height - keyboardHeight - height_top;
+                    binding.scrollView.setLayoutParams(layoutParams);
+
+                    binding.scrollView.fullScroll(View.FOCUS_DOWN);
+                    binding.scrollView.invalidate();
+                }
+
+                if(keyboardOpen) {
+
+                }
+                else
+                {
+                    binding.editNickname.clearFocus();
+                    binding.editIntrodution.clearFocus();
+                }
+            }
+        });
+    }
     // 버튼들을 눌렀을때 에디트 포커스 해제 처리
     private void Check_EditFocus_OnButton()
     {

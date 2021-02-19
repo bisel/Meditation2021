@@ -2,6 +2,7 @@ package com.soulfriends.meditation.view;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelStore;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.ContentsinfoBinding;
+import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.util.ActivityStack;
@@ -107,8 +109,19 @@ public class ContentsinfoActivity extends BaseActivity implements ResultListener
 
                 // 인터넷 연결 끊었을 경우 해당
                 // MainActivity 이동
-                ActivityStack.instance().Pop();
-                ActivityStack.instance().OnBack(this);
+                AlertLineOneOkPopup alertDlg = new AlertLineOneOkPopup(this, this, AlertLineOneOkPopup.Dlg_Type.error_retry);
+                alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                alertDlg.show();
+
+                alertDlg.iv_ok.setOnClickListener(v -> {
+
+                    MeditationAudioManager.stop_ext();
+                    ActivityStack.instance().Pop();
+                    ActivityStack.instance().OnBack(this);
+
+                    alertDlg.dismiss();
+                });
+
             }
             break;
             case PlaybackStatus.STOPPED: {
@@ -116,7 +129,7 @@ public class ContentsinfoActivity extends BaseActivity implements ResultListener
                 // 음악이 끝난 경우 발생되는 이벤트
 
                 // 플레이 위치 초기화
-                MeditationAudioManager.getinstance().idle_start();
+                MeditationAudioManager.idle_start();
 
                 // MainActivity 이동
                 ActivityStack.instance().Pop();
@@ -128,7 +141,7 @@ public class ContentsinfoActivity extends BaseActivity implements ResultListener
             case PlaybackStatus.STOP_NOTI: {
 
                 // 노티에서 정지 이벤트  발생된 경우
-                MeditationAudioManager.getinstance().stop();
+                MeditationAudioManager.stop();
                 MeditationAudioManager.getinstance().unbind();
 
                 // MainActivity 이동

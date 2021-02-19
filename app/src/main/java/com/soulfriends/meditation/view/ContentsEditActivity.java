@@ -485,6 +485,10 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
                 // 배경 이미지 버튼 선택시
                 if (audioState == eAudioState.ing) {
                     // 녹음 중이면 클릭이 안되도록 처리한다.
+
+                    String str_msg = this.getResources().getString(R.string.contentsmake_audioing_exception);
+                    Toast.makeText(getApplicationContext(),str_msg, Toast.LENGTH_SHORT).show();
+
                     break;
                 }
 
@@ -507,6 +511,9 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
 
                 if (audioState == eAudioState.ing) {
                     // 녹음 중이면 클릭이 안되도록 처리한다.
+
+                    String str_msg = this.getResources().getString(R.string.contentsmake_audioing_exception);
+                    Toast.makeText(getApplicationContext(),str_msg, Toast.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -550,6 +557,7 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
 
                 // 타이틀 입력 방지
                 binding.editTitle.setEnabled(false);
+                binding.ivTitlebgOver.setVisibility(View.VISIBLE);
 
                 SetState_Audio(eAudioState.ing);
 
@@ -613,6 +621,7 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
                 } else {
                     // 타이틀 입력 방지
                     binding.editTitle.setEnabled(false);
+                    binding.ivTitlebgOver.setVisibility(View.VISIBLE);
 
 
                     // 녹음 진행하고 30 초 이전 이면 녹음 취소 팝업이 나오도록 한다.
@@ -686,6 +695,10 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
                 bStopButtonActive = false;
 
                 binding.tvContext1.setText("00:00");
+
+                // 타이틀 입력 처리
+                binding.editTitle.setEnabled(false);
+                binding.ivTitlebgOver.setVisibility(View.VISIBLE);
 
                 Check_TitleEdit();
 
@@ -877,6 +890,7 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
 
         // 타이틀 입력 처리
         binding.editTitle.setEnabled(true);
+        binding.ivTitlebgOver.setVisibility(View.GONE);
 
         bChange_Audio = true;
 

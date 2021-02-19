@@ -682,8 +682,13 @@ public class MeditationService extends Service implements Player.EventListener, 
                 }
 
                 MeditationAudioManager.getinstance().ShowTimerPopup();
-                MeditationAudioManager.stop();
-                MeditationAudioManager.getinstance().unbind();
+
+                //타이머 종료 때 플레이 시점에서 정지되게 수정(가능하다면)
+                MeditationAudioManager.pause();
+
+
+                //MeditationAudioManager.stop();
+                //MeditationAudioManager.getinstance().unbind();
 
                 StopTimer();
             } else {

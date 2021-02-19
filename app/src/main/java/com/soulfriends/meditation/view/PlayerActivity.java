@@ -237,6 +237,27 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         meditationAudioManager.SetTitle_Url(meditationContents.title);
         meditationAudioManager.SetThumbnail_Url(meditationContents.thumbnail_uri);
 
+
+
+        if(UtilAPI.isConnected(this) == 0)
+        {
+            //인터넷 연결 안될 경우
+
+            // 인터넷 연결 끊었을 경우 해당
+            AlertLineOneOkPopup alertDlg = new AlertLineOneOkPopup(this, this, AlertLineOneOkPopup.Dlg_Type.error_retry);
+            alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            alertDlg.show();
+
+            alertDlg.iv_ok.setOnClickListener(v -> {
+
+                ActivityStack.instance().OnBack(this);
+
+                alertDlg.dismiss();
+            });
+            return;
+        }
+
+
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
         //StorageReference storageRef = storage.getReferenceFromUrl("gs://meditation-m.appspot.com/test/play_bgm5.mp3");
@@ -274,6 +295,8 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+
+                int xx = 0;
             }
         });
     }
@@ -306,6 +329,9 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
     @Override
     protected void onStart() {
         super.onStart();
+
+        // 소셜 콘텐츠 재생 후 닫기 눌러서 복귀 시 콘텐츠로 오게 수정
+        UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
 
         // 초기화
         viewModel.setTimer_time("");
@@ -504,7 +530,18 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             case PlaybackStatus.ERROR: {
 
                 // 인터넷 연결 끊었을 경우 해당
-                ActivityStack.instance().OnBack(this);
+                AlertLineOneOkPopup alertDlg = new AlertLineOneOkPopup(this, this, AlertLineOneOkPopup.Dlg_Type.error_retry);
+                alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                alertDlg.show();
+
+                alertDlg.iv_ok.setOnClickListener(v -> {
+
+                    MeditationAudioManager.stop_ext();
+                    ActivityStack.instance().OnBack(this);
+
+                    alertDlg.dismiss();
+                });
+
             }
             break;
             case PlaybackStatus.IDLE:
@@ -518,7 +555,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 // 음악이 끝난 경우 발생되는 이벤트
 
                 // 플레이 위치 초기화
-                meditationAudioManager.idle_start();
+                MeditationAudioManager.idle_start();
 
                 // MainActivity 이동
                 //ChangeActivity(MainActivity.class);
@@ -528,7 +565,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             case PlaybackStatus.STOP_NOTI: {
 
                 // 노티에서 정지 이벤트  발생된 경우
-                meditationAudioManager.stop();
+                MeditationAudioManager.stop();
                 meditationAudioManager.unbind();
 
                 // MainActivity 이동

@@ -79,60 +79,76 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout4"
+        <!--        <androidx.cardview.widget.CardView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_margin="5dp"-->
+        <!--            app:cardCornerRadius="8dp">-->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
             android:layout_marginTop="25dp"
-            android:layout_marginBottom="1dp"
-            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/guideline9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_tiitle">
 
-            <ImageView
-                android:id="@+id/iv_contents_image"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/session_profile_img" />
-
-            <ImageView
-                android:id="@+id/imageView"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout4"
                 android:layout_width="wrap_content"
-                android:layout_height="34dp"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_contents_image"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/grading_text_bg" />
+                android:layout_height="160dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_contents_title"
-                android:layout_width="145dp"
-                android:layout_height="28dp"
-                android:layout_marginBottom="4dp"
-                android:ellipsize="end"
-                android:ems="7"
-                android:fontFamily="@font/font_notosanskr_regular"
-                android:gravity="center_horizontal|center_vertical"
-                android:includeFontPadding="false"
-                android:lineSpacingExtra="6sp"
-                android:maxEms="7"
-                android:maxLines="1"
-                android:text="@{viewModel.title}"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/imageView"
-                app:layout_constraintTop_toTopOf="@+id/imageView" />
 
-<!--            android:text="@string/session_center_contents"-->
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/iv_contents_image"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/session_profile_img" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="160dp"
+                    android:layout_height="34dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_contents_image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@drawable/grading_text_bg" />
+
+                <TextView
+                    android:id="@+id/tv_contents_title"
+                    android:layout_width="145dp"
+                    android:layout_height="28dp"
+                    android:layout_marginBottom="4dp"
+                    android:ellipsize="end"
+                    android:ems="7"
+                    android:fontFamily="@font/font_notosanskr_regular"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:includeFontPadding="false"
+                    android:lineSpacingExtra="6sp"
+                    android:maxEms="7"
+                    android:maxLines="1"
+                    android:text="@{viewModel.title}"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/imageView"
+                    app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+
+                <!--            android:text="@string/session_center_contents"-->
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
 
         <TextView
             android:id="@+id/tv_evaluation"
@@ -148,7 +164,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+            app:layout_constraintTop_toBottomOf="@+id/cv_view" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -212,8 +228,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_marginTop="6dp"
-	        android:fontFamily="@font/font_notosanskr_regular"
-		android:includeFontPadding="false"
+                android:fontFamily="@font/font_notosanskr_regular"
+                android:includeFontPadding="false"
                 android:text="@string/session_bad"
                 android:textColor="@color/white"
                 android:textSize="10sp"
