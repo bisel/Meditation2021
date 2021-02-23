@@ -191,13 +191,16 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
         viewModel.Update();
 
         String res = NetServiceManager.getinstance().findFriends(userProfile.uid);
-        if (res.equals("emotion")) {
 
-            // 감정 공유한 상태
-            if (userProfile.emotiontype > 0) {
+        if(res == null)
+        {
+            // 심리
+            {
+
 
                 binding.layFeel.setVisibility(View.VISIBLE);
                 binding.tvStateQuest.setVisibility(View.VISIBLE);
+
 
                 // 닉네임 질의
                 if (userProfile.nickname != null) {
@@ -213,38 +216,19 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
                     }
                 }
 
-                // 이모티콘
-                ResultData resultData = NetServiceManager.getinstance().getResultData(userProfile.emotiontype);
-
-                if (resultData.id > 0) {
-                    String str_id = "";
-                    if (resultData.id < 10) {
-                        str_id = "0" + String.valueOf(resultData.id);
-                    } else {
-                        str_id = String.valueOf(resultData.id);
-                    }
-                    String strEmoti = "emoti_" + str_id;
-                    int res_id_1 = this.getResources().getIdentifier(strEmoti, "drawable", this.getPackageName());
-                    UtilAPI.setImage(this, binding.ivIcon, res_id_1);
-                }
-            } else {
-                binding.layFeel.setVisibility(View.VISIBLE);
-                binding.tvStateQuest.setVisibility(View.VISIBLE);
-
-                String strEmoti = "ctgr_music";
+                String strEmoti = "profile_mind_noanswer";
                 int res_id_1 = this.getResources().getIdentifier(strEmoti, "drawable", this.getPackageName());
                 UtilAPI.setImage(this, binding.ivIcon, res_id_1);
 
-                binding.textView3.setVisibility(View.GONE);
-                binding.imageView14.setVisibility(View.GONE);
+                binding.textView3.setTextColor(Color.parseColor("#4dffffff"));
+                binding.textView3.setVisibility(View.VISIBLE);
+                binding.imageView14.setVisibility(View.VISIBLE);
+
+
             }
 
-            // 성격상태 처리
-            if (userProfile.chartype > 0) {
-
-                binding.layCharacter.setVisibility(View.VISIBLE);
-                binding.tvStateCharQuest.setVisibility(View.VISIBLE);
-
+            // 성격
+            {
                 // 닉네임 질의
                 if (userProfile.nickname != null) {
                     String strQuest = userProfile.nickname + getResources().getString(R.string.feel_state_char_quest); // 2020.12.11
@@ -259,41 +243,173 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
                     }
                 }
 
-                // 이모티콘
-                ArrayList<PersonResultData> list = NetServiceManager.getinstance().getPersonResultDataList();
-                PersonResultData resultData = list.get(userProfile.chartype);
-
-                int id_resultData = Integer.parseInt(resultData.id);
-                if (id_resultData > 0) {
-                    String str_id = "";
-                    if (id_resultData < 10) {
-                        str_id = String.valueOf(id_resultData);
-                    } else {
-                        str_id = String.valueOf(id_resultData);
-                    }
-                    String strPersonality = "mini_personality_" + str_id;
-                    int res_id_1 = this.getResources().getIdentifier(strPersonality, "drawable", this.getPackageName());
-                    UtilAPI.setImage(this, binding.ivCharIcon, res_id_1);
-                }
-            } else {
                 binding.layCharacter.setVisibility(View.VISIBLE);
                 binding.tvStateCharQuest.setVisibility(View.VISIBLE);
 
-                String strEmoti = "ctgr_music";
-                int res_id_1 = this.getResources().getIdentifier(strEmoti, "drawable", this.getPackageName());
-                UtilAPI.setImage(this, binding.ivCharIcon, res_id_1);
+                binding.ivCharIcon.setVisibility(View.GONE);
+                binding.ivCharIconNo.setVisibility(View.VISIBLE);
 
-                binding.textView6.setVisibility(View.GONE);
-                binding.ivDetailbg.setVisibility(View.GONE);
+                String strEmoti = "profile_chrctr_noanswer";
+                int res_id_1 = this.getResources().getIdentifier(strEmoti, "drawable", this.getPackageName());
+                UtilAPI.setImage(this, binding.ivCharIconNo, res_id_1);
+
+                binding.textView6.setTextColor(Color.parseColor("#4dffffff"));
+                binding.textView6.setVisibility(View.VISIBLE);
+                binding.ivDetailbg.setVisibility(View.VISIBLE);
             }
         }
-        else
-        {
-            binding.layFeel.setVisibility(View.GONE);
-            binding.tvStateQuest.setVisibility(View.GONE);
+        else {
+            if (res.equals("emotion")) {
 
-            binding.layCharacter.setVisibility(View.GONE);
-            binding.tvStateCharQuest.setVisibility(View.GONE);
+                //---------------------------------------------------
+                // 심리  - 감정 공유한 상태
+                //---------------------------------------------------
+                if (userProfile.emotiontype > 0) {
+
+                    binding.layFeel.setVisibility(View.VISIBLE);
+                    binding.tvStateQuest.setVisibility(View.VISIBLE);
+
+                    binding.textView3.setTextColor(Color.WHITE);
+
+                    // 닉네임 질의
+                    if (userProfile.nickname != null) {
+                        String strQuest = userProfile.nickname + getResources().getString(R.string.feel_state_quest); // 2020.12.11
+
+                        int end_nick = userProfile.nickname.length();
+
+                        if (end_nick > 0) {
+                            Spannable wordtoSpan = new SpannableString(strQuest);
+                            wordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(179, 179, 227)), 0, end_nick, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            wordtoSpan.setSpan(new ForegroundColorSpan(Color.WHITE), end_nick + 1, strQuest.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            binding.tvStateQuest.setText(wordtoSpan);
+                        }
+                    }
+
+                    // 이모티콘
+                    ResultData resultData = NetServiceManager.getinstance().getResultData(userProfile.emotiontype);
+
+                    if (resultData.id > 0) {
+                        String str_id = "";
+                        if (resultData.id < 10) {
+                            str_id = "0" + String.valueOf(resultData.id);
+                        } else {
+                            str_id = String.valueOf(resultData.id);
+                        }
+                        String strEmoti = "emoti_" + str_id;
+                        int res_id_1 = this.getResources().getIdentifier(strEmoti, "drawable", this.getPackageName());
+                        UtilAPI.setImage(this, binding.ivIcon, res_id_1);
+                    }
+                } else {
+
+                    // 닉네임 질의
+                    if (userProfile.nickname != null) {
+                        String strQuest = userProfile.nickname + getResources().getString(R.string.feel_state_quest); // 2020.12.11
+
+                        int end_nick = userProfile.nickname.length();
+
+                        if (end_nick > 0) {
+                            Spannable wordtoSpan = new SpannableString(strQuest);
+                            wordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(179, 179, 227)), 0, end_nick, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            wordtoSpan.setSpan(new ForegroundColorSpan(Color.WHITE), end_nick + 1, strQuest.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            binding.tvStateQuest.setText(wordtoSpan);
+                        }
+                    }
+
+                    binding.layFeel.setVisibility(View.VISIBLE);
+                    binding.tvStateQuest.setVisibility(View.VISIBLE);
+
+                    String strEmoti = "profile_mind_noanswer";
+                    int res_id_1 = this.getResources().getIdentifier(strEmoti, "drawable", this.getPackageName());
+                    UtilAPI.setImage(this, binding.ivIcon, res_id_1);
+
+                    binding.textView3.setTextColor(Color.parseColor("#4dffffff"));
+                    binding.textView3.setVisibility(View.VISIBLE);
+                    binding.imageView14.setVisibility(View.VISIBLE);
+                }
+
+                //---------------------------------------------------
+                // 성격상태 처리
+                //---------------------------------------------------
+                if (userProfile.chartype > 0) {
+
+                    binding.layCharacter.setVisibility(View.VISIBLE);
+                    binding.tvStateCharQuest.setVisibility(View.VISIBLE);
+
+                    binding.textView6.setTextColor(Color.WHITE);
+
+                    binding.ivCharIcon.setVisibility(View.GONE);
+                    binding.ivCharIconNo.setVisibility(View.GONE);
+
+
+                    // 닉네임 질의
+                    if (userProfile.nickname != null) {
+                        String strQuest = userProfile.nickname + getResources().getString(R.string.feel_state_char_quest); // 2020.12.11
+
+                        int end_nick = userProfile.nickname.length();
+
+                        if (end_nick > 0) {
+                            Spannable wordtoSpan = new SpannableString(strQuest);
+                            wordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(179, 179, 227)), 0, end_nick, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            wordtoSpan.setSpan(new ForegroundColorSpan(Color.WHITE), end_nick + 1, strQuest.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            binding.tvStateCharQuest.setText(wordtoSpan);
+                        }
+                    }
+
+                    // 이모티콘
+                    ArrayList<PersonResultData> list = NetServiceManager.getinstance().getPersonResultDataList();
+                    PersonResultData resultData = list.get(userProfile.chartype);
+
+                    int id_resultData = Integer.parseInt(resultData.id);
+                    if (id_resultData > 0) {
+                        String str_id = "";
+                        if (id_resultData < 10) {
+                            str_id = String.valueOf(id_resultData);
+                        } else {
+                            str_id = String.valueOf(id_resultData);
+                        }
+
+                        binding.ivCharIcon.setVisibility(View.VISIBLE);
+
+                        String strPersonality = "mini_personality_" + str_id;
+                        int res_id_1 = this.getResources().getIdentifier(strPersonality, "drawable", this.getPackageName());
+                        UtilAPI.setImage(this, binding.ivCharIcon, res_id_1);
+                    }
+                } else {
+                    binding.layCharacter.setVisibility(View.VISIBLE);
+                    binding.tvStateCharQuest.setVisibility(View.VISIBLE);
+
+                    // 닉네임 질의
+                    if (userProfile.nickname != null) {
+                        String strQuest = userProfile.nickname + getResources().getString(R.string.feel_state_char_quest); // 2020.12.11
+
+                        int end_nick = userProfile.nickname.length();
+
+                        if (end_nick > 0) {
+                            Spannable wordtoSpan = new SpannableString(strQuest);
+                            wordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(179, 179, 227)), 0, end_nick, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            wordtoSpan.setSpan(new ForegroundColorSpan(Color.WHITE), end_nick + 1, strQuest.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            binding.tvStateCharQuest.setText(wordtoSpan);
+                        }
+                    }
+
+                    binding.ivCharIcon.setVisibility(View.GONE);
+                    binding.ivCharIconNo.setVisibility(View.VISIBLE);
+
+                    String strEmoti = "profile_chrctr_noanswer";
+                    int res_id_1 = this.getResources().getIdentifier(strEmoti, "drawable", this.getPackageName());
+                    UtilAPI.setImage(this, binding.ivCharIconNo, res_id_1);
+
+                    binding.textView6.setTextColor(Color.parseColor("#4dffffff"));
+                    binding.textView6.setVisibility(View.VISIBLE);
+                    binding.ivDetailbg.setVisibility(View.VISIBLE);
+                }
+            } else {
+                binding.layFeel.setVisibility(View.GONE);
+                binding.tvStateQuest.setVisibility(View.GONE);
+
+                binding.layCharacter.setVisibility(View.GONE);
+                binding.tvStateCharQuest.setVisibility(View.GONE);
+            }
         }
     }
 

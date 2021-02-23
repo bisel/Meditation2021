@@ -538,17 +538,24 @@ public class MainActivity extends BaseActivity implements ResultListener {
 
                     finish();
                 }
+
             }
             break;
             case R.id.meun_btn: {
 
-               this.startActivity(new Intent(this, SettingActivity.class));
+                //this.startActivity(new Intent(this, UserinfoExtActivity.class));
+                //this.overridePendingTransition(0, 0);
+                //finish();
+                //UtilAPI.showNetConnectionDlg();
+
+                // orig
+                this.startActivity(new Intent(this, SettingActivity.class));
                 this.overridePendingTransition(0, 0);
                 finish();
 
-//                this.startActivity(new Intent(this, InAppActivity.class));
-//                this.overridePendingTransition(0, 0);
-//                finish();
+                //this.startActivity(new Intent(this, InAppActivity.class));
+                //this.overridePendingTransition(0, 0);
+                //finish();
 
 //                Intent intent = new Intent(UtilAPI.GetActivity() , TimerDialogActivity.class);
 //                UtilAPI.GetActivity().startActivity(intent);

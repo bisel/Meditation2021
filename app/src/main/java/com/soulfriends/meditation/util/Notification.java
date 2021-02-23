@@ -14,7 +14,10 @@ import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 
+import com.soulfriends.meditation.R;
+
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -59,11 +62,13 @@ public class Notification {
 
             ClearNotifications();
 
-            String str_title = "힐링 타이틀";
+            String str_title = "soulfriends";
 
-            String str_msg_0 = "제목 1";
-            String str_msg_1 = "제목 2";
-            String str_msg_2 = "제목 3";
+
+
+            String str_msg_0 = this.context.getResources().getString(R.string.notification_text_1);
+            String str_msg_1 = this.context.getResources().getString(R.string.notification_text_2);
+            String str_msg_2 = this.context.getResources().getString(R.string.notification_text_3);
 
 
             float daytime_01 = 20;// 시간 * 분 * 초 * 밀리
@@ -88,16 +93,18 @@ public class Notification {
 
         float curtime = 0;
 
-        String str_title = "힐링 타이틀";
+        String str_title = "soulfriends";
 
-        String str_msg_0 = "제목 1";
-        String str_msg_1 = "제목 2";
-        String str_msg_2 = "제목 3";
+        String str_msg_0 = this.context.getResources().getString(R.string.notification_text_1);
+        String str_msg_1 = this.context.getResources().getString(R.string.notification_text_2);
+        String str_msg_2 = this.context.getResources().getString(R.string.notification_text_3);
+        String str_msg_3 = this.context.getResources().getString(R.string.notification_text_4);
+        String str_msg_4 = this.context.getResources().getString(R.string.notification_text_5);
 
         for (int i = 0; i < 30; i++) { // 30
             curtime += 1.0f;
 
-            int rand = getRandomNumber(0, 2 + 1); // 0 ~ 2
+            int rand = getRandomNumber(0, 4 + 1); // 0 ~ 2
             switch (rand) {
                 case 0: {
                     SendNotification(i, curtime, str_title, str_msg_0);
@@ -109,6 +116,14 @@ public class Notification {
                 break;
                 case 2: {
                     SendNotification(i, curtime, str_title, str_msg_2);
+                }
+                break;
+                case 3: {
+                    SendNotification(i, curtime, str_title, str_msg_3);
+                }
+                break;
+                case 4: {
+                    SendNotification(i, curtime, str_title, str_msg_4);
                 }
                 break;
                 default:
@@ -125,8 +140,8 @@ public class Notification {
         int bgColor = 0;
 
         String channel = "default";
-        String largeIconResource = "logo_icon";//""l_icon";//s_icon.png 확장자 빼고 이름만
-        String smallIconResource = "s_icon";//"s_icon"; //s_icon.png 확장자 빼고 이름만
+        String largeIconResource = "pushicon_512";//""l_icon";//s_icon.png 확장자 빼고 이름만
+        String smallIconResource = "statusbaricon";//"s_icon"; //s_icon.png 확장자 빼고 이름만
         String bundle = "com.soulfriends.meditation";
 
         SetNotification(channel, bundle, largeIconResource, smallIconResource, title, message, id, delay, sound, vibrate, lights, bgColor);
@@ -173,8 +188,8 @@ public class Notification {
     private int bgColor = 0;
 
     private String channel = "default";
-    private String big_Icon = "l_icon";
-    private String small_Icon = "s_icon";
+    private String big_Icon = "pushicon_512";
+    private String small_Icon = "statusbaricon";
     private String str_bundle = "com.soulfriends.meditation";
 
     public void register(String title, String message, int id, float _delayMs)

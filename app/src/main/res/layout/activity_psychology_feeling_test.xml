@@ -23,12 +23,12 @@
             android:id="@+id/tv_nick"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="78dp"
+            android:layout_marginTop="68dp"
 	    android:fontFamily="@font/font_notosanskr_medium"
             android:gravity="center_horizontal"
             android:includeFontPadding="false"
             android:letterSpacing="-0.01"
-            android:lineSpacingExtra="9sp"
+            android:lineSpacingExtra="1sp"
             android:text="@string/psychology_nickname"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -94,11 +94,13 @@
         <GridLayout
             android:layout_width="360dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="178dp"
+            android:layout_marginTop="148dp"
             android:columnCount="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
+<!--            android:layout_marginTop="178dp"-->
 
             <LinearLayout
                 android:layout_width="match_parent"

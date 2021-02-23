@@ -322,10 +322,11 @@
                         android:id="@+id/linearLayout11"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="188dp"
+                        android:layout_marginTop="172dp"
                         android:gravity="center_horizontal"
                         android:orientation="vertical"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/iv_Introduction_bg">
 
@@ -337,9 +338,9 @@
                             android:layout_marginTop="0dp"
                             android:fontFamily="@font/font_notosanskr_medium"
                             android:gravity="center"
-                            android:lineSpacingExtra="6sp"
                             android:includeFontPadding="false"
                             android:letterSpacing="-0.01"
+                            android:lineSpacingExtra="6sp"
                             android:text="@string/feel_state_quest"
                             android:textColor="@color/white"
                             android:textSize="14sp"
@@ -465,7 +466,6 @@
                                 android:id="@+id/tv_my_char_state"
                                 android:layout_width="271dp"
                                 android:layout_height="51dp"
-                                android:layout_marginTop="5dp"
                                 android:layout_marginBottom="10dp"
                                 android:fontFamily="@font/font_notosanskr_medium"
                                 android:gravity="center_horizontal|center_vertical"
@@ -476,8 +476,7 @@
                                 android:textSize="18sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/iv_char_bg"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/iv_char_icon" />
+                                app:layout_constraintStart_toStartOf="parent" />
 
                             <!--        android:text="@string/profile_feeling_state"-->
 
@@ -488,6 +487,17 @@
                                 android:layout_height="64dp"
                                 android:layout_marginTop="23dp"
                                 android:background="@drawable/profile_chrctr_icon_area"
+                                android:visibility="gone"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/iv_char_bg" />
+
+                            <ImageView
+                                android:id="@+id/iv_char_icon_no"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="23dp"
+                                android:background="@drawable/profile_chrctr_noanswer"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/iv_char_bg" />
@@ -522,10 +532,10 @@
                             android:id="@+id/layout_contents_new"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
                             android:layout_gravity="left"
                             android:layout_marginTop="20dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <!--Title-->
 
@@ -592,10 +602,10 @@
                                     android:layout_marginLeft="10dp"
                                     android:fontFamily="@font/font_notosanskr_medium"
                                     android:includeFontPadding="false"
-                                    android:text="@{viewModel.contents_make_number}"
-                                    android:textColor="#b5ffffff"
                                     android:letterSpacing="-0.01"
                                     android:lineSpacingExtra="6sp"
+                                    android:text="@{viewModel.contents_make_number}"
+                                    android:textColor="#b5ffffff"
                                     android:textSize="14sp" />
                                 <!--        android:text="@={viewModel.name}"-->
                                 <!--        android:text="ddddddd"-->

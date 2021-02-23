@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.view.BaseActivity;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -67,6 +68,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 
 public class UtilAPI {
 
@@ -213,7 +216,7 @@ public class UtilAPI {
             public void onSuccess(Uri uri) {
 
                 meditationContents.thumbnail_uri = uri.toString();
-                showImage(context, uri, view);
+                showImageEX(context, uri, view);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -223,6 +226,17 @@ public class UtilAPI {
                 int xx = 0;
             }
         });
+    }
+
+    public static void showImageEX(Context context, Uri uri, ImageView view) {
+        //statesList.put(uri.toString(),uri.toString());
+        Activity activity = (Activity) context;
+        if (activity.isFinishing())
+            return;
+        Glide.with(view.getContext()).load(uri).
+                placeholder(R.drawable.default_card_02).
+                transition(withCrossFade()).
+                diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(view);
     }
 
     public static void load_image(Context context, String str_uri, ImageView view)
@@ -278,7 +292,10 @@ public class UtilAPI {
         Activity activity = (Activity) context;
         if (activity.isFinishing())
             return;
-        Glide.with(view.getContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(view);
+        Glide.with(view.getContext()).load(uri).
+                placeholder(R.drawable.register_profile_img).
+                transition(withCrossFade()).
+                diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(view);
     }
 
     public static void setImage(Context context, ImageView view, int res_id)

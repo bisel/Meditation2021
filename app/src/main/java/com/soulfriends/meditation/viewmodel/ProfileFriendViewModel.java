@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
 import com.soulfriends.meditation.parser.PersonResultData;
@@ -77,12 +78,28 @@ public class ProfileFriendViewModel extends ViewModel {
         minute.setValue(String.valueOf(_minute));
 
         // 마음 상태
-        ResultData resultData = NetServiceManager.getinstance().getResultData(userProfile.emotiontype);
-        feelstate.setValue(resultData.state);
+
+        if(userProfile.emotiontype == 0)
+        {
+            // 심리검사 아직 안함
+            feelstate.setValue(context.getResources().getString(R.string.profile_pshy_test_no));
+
+        }
+        else {
+            ResultData resultData = NetServiceManager.getinstance().getResultData(userProfile.emotiontype);
+            feelstate.setValue(resultData.state);
+        }
 
         // 2020.12.24
-        PersonResultData charData  = NetServiceManager.getinstance().getPersonResultDataList().get(userProfile.chartype);
-        charstate.setValue(charData.title);
+        if(userProfile.chartype == 0)
+        {
+            // 성격 검사 아직 안함
+            charstate.setValue(context.getResources().getString(R.string.profile_char_test_no));
+        }
+        else {
+            PersonResultData charData = NetServiceManager.getinstance().getPersonResultDataList().get(userProfile.chartype);
+            charstate.setValue(charData.title);
+        }
     }
 
     public void OnClick_Select(View view)

@@ -481,7 +481,15 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                     }
                 } else if (res.equals("emotion")) {
                     // 감정상태
-                    emotion_type = 0;
+                    if(meditationDetailFriend.mUserProfile.emotiontype == 0)
+                    {
+                        // 검사안함
+                        emotion_type = 4;
+                    }
+                    else
+                    {
+                        emotion_type = 0;
+                    }
                 } else {
                     // "감정 공유 요청 중"
 
@@ -775,8 +783,10 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                 getActivity().finish();
             }
             break;
+            case R.id.ic_close_test:
             case R.id.ic_close:
             {
+                // 검사 안함
                 // 감정상태
                 // "감정 공유를 취소하시겠습니까" 팝업 띄운다.
                 // 예 -> "감정공유 요청"

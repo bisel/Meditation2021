@@ -69,6 +69,7 @@ public class FriendEmotionAdapter extends RecyclerView.Adapter{
             bind.layoutRequestingbt.setVisibility(View.GONE);
             bind.layoutRequestbt.setVisibility(View.GONE);
             bind.layoutRequestAnswerbt.setVisibility(View.GONE);
+            bind.layoutTestbt.setVisibility(View.GONE);
         }
         else if(friendEmotionItemViewModel.emotion_state == 1)
         {
@@ -77,6 +78,7 @@ public class FriendEmotionAdapter extends RecyclerView.Adapter{
             bind.layoutRequestingbt.setVisibility(View.VISIBLE);
             bind.layoutRequestbt.setVisibility(View.GONE);
             bind.layoutRequestAnswerbt.setVisibility(View.GONE);
+            bind.layoutTestbt.setVisibility(View.GONE);
         }
         else if(friendEmotionItemViewModel.emotion_state == 3)
         {
@@ -85,6 +87,16 @@ public class FriendEmotionAdapter extends RecyclerView.Adapter{
             bind.layoutRequestingbt.setVisibility(View.GONE);
             bind.layoutRequestbt.setVisibility(View.GONE);
             bind.layoutRequestAnswerbt.setVisibility(View.VISIBLE);
+            bind.layoutTestbt.setVisibility(View.GONE);
+        }
+        else if(friendEmotionItemViewModel.emotion_state == 4)
+        {
+            // 검사 안함.
+            bind.layoutBasebt.setVisibility(View.GONE);
+            bind.layoutRequestingbt.setVisibility(View.GONE);
+            bind.layoutRequestbt.setVisibility(View.GONE);
+            bind.layoutRequestAnswerbt.setVisibility(View.GONE);
+            bind.layoutTestbt.setVisibility(View.VISIBLE);
         }
         else
         {
@@ -93,6 +105,7 @@ public class FriendEmotionAdapter extends RecyclerView.Adapter{
             bind.layoutRequestingbt.setVisibility(View.GONE);
             bind.layoutRequestbt.setVisibility(View.VISIBLE);
             bind.layoutRequestAnswerbt.setVisibility(View.GONE);
+            bind.layoutTestbt.setVisibility(View.GONE);
         }
 
         // profile 이미지
@@ -114,13 +127,13 @@ public class FriendEmotionAdapter extends RecyclerView.Adapter{
             int res_id_1 = context.getResources().getIdentifier(strEmoti, "drawable", context.getPackageName());
             UtilAPI.setImage(context, bind.ivEmoticon, res_id_1); //iv_emoticon
         }
-        else
-        {
-            // 물음표 이모티콘 표시(색상 다르게, 파란색(my 버튼 색)
-            String strEmoti = "ctgr_music";
-            int res_id_1 = context.getResources().getIdentifier(strEmoti, "drawable", context.getPackageName());
-            UtilAPI.setImage(context, bind.ivEmoticon, res_id_1); //iv_emoticon
-        }
+//        else
+//        {
+//            // 물음표 이모티콘 표시(색상 다르게, 파란색(my 버튼 색)
+//            String strEmoti = "social_mind_noanswer";
+//            int res_id_1 = context.getResources().getIdentifier(strEmoti, "drawable", context.getPackageName());
+//            UtilAPI.setImage(context, bind.ivEmoticon, res_id_1); //iv_emoticon
+//        }
     }
 
     @Override

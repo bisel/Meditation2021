@@ -469,7 +469,12 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
                 }
 
                 if(keyboardOpen) {
-
+                    if(binding.editNickname.isFocused()) {
+                    }
+                    else
+                    {
+                        binding.editIntrodution.setFocusable(true);
+                    }
                 }
                 else
                 {

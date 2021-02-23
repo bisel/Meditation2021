@@ -484,10 +484,17 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
 
                     binding.scrollView.fullScroll(View.FOCUS_DOWN);
                     binding.scrollView.invalidate();
+
                 }
 
                 if(keyboardOpen) {
 
+                    if(binding.editNickname.isFocused()) {
+                    }
+                    else
+                    {
+                        binding.editIntrodution.setFocusable(true);
+                    }
                 }
                 else
                 {
