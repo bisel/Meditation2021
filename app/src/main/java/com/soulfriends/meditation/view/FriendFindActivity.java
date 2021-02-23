@@ -8,7 +8,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -225,7 +224,7 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
 
                     NetServiceManager.getinstance().setOnSendFriendRequestListener(new NetServiceManager.OnSendFriendRequestListener() {
                         @Override
-                        public void onSendFriendRequest(boolean validate) {
+                        public void onSendFriendRequest(boolean validate,int errorCode) {
 
                             if(validate)
                             {
@@ -241,7 +240,11 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                             }
                             else
                             {
-
+                                if(errorCode == 400){
+                                    // 서버 로직상으로 이미 상대방이 자신에게 친구 요청한 상태 - 2021.02.23 -> 요청 응답
+                                }else{
+                                    // FIreBase의 서버 오류
+                                }
                             }
                         }
                     });
@@ -266,7 +269,7 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
 
                     NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
                         @Override
-                        public void onRemoveFriend(boolean validate) {
+                        public void onRemoveFriend(boolean validate,int errocode) {
 
                             if(validate)
                             {
@@ -290,6 +293,7 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                             }
                             else
                             {
+                                // 1. 상대방이 이미 친구를 삭제 한 경우, 2021.02.23 , errcode 403
 
                             }
                         }
@@ -364,7 +368,7 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
 
                     NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
                         @Override
-                        public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo) {
+                        public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo,int errorcode) {
 
                             if(validate)
                             {
@@ -399,7 +403,7 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                     //  1 . 친구 신청 신청 (상대방이 나에게 신청)
                     NetServiceManager.getinstance().setOnRejectFriendRequestListener(new NetServiceManager.OnRejectFriendRequestListener() {
                         @Override
-                        public void onRejectFriendRequest(boolean validate) {
+                        public void onRejectFriendRequest(boolean validate,int errorcode) {
 
                             if(validate)
                             {

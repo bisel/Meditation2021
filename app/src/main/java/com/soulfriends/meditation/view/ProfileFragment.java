@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,7 +29,6 @@ import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.friend.FriendEmotionAdapter;
 import com.soulfriends.meditation.view.friend.FriendEmotionItemViewModel;
-import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.view.nested.ParentItemViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentBottomItemExtViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentItemExtAdapter;
@@ -804,7 +802,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                     NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
                         @Override
-                        public void onRemoveFriend(boolean validate) {
+                        public void onRemoveFriend(boolean validate,int errcode) {
 
                             if(validate)
                             {
@@ -820,7 +818,9 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                             }
                             else
                             {
-
+                                // 2021.02.23
+                                //   - 이미 감정친구를 삭제하고 일반친구로 변경한 경우 -> 402
+                                //   - 친구 삭제 한경우. -> 403
                             }
                         }
                     });
@@ -901,7 +901,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                     NetServiceManager.getinstance().setOnSendFriendRequestListener(new NetServiceManager.OnSendFriendRequestListener() {
                         @Override
-                        public void onSendFriendRequest(boolean validate) {
+                        public void onSendFriendRequest(boolean validate,int errorCode) {
 
                             if(validate)
                             {
@@ -917,7 +917,18 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                             }
                             else
                             {
+                                   /* 2021.02.23 아래의 3가지 조건이 정상적일 경우 정상 처리가 됨.
+                                    - 이미 상대방이 감정친구 요청을 한경우 -> 401
+                                    - 이미 감정친구를 삭제하고 일반친구로 변경한 경우 -> 402
+                                    - 친구 삭제 한경우. -> 403
+                                    */
+                                   if(errorCode == 401){
 
+                                   }else if(errorCode == 402){
+
+                                   }else if(errorCode == 403){
+
+                                   }
                             }
                         }
                     });
@@ -943,7 +954,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                     NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
                         @Override
-                        public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo) {
+                        public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo,int errorcode) {
 
                             if(validate)
                             {
@@ -979,7 +990,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                     NetServiceManager.getinstance().setOnRejectFriendRequestListener(new NetServiceManager.OnRejectFriendRequestListener() {
                         @Override
-                        public void onRejectFriendRequest(boolean validate) {
+                        public void onRejectFriendRequest(boolean validate,int errorcode) {
 
                             if(validate)
                             {

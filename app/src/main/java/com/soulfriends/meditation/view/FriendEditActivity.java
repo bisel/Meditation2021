@@ -1,16 +1,12 @@
 package com.soulfriends.meditation.view;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.FriendEditBinding;
@@ -23,8 +19,6 @@ import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.friend.FriendEditAdapter;
 import com.soulfriends.meditation.view.friend.FriendEditItemViewModel;
-import com.soulfriends.meditation.view.friend.FriendFindAdapter;
-import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.viewmodel.FriendEditViewModel;
 import com.soulfriends.meditation.viewmodel.FriendEditViewModelFactory;
 
@@ -181,7 +175,7 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
 
                 NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
                     @Override
-                    public void onRemoveFriend(boolean validate) {
+                    public void onRemoveFriend(boolean validate,int errorcode) {
 
                         if (validate) {
                             // 삭제
@@ -193,6 +187,7 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
                             }
 
                         } else {
+                            // 2021.02.23
 
                         }
                     }

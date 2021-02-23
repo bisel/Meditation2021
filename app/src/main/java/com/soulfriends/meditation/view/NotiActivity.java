@@ -1,15 +1,12 @@
 package com.soulfriends.meditation.view;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.NotiBinding;
@@ -20,8 +17,6 @@ import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
-import com.soulfriends.meditation.view.friend.FriendEditAdapter;
-import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.view.noti.NotiAdapter;
 import com.soulfriends.meditation.view.noti.NotiItemViewModel;
 import com.soulfriends.meditation.viewmodel.NotiViewModel;
@@ -201,7 +196,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                         //  1 . 친구 신청 거절 (상대방이 나에게 신청)
                         NetServiceManager.getinstance().setOnRejectFriendRequestListener(new NetServiceManager.OnRejectFriendRequestListener() {
                             @Override
-                            public void onRejectFriendRequest(boolean validate) {
+                            public void onRejectFriendRequest(boolean validate,int errorcode) {
 
                                 if(validate)
                                 {
@@ -229,7 +224,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                         //  2.  감정 공유 거절 (상대방이 나에게 신청)
                         NetServiceManager.getinstance().setOnRejectFriendRequestListener(new NetServiceManager.OnRejectFriendRequestListener() {
                             @Override
-                            public void onRejectFriendRequest(boolean validate) {
+                            public void onRejectFriendRequest(boolean validate,int errorcode) {
 
                                 if(validate)
                                 {
@@ -275,7 +270,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
                         NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
                             @Override
-                            public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo) {
+                            public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo,int errorcode) {
 
                                 if(validate)
                                 {
@@ -303,7 +298,7 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
                         NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
                             @Override
-                            public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo) {
+                            public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo,int errorcode) {
 
                                 if(validate)
                                 {

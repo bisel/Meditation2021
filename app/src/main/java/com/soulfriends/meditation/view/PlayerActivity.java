@@ -926,7 +926,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
 
                 NetServiceManager.getinstance().setOnSendFriendRequestListener(new NetServiceManager.OnSendFriendRequestListener() {
                     @Override
-                    public void onSendFriendRequest(boolean validate) {
+                    public void onSendFriendRequest(boolean validate,int errorCode) {
 
                         if (validate) {
                             alertDlg_ok = new AlertLineOneOkPopup(PlayerActivity.this, PlayerActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_request);
@@ -959,7 +959,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 // 친구 삭제
                 NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
                     @Override
-                    public void onRemoveFriend(boolean validate) {
+                    public void onRemoveFriend(boolean validate,int errorcode) {
 
                         if (validate) {
                             alertDlg_ok = new AlertLineOneOkPopup(PlayerActivity.this, PlayerActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_cancelled);
@@ -975,7 +975,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                            // UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);
                             //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
                         } else {
-
+                            // 1. 상대방이 이미 친구를 삭제 한 경우, 2021.02.23 , errcode 403
                         }
                     }
                 });
