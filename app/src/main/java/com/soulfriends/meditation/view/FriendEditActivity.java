@@ -1,5 +1,6 @@
 package com.soulfriends.meditation.view;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.FriendEditBinding;
+import com.soulfriends.meditation.dlg.ErrorCodePopup;
 import com.soulfriends.meditation.model.MeditationDetailFriend;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
@@ -19,6 +21,7 @@ import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.friend.FriendEditAdapter;
 import com.soulfriends.meditation.view.friend.FriendEditItemViewModel;
+import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.viewmodel.FriendEditViewModel;
 import com.soulfriends.meditation.viewmodel.FriendEditViewModelFactory;
 
@@ -188,6 +191,42 @@ public class FriendEditActivity extends BaseActivity implements ResultListener, 
 
                         } else {
                             // 2021.02.23
+                            if(errorcode == 403){
+
+                                // 1. 상대방이 이미 친구를 삭제 한 경우, 2021.02.23 , errcode 403
+                                ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendEditActivity.this, FriendEditActivity.this);
+                                alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                alertDlg_error.show();
+
+                                FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
+                                String str_msg = friendFindItemViewModel.userProfile.nickname + FriendEditActivity.this.getResources().getString(R.string.dialog_error_code_403);
+                                alertDlg_error.textView.setText(str_msg);
+
+                                alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                    // 리사이클 데이터 변경에따른 ui 업데이트
+                                    if(list_friend.size() > 0) {
+                                        list_friend.remove(pos);
+                                        friendEditAdapter.notifyItemRemoved(pos);
+                                        friendEditAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                                    }
+
+                                    alertDlg_error.dismiss();
+                                });
+                            }
+                            else{
+                                // 500
+                                ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendEditActivity.this, FriendEditActivity.this);
+                                alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                alertDlg_error.show();
+
+                                alertDlg_error.textView.setText(FriendEditActivity.this.getResources().getString(R.string.dialog_error_firebase));
+
+                                alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                    alertDlg_error.dismiss();
+                                });
+                            }
 
                         }
                     }

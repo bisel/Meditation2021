@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.FriendFindBinding;
 import com.soulfriends.meditation.dlg.AlertAlreadyPopup;
+import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
 import com.soulfriends.meditation.dlg.AlertLineOnePopup;
+import com.soulfriends.meditation.dlg.ErrorCodePopup;
 import com.soulfriends.meditation.model.MeditationFriend;
 import com.soulfriends.meditation.model.UserProfile;
 import com.soulfriends.meditation.netservice.NetServiceManager;
@@ -27,6 +29,7 @@ import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.friend.FriendFindAdapter;
 import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
+import com.soulfriends.meditation.view.player.MeditationAudioManager;
 import com.soulfriends.meditation.viewmodel.FriendFindViewModel;
 import com.soulfriends.meditation.viewmodel.FriendFindViewModelFactory;
 
@@ -240,10 +243,43 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                             }
                             else
                             {
+                                alertDlg.dismiss();
+
                                 if(errorCode == 400){
                                     // 서버 로직상으로 이미 상대방이 자신에게 친구 요청한 상태 - 2021.02.23 -> 요청 응답
+
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
+                                    String str_msg = friendFindItemViewModel.userProfile.nickname + FriendFindActivity.this.getResources().getString(R.string.dialog_error_code_400);
+                                    alertDlg_error.textView.setText(str_msg);
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        friendFindItemViewModel.friend_state = 3;  // 요청 응답
+
+                                        // 리사이클 데이터 변경에따른 ui 업데이트
+                                        friendFindAdapter.notifyDataSetChanged();
+
+
+                                        alertDlg_error.dismiss();
+                                    });
+
+
                                 }else{
-                                    // FIreBase의 서버 오류
+                                    // FireBase의 서버 오류
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    alertDlg_error.textView.setText(FriendFindActivity.this.getResources().getString(R.string.dialog_error_firebase));
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        alertDlg_error.dismiss();
+                                    });
                                 }
                             }
                         }
@@ -293,8 +329,41 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                             }
                             else
                             {
-                                // 1. 상대방이 이미 친구를 삭제 한 경우, 2021.02.23 , errcode 403
+                                alertDlg.dismiss();
 
+                                // 1. 상대방이 이미 친구를 삭제 한 경우, 2021.02.23 , errcode 403
+                                if(errocode == 403){
+
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
+                                    String str_msg = friendFindItemViewModel.userProfile.nickname + FriendFindActivity.this.getResources().getString(R.string.dialog_error_code_403);
+                                    alertDlg_error.textView.setText(str_msg);
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        friendFindItemViewModel.friend_state = 0;  // 친구추가로 변경
+
+                                        // 리사이클 데이터 변경에따른 ui 업데이트
+                                        friendFindAdapter.notifyDataSetChanged();
+
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
+                                else{
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    alertDlg_error.textView.setText(FriendFindActivity.this.getResources().getString(R.string.dialog_error_firebase));
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
                             }
                         }
                     });
@@ -333,7 +402,7 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
 
                                 //Toast.makeText(this,"친구 요청중",Toast.LENGTH_SHORT).show();
 
-                                alertDlg.dismiss();
+                                //alertDlg.dismiss();
                             }
                             else
                             {
@@ -386,7 +455,20 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                             }
                             else
                             {
+                                if(errorcode == 500){
 
+                                    // 해당 요청이 상대방이 취소해서 해당 메시지가 유효하지 않는 경우 : 500
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    alertDlg_error.textView.setText(FriendFindActivity.this.getResources().getString(R.string.dialog_error_code_500));
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
                             }
                         }
                     });
@@ -418,7 +500,29 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                             }
                             else
                             {
+                                if(errorcode == 500){
 
+                                    // "친구 추가"
+                                    if(list_friend.size() > pos) {
+                                        FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
+                                        friendFindItemViewModel.friend_state = 0;
+
+                                        // 리사이클 데이터 변경에따른 ui 업데이트
+                                        friendFindAdapter.notifyDataSetChanged();
+                                    }
+
+                                    // 해당 요청이 상대방이 취소해서 해당 메시지가 유효하지 않는 경우 : 500
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    alertDlg_error.textView.setText(FriendFindActivity.this.getResources().getString(R.string.dialog_error_code_500));
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
                             }
                         }
                     });

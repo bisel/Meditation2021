@@ -646,49 +646,76 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             case R.id.bt_bookmark: {
                 // 북마크
 
-                if (bBookmark_state) {
-                    NetServiceManager.getinstance().sendFavoriteContents(meditationContents.uid, false);
-                    bBookmark_state = false;
+                //--------------------------------------------------
+                //  인터넷 연결 안되는 상황일 때 앱 실행 시
+                //--------------------------------------------------
+                if(UtilAPI.isConnected(this) == 0) {
+                    Intent intent = new Intent(this, NetDialogActivity.class);
+                    this.startActivity(intent);
 
-                    UtilAPI.setButtonBackground(this, binding.btBookmark, R.drawable.bookmark_btn);
-                } else {
-                    // 말풍선 띄워준다.
-                    NetServiceManager.getinstance().sendFavoriteContents(meditationContents.uid, true);
-                    bBookmark_state = true;
+                    this.overridePendingTransition(0, 0);
 
-                    UtilAPI.setButtonBackground(this, binding.btBookmark, R.drawable.bookmark_btn_com);
+                    // this.finish();
+                }
+                else {
+                    if (bBookmark_state) {
+                        NetServiceManager.getinstance().sendFavoriteContents(meditationContents.uid, false);
+                        bBookmark_state = false;
 
-                    CallWithDelay_balloon(2000, this);
+                        UtilAPI.setButtonBackground(this, binding.btBookmark, R.drawable.bookmark_btn);
+                    } else {
+                        // 말풍선 띄워준다.
+                        NetServiceManager.getinstance().sendFavoriteContents(meditationContents.uid, true);
+                        bBookmark_state = true;
+
+                        UtilAPI.setButtonBackground(this, binding.btBookmark, R.drawable.bookmark_btn_com);
+
+                        CallWithDelay_balloon(2000, this);
+                    }
                 }
             }
             break;
             case R.id.bt_like: {
-                if (reactionCode == 1) {
-                    // 좋아요 -> 별로예요
-                    UtilAPI.setButtonBackground(this, binding.btLike, R.drawable.dislike_btn_com);
 
-                    reactionCode = 2;
+                //--------------------------------------------------
+                //  인터넷 연결 안되는 상황일 때 앱 실행 시
+                //--------------------------------------------------
+                if(UtilAPI.isConnected(this) == 0) {
+                    Intent intent = new Intent(this, NetDialogActivity.class);
+                    this.startActivity(intent);
 
-                    CallWithDelay_balloon_like(2000, this, binding.layoutDislikeBalloon);
-                } else if (reactionCode == 2 || reactionCode == 0) {
-                    // 별로예요 -> 좋아요
-                    UtilAPI.setButtonBackground(this, binding.btLike, R.drawable.like_btn_com);
+                    this.overridePendingTransition(0, 0);
 
-                    reactionCode = 1;
-
-                    CallWithDelay_balloon_like(2000, this, binding.layoutLikeBalloon);
+                    // this.finish();
                 }
+                else {
+                    if (reactionCode == 1) {
+                        // 좋아요 -> 별로예요
+                        UtilAPI.setButtonBackground(this, binding.btLike, R.drawable.dislike_btn_com);
 
-                String uid = NetServiceManager.getinstance().getUserProfile().uid;
-                //String uid_11 = NetServiceManager.getinstance().getUserProfile().uid;
+                        reactionCode = 2;
 
-                // 2020.12.04 로컬 콘텐츠 List 자체에 대한 수정도 같이 이루어져야 한다.
-                if (meditationContents.ismycontents == 1) { // social
-                    NetServiceManager.getinstance().sendFavoriteLocalEventExt(uid, meditationContents.uid, reactionCode, true);
-                    NetServiceManager.getinstance().sendSocialFavoriteEventExt(uid, meditationContents.uid, reactionCode, true);
-                } else {
-                    NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactionCode);
-                    NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactionCode);
+                        CallWithDelay_balloon_like(2000, this, binding.layoutDislikeBalloon);
+                    } else if (reactionCode == 2 || reactionCode == 0) {
+                        // 별로예요 -> 좋아요
+                        UtilAPI.setButtonBackground(this, binding.btLike, R.drawable.like_btn_com);
+
+                        reactionCode = 1;
+
+                        CallWithDelay_balloon_like(2000, this, binding.layoutLikeBalloon);
+                    }
+
+                    String uid = NetServiceManager.getinstance().getUserProfile().uid;
+                    //String uid_11 = NetServiceManager.getinstance().getUserProfile().uid;
+
+                    // 2020.12.04 로컬 콘텐츠 List 자체에 대한 수정도 같이 이루어져야 한다.
+                    if (meditationContents.ismycontents == 1) { // social
+                        NetServiceManager.getinstance().sendFavoriteLocalEventExt(uid, meditationContents.uid, reactionCode, true);
+                        NetServiceManager.getinstance().sendSocialFavoriteEventExt(uid, meditationContents.uid, reactionCode, true);
+                    } else {
+                        NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactionCode);
+                        NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactionCode);
+                    }
                 }
             }
             break;

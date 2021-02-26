@@ -329,31 +329,43 @@ public class PsychologyVoiceTestActivity extends BaseActivity implements ResultL
 
                 // 테스트로 4초 있다가 결과 화면 이동 처리한다.
 
-                NetServiceManager.getinstance().setRecvDoneVoiceAnalysisListener(new NetServiceManager.OnRecvDoneVoiceAnalysisListener() {
-                    @Override
-                    public void onRecvDoneVoiceAnalysis(boolean validate) {
-                        if(NetServiceManager.getinstance().isAppOnForeground() == true){
-                            Log.d("NetServiceManager","onRecvDoneVoiceAnalysis forground ");
-                            if(step_voice == 3 && !bShowVoicePopup){
-                                if(validate == false)
-                                {
-                                    ShowVoiceDialog();
+                //--------------------------------------------------
+                //  인터넷 연결 안되는 상황일 때 앱 실행 시
+                //--------------------------------------------------
+                if(UtilAPI.isConnected(this) == 0) {
+                    Intent intent = new Intent(this, NetDialogActivity.class);
+                    this.startActivity(intent);
+
+                    this.overridePendingTransition(0, 0);
+
+                    // this.finish();
+                }
+                else {
+
+                    NetServiceManager.getinstance().setRecvDoneVoiceAnalysisListener(new NetServiceManager.OnRecvDoneVoiceAnalysisListener() {
+                        @Override
+                        public void onRecvDoneVoiceAnalysis(boolean validate) {
+                            if (NetServiceManager.getinstance().isAppOnForeground() == true) {
+                                Log.d("NetServiceManager", "onRecvDoneVoiceAnalysis forground ");
+                                if (step_voice == 3 && !bShowVoicePopup) {
+                                    if (validate == false) {
+                                        ShowVoiceDialog();
+                                    } else {
+                                        SetStep(4);
+                                    }
                                 }
-                                else {
-                                    SetStep(4);
-                                }
+
+                            } else {
+                                Log.d("NetServiceManager", "onRecvDoneVoiceAnalysis backround ");
+                                //ShowVoiceDialog();
+                                bShowVoicePopUpInExceptionVoiceTest = true;
                             }
 
-                        }else{
-                            Log.d("NetServiceManager","onRecvDoneVoiceAnalysis backround ");
-                            //ShowVoiceDialog();
-                            bShowVoicePopUpInExceptionVoiceTest = true;
                         }
+                    });
 
-                    }
-                });
-
-                NetServiceManager.getinstance().StartVoiceAnalysis();
+                    NetServiceManager.getinstance().StartVoiceAnalysis();
+                }
 
 //                // 6초 테스트
 //                CountDownTimer countDownTimer = new CountDownTimer(6 * 1000, 1000) {

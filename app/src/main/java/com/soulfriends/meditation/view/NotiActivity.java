@@ -1,5 +1,7 @@
 package com.soulfriends.meditation.view;
 
+import android.app.Activity;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.NotiBinding;
+import com.soulfriends.meditation.dlg.ErrorCodePopup;
 import com.soulfriends.meditation.model.MeditationDetailAlarm;
 import com.soulfriends.meditation.model.MeditationFriend;
 import com.soulfriends.meditation.netservice.NetServiceManager;
@@ -17,6 +20,7 @@ import com.soulfriends.meditation.util.ActivityStack;
 import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
+import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.view.noti.NotiAdapter;
 import com.soulfriends.meditation.view.noti.NotiItemViewModel;
 import com.soulfriends.meditation.viewmodel.NotiViewModel;
@@ -127,42 +131,6 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
         }
 
-//        List list = new ArrayList<>();
-//
-//        for (int i = 0; i < 30; i++)
-//        {
-//            if(i % 6 == 0)
-//            {
-//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 0, 0);
-//
-//                list.add(notiViewModel);
-//            }
-//            else if(i % 6 == 1){
-//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this, this, String.valueOf(i), String.valueOf(i), 0, 1);
-//
-//                list.add(notiViewModel);
-//            }
-//            else if(i % 6 == 2){
-//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 0, 2);
-//
-//                list.add(notiViewModel);
-//            }
-//            else if(i % 6== 3){
-//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 0, 3);
-//
-//                list.add(notiViewModel);
-//            }
-//            else if(i % 6 == 4){
-//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 1, 0);
-//
-//                list.add(notiViewModel);
-//            }
-//            else {
-//                NotiItemViewModel notiViewModel = new NotiItemViewModel(this,this, String.valueOf(i), String.valueOf(i), 1, 1);
-//
-//                list.add(notiViewModel);
-//            }
-//        }
     }
 
     @Override
@@ -212,6 +180,25 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                                 else
                                 {
 
+                                    if(errorcode == 500)
+                                    {
+                                        // 500
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(NotiActivity.this, NotiActivity.this);
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
+
+                                        alertDlg_error.textView.setText(NotiActivity.this.getResources().getString(R.string.dialog_error_firebase));
+
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                            // 리스트에서 삭제
+                                            list_noti.remove(pos);
+                                            notiAdapter.notifyItemRemoved(pos);
+                                            notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+
+                                            alertDlg_error.dismiss();
+                                        });
+                                    }
                                 }
                             }
                         });
@@ -239,7 +226,48 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                                 }
                                 else
                                 {
+                                    if(errorcode == 403)
+                                    {
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(NotiActivity.this, NotiActivity.this);
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
 
+                                        String str_msg = hAlarm.otheruser.nickname + NotiActivity.this.getResources().getString(R.string.dialog_error_code_403);
+                                        alertDlg_error.textView.setText(str_msg);
+
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                            if(list_noti.size() > 0) {
+                                                // 리스트에서 삭제
+                                                list_noti.remove(pos);
+                                                notiAdapter.notifyItemRemoved(pos);
+                                                notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                            }
+
+                                            alertDlg_error.dismiss();
+                                        });
+                                    }
+                                    else if(errorcode == 500)
+                                    {
+                                        // 500
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(NotiActivity.this, NotiActivity.this);
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
+
+                                        alertDlg_error.textView.setText(NotiActivity.this.getResources().getString(R.string.dialog_error_firebase));
+
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                            // 리스트에서 삭제
+                                            if(list_noti.size() > 0) {
+                                                list_noti.remove(pos);
+                                                notiAdapter.notifyItemRemoved(pos);
+                                                notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                            }
+
+                                            alertDlg_error.dismiss();
+                                        });
+                                    }
                                 }
                             }
                         });
@@ -285,7 +313,25 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                                 }
                                 else
                                 {
+                                    if(errorcode == 500)
+                                    {
+                                        // 500
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(NotiActivity.this, NotiActivity.this);
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
 
+                                        alertDlg_error.textView.setText(NotiActivity.this.getResources().getString(R.string.dialog_error_firebase));
+
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                            // 리스트에서 삭제
+                                            list_noti.remove(pos);
+                                            notiAdapter.notifyItemRemoved(pos);
+                                            notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+
+                                            alertDlg_error.dismiss();
+                                        });
+                                    }
                                 }
                             }
                         });
@@ -314,6 +360,48 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
                                 else
                                 {
 
+                                    if(errorcode == 403)
+                                    {
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(NotiActivity.this, NotiActivity.this);
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
+
+                                        String str_msg = hAlarm.otheruser.nickname + NotiActivity.this.getResources().getString(R.string.dialog_error_code_403);
+                                        alertDlg_error.textView.setText(str_msg);
+
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                            if(list_noti.size() > 0) {
+                                                // 리스트에서 삭제
+                                                list_noti.remove(pos);
+                                                notiAdapter.notifyItemRemoved(pos);
+                                                notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                            }
+
+                                            alertDlg_error.dismiss();
+                                        });
+                                    }
+                                    else if(errorcode == 500)
+                                    {
+                                        // 500
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(NotiActivity.this, NotiActivity.this);
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
+
+                                        alertDlg_error.textView.setText(NotiActivity.this.getResources().getString(R.string.dialog_error_firebase));
+
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                            // 리스트에서 삭제
+                                            if(list_noti.size() > 0) {
+                                                list_noti.remove(pos);
+                                                notiAdapter.notifyItemRemoved(pos);
+                                                notiAdapter.notifyItemRangeChanged(pos, list_noti.size());
+                                            }
+
+                                            alertDlg_error.dismiss();
+                                        });
+                                    }
                                 }
                             }
                         });
@@ -322,8 +410,6 @@ public class NotiActivity extends BaseActivity implements ResultListener, ItemCl
 
                     }
                 }
-
-
             }
             break;
         }

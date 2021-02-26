@@ -165,36 +165,62 @@ public class SessioinActivity extends BaseActivity implements ResultListener {
             case R.id.iv_good_button: {
                 // 좋아요
 
-                reactiionCode = 1;
+                //--------------------------------------------------
+                //  인터넷 연결 안되는 상황일 때 앱 실행 시
+                //--------------------------------------------------
+                if(UtilAPI.isConnected(this) == 0) {
+                    Intent intent = new Intent(this, NetDialogActivity.class);
+                    this.startActivity(intent);
 
-                Select_Good();
+                    this.overridePendingTransition(0, 0);
 
-                String uid = NetServiceManager.getinstance().getUserProfile().uid;
+                    // this.finish();
+                }
+                else {
+                    reactiionCode = 1;
 
-                if(meditationContents.ismycontents == 1){ // social
-                    NetServiceManager.getinstance().sendFavoriteLocalEventExt(uid, meditationContents.uid, reactiionCode,true);
-                    NetServiceManager.getinstance().sendSocialFavoriteEventExt(uid, meditationContents.uid, reactiionCode,true);
-                }else{
-                    NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactiionCode);
-                    NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactiionCode);
+                    Select_Good();
+
+                    String uid = NetServiceManager.getinstance().getUserProfile().uid;
+
+                    if (meditationContents.ismycontents == 1) { // social
+                        NetServiceManager.getinstance().sendFavoriteLocalEventExt(uid, meditationContents.uid, reactiionCode, true);
+                        NetServiceManager.getinstance().sendSocialFavoriteEventExt(uid, meditationContents.uid, reactiionCode, true);
+                    } else {
+                        NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactiionCode);
+                        NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactiionCode);
+                    }
                 }
             }
             break;
             case R.id.iv_bad_button: {
                 // 별로예요
 
-                reactiionCode = 2;
+                //--------------------------------------------------
+                //  인터넷 연결 안되는 상황일 때 앱 실행 시
+                //--------------------------------------------------
+                if(UtilAPI.isConnected(this) == 0) {
+                    Intent intent = new Intent(this, NetDialogActivity.class);
+                    this.startActivity(intent);
 
-                Select_Bad();
+                    this.overridePendingTransition(0, 0);
 
-                String uid = NetServiceManager.getinstance().getUserProfile().uid;
+                    // this.finish();
+                }
+                else {
+                    reactiionCode = 2;
 
-                if(meditationContents.ismycontents == 1){ // social
-                    NetServiceManager.getinstance().sendFavoriteLocalEventExt(uid, meditationContents.uid, reactiionCode,true);
-                    NetServiceManager.getinstance().sendSocialFavoriteEventExt(uid, meditationContents.uid, reactiionCode,true);
-                }else{
-                    NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactiionCode);
-                    NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactiionCode);
+                    Select_Bad();
+
+                    String uid = NetServiceManager.getinstance().getUserProfile().uid;
+
+                    if (meditationContents.ismycontents == 1) { // social
+                        NetServiceManager.getinstance().sendFavoriteLocalEventExt(uid, meditationContents.uid, reactiionCode, true);
+                        NetServiceManager.getinstance().sendSocialFavoriteEventExt(uid, meditationContents.uid, reactiionCode, true);
+                    } else {
+                        NetServiceManager.getinstance().sendFavoriteLocalEvent(uid, meditationContents.uid, reactiionCode);
+                        NetServiceManager.getinstance().sendFavoriteEvent(uid, meditationContents.uid, reactiionCode);
+                    }
                 }
             }
             break;

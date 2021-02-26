@@ -16,6 +16,7 @@ import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.dlg.AlertAlreadyPopup;
 import com.soulfriends.meditation.dlg.AlertLineOnePopup;
 import com.soulfriends.meditation.dlg.AlertLineTwoPopup;
+import com.soulfriends.meditation.dlg.ErrorCodePopup;
 import com.soulfriends.meditation.model.MeditationCategory;
 import com.soulfriends.meditation.model.MeditationContents;
 import com.soulfriends.meditation.model.MeditationDetailFriend;
@@ -818,9 +819,60 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                             }
                             else
                             {
+                                alertDlg.dismiss();
+
                                 // 2021.02.23
                                 //   - 이미 감정친구를 삭제하고 일반친구로 변경한 경우 -> 402
                                 //   - 친구 삭제 한경우. -> 403
+                                if(errcode == 402)
+                                {
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                    String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_403);
+                                    alertDlg_error.textView.setText(str_msg);
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+
+
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
+                                else if(errcode == 403)
+                                {
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                    String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_403);
+                                    alertDlg_error.textView.setText(str_msg);
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+
+
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
+                                else if(errcode == 500)
+                                {
+                                    // 500
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    alertDlg_error.textView.setText(getActivity().getResources().getString(R.string.dialog_error_firebase));
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        // 리스트에서 삭제
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
                             }
                         }
                     });
@@ -917,16 +969,74 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                             }
                             else
                             {
+                                alertDlg.dismiss();
+
                                    /* 2021.02.23 아래의 3가지 조건이 정상적일 경우 정상 처리가 됨.
                                     - 이미 상대방이 감정친구 요청을 한경우 -> 401
                                     - 이미 감정친구를 삭제하고 일반친구로 변경한 경우 -> 402
                                     - 친구 삭제 한경우. -> 403
                                     */
                                    if(errorCode == 401){
+                                       ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                       alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                       alertDlg_error.show();
+
+                                       FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                       String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_401);
+                                       alertDlg_error.textView.setText(str_msg);
+
+                                       alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                           friendEmotionItemViewModel.emotion_state = 1;  // 감정공유 요청 중
+
+                                           // 리사이클 데이터 변경에따른 ui 업데이트
+                                           friendEmotionAdapter.notifyDataSetChanged();
+
+                                           alertDlg_error.dismiss();
+                                       });
 
                                    }else if(errorCode == 402){
+                                       ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                       alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                       alertDlg_error.show();
+
+                                       FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                       String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_402);
+                                       alertDlg_error.textView.setText(str_msg);
+
+                                       alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                           // - 이미 감정친구를 삭제하고 일반친구로 변경한 경우 -> 402
+
+                                           // 제거
+                                           list_friend.remove(pos);
+                                           friendEmotionAdapter.notifyItemRemoved(pos);
+                                           friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+
+
+                                           alertDlg_error.dismiss();
+                                       });
 
                                    }else if(errorCode == 403){
+                                       ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                       alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                       alertDlg_error.show();
+
+                                       FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                       String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_403);
+                                       alertDlg_error.textView.setText(str_msg);
+
+                                       alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                           //  - 친구 삭제 한경우. -> 403
+                                           // 제거
+                                           list_friend.remove(pos);
+                                           friendEmotionAdapter.notifyItemRemoved(pos);
+                                           friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+
+
+                                           alertDlg_error.dismiss();
+                                       });
 
                                    }
                             }
@@ -973,7 +1083,43 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                             }
                             else
                             {
+                                if(errorcode == 403)
+                                {
+                                    // 현재 친구 상태가 아닌 경우. : 403
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
 
+                                    FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                    String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_403);
+                                    alertDlg_error.textView.setText(str_msg);
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        // 제거
+                                        list_friend.remove(pos);
+                                        friendEmotionAdapter.notifyItemRemoved(pos);
+                                        friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+
+
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
+                                else if(errorcode == 500)
+                                {
+                                    // 500
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    alertDlg_error.textView.setText(getActivity().getResources().getString(R.string.dialog_error_firebase));
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        // 리스트에서 삭제
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
                             }
                         }
                     });
@@ -1006,7 +1152,41 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                             }
                             else
                             {
+                                if(errorcode == 403)
+                                {
+                                    // 현재 친구 상태가 아닌 경우. : 403
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
 
+                                    FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                    String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_403);
+                                    alertDlg_error.textView.setText(str_msg);
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        // 삭제처리를 해야 한다.
+                                        list_friend.remove(pos);
+                                        friendEmotionAdapter.notifyItemRemoved(pos);
+                                        friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
+                                else if(errorcode == 500)
+                                {
+                                    // 500
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    alertDlg_error.textView.setText(getActivity().getResources().getString(R.string.dialog_error_firebase));
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
                             }
                         }
                     });

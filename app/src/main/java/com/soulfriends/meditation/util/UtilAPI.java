@@ -491,7 +491,8 @@ public class UtilAPI {
                 }
                 break;
                 case "PlayerActivity": {
-                    activity.startActivity(new Intent(activity, PlayerActivity.class));
+                    // 좋아요, 싫어요, 즐겨찾기
+                    activity.startActivity(new Intent(activity, MainActivity.class));
                 }
                 break;
                 case "ProfileActivity": {
