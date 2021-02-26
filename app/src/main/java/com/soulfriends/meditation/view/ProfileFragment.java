@@ -983,7 +983,6 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                                    /* 2021.02.23 아래의 3가지 조건이 정상적일 경우 정상 처리가 됨.
                                     - 이미 상대방이 감정친구 요청을 한경우 -> 401
-                                    - 이미 감정친구를 삭제하고 일반친구로 변경한 경우 -> 402
                                     - 친구 삭제 한경우. -> 403
                                     */
                                    if(errorCode == 401){
@@ -998,27 +997,6 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
 
                                            friendEmotionItemViewModel.emotion_state = 1;  // 감정공유 요청 중
-
-                                           // 리사이클 데이터 변경에따른 ui 업데이트
-                                           friendEmotionAdapter.notifyDataSetChanged();
-
-                                           alertDlg_error.dismiss();
-                                       });
-
-                                   }else if(errorCode == 402){
-                                       ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
-                                       alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                                       alertDlg_error.show();
-
-                                       FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
-                                       String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_402);
-                                       alertDlg_error.textView.setText(str_msg);
-
-                                       alertDlg_error.iv_ok.setOnClickListener(v -> {
-
-                                           // - 이미 감정친구를 삭제하고 일반친구로 변경한 경우 -> 402
-//
-                                           friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 +
 
                                            // 리사이클 데이터 변경에따른 ui 업데이트
                                            friendEmotionAdapter.notifyDataSetChanged();
