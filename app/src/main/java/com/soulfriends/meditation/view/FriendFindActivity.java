@@ -422,121 +422,142 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
             case R.id.iv_request_answerbt:
             {
 
-                // 친구요청 응답
-                // 팝업을 띄운다.
-                // 거절, 수락 처리
-
+                // 여기에 분기해야 한다.
                 UserProfile userProfile = (UserProfile)obj;
-                AlertAlreadyPopup alertDlg = new AlertAlreadyPopup(this, this, AlertAlreadyPopup.Dlg_Type.friend, userProfile.nickname);
-                alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                alertDlg.show();
 
-                // 수락
-                alertDlg.iv_ok.setOnClickListener(v -> {
-                    //  1 . 친구 신청 신청 (상대방이 나에게 신청)
+                if(!NetServiceManager.getinstance().checkSendFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid))
+                {
+                    // 해당 요청이 상대방이 취소해서 해당 메시지가 유효하지 않는 경우 : 500
+                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
+                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    alertDlg_error.show();
 
-                    NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
-                        @Override
-                        public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo,int errorcode) {
+                    alertDlg_error.textView.setText(FriendFindActivity.this.getResources().getString(R.string.dialog_error_code_500));
 
-                            if(validate)
-                            {
-                                //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
-                                NetServiceManager.getinstance().addForceLocalFriends(userProfile, friendinfo);
-                                //상태 변경
-                                // "친구" 로 변경
-                                if(list_friend.size() > pos) {
-                                    FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
-                                    friendFindItemViewModel.friend_state = 1;
+                    alertDlg_error.iv_ok.setOnClickListener(v -> {
 
-                                    // 리사이클 데이터 변경에따른 ui 업데이트
-                                    friendFindAdapter.notifyDataSetChanged();
-                                }
-                            }
-                            else
-                            {
-                                if(errorcode == 500){
+                        FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel) list_friend.get(pos);
+                        friendFindItemViewModel.friend_state = 0;  // 친구추가로 변경
 
-                                    // 해당 요청이 상대방이 취소해서 해당 메시지가 유효하지 않는 경우 : 500
-                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
-                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                                    alertDlg_error.show();
+                        // 리사이클 데이터 변경에따른 ui 업데이트
+                        friendFindAdapter.notifyDataSetChanged();
 
-                                    alertDlg_error.textView.setText(FriendFindActivity.this.getResources().getString(R.string.dialog_error_code_500));
+                        alertDlg_error.dismiss();
+                    });
+                }
+                else
+                    {
 
-                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+                    // 친구요청 응답
+                    // 팝업을 띄운다.
+                    // 거절, 수락 처리
 
-                                        FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
-                                        friendFindItemViewModel.friend_state = 0;  // 친구추가로 변경
+
+                    AlertAlreadyPopup alertDlg = new AlertAlreadyPopup(this, this, AlertAlreadyPopup.Dlg_Type.friend, userProfile.nickname);
+                    alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    alertDlg.show();
+
+                    // 수락
+                    alertDlg.iv_ok.setOnClickListener(v -> {
+                        //  1 . 친구 신청 신청 (상대방이 나에게 신청)
+
+                        NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
+                            @Override
+                            public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo, int errorcode) {
+
+                                if (validate) {
+                                    //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
+                                    NetServiceManager.getinstance().addForceLocalFriends(userProfile, friendinfo);
+                                    //상태 변경
+                                    // "친구" 로 변경
+                                    if (list_friend.size() > pos) {
+                                        FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel) list_friend.get(pos);
+                                        friendFindItemViewModel.friend_state = 1;
 
                                         // 리사이클 데이터 변경에따른 ui 업데이트
                                         friendFindAdapter.notifyDataSetChanged();
-                                        alertDlg_error.dismiss();
-                                    });
-                                }
-                            }
-                        }
-                    });
+                                    }
+                                } else {
+                                    if (errorcode == 500) {
 
-                    NetServiceManager.getinstance().AcceptFriend(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
+                                        // 해당 요청이 상대방이 취소해서 해당 메시지가 유효하지 않는 경우 : 500
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
 
-                    alertDlg.dismiss();
+                                        alertDlg_error.textView.setText(FriendFindActivity.this.getResources().getString(R.string.dialog_error_code_500));
 
-                });
-                
-                // 거절
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
 
-                alertDlg.iv_no.setOnClickListener(v -> {
-                    //  1 . 친구 신청 신청 (상대방이 나에게 신청)
-                    NetServiceManager.getinstance().setOnRejectFriendRequestListener(new NetServiceManager.OnRejectFriendRequestListener() {
-                        @Override
-                        public void onRejectFriendRequest(boolean validate,int errorcode) {
-
-                            if(validate)
-                            {
-                                // "친구 추가"
-                                if(list_friend.size() > pos) {
-                                    FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
-                                    friendFindItemViewModel.friend_state = 0;
-
-                                    // 리사이클 데이터 변경에따른 ui 업데이트
-                                    friendFindAdapter.notifyDataSetChanged();
-                                }
-                            }
-                            else
-                            {
-                                if(errorcode == 500){
-
-                                    // 해당 요청이 상대방이 취소해서 해당 메시지가 유효하지 않는 경우 : 500
-                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
-                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                                    alertDlg_error.show();
-
-                                    alertDlg_error.textView.setText(FriendFindActivity.this.getResources().getString(R.string.dialog_error_code_500));
-
-                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
-
-                                        // "친구 추가"
-                                        if(list_friend.size() > pos) {
-                                            FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
-                                            friendFindItemViewModel.friend_state = 0;
+                                            FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel) list_friend.get(pos);
+                                            friendFindItemViewModel.friend_state = 0;  // 친구추가로 변경
 
                                             // 리사이클 데이터 변경에따른 ui 업데이트
                                             friendFindAdapter.notifyDataSetChanged();
-                                        }
-
-                                        alertDlg_error.dismiss();
-                                    });
+                                            alertDlg_error.dismiss();
+                                        });
+                                    }
                                 }
                             }
-                        }
+                        });
+
+                        NetServiceManager.getinstance().AcceptFriend(NetServiceManager.getinstance().getUserProfile().uid, userProfile.uid);
+
+                        alertDlg.dismiss();
+
                     });
 
-                    NetServiceManager.getinstance().rejectFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
+                    // 거절
 
-                    alertDlg.dismiss();
+                    alertDlg.iv_no.setOnClickListener(v -> {
+                        //  1 . 친구 신청 신청 (상대방이 나에게 신청)
+                        NetServiceManager.getinstance().setOnRejectFriendRequestListener(new NetServiceManager.OnRejectFriendRequestListener() {
+                            @Override
+                            public void onRejectFriendRequest(boolean validate, int errorcode) {
 
-                });
+                                if (validate) {
+                                    // "친구 추가"
+                                    if (list_friend.size() > pos) {
+                                        FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel) list_friend.get(pos);
+                                        friendFindItemViewModel.friend_state = 0;
+
+                                        // 리사이클 데이터 변경에따른 ui 업데이트
+                                        friendFindAdapter.notifyDataSetChanged();
+                                    }
+                                } else {
+                                    if (errorcode == 500) {
+
+                                        // 해당 요청이 상대방이 취소해서 해당 메시지가 유효하지 않는 경우 : 500
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
+
+                                        alertDlg_error.textView.setText(FriendFindActivity.this.getResources().getString(R.string.dialog_error_code_500));
+
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                            // "친구 추가"
+                                            if (list_friend.size() > pos) {
+                                                FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel) list_friend.get(pos);
+                                                friendFindItemViewModel.friend_state = 0;
+
+                                                // 리사이클 데이터 변경에따른 ui 업데이트
+                                                friendFindAdapter.notifyDataSetChanged();
+                                            }
+
+                                            alertDlg_error.dismiss();
+                                        });
+                                    }
+                                }
+                            }
+                        });
+
+                        NetServiceManager.getinstance().rejectFriendRequest(NetServiceManager.getinstance().getUserProfile().uid, userProfile.uid);
+
+                        alertDlg.dismiss();
+
+                    });
+                }
 
             }
             break;

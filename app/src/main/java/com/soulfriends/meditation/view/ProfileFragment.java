@@ -1041,167 +1041,182 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             case R.id.iv_request_answerbt:
             case R.id.ic_close_answer_req:
             {
-                // 감정 공유 응답
-                // 팝업을 띄운다.
-                UserProfile userProfile = (UserProfile)obj;
-                AlertAlreadyPopup alertDlg = new AlertAlreadyPopup(getActivity(), getActivity(), AlertAlreadyPopup.Dlg_Type.emotion, userProfile.nickname);
-                alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                alertDlg.show();
+                if(!NetServiceManager.getinstance().checkSendEmotionFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid)) {
 
-                // 수락
-                alertDlg.iv_ok.setOnClickListener(v -> {
+                    // 500
+                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    alertDlg_error.show();
 
-                    NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
-                        @Override
-                        public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo,int errorcode) {
+                    alertDlg_error.textView.setText(getActivity().getResources().getString(R.string.dialog_error_firebase));
 
-                            if(validate)
-                            {
-                                //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
-                                // 상태 변경 
-                                
-                                // "감정 상태" 변경
+                    alertDlg_error.iv_ok.setOnClickListener(v -> {
 
-                                NetServiceManager.getinstance().addForceLocalEmotionFriends(userProfile.uid);
+                        FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel) list_friend.get(pos);
+                        friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 +
 
-                                FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
-                                friendEmotionItemViewModel.emotion_state = 0;  // 감정공유 +
+                        // 리사이클 데이터 변경에따른 ui 업데이트
+                        friendEmotionAdapter.notifyDataSetChanged();
 
-                                // 리사이클 데이터 변경에따른 ui 업데이트
-                                friendEmotionAdapter.notifyDataSetChanged();
-                            }
-                            else
-                            {
-                                if(errorcode == 403)
-                                {
-                                    // 현재 친구 상태가 아닌 경우. : 403
-                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
-                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                                    alertDlg_error.show();
-
-                                    FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
-                                    String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_403);
-                                    alertDlg_error.textView.setText(str_msg);
-
-                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
-
-                                        // 제거
-                                        if(list_friend.size() > pos) {
-                                            list_friend.remove(pos);
-                                            friendEmotionAdapter.notifyItemRemoved(pos);
-                                            friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
-                                        }
-
-
-                                        alertDlg_error.dismiss();
-                                    });
-                                }
-                                else if(errorcode == 500)
-                                {
-                                    // 500
-                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
-                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                                    alertDlg_error.show();
-
-                                    alertDlg_error.textView.setText(getActivity().getResources().getString(R.string.dialog_error_firebase));
-
-                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
-
-                                        FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
-                                        friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 +
-
-                                        // 리사이클 데이터 변경에따른 ui 업데이트
-                                        friendEmotionAdapter.notifyDataSetChanged();
-
-                                        // 리스트에서 삭제
-                                        alertDlg_error.dismiss();
-                                    });
-                                }
-                            }
-                        }
+                        // 리스트에서 삭제
+                        alertDlg_error.dismiss();
                     });
 
-                    NetServiceManager.getinstance().AcceptEmotionFriend(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
+                }
+                else
+                {
+                    // 감정 공유 응답
+                    // 팝업을 띄운다.
+                    UserProfile userProfile = (UserProfile) obj;
+                    AlertAlreadyPopup alertDlg = new AlertAlreadyPopup(getActivity(), getActivity(), AlertAlreadyPopup.Dlg_Type.emotion, userProfile.nickname);
+                    alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    alertDlg.show();
+
+                    // 수락
+                    alertDlg.iv_ok.setOnClickListener(v -> {
+
+                        NetServiceManager.getinstance().setOnAcceptFriendRequestListener(new NetServiceManager.OnAcceptFriendRequestListener() {
+                            @Override
+                            public void onAcceptFriendRequest(boolean validate, MeditationFriend friendinfo, int errorcode) {
+
+                                if (validate) {
+                                    //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
+                                    // 상태 변경
+
+                                    // "감정 상태" 변경
+
+                                    NetServiceManager.getinstance().addForceLocalEmotionFriends(userProfile.uid);
+
+                                    FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel) list_friend.get(pos);
 
 
-                    alertDlg.dismiss();
+                                    friendEmotionItemViewModel.emotion_state = 0;  // 감정공유 +
 
-                });
+                                    // 리사이클 데이터 변경에따른 ui 업데이트
+                                    friendEmotionAdapter.notifyDataSetChanged();
+                                } else {
+                                    if (errorcode == 403) {
+                                        // 현재 친구 상태가 아닌 경우. : 403
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
 
-                // 거절
-                alertDlg.iv_no.setOnClickListener(v -> {
+                                        FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel) list_friend.get(pos);
+                                        String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_403);
+                                        alertDlg_error.textView.setText(str_msg);
 
-                    NetServiceManager.getinstance().setOnRejectFriendRequestListener(new NetServiceManager.OnRejectFriendRequestListener() {
-                        @Override
-                        public void onRejectFriendRequest(boolean validate,int errorcode) {
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
 
-                            if(validate)
-                            {
-                                //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
-                                // 상태 변경
+                                            // 제거
+                                            if (list_friend.size() > pos) {
+                                                list_friend.remove(pos);
+                                                friendEmotionAdapter.notifyItemRemoved(pos);
+                                                friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                                            }
 
-                                // "감정공유 요청" 변경
-                                FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
-                                friendEmotionItemViewModel.emotion_state = 2;
 
-                                // 리사이클 데이터 변경에따른 ui 업데이트
-                                friendEmotionAdapter.notifyDataSetChanged();
-                            }
-                            else
-                            {
-                                if(errorcode == 403)
-                                {
-                                    // 현재 친구 상태가 아닌 경우. : 403
-                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
-                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                                    alertDlg_error.show();
+                                            alertDlg_error.dismiss();
+                                        });
+                                    } else if (errorcode == 500) {
+                                        // 500
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
 
-                                    FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
-                                    String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_403);
-                                    alertDlg_error.textView.setText(str_msg);
+                                        alertDlg_error.textView.setText(getActivity().getResources().getString(R.string.dialog_error_firebase));
 
-                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
 
-                                        // 삭제처리를 해야 한다.
-                                        if(list_friend.size() > pos) {
-                                            list_friend.remove(pos);
-                                            friendEmotionAdapter.notifyItemRemoved(pos);
-                                            friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
-                                        }
+                                            FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel) list_friend.get(pos);
+                                            friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 +
 
-                                        alertDlg_error.dismiss();
-                                    });
+                                            // 리사이클 데이터 변경에따른 ui 업데이트
+                                            friendEmotionAdapter.notifyDataSetChanged();
+
+                                            // 리스트에서 삭제
+                                            alertDlg_error.dismiss();
+                                        });
+                                    }
                                 }
-                                else if(errorcode == 500)
-                                {
-                                    // 500
-                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
-                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                                    alertDlg_error.show();
-
-                                    alertDlg_error.textView.setText(getActivity().getResources().getString(R.string.dialog_error_firebase));
-
-                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
-
-                                        FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
-                                        friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 +
-
-                                        // 리사이클 데이터 변경에따른 ui 업데이트
-                                        friendEmotionAdapter.notifyDataSetChanged();
-
-                                        alertDlg_error.dismiss();
-                                    });
-                                }
                             }
-                        }
+                        });
+
+                        NetServiceManager.getinstance().AcceptEmotionFriend(NetServiceManager.getinstance().getUserProfile().uid, userProfile.uid);
+
+
+                        alertDlg.dismiss();
+
                     });
 
-                    NetServiceManager.getinstance().rejectEmotionFriendRequest(NetServiceManager.getinstance().getUserProfile().uid,  userProfile.uid);
+                    // 거절
+                    alertDlg.iv_no.setOnClickListener(v -> {
+
+                        NetServiceManager.getinstance().setOnRejectFriendRequestListener(new NetServiceManager.OnRejectFriendRequestListener() {
+                            @Override
+                            public void onRejectFriendRequest(boolean validate, int errorcode) {
+
+                                if (validate) {
+                                    //Toast.makeText(this, "수락" ,Toast.LENGTH_SHORT).show();
+                                    // 상태 변경
+
+                                    // "감정공유 요청" 변경
+                                    FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel) list_friend.get(pos);
+                                    friendEmotionItemViewModel.emotion_state = 2;
+
+                                    // 리사이클 데이터 변경에따른 ui 업데이트
+                                    friendEmotionAdapter.notifyDataSetChanged();
+                                } else {
+                                    if (errorcode == 403) {
+                                        // 현재 친구 상태가 아닌 경우. : 403
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
+
+                                        FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel) list_friend.get(pos);
+                                        String str_msg = friendEmotionItemViewModel.userProfile.nickname + getActivity().getResources().getString(R.string.dialog_error_code_403);
+                                        alertDlg_error.textView.setText(str_msg);
+
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                            // 삭제처리를 해야 한다.
+                                            if (list_friend.size() > pos) {
+                                                list_friend.remove(pos);
+                                                friendEmotionAdapter.notifyItemRemoved(pos);
+                                                friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                                            }
+
+                                            alertDlg_error.dismiss();
+                                        });
+                                    } else if (errorcode == 500) {
+                                        // 500
+                                        ErrorCodePopup alertDlg_error = new ErrorCodePopup(getActivity(), getActivity());
+                                        alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                        alertDlg_error.show();
+
+                                        alertDlg_error.textView.setText(getActivity().getResources().getString(R.string.dialog_error_firebase));
+
+                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                            FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel) list_friend.get(pos);
+                                            friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 +
+
+                                            // 리사이클 데이터 변경에따른 ui 업데이트
+                                            friendEmotionAdapter.notifyDataSetChanged();
+
+                                            alertDlg_error.dismiss();
+                                        });
+                                    }
+                                }
+                            }
+                        });
+
+                        NetServiceManager.getinstance().rejectEmotionFriendRequest(NetServiceManager.getinstance().getUserProfile().uid, userProfile.uid);
 
 
-                    alertDlg.dismiss();
+                        alertDlg.dismiss();
 
-                });
+                    });
+                }
 
             }
             break;
