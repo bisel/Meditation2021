@@ -6260,6 +6260,21 @@ public class NetServiceManager {
     {
         UtilAPI.showNetConnectionDlg();
     }
+
+    // 친구 요청에 대한 유효여부 판다.
+    public boolean checkSendFriendRequest(String sendUserID, String recvUserID){
+        if(mfbDBRef.child("alarms").child(friendRequestString).child(recvUserID).child(sendUserID) == null){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkSendEmotionFriendRequest(String sendUserID, String recvUserID){
+        if(mfbDBRef.child("alarms").child(emotionFriendRequestString).child(recvUserID).child(sendUserID) == null){
+            return false;
+        }
+        return true;
+    }
 }
 
 
