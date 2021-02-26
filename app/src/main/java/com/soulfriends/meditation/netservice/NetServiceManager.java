@@ -3786,7 +3786,6 @@ public class NetServiceManager {
     //    2) 상대방이 친구 관계를 끊어버린 경우.
     //
     //- 이미 상대방이 감정친구 요청을 한경우 -> 401
-    //        - 이미 감정친구를 삭제하고 일반친구로 변경한 경우 -> 402
     //        - 친구 삭제 한경우. -> 403
     public void sendEmotionFriendRequest(String sendUserID, String recvUserID){
         String curDate = getCurDate("yyyyMMddHHmmss");
@@ -3805,61 +3804,36 @@ public class NetServiceManager {
         }
 
        // 친구 삭제 한경우. -> 403
-//        if(mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID) == null){
-//            mSendFriendRequestListener.onSendFriendRequest(false,403);
-//            return;
-//        }
+        if(mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID) == null){
+            mSendFriendRequestListener.onSendFriendRequest(false,403);
+            return;
+        }
 
-
-        //  이미 감정친구를 삭제하고 일반친구로 변경한 경우 -> 402
-        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+        // 정상적인 경우
+        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).setValue(newSenderEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    MeditationFriend frineddata = snapshot.getValue(MeditationFriend.class);
-                    if(frineddata.friendtype.equals("normal")){
-                        //2. 이미 상대방이 감정친구를 삭제하고 일반 친구로 변경된 경우
-                        mSendFriendRequestListener.onSendFriendRequest(false,402);
-                    }else{
-                        // 정상적인 경우
-                        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).setValue(newSenderEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).setValue(newRecverEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        mEmotionFriendsRequestList.add(recvUserID); // 내가 보낸 요청 성공했기 때문에 local mFriendsRequestList update진행
+            public void onSuccess(Void aVoid) {
+                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).setValue(newRecverEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        mEmotionFriendsRequestList.add(recvUserID); // 내가 보낸 요청 성공했기 때문에 local mFriendsRequestList update진행
 
-                                        // 요청 성공
-                                        mSendFriendRequestListener  .onSendFriendRequest(true,0);
-                                    }
-                                })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                mSendFriendRequestListener.onSendFriendRequest(false,0);
-                                            }
-                                        });
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                mSendFriendRequestListener.onSendFriendRequest(false,0);
-                            }
-                        });
+                        // 요청 성공
+                        mSendFriendRequestListener  .onSendFriendRequest(true,0);
                     }
-                }else{
-                    // 아예 값이 없음-> 3. 상대방이 자신을 친구에서 삭제한 경우
-                    mSendFriendRequestListener.onSendFriendRequest(false,403);
-                    return;
-                }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mSendFriendRequestListener.onSendFriendRequest(false,0);
+                    }
+                });
             }
-
+        })
+        .addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onFailure(@NonNull Exception e) {
                 mSendFriendRequestListener.onSendFriendRequest(false,0);
-                return;
             }
         });
     }
