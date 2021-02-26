@@ -466,6 +466,11 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
 
                                     alertDlg_error.iv_ok.setOnClickListener(v -> {
 
+                                        FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
+                                        friendFindItemViewModel.friend_state = 0;  // 친구추가로 변경
+
+                                        // 리사이클 데이터 변경에따른 ui 업데이트
+                                        friendFindAdapter.notifyDataSetChanged();
                                         alertDlg_error.dismiss();
                                     });
                                 }
@@ -502,15 +507,6 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                             {
                                 if(errorcode == 500){
 
-                                    // "친구 추가"
-                                    if(list_friend.size() > pos) {
-                                        FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
-                                        friendFindItemViewModel.friend_state = 0;
-
-                                        // 리사이클 데이터 변경에따른 ui 업데이트
-                                        friendFindAdapter.notifyDataSetChanged();
-                                    }
-
                                     // 해당 요청이 상대방이 취소해서 해당 메시지가 유효하지 않는 경우 : 500
                                     ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
                                     alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -519,6 +515,15 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                                     alertDlg_error.textView.setText(FriendFindActivity.this.getResources().getString(R.string.dialog_error_code_500));
 
                                     alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        // "친구 추가"
+                                        if(list_friend.size() > pos) {
+                                            FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
+                                            friendFindItemViewModel.friend_state = 0;
+
+                                            // 리사이클 데이터 변경에따른 ui 업데이트
+                                            friendFindAdapter.notifyDataSetChanged();
+                                        }
 
                                         alertDlg_error.dismiss();
                                     });

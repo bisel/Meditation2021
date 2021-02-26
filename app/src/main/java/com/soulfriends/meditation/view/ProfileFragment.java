@@ -836,6 +836,11 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                                     alertDlg_error.iv_ok.setOnClickListener(v -> {
 
+                                        //
+                                        friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 +
+
+                                        // 리사이클 데이터 변경에따른 ui 업데이트
+                                        friendEmotionAdapter.notifyDataSetChanged();
 
 
                                         alertDlg_error.dismiss();
@@ -853,7 +858,12 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                                     alertDlg_error.iv_ok.setOnClickListener(v -> {
 
-
+                                        // 제거
+                                        if(list_friend.size() > pos) {
+                                            list_friend.remove(pos);
+                                            friendEmotionAdapter.notifyItemRemoved(pos);
+                                            friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                                        }
 
                                         alertDlg_error.dismiss();
                                     });
@@ -1007,12 +1017,11 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                                        alertDlg_error.iv_ok.setOnClickListener(v -> {
 
                                            // - 이미 감정친구를 삭제하고 일반친구로 변경한 경우 -> 402
+//
+                                           friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 +
 
-                                           // 제거
-                                           list_friend.remove(pos);
-                                           friendEmotionAdapter.notifyItemRemoved(pos);
-                                           friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
-
+                                           // 리사이클 데이터 변경에따른 ui 업데이트
+                                           friendEmotionAdapter.notifyDataSetChanged();
 
                                            alertDlg_error.dismiss();
                                        });
@@ -1030,9 +1039,11 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                                            //  - 친구 삭제 한경우. -> 403
                                            // 제거
-                                           list_friend.remove(pos);
-                                           friendEmotionAdapter.notifyItemRemoved(pos);
-                                           friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                                           if(list_friend.size() > pos) {
+                                               list_friend.remove(pos);
+                                               friendEmotionAdapter.notifyItemRemoved(pos);
+                                               friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                                           }
 
 
                                            alertDlg_error.dismiss();
@@ -1097,9 +1108,11 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                                     alertDlg_error.iv_ok.setOnClickListener(v -> {
 
                                         // 제거
-                                        list_friend.remove(pos);
-                                        friendEmotionAdapter.notifyItemRemoved(pos);
-                                        friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                                        if(list_friend.size() > pos) {
+                                            list_friend.remove(pos);
+                                            friendEmotionAdapter.notifyItemRemoved(pos);
+                                            friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                                        }
 
 
                                         alertDlg_error.dismiss();
@@ -1115,6 +1128,12 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                                     alertDlg_error.textView.setText(getActivity().getResources().getString(R.string.dialog_error_firebase));
 
                                     alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                        friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 +
+
+                                        // 리사이클 데이터 변경에따른 ui 업데이트
+                                        friendEmotionAdapter.notifyDataSetChanged();
 
                                         // 리스트에서 삭제
                                         alertDlg_error.dismiss();
@@ -1166,9 +1185,11 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                                     alertDlg_error.iv_ok.setOnClickListener(v -> {
 
                                         // 삭제처리를 해야 한다.
-                                        list_friend.remove(pos);
-                                        friendEmotionAdapter.notifyItemRemoved(pos);
-                                        friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                                        if(list_friend.size() > pos) {
+                                            list_friend.remove(pos);
+                                            friendEmotionAdapter.notifyItemRemoved(pos);
+                                            friendEmotionAdapter.notifyItemRangeChanged(pos, list_friend.size());
+                                        }
 
                                         alertDlg_error.dismiss();
                                     });
@@ -1183,6 +1204,12 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
                                     alertDlg_error.textView.setText(getActivity().getResources().getString(R.string.dialog_error_firebase));
 
                                     alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        FriendEmotionItemViewModel friendEmotionItemViewModel = (FriendEmotionItemViewModel)list_friend.get(pos);
+                                        friendEmotionItemViewModel.emotion_state = 2;  // 감정공유 +
+
+                                        // 리사이클 데이터 변경에따른 ui 업데이트
+                                        friendEmotionAdapter.notifyDataSetChanged();
 
                                         alertDlg_error.dismiss();
                                     });
