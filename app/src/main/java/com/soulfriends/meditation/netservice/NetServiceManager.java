@@ -3797,45 +3797,105 @@ public class NetServiceManager {
         newRecverEntity.releasedate = getCurDate("yyyyMMddHHmmss");  // yymmddhhmmss
         newRecverEntity.requesttype = "recv";
 
-        // 1. 상대방의 이미 감정 요청이 있는 경우
-        if(mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID) == null){
-            mSendFriendRequestListener.onSendFriendRequest(false,401);
-            return;
-        }
-
-       // 친구 삭제 한경우. -> 403
-        if(mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID) == null){
-            mSendFriendRequestListener.onSendFriendRequest(false,403);
-            return;
-        }
-
-        // 정상적인 경우
-        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).setValue(newSenderEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
+        // 수정된 코드
+        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).setValue(newRecverEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        mEmotionFriendsRequestList.add(recvUserID); // 내가 보낸 요청 성공했기 때문에 local mFriendsRequestList update진행
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).setValue(newSenderEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).setValue(newRecverEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                mEmotionFriendsRequestList.add(recvUserID); // 내가 보낸 요청 성공했기 때문에 local mFriendsRequestList update진행
 
-                        // 요청 성공
-                        mSendFriendRequestListener  .onSendFriendRequest(true,0);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        mSendFriendRequestListener.onSendFriendRequest(false,0);
-                    }
-                });
+                                                // 요청 성공
+                                                mSendFriendRequestListener.onSendFriendRequest(true,0);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                mSendFriendRequestListener.onSendFriendRequest(false,0);
+                                            }
+                                        });
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        mSendFriendRequestListener.onSendFriendRequest(false,0);
+                                    }
+                                });
+                            }else{
+                                // 친구 삭제 한경우. -> 403
+                                mSendFriendRequestListener.onSendFriendRequest(false,403);
+                            }
+                        }
+                        // firebase 가 읽기 권한이 없을때.
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            mSendFriendRequestListener.onSendFriendRequest(false,-1);
+                        }
+                    });
+
+                }else{
+                    // 1. 상대방의 이미 감정 요청이 있는 경우
+                    mSendFriendRequestListener.onSendFriendRequest(false,401);
+                }
             }
-        })
-        .addOnFailureListener(new OnFailureListener() {
+            // firebase 가 읽기 권한이 없을때.
             @Override
-            public void onFailure(@NonNull Exception e) {
-                mSendFriendRequestListener.onSendFriendRequest(false,0);
+            public void onCancelled(@NonNull DatabaseError error) {
+                mSendFriendRequestListener.onSendFriendRequest(false,-1);
             }
         });
+
+// 이전 코드
+//        // 1. 상대방의 이미 감정 요청이 있는 경우
+//        if(mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID) == null){
+//            mSendFriendRequestListener.onSendFriendRequest(false,401);
+//            return;
+//        }
+
+       // 친구 삭제 한경우. -> 403
+//        if(mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID) == null){
+//            mSendFriendRequestListener.onSendFriendRequest(false,403);
+//            return;
+//        }
+
+        // 정상적인 경우
+//        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).setValue(newSenderEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).setValue(newRecverEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        mEmotionFriendsRequestList.add(recvUserID); // 내가 보낸 요청 성공했기 때문에 local mFriendsRequestList update진행
+//
+//                        // 요청 성공
+//                        mSendFriendRequestListener  .onSendFriendRequest(true,0);
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        mSendFriendRequestListener.onSendFriendRequest(false,0);
+//                    }
+//                });
+//            }
+//        })
+//        .addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                mSendFriendRequestListener.onSendFriendRequest(false,0);
+//            }
+//        });
     }
 
     // 3. 친구 요청 취소 (자신이 취소한것임 그래서 알림 불필요)
@@ -3919,36 +3979,51 @@ public class NetServiceManager {
         mEntity.releasedate = getCurDate("yyyyMMddHHmmss");
 
         // 해당 요청이 정상 서버상에서 정상적인지 파악한 후 Friend 처리 해야 한다.
-        if(mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID) == null){
-            mAcceptFriendRequestListener.onAcceptFriendRequest(false,null, 500);
-            return;
-        }
-
-        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).setValue(mEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).setValue(mEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).setValue(mEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).setValue(mEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        // 일반 알람을 보내야 한다.
-                                        MeditationAlarm sendentity = new MeditationAlarm();
-                                        sendentity.alarmtype = 1;
-                                        sendentity.alarmsubtype = 1;
-                                        sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
-                                        sendentity.uid = sendUserID;
-                                        DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
-                                        sendentity.alarmkey = normalnoti.getKey();
-                                        normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                // 요청 성공
-                                                mAcceptFriendRequestListener.onAcceptFriendRequest(true,mEntity,0);
+                                                mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        // 일반 알람을 보내야 한다.
+                                                        MeditationAlarm sendentity = new MeditationAlarm();
+                                                        sendentity.alarmtype = 1;
+                                                        sendentity.alarmsubtype = 1;
+                                                        sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
+                                                        sendentity.uid = sendUserID;
+                                                        DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
+                                                        sendentity.alarmkey = normalnoti.getKey();
+                                                        normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                // 요청 성공
+                                                                mAcceptFriendRequestListener.onAcceptFriendRequest(true,mEntity,0);
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
+                                                            }
+                                                        });
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
+                                                    }
+                                                });
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -3957,7 +4032,6 @@ public class NetServiceManager {
                                                 mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
                                             }
                                         });
-
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -3966,7 +4040,7 @@ public class NetServiceManager {
                                         mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
                                     }
                                 });
-                            }
+                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -3974,70 +4048,100 @@ public class NetServiceManager {
                                 mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
                             }
                         });
+
+                    }else{
+                        mAcceptFriendRequestListener.onAcceptFriendRequest(false,null, 500);
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
-                    }
-                });
-            }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
-            }
+                }
+                // firebase 가 읽기 권한이 없을때.
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    mAcceptFriendRequestListener.onAcceptFriendRequest(false,null, -1);
+                }
         });
     }
     
     
-    // 6. 감정 친구 수락 (수락후 요청들 지워야 한다.) -> 2021.02.09 -> 2021.02.23
+    // 6. 감정 친구 수락 (수락후 요청들 지워야 한다.) -> 2021.02.09 -> 2021.02.23 -> 2021.03.03
     public void AcceptEmotionFriend(String  sendUserID, String recvUserID){
-        // 1. 현재 친구 상태가 아닌 경우. : 403
-        if(mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID) == null){
-            mSendFriendRequestListener.onSendFriendRequest(false,403);
-            return;
-        }
+
+//        if(mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID) == null){
+//            mSendFriendRequestListener.onSendFriendRequest(false,403);
+//            return;
+//        }
 
         // 2. 해당 친구 요청이 유효한 상태인지 확인 유효 하지 않은 상태 : 500
-        if(mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID) == null){
-            mAcceptFriendRequestListener.onAcceptFriendRequest(true,null,500);
-            return;
-        }
+//        if(mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID) == null){
+//            mAcceptFriendRequestListener.onAcceptFriendRequest(true,null,500);
+//            return;
+//        }
+
 
         Map<String, Object> updateMap = new HashMap<>();
         updateMap.put("friendtype", "emotion");
 
-        // 기존값을 덮어서 저장한다.
-        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+        // 1. 현재 친구 상태가 아닌 경우. : 403
+        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // 2. 해당 친구 요청이 유효한 상태인지 확인 유효 하지 않은 상태 : 500
+                    mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                // 기존값을 덮어서 저장한다.
+                                mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        // 요청 성공
-                                        // 일반 알람을 보내야 한다.
-                                        MeditationAlarm sendentity = new MeditationAlarm();
-                                        sendentity.alarmtype = 1;
-                                        sendentity.alarmsubtype = 3;
-                                        sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
-                                        sendentity.uid = sendUserID;
-
-                                        DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
-                                        sendentity.alarmkey = normalnoti.getKey();
-                                        normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).updateChildren(updateMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                // 요청 성공
-                                                mAcceptFriendRequestListener.onAcceptFriendRequest(true,null,0);
+                                                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                // 요청 성공
+                                                                // 일반 알람을 보내야 한다.
+                                                                MeditationAlarm sendentity = new MeditationAlarm();
+                                                                sendentity.alarmtype = 1;
+                                                                sendentity.alarmsubtype = 3;
+                                                                sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
+                                                                sendentity.uid = sendUserID;
+
+                                                                DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
+                                                                sendentity.alarmkey = normalnoti.getKey();
+                                                                normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        // 요청 성공
+                                                                        mAcceptFriendRequestListener.onAcceptFriendRequest(true,null,0);
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
+                                                                    }
+                                                                });
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
+                                                            }
+                                                        });
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
+                                                    }
+                                                });
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -4046,7 +4150,7 @@ public class NetServiceManager {
                                                 mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
                                             }
                                         });
-                                    }
+                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
@@ -4054,28 +4158,25 @@ public class NetServiceManager {
                                         mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
                                     }
                                 });
+                            }else{
+                                mAcceptFriendRequestListener.onAcceptFriendRequest(true,null,500);
                             }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
-                    }
-                });
-             }
-        })
-        .addOnFailureListener(new OnFailureListener() {
+                        }
+                        // firebase 가 읽기 권한이 없을때.
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            mSendFriendRequestListener.onSendFriendRequest(false,-1);
+                        }
+                    });
+                }else{
+
+                    mSendFriendRequestListener.onSendFriendRequest(false,403);
+                }
+            }
+            // firebase 가 읽기 권한이 없을때.
             @Override
-            public void onFailure(@NonNull Exception e) {
-                mAcceptFriendRequestListener.onAcceptFriendRequest(false,null,0);
+            public void onCancelled(@NonNull DatabaseError error) {
+                mSendFriendRequestListener.onSendFriendRequest(false,-1);
             }
         });
     }
@@ -4092,62 +4193,77 @@ public class NetServiceManager {
     public void rejectFriendRequest(String  sendUserID, String recvUserID)
     {
         // 2021.02.23
-        if(mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID) == null){
-            mRejectFriendRequestListener.onRejectFriendRequest(false,500);
-        }
+//        if(mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID) == null){
+//            mRejectFriendRequestListener.onRejectFriendRequest(false,500);
+//        }
 
-        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // 일반 알람을 보내야 한다.
-                                MeditationAlarm sendentity = new MeditationAlarm();
-                                sendentity.alarmtype = 1;
-                                sendentity.alarmsubtype = 2;
-                                sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
-                                sendentity.uid = sendUserID;
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // 일반 알람을 보내야 한다.
+                                            MeditationAlarm sendentity = new MeditationAlarm();
+                                            sendentity.alarmtype = 1;
+                                            sendentity.alarmsubtype = 2;
+                                            sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
+                                            sendentity.uid = sendUserID;
 
-                                DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
-                                sendentity.alarmkey = normalnoti.getKey();
-                                normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        mRejectFriendRequestListener.onRejectFriendRequest(true,0);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        mRejectFriendRequestListener.onRejectFriendRequest(true,0);
-                                    }
-                                });
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                mRejectFriendRequestListener.onRejectFriendRequest(true,0);
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        mRejectFriendRequestListener.onRejectFriendRequest(false,0);
-                    }
-                });
+                                            DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
+                                            sendentity.alarmkey = normalnoti.getKey();
+                                            normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    mRejectFriendRequestListener.onRejectFriendRequest(true,0);
+                                                }
+                                            })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            mRejectFriendRequestListener.onRejectFriendRequest(true,0);
+                                                        }
+                                                    });
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            mRejectFriendRequestListener.onRejectFriendRequest(true,0);
+                                        }
+                                    });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    mRejectFriendRequestListener.onRejectFriendRequest(false,0);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mRejectFriendRequestListener.onRejectFriendRequest(false,0);
+                        }
+                    });
+                }else{
+                    mRejectFriendRequestListener.onRejectFriendRequest(false,500);
+                }
             }
-        })
-        .addOnFailureListener(new OnFailureListener() {
+            // firebase 가 읽기 권한이 없을때.
             @Override
-            public void onFailure(@NonNull Exception e) {
-                mRejectFriendRequestListener.onRejectFriendRequest(false,0);
+            public void onCancelled(@NonNull DatabaseError error) {
+                mRejectFriendRequestListener.onRejectFriendRequest(false,-1);
             }
         });
     }
@@ -4157,58 +4273,86 @@ public class NetServiceManager {
     {
         // 친구인 상태가 안닌 경우 -> 2021.02.23
         // 현재 친구 상태가 아닌 경우. : 403
-        if(mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID) == null){
-            mRejectFriendRequestListener.onRejectFriendRequest(false,403);
-            return;
-        }
+//        if(mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID) == null){
+//            mRejectFriendRequestListener.onRejectFriendRequest(false,403);
+//            return;
+//        }
 
         // 2021.02.23. 해당 감정 요청 유효 확인 -> 2021.02.23
-        if(mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID) == null){
-            mRejectFriendRequestListener.onRejectFriendRequest(false,500);
-        }
+//        if(mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID) == null){
+//            mRejectFriendRequestListener.onRejectFriendRequest(false,500);
+//        }
 
-        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // 일반 알람을 보내야 한다.
-                        MeditationAlarm sendentity = new MeditationAlarm();
-                        sendentity.alarmtype = 1;
-                        sendentity.alarmsubtype = 4;
-                        sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
-                        sendentity.uid = sendUserID;
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                // 일반 알람을 보내야 한다.
+                                                MeditationAlarm sendentity = new MeditationAlarm();
+                                                sendentity.alarmtype = 1;
+                                                sendentity.alarmsubtype = 4;
+                                                sendentity.releasedate = getCurDate("yyyyMMddHHmmss");
+                                                sendentity.uid = sendUserID;
 
-                        DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
-                        sendentity.alarmkey = normalnoti.getKey();
+                                                DatabaseReference normalnoti = mfbDBRef.child(alarmInfoString).child(normalalarmString).child(recvUserID).push();
+                                                sendentity.alarmkey = normalnoti.getKey();
 
-                        normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                mRejectFriendRequestListener.onRejectFriendRequest(true,0);
+                                                normalnoti.setValue(sendentity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        mRejectFriendRequestListener.onRejectFriendRequest(true,0);
+                                                    }
+                                                })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                mRejectFriendRequestListener.onRejectFriendRequest(true,0);
+                                                            }
+                                                        });
+                                            }
+                                        })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        mRejectFriendRequestListener.onRejectFriendRequest(false,0);
+                                                    }
+                                                });
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        mRejectFriendRequestListener.onRejectFriendRequest(false,0);
+                                    }
+                                });
+                            }else{
+                                mRejectFriendRequestListener.onRejectFriendRequest(false,500);
                             }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                mRejectFriendRequestListener.onRejectFriendRequest(true,0);
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        mRejectFriendRequestListener.onRejectFriendRequest(false,0);
-                    }
-                });
+                        }
+                        // firebase 가 읽기 권한이 없을때.
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            mRejectFriendRequestListener.onRejectFriendRequest(false,-1);
+                        }
+                    });
+                }else{
+                    mRejectFriendRequestListener.onRejectFriendRequest(false,403);
+                }
             }
-        })
-        .addOnFailureListener(new OnFailureListener() {
+            // firebase 가 읽기 권한이 없을때.
             @Override
-            public void onFailure(@NonNull Exception e) {
-                mRejectFriendRequestListener.onRejectFriendRequest(false,0);
+            public void onCancelled(@NonNull DatabaseError error) {
+                mRejectFriendRequestListener.onRejectFriendRequest(false,-1);
             }
         });
     }
@@ -4223,35 +4367,45 @@ public class NetServiceManager {
     }
 
     public void removeFriend(String  sendUserID, String recvUserID){
-        // 1. 상대방이 이미 친구를 삭제 한 경우, 2021.02.23 , errcode 403
-        if(mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID) == null){
-            mRemoveFriendListener.onRemoveFriend(false,403);
-            return;
-        }
 
-        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+        // 1. 상대방이 이미 친구를 삭제 한 경우, 2021.02.23 , errcode 403
+        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        removeDetialFriends(recvUserID); //해당 유저를 local에서 지워버림
-                        // 요청 성공
-                        mRemoveFriendListener.onRemoveFriend(true,0);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        mRemoveFriendListener.onRemoveFriend(false,0);
-                    }
-                });
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            mfbDBRef.child(friendsString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    removeDetialFriends(recvUserID); //해당 유저를 local에서 지워버림
+                                    // 요청 성공
+                                    mRemoveFriendListener.onRemoveFriend(true,0);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    mRemoveFriendListener.onRemoveFriend(false,0);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mRemoveFriendListener.onRemoveFriend(false,0);
+                        }
+                    });
+                }else{
+                    mRemoveFriendListener.onRemoveFriend(false,403);
+                }
             }
-        })
-        .addOnFailureListener(new OnFailureListener() {
+            // firebase 가 읽기 권한이 없을때.
             @Override
-            public void onFailure(@NonNull Exception e) {
-                mRemoveFriendListener.onRemoveFriend(false,0);
+            public void onCancelled(@NonNull DatabaseError error) {
+                mRemoveFriendListener.onRemoveFriend(false,-1);
             }
         });
     }
@@ -4259,11 +4413,6 @@ public class NetServiceManager {
 
     // 10. 감정 친구 삭제, 친구 자체의 값만 업데이트 한다.
     public void removeEmotionFriend(String  sendUserID, String recvUserID){
-        // 1. 상대방이 이미 친구를 삭제 한 경우, 2021.02.23 , errcode 403
-        if(mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID) == null){
-            mRemoveFriendListener.onRemoveFriend(false,403);
-            return;
-        }
 
         mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -4304,16 +4453,14 @@ public class NetServiceManager {
                         });
                     }
                 }else{
-                    // 아예 값이 없음-> 3. 상대방이 자신을 친구에서 삭제한 경우
+                    // 1. 상대방이 이미 친구를 삭제 한 경우, 2021.02.23 , errcode 403
                     mRemoveFriendListener.onRemoveFriend(false,403);
-                    return;
                 }
             }
-
+            // firebase 가 읽기 권한이 없을때.
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                mRemoveFriendListener.onRemoveFriend(false,0);
-                return;
+                mRemoveFriendListener.onRemoveFriend(false,-1);
             }
         });
     }
@@ -6254,7 +6401,15 @@ public class NetServiceManager {
     // alarm open처리 , new 처리 : 이후 처리
     //=================================================
 
-    // 빌링 처리
+    // 친구 요청에 대해서 유효여부를 listner를 통해서 확인
+    private OnCheckSendFriendRequest mCheckSendFriendListener = null;
+    public interface OnCheckSendFriendRequest {
+        void onCheckSendFriendRequest(boolean validate,int errocode);
+    }
+    public void setOnCheckSendFriendRequest(OnCheckSendFriendRequest listenfunc){
+        mCheckSendFriendListener = listenfunc;
+    }
+
 
     public void showNetConnectionDlg()
     {
@@ -6262,18 +6417,49 @@ public class NetServiceManager {
     }
 
     // 친구 요청에 대한 유효여부 판다.
-    public boolean checkSendFriendRequest(String sendUserID, String recvUserID){
-        if(mfbDBRef.child("alarms").child(friendRequestString).child(recvUserID).child(sendUserID) == null){
-            return false;
-        }
-        return true;
+    public void checkSendFriendRequest(String sendUserID, String recvUserID){
+        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    mCheckSendFriendListener.onCheckSendFriendRequest(true,0);
+                }else{
+                    mCheckSendFriendListener.onCheckSendFriendRequest(false,0);
+                }
+            }
+            // firebase 가 읽기 권한이 없을때.
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                mCheckSendFriendListener.onCheckSendFriendRequest(false,-1);
+            }
+        });
     }
 
-    public boolean checkSendEmotionFriendRequest(String sendUserID, String recvUserID){
-        if(mfbDBRef.child("alarms").child(emotionFriendRequestString).child(recvUserID).child(sendUserID) == null){
-            return false;
-        }
-        return true;
+    // 감정 친구 요청에 대해서 유효여부를 listner를 통해서 확인
+    private OnCheckSendEmotionFriendRequest mCheckSendEmotionFriendListener = null;
+    public interface OnCheckSendEmotionFriendRequest {
+        void onCheckSendEmotionFriendRequest(boolean validate,int errocode);
+    }
+    public void setOnCheckSendEmotionFriendRequest(OnCheckSendEmotionFriendRequest listenfunc){
+        mCheckSendEmotionFriendListener = listenfunc;
+    }
+
+    public void checkSendEmotionFriendRequest(String sendUserID, String recvUserID){
+        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    mCheckSendEmotionFriendListener.onCheckSendEmotionFriendRequest(true,0);
+                }else{
+                    mCheckSendEmotionFriendListener.onCheckSendEmotionFriendRequest(false,0);
+                }
+            }
+            // firebase 가 읽기 권한이 없을때.
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                mCheckSendEmotionFriendListener.onCheckSendEmotionFriendRequest(false,-1);
+            }
+        });
     }
 }
 
