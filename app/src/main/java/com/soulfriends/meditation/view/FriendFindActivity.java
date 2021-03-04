@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.FriendFindBinding;
 import com.soulfriends.meditation.dlg.AlertAlreadyPopup;
-import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
 import com.soulfriends.meditation.dlg.AlertLineOnePopup;
 import com.soulfriends.meditation.dlg.ErrorCodePopup;
 import com.soulfriends.meditation.model.MeditationFriend;
@@ -29,7 +28,6 @@ import com.soulfriends.meditation.util.ResultListener;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.friend.FriendFindAdapter;
 import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
-import com.soulfriends.meditation.view.player.MeditationAudioManager;
 import com.soulfriends.meditation.viewmodel.FriendFindViewModel;
 import com.soulfriends.meditation.viewmodel.FriendFindViewModelFactory;
 
@@ -73,9 +71,6 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
         // 검색 버튼 눌렀을때만 하기 때문에
         // 초기에 리스트를 보여줄 필요가 없다.
         //ItemList();
-
-
-        
 
         friendFindAdapter = new FriendFindAdapter(list_friend, this, this);
 

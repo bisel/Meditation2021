@@ -3734,51 +3734,68 @@ public class NetServiceManager {
         newRecverEntity.releasedate = getCurDate("yyyyMMddHHmmss");  // yymmddhhmmss
         newRecverEntity.requesttype = "recv";
 
+        // 0. 이미 친구 리스트 인경우 처리 2021.03.04
         // 1. 상대방이 자신에게 친구요청이 있는지 먼저 확인해야 한다.
         //    없으면 정상처리, 있으면 error코드 전달.
         // find friend request
-        mfbDBRef.child("alarms").child("friendrequest").child(recvUserID).child(sendUserID).addListenerForSingleValueEvent(new ValueEventListener(){
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    // 이미 친구 요청 있음 -> 2021.02.23
-                    mSendFriendRequestListener.onSendFriendRequest(false,400);
-                }
-                else{
-                   // 정상 친구 요청 실시
-                    mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).setValue(newSenderEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).setValue(newRecverEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    mFriendsRequestList.add(recvUserID); // 내가 보낸 요청 성공했기 때문에 local mFriendsRequestList update진행
 
-                                    // 요청 성공
-                                    mSendFriendRequestListener.onSendFriendRequest(true,0);
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    mSendFriendRequestListener.onSendFriendRequest(false,0);
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            mSendFriendRequestListener.onSendFriendRequest(false,0);
-                        }
-                    });
-                }
-            }
+        mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                 if (snapshot.exists()) {
+                     // 이미 친구가 되어 버린 상태 -> 2021.03.04 // 이미 친구가 되어버릴수 있으므로 410에 처리 필요
+                     mSendFriendRequestListener.onSendFriendRequest(false,410);
+                 }
+                 else{
+                     mfbDBRef.child("alarms").child("friendrequest").child(recvUserID).child(sendUserID).addListenerForSingleValueEvent(new ValueEventListener(){
+                         @Override
+                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                             if (snapshot.exists()) {
+                                 // 이미 친구 요청 있음 -> 2021.02.23
+                                 mSendFriendRequestListener.onSendFriendRequest(false,400);
+                             }
+                             else{
+                                 // 정상 친구 요청 실시
+                                 mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).setValue(newSenderEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                     @Override
+                                     public void onSuccess(Void aVoid) {
+                                         mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).setValue(newRecverEntity).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                             @Override
+                                             public void onSuccess(Void aVoid) {
+                                                 mFriendsRequestList.add(recvUserID); // 내가 보낸 요청 성공했기 때문에 local mFriendsRequestList update진행
+
+                                                 // 요청 성공
+                                                 mSendFriendRequestListener.onSendFriendRequest(true,0);
+                                             }
+                                         })
+                                         .addOnFailureListener(new OnFailureListener() {
+                                             @Override
+                                             public void onFailure(@NonNull Exception e) {
+                                                 mSendFriendRequestListener.onSendFriendRequest(false,0);
+                                             }
+                                         });
+                                     }
+                                 })
+                                 .addOnFailureListener(new OnFailureListener() {
+                                     @Override
+                                     public void onFailure(@NonNull Exception e) {
+                                         mSendFriendRequestListener.onSendFriendRequest(false,0);
+                                     }
+                                 });
+                             }
+                         }
+                         @Override
+                         public void onCancelled(@NonNull DatabaseError error) {
+                             mSendFriendRequestListener.onSendFriendRequest(false,0);
+                         }
+                     });
+                 }
+             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 mSendFriendRequestListener.onSendFriendRequest(false,0);
             }
-        });
+         });
     }
 
     // 2. friend 감정 친구 요청, 일반 친구 요청과 동일한 callback함수 사용
@@ -3802,6 +3819,9 @@ public class NetServiceManager {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    // 1. 상대방의 이미 감정 요청이 있는 경우
+                    mSendFriendRequestListener.onSendFriendRequest(false,401);
+                }else{
                     mfbDBRef.child(friendsString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -3818,12 +3838,12 @@ public class NetServiceManager {
                                                 mSendFriendRequestListener.onSendFriendRequest(true,0);
                                             }
                                         })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                mSendFriendRequestListener.onSendFriendRequest(false,0);
-                                            }
-                                        });
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        mSendFriendRequestListener.onSendFriendRequest(false,0);
+                                                    }
+                                                });
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -3844,9 +3864,6 @@ public class NetServiceManager {
                         }
                     });
 
-                }else{
-                    // 1. 상대방의 이미 감정 요청이 있는 경우
-                    mSendFriendRequestListener.onSendFriendRequest(false,401);
                 }
             }
             // firebase 가 읽기 권한이 없을때.
