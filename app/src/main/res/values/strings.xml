@@ -397,6 +397,7 @@
     <string name="dialog_error_firebase">서버 오류가 발생했습니다.</string>
     <string name="dialog_error_code_400">님이 이미 친구 요청했습니다.</string>
     <string name="dialog_error_code_500">해당 요청이 유효하지 않습니다.</string>
+    <string name="dialog_error_code_410">님이 이미 친구가 되었습니다.</string>
 
     <!-- 콘텐츠 정보 dialog  -->
     <string name="dialog_contents_info_title">정보</string> <!--alert_info 300, 238-->

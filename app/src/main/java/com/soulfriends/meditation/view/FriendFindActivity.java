@@ -263,7 +263,31 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
                                     });
 
 
-                                }else{
+                                }
+                                else if(errorCode == 410)
+                                {
+                                    // 이미 친구가 되어 버린 상태 -> 2021.03.04 // 이미 친구가 되어버릴수 있으므로 410에 처리 필요
+
+                                    ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
+                                    alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    alertDlg_error.show();
+
+                                    FriendFindItemViewModel friendFindItemViewModel = (FriendFindItemViewModel)list_friend.get(pos);
+                                    String str_msg = friendFindItemViewModel.userProfile.nickname + FriendFindActivity.this.getResources().getString(R.string.dialog_error_code_410);
+                                    alertDlg_error.textView.setText(str_msg);
+
+                                    alertDlg_error.iv_ok.setOnClickListener(v -> {
+
+                                        friendFindItemViewModel.friend_state = 1;  // 친구
+
+                                        // 리사이클 데이터 변경에따른 ui 업데이트
+                                        friendFindAdapter.notifyDataSetChanged();
+
+
+                                        alertDlg_error.dismiss();
+                                    });
+                                }
+                                else{
                                     // FireBase의 서버 오류
                                     ErrorCodePopup alertDlg_error = new ErrorCodePopup(FriendFindActivity.this, FriendFindActivity.this);
                                     alertDlg_error.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
