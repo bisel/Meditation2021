@@ -1043,9 +1043,9 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
             case R.id.ic_close_answer_req:
             {
 
-                NetServiceManager.getinstance().setOnCheckSendFriendRequest(new NetServiceManager.OnCheckSendFriendRequest() {
+                NetServiceManager.getinstance().setOnCheckSendEmotionFriendRequest(new NetServiceManager.OnCheckSendEmotionFriendRequest() {
                     @Override
-                    public void onCheckSendFriendRequest(boolean validate,int errocode) {
+                    public void onCheckSendEmotionFriendRequest(boolean validate,int errocode) {
 
                         if(validate)
                         {
