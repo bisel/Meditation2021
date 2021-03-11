@@ -30,7 +30,6 @@ import com.soulfriends.meditation.util.ItemClickListenerExt;
 import com.soulfriends.meditation.util.UtilAPI;
 import com.soulfriends.meditation.view.friend.FriendEmotionAdapter;
 import com.soulfriends.meditation.view.friend.FriendEmotionItemViewModel;
-import com.soulfriends.meditation.view.friend.FriendFindItemViewModel;
 import com.soulfriends.meditation.view.nested.ParentItemViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentBottomItemExtViewModel;
 import com.soulfriends.meditation.view.nestedext.ParentItemExtAdapter;
@@ -915,7 +914,7 @@ public class ProfileFragment extends Fragment implements ItemClickListener, Item
 
                     NetServiceManager.getinstance().setOnCancelFriendRequestListener(new NetServiceManager.OnCancelFriendRequestListener() {
                         @Override
-                        public void onCancelFriendRequest(boolean validate) {
+                        public void onCancelFriendRequest(boolean validate,int errcode) {
 
                             if(validate)
                             {

@@ -3918,65 +3918,107 @@ public class NetServiceManager {
     // 3. 친구 요청 취소 (자신이 취소한것임 그래서 알림 불필요)
     private OnCancelFriendRequestListener mCancelFriendRequestListener = null;
     public interface OnCancelFriendRequestListener {
-        void onCancelFriendRequest(boolean validate);
+        void onCancelFriendRequest(boolean validate,int errocode);
     }
     public void setOnCancelFriendRequestListener(OnCancelFriendRequestListener listenfunc){
         mCancelFriendRequestListener = listenfunc;
     }
 
     public void cancelFriendRequest(String  sendUserID, String recvUserID){
-        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+        // 2021.03.11 상대방이 친구가 되었는지 거절했는지 검증하고 처리 되어야 한다.
+        // 요청값이 있는지 여부 확인해서 처리해야 함.
+        mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // 요청 성공
-                        mCancelFriendRequestListener.onCancelFriendRequest(true);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        mCancelFriendRequestListener.onCancelFriendRequest(false);
-                    }
-                });
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    mfbDBRef.child(alarmInfoString).child(friendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            mfbDBRef.child(alarmInfoString).child(friendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // 요청 성공
+                                    mCancelFriendRequestListener.onCancelFriendRequest(true,0);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    mCancelFriendRequestListener.onCancelFriendRequest(false,0);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            mCancelFriendRequestListener.onCancelFriendRequest(false,0);
+                        }
+                    });
+
+                }else{
+                    // 상대방의 요청이 이미 사라진 경우 (친구를 수락하거나, 거절한경우, 해당 필드를 없에면 된다.
+                    // 2021.03.11
+                    mCancelFriendRequestListener.onCancelFriendRequest(false,401);
+
+                }
             }
-        })
-        .addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                mCancelFriendRequestListener.onCancelFriendRequest(false);
+            public void onCancelled(@NonNull DatabaseError error) {
+                mCancelFriendRequestListener.onCancelFriendRequest(false,0);
             }
         });
+
+
     }
 
     // 4. 감정 친구 요청 취소, 친구 요청 취소와 동일한 callback 함수 사용 (자신이 취소한것임 그래서 알림 불필요)
     public void cancelEmotionFriendRequest(String  sendUserID, String recvUserID){
-        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+        // 2021.03.11 상대방이 김정친구가 되었는지 거절했는지 검증하고 처리 되어야 한다. -> 2021.03.11 // 요청값이 있는지 여부 확인해서 처리해야 함.
+        mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                 if (snapshot.exists()) {
+                     mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(sendUserID).child(recvUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                         @Override
+                         public void onSuccess(Void aVoid) {
+                             mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                 @Override
+                                 public void onSuccess(Void aVoid) {
+                                     // 요청 성공
+                                     mCancelFriendRequestListener.onCancelFriendRequest(true,0);
+                                 }
+                             })
+                             .addOnFailureListener(new OnFailureListener() {
+                                 @Override
+                                 public void onFailure(@NonNull Exception e) {
+                                     mCancelFriendRequestListener.onCancelFriendRequest(false,0);
+                                 }
+                             });
+                         }
+                     })
+                     .addOnFailureListener(new OnFailureListener() {
+                         @Override
+                         public void onFailure(@NonNull Exception e) {
+                             mCancelFriendRequestListener.onCancelFriendRequest(false,0);
+                         }
+                     });
+
+                 }else{
+                     // 상대방의 요청이 이미 사라진 경우 (친구를 수락하거나, 거절한경우, 해당 필드를 없에면 된다.
+                     // 2021.03.11
+                     mCancelFriendRequestListener.onCancelFriendRequest(false,401);
+                 }
+             }
             @Override
-            public void onSuccess(Void aVoid) {
-                mfbDBRef.child(alarmInfoString).child(emotionFriendRequestString).child(recvUserID).child(sendUserID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // 요청 성공
-                        mCancelFriendRequestListener.onCancelFriendRequest(true);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        mCancelFriendRequestListener.onCancelFriendRequest(false);
-                    }
-                });
+            public void onCancelled(@NonNull DatabaseError error) {
+                mCancelFriendRequestListener.onCancelFriendRequest(false,0);
             }
-        })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                mCancelFriendRequestListener.onCancelFriendRequest(false);
-            }
-        });
+         });
+
+
+
+
     }
 
     // 5. 친구 수락(수락후 요청들 지워야 한다.)
