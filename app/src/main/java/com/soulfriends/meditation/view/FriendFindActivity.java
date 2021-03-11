@@ -409,7 +409,7 @@ public class FriendFindActivity extends BaseActivity implements ResultListener, 
 
                     NetServiceManager.getinstance().setOnCancelFriendRequestListener(new NetServiceManager.OnCancelFriendRequestListener() {
                         @Override
-                        public void onCancelFriendRequest(boolean validate) {
+                        public void onCancelFriendRequest(boolean validate,int errocode) {
 
                             if(validate)
                             {

@@ -718,7 +718,8 @@ public class NetServiceManager {
 
 
          // 4. 고정리스트 콘텐츠들
-         List<String> inputContentsCategorysIds = asList("63","67","55","56","57","58","59","60","61","62","64","65");
+         //List<String> inputContentsCategorysIds = asList("63","67","55","56","57","58","59","60","61","62","64","65");
+        List<String> inputContentsCategorysIds = asList("51","52","53","54","63","67","55","56","57","58","59","60","61","62","64","65");
          procContentsCategorys(inputContentsCategorysIds,newShowCategorys);
 
          return newShowCategorys;
@@ -760,7 +761,7 @@ public class NetServiceManager {
             newShowCategorys.showcategorys.add(recentPlayCategory);
         }
 
-        List<String> inputContentsCategorysIds = asList("55","56","57","58","60");
+        List<String> inputContentsCategorysIds = asList("51","52","55","56","57","58");
         procContentsCategorys(inputContentsCategorysIds,newShowCategorys);
 
         return newShowCategorys;
@@ -804,7 +805,7 @@ public class NetServiceManager {
             newShowCategorys.showcategorys.add(recentPlayCategory);
         }
 
-        List<String> inputContentsCategorysIds = asList("63","67","62","64");
+        List<String> inputContentsCategorysIds = asList("54","63","67","64");
         procContentsCategorys(inputContentsCategorysIds,newShowCategorys);
         return newShowCategorys;
     }
@@ -845,7 +846,7 @@ public class NetServiceManager {
             newShowCategorys.showcategorys.add(recentPlayCategory);
         }
 
-        List<String> inputContentsCategorysIds = asList("59","61","65");
+        List<String> inputContentsCategorysIds = asList("53","59","65");
         procContentsCategorys(inputContentsCategorysIds,newShowCategorys);
         return newShowCategorys;
     }
@@ -3744,6 +3745,7 @@ public class NetServiceManager {
              public void onDataChange(@NonNull DataSnapshot snapshot) {
                  if (snapshot.exists()) {
                      // 이미 친구가 되어 버린 상태 -> 2021.03.04 // 이미 친구가 되어버릴수 있으므로 410에 처리 필요
+                     // 서로 친구 요청, 나는 친구 친구요청 삭제, 다시 친구 요청시에, 이미 다른 사람이 친구 수락을 했으면, 친구 상태가 되어버린다.
                      mSendFriendRequestListener.onSendFriendRequest(false,410);
                  }
                  else{

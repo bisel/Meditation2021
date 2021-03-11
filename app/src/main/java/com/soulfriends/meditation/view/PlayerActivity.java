@@ -1016,7 +1016,7 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
                 // 친구 취소
                 NetServiceManager.getinstance().setOnCancelFriendRequestListener(new NetServiceManager.OnCancelFriendRequestListener() {
                     @Override
-                    public void onCancelFriendRequest(boolean validate) {
+                    public void onCancelFriendRequest(boolean validate,int errocode) {
 
                         if (validate) {
                             alertDlg_ok = new AlertLineOneOkPopup(PlayerActivity.this, PlayerActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_cancelled);
