@@ -59,6 +59,8 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
     private boolean isKeyboardShowing = false;
     private int keypadBaseHeight = 0;
 
+    private int gender = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -369,7 +371,7 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
                 Check_EditFocus_OnButton();
 
 
-                userProfile.gender = 1;
+                gender = 1;
 
                 bSuccess_gender = true;
 
@@ -387,7 +389,7 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
 
                 Check_EditFocus_OnButton();
 
-                userProfile.gender = 2;
+                gender = 2;
 
                 bSuccess_gender = true;
 
@@ -419,6 +421,8 @@ public class UserinfoActivity extends PhotoBaseActivity implements ResultListene
                 UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
                 userProfile.uid = mAuth.getCurrentUser().getUid();
                 userProfile.nickname = viewModel.getNickname().getValue();
+
+                userProfile.gender = gender;
 
                 //userProfile.profileimg = mCurrentPhotoPath;
                 userProfile.profileIntro = viewModel.getIntroduction().getValue();

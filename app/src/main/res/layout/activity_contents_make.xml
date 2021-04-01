@@ -213,7 +213,9 @@
                 android:lineSpacingExtra="6sp"
                 android:text="@string/contentsmake_context"
                 android:textColor="@color/white"
+
                 android:textSize="14sp"
+                android:maxLines="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

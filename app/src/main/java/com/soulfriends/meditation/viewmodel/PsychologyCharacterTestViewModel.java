@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -95,8 +96,8 @@ public class PsychologyCharacterTestViewModel extends ViewModel {
         this.listener.onSuccess(view.getId(), "Success!");
     }
 
-    public Button getView() {
-        return (Button)view;
+    public ImageView getView() {
+        return (ImageView)view;
     }
 
     private View view;

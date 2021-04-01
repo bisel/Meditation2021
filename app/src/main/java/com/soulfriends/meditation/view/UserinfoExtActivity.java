@@ -59,6 +59,8 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
     private boolean isKeyboardShowing = false;
     private int keypadBaseHeight = 0;
 
+    private int gender = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +109,7 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
 
             String image_uri = userProfile.profileimg_uri;
 
-            UtilAPI.load_image_circle(this, image_uri, binding.ivPicture);
+            UtilAPI.load_image_circle_imme(this, image_uri, binding.ivPicture);
         }
         // 프로필 사진
         //UtilAPI.load_image_circle(this, userProfile.profileimg, binding.ivPicture);
@@ -116,6 +118,7 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
         viewModel.setNickname(userProfile.nickname);
         
         // 성별
+        gender = userProfile.gender;
         SetGender(userProfile.gender);
 
         // 자기 소개
@@ -315,9 +318,10 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
                 Check_EditFocus_OnButton();
                 //--------------------------------------------------
                 // 회원 정보 수정에서는 성별 변경하지 않도록 한다.
+                // 2021_0330 수정 가능하도록 변경
                 //--------------------------------------------------
-                if(false) {
-                    userProfile.gender = 1;
+                if(true) {
+                    gender = 1;
 
                     bSuccess_gender = true;
 
@@ -336,9 +340,10 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
                 Check_EditFocus_OnButton();
                 //--------------------------------------------------
                 // 회원 정보 수정에서는 성별 변경하지 않도록 한다.
+                // 2021_0330 수정 가능하도록 변경
                 //--------------------------------------------------
-                if(false) {
-                    userProfile.gender = 2;
+                if(true) {
+                    gender = 2;
 
                     bSuccess_gender = true;
 
@@ -389,6 +394,8 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
                     str_intro = viewModel.getIntroduction().getValue();
                 }
 
+
+
                 String str_photopath = null;
                 if(bChange_ProfileImage)
                 {
@@ -406,7 +413,14 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
                     }
                 });
 
+
                 // 유저 이미지를 보내야만 되는 이벤트 오는거 같음 - dlsmdla
+
+
+                // 2021_0330 성별 입력값 넣도록 해야 한다.
+                // gender
+
+                userProfile.gender = gender;
                 NetServiceManager.getinstance().sendValNewProfileExt(userProfile, str_nickname, str_intro, str_photopath);
             }
             break;
@@ -469,10 +483,15 @@ public class UserinfoExtActivity extends PhotoBaseActivity implements ResultList
                 }
 
                 if(keyboardOpen) {
+
+                    binding.editNickname.clearFocus();
+                    binding.editIntrodution.clearFocus();
+
                     if(binding.editNickname.isFocused()) {
                     }
                     else
                     {
+
                         binding.editIntrodution.setFocusable(true);
                     }
                 }

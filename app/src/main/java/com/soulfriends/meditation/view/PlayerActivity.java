@@ -31,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import com.soulfriends.meditation.R;
 import com.soulfriends.meditation.databinding.PlayerBinding;
 import com.soulfriends.meditation.dlg.AlertLineOneOkPopup;
+import com.soulfriends.meditation.dlg.AlertLineOnePopup;
 import com.soulfriends.meditation.dlg.MenuModifyPopup;
 import com.soulfriends.meditation.dlg.MenuReportPopup;
 import com.soulfriends.meditation.model.MeditationContents;
@@ -984,30 +985,42 @@ public class PlayerActivity extends BaseActivity implements RecvEventListener, R
             break;
             case 1: {
                 // 친구 삭제
-                NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
-                    @Override
-                    public void onRemoveFriend(boolean validate,int errorcode) {
 
-                        if (validate) {
-                            alertDlg_ok = new AlertLineOneOkPopup(PlayerActivity.this, PlayerActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_cancelled);
+                // 친구
+                // "친구 삭제하시겠습니까?" 팝업 띄운다.
+                // 예 -> 서버에 요청보내고 나서 처리 해야함. 삭제
+                AlertLineOnePopup alertDlg = new AlertLineOnePopup(this, this, AlertLineOnePopup.Dlg_Type.friend_delete);
+                alertDlg.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                alertDlg.show();
 
-                            alertDlg_ok.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                            alertDlg_ok.show();
-                            alertDlg_ok.iv_ok.setOnClickListener(v -> {
+                alertDlg.iv_ok.setOnClickListener(v -> {
+                    NetServiceManager.getinstance().setOnRemoveFriendListener(new NetServiceManager.OnRemoveFriendListener() {
+                        @Override
+                        public void onRemoveFriend(boolean validate,int errorcode) {
 
+                            if (validate) {
                                 SendFriendState();
-                                alertDlg_ok.dismiss();
-                            });
+                                alertDlg.dismiss();
+//                                alertDlg_ok = new AlertLineOneOkPopup(PlayerActivity.this, PlayerActivity.this, AlertLineOneOkPopup.Dlg_Type.friend_cancelled);
+//
+//                                alertDlg_ok.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//                                alertDlg_ok.show();
+//                                alertDlg_ok.iv_ok.setOnClickListener(v -> {
 
-                           // UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);
-                            //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            // 1. 상대방이 이미 친구를 삭제 한 경우, 2021.02.23 , errcode 403
+                                  //  SendFriendState();
+                                    //alertDlg_ok.dismiss();
+                                //});
+
+                                // UtilAPI.setImage(PlayerActivity.this, binding.ivFriendState, R.drawable.player_addfriend);
+                                //Toast.makeText(PlayerActivity.this, "친구가 취소되었습니다.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // 1. 상대방이 이미 친구를 삭제 한 경우, 2021.02.23 , errcode 403
+                            }
                         }
-                    }
-                });
+                    });
 
-                NetServiceManager.getinstance().removeFriend(NetServiceManager.getinstance().getUserProfile().uid, UtilAPI.s_userProfile_friend.uid);
+                    NetServiceManager.getinstance().removeFriend(NetServiceManager.getinstance().getUserProfile().uid, UtilAPI.s_userProfile_friend.uid);
+                });
 
             }
             break;

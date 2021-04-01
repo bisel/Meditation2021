@@ -102,6 +102,19 @@ public class PsychologyListActivity extends BaseActivity implements ResultListen
                         //UtilAPI.setImage(this, binding.ivVoiceButton, R.drawable.test_voice_com);
                     }
                 }
+                else
+                {
+                    if(voice_result_time.length() == 0)
+                    {
+                        // 최초 처음
+                        bVoiceEvent = true;
+
+                        //UtilAPI.setImage(this, binding.ivVoiceButton, R.drawable.test_voice);
+
+                        binding.layoutVoiceEnable.setVisibility(View.VISIBLE);
+                    }
+
+                }
             }
             else
             {

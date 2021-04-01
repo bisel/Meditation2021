@@ -175,6 +175,8 @@ public class UtilAPI {
 
     public static UserProfile s_userProfile_friend;
 
+    public static UserProfile s_userProfile_target;
+
     public static void ClearActivity_Temp() {
         s_activity_TempList.clear();
     }
@@ -265,6 +267,25 @@ public class UtilAPI {
     }
 
 
+    public static void load_image_circle_imme(Context context, String str_uri, de.hdodenhof.circleimageview.CircleImageView view)
+    {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(str_uri);
+        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                int xxx = 0;
+                showImage_circle_imme(context, uri, view);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+
+                int xx = 0;
+            }
+        });
+    }
+
     public static void load_image_circle(Context context, String str_uri, de.hdodenhof.circleimageview.CircleImageView view)
     {
         StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(str_uri);
@@ -286,12 +307,26 @@ public class UtilAPI {
 
     //static Map<String, String> statesList = new HashMap<>();
 
+    public static void showImage_circle_imme(Context context, Uri uri, de.hdodenhof.circleimageview.CircleImageView view)
+    {
+        //statesList.put(uri.toString(),uri.toString());
+        Activity activity = (Activity) context;
+        if (activity.isFinishing())
+            return;
+
+        Glide.with(view.getContext()).load(uri).
+                placeholder(R.drawable.register_profile_img).
+                diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(view);
+
+    }
+
     public static void showImage_circle(Context context, Uri uri, de.hdodenhof.circleimageview.CircleImageView view)
     {
         //statesList.put(uri.toString(),uri.toString());
         Activity activity = (Activity) context;
         if (activity.isFinishing())
             return;
+
         Glide.with(view.getContext()).load(uri).
                 placeholder(R.drawable.register_profile_img).
                 transition(withCrossFade()).
@@ -585,6 +620,8 @@ public class UtilAPI {
         ClearActivity_Temp();
 
         s_userProfile_friend = null;
+
+        s_userProfile_target = null;
 
         s_MeditationContents_temp = null;
 

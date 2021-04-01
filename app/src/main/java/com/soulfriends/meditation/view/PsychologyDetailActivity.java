@@ -50,7 +50,10 @@ public class PsychologyDetailActivity extends BaseActivity implements ResultList
         UtilAPI.SetNetConnection_Activity(this);
 
         // 이모티콘 타입에 따라 결과 보이도록 한다.
-        UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
+        //UserProfile userProfile = NetServiceManager.getinstance().getUserProfile();
+
+        UserProfile userProfile = UtilAPI.s_userProfile_target;
+
         //int emotiontype = 1;//NetServiceManager.getinstance().getUserProfile().emotiontype;
         int emotiontype = userProfile.emotiontype;
         ResultData resultData = NetServiceManager.getinstance().getResultData(emotiontype);
@@ -83,9 +86,9 @@ public class PsychologyDetailActivity extends BaseActivity implements ResultList
             case R.id.ic_close: {
                 // 닫기 버튼
 
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                this.overridePendingTransition(0, 0);
+//                Intent intent = new Intent(this, MainActivity.class);
+//                startActivity(intent);
+//                this.overridePendingTransition(0, 0);
                 finish();
             }
             break;
@@ -100,9 +103,9 @@ public class PsychologyDetailActivity extends BaseActivity implements ResultList
     @Override // 2020.12.20 , Close 막기
     public void onBackPressed() {
 
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        this.overridePendingTransition(0, 0);
+        //Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
+        //this.overridePendingTransition(0, 0);
         finish();
     }
 }

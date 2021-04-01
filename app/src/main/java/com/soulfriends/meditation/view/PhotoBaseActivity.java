@@ -3,6 +3,7 @@ package com.soulfriends.meditation.view;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.soulfriends.meditation.util.MediaUri;
 
 import java.io.File;
 import java.io.IOException;
@@ -259,7 +261,7 @@ public class PhotoBaseActivity extends BaseActivity {
 
                     //Toast.makeText(this, "오디오 파일 선택", Toast.LENGTH_SHORT).show();
                     Uri uri = data.getData();
-                    String path = getPath(uri);
+                    String path = getPath_Audio(uri);
                     String name = getName(uri);
                     String uriId = getUriId(uri);
 
@@ -396,6 +398,28 @@ public class PhotoBaseActivity extends BaseActivity {
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
+
+    // 실제 경로 찾기
+    public String getPath_Audio(Uri uri) {
+
+        return MediaUri.getRealPath(getApplicationContext(), uri);
+
+
+//        Cursor cursor = getContentResolver().query(uri, null, null, null);
+//        cursor.moveToNext();
+//
+//        String path = cursor.getString(cursor.getColumnIndex("_data"));
+//        cursor.close();
+//        return path;
+
+//        String[] projection = {MediaStore.Audio.Media.DATA};
+//        Cursor cursor = managedQuery(uri, projection, null, null, null);
+//        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+//        cursor.moveToFirst();
+//        return cursor.getString(column_index);
+    }
+
+
 
     public String getFileName(Uri uri) {
         if (uri == null) return null;

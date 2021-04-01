@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -416,44 +417,56 @@ public class ContentsEditActivity extends PhotoBaseActivity implements ResultLis
         // 오디오 파일 선택해서 파일 시간 표시하기
         Upload_Audio_filePath = path_file;
 
+        String filename = path_file.substring(path_file.lastIndexOf("/")+1);
+
+        int pos = filename .lastIndexOf(".");
+        filename = filename.substring(0, pos);
+
+        if(filename.length() > 15) {
+            filename = filename.substring(0, 15);
+            filename += "...";
+        }
+        binding.tvContext.setText(filename);
+        binding.tvContext.setEllipsize(TextUtils.TruncateAt.END);
+
         bCheck_Audio = true;
 
         bChange_Audio = true;
 
-        // 시간단위
-        String hour = String.valueOf(duration / (60 * 60 * 1000));
+//        // 시간단위
+//        String hour = String.valueOf(duration / (60 * 60 * 1000));
+//
+//        // 분단위
+//        long getMin = duration - (duration / (60 * 60 * 1000));
+//
+//        int int_hour_loc = Integer.parseInt(hour);
+//        long getMin_loc = getMin - (int_hour_loc * 60 * 60 * 1000);
+//        String min = String.valueOf(getMin_loc / (60 * 1000)); // 몫
+//
+//        // 초단위
+//        String second = String.valueOf((getMin % (60 * 1000)) / 1000); // 나머지
+//
+//        // 밀리세컨드 단위
+//        String millis = String.valueOf((getMin % (60 * 1000)) % 1000); // 몫
+//
+//        // 시간이 한자리면 0을 붙인다
+//        if (hour.length() == 1) {
+//            hour = "0" + hour;
+//        }
+//
+//        // 분이 한자리면 0을 붙인다
+//        if (min.length() == 1) {
+//            min = "0" + min;
+//        }
+//
+//        // 초가 한자리면 0을 붙인다
+//        if (second.length() == 1) {
+//            second = "0" + second;
+//        }
+//
+//        String strTime = (min + ":" + second);
 
-        // 분단위
-        long getMin = duration - (duration / (60 * 60 * 1000));
-
-        int int_hour_loc = Integer.parseInt(hour);
-        long getMin_loc = getMin - (int_hour_loc * 60 * 60 * 1000);
-        String min = String.valueOf(getMin_loc / (60 * 1000)); // 몫
-
-        // 초단위
-        String second = String.valueOf((getMin % (60 * 1000)) / 1000); // 나머지
-
-        // 밀리세컨드 단위
-        String millis = String.valueOf((getMin % (60 * 1000)) % 1000); // 몫
-
-        // 시간이 한자리면 0을 붙인다
-        if (hour.length() == 1) {
-            hour = "0" + hour;
-        }
-
-        // 분이 한자리면 0을 붙인다
-        if (min.length() == 1) {
-            min = "0" + min;
-        }
-
-        // 초가 한자리면 0을 붙인다
-        if (second.length() == 1) {
-            second = "0" + second;
-        }
-
-        String strTime = (min + ":" + second);
-
-        binding.tvContext.setText(strTime);
+        //binding.tvContext.setText(strTime);
     }
 
 

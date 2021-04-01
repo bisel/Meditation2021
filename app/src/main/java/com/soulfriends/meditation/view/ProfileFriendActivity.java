@@ -92,7 +92,7 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
 
             String image_uri = userProfile.profileimg_uri;
 
-            UtilAPI.load_image_circle(this, image_uri, binding.ivPicture);
+            UtilAPI.load_image_circle_imme(this, image_uri, binding.ivPicture);
         }
 
         //----------------------------------------------
@@ -426,24 +426,28 @@ public class ProfileFriendActivity extends PhotoBaseActivity implements ResultLi
 
                 // 심리 결과 화면으로 이동 처리
 
+                UtilAPI.s_userProfile_target = userProfile;
+
                 Intent intent = new Intent();
                 intent.setClass(this, PsychologyDetailActivity.class);
                 this.startActivity(intent);
 
-                UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
-                this.finish();
+                //UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+                //this.finish();
             }
             break;
             case R.id.lay_character: {
 
                 // 성격 결과 화면으로 이동 처리
 
+                UtilAPI.s_userProfile_target = userProfile;
+
                 Intent intent = new Intent();
                 intent.setClass(this, PsychologyCharacterDetailActivity.class);
                 this.startActivity(intent);
 
-                UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
-                this.finish();
+                //UtilAPI.s_StrMainFragment = UtilAPI.FRAGMENT_PROFILE;
+                //this.finish();
             }
             break;
 

@@ -371,30 +371,43 @@ public class MainActivity extends BaseActivity implements ResultListener {
                 changeFragment(homeFragment, "HomeFragment");
 
                 bottomNavigationView.setSelectedItemId(R.id.home_fragment);
+
+                // 2021.0330 친구 프로필 이동처리
+                UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
             }
             break;
             case UtilAPI.FRAGMENT_SLEEP: {
                 changeFragment(sleepFragment, "SleepFragment");
 
                 bottomNavigationView.setSelectedItemId(R.id.sleep_fragment);
+
+                // 2021.0330 친구 프로필 이동처리
+                UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
             }
             break;
             case UtilAPI.FRAGMENT_MEDITATION: {
                 changeFragment(meditationFragment, "MeditationFragment");
 
                 bottomNavigationView.setSelectedItemId(R.id.meditation_fragment);
+
+                // 2021.0330 친구 프로필 이동처리
+                UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
             }
             break;
             case UtilAPI.FRAGMENT_MUSIC: {
                 changeFragment(musicFragment, "MusicFragment");
 
                 bottomNavigationView.setSelectedItemId(R.id.music_fragment);
+
+                // 2021.0330 친구 프로필 이동처리
+                UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
             }
             break;
             case UtilAPI.FRAGMENT_PROFILE: {
 
                 //소셜 메뉴 누르면 기본 콘텐츠가 보이게 수정
-                UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
+                // 2021.0330 친구 프로필 이동처리
+                //UtilAPI.s_StrFragment_Profile_Tab = UtilAPI.TAB_CONTENTS;
 
                 changeFragment(profileFragment, "ProfileFragment");
 

@@ -34,7 +34,7 @@ public class PsychologyCharacterTestActivity extends BaseActivity implements Res
 
     private boolean bCheckResult = false;
     private int select_item_id = -1;
-    private Button viewPrev = null;
+    private ImageView viewPrev = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,7 +223,7 @@ public class PsychologyCharacterTestActivity extends BaseActivity implements Res
         // 이전 버튼 비선택 처리
         if (select_item_id != -1) {
 
-            UtilAPI.setButtonBackground(this, viewPrev, R.drawable.test_chrctr_answerbg);
+            UtilAPI.setImage(this, viewPrev, R.drawable.test_chrctr_answerbg);
         }
 
         // 이미 선택된 것이 있다면
@@ -231,7 +231,7 @@ public class PsychologyCharacterTestActivity extends BaseActivity implements Res
         if(_select_item_id > 0)
         {
             // 기존에 선택된 아이템이 있다.
-            Button view_layout = null;
+            ImageView view_layout = null;
 
             switch (_select_item_id) {
                 case 1: {
@@ -253,7 +253,7 @@ public class PsychologyCharacterTestActivity extends BaseActivity implements Res
                 viewPrev = view_layout;
 
                 // 선택 표시
-                UtilAPI.setButtonBackground(this, view_layout, R.drawable.test_chrctr_answerbg_selected);
+                UtilAPI.setImage(this, view_layout, R.drawable.test_chrctr_answerbg_selected);
 
                 // 결과 버튼 활성화
                 UtilAPI.setButtonBackground(this, binding.btResult, R.drawable.btn_colcr_able);
@@ -316,14 +316,14 @@ public class PsychologyCharacterTestActivity extends BaseActivity implements Res
         // 이전 버튼 비선택 처리
         if (select_item_id != -1) {
 
-            UtilAPI.setButtonBackground(this, viewPrev, R.drawable.test_chrctr_answerbg);
+            UtilAPI.setImage(this, viewPrev, R.drawable.test_chrctr_answerbg);
         }
 
         // 첫 이모티콘 선택시
 
         viewPrev = viewModel.getView();
 
-        UtilAPI.setButtonBackground(this, viewPrev, R.drawable.test_chrctr_answerbg_selected);
+        UtilAPI.setImage(this, viewPrev, R.drawable.test_chrctr_answerbg_selected);
 
 
         select_item_id = index;

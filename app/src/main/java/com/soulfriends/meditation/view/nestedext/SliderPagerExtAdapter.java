@@ -132,6 +132,27 @@ public class SliderPagerExtAdapter extends PagerAdapter {
                         NetServiceManager.getinstance().sendValProfile(userProfile);
                     }
                 }
+                else
+                {
+                    if (psy_reult_time.length() == 0) {
+
+                        // 심리 검사 유도하도록 문구 나오도록 한다.
+                        userProfile.emotiontype = 0; // 초기화 한다.
+
+                        NetServiceManager.getinstance().setOnRecvValProfileListener(new NetServiceManager.OnRecvValProfileListener() {
+                            @Override
+                            public void onRecvValProfile(boolean validate) {
+                                if (validate == true) {
+                                    int xx = 0;
+                                } else {
+                                    int yy = 0;
+                                }
+                            }
+                        });
+
+                        NetServiceManager.getinstance().sendValProfile(userProfile);
+                    }
+                }
             }
 
             // nickname feeling state

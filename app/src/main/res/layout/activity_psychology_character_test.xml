@@ -86,7 +86,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <Button
+        <ImageView
             android:id="@+id/bt_answer1"
             android:layout_width="0dp"
             android:layout_height="55dp"
@@ -96,20 +96,14 @@
             android:layout_marginEnd="40dp"
             android:layout_marginRight="40dp"
             android:background="@drawable/test_chrctr_answerbg"
-            android:fontFamily="@font/font_notosanskr_regular"
             android:gravity="left|center_vertical"
-            android:includeFontPadding="false"
-            android:lineSpacingExtra="-2sp"
             android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
-            android:text="@{viewModel.text_1}"
-            android:textColor="@color/white"
-            android:textSize="14sp"
             app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_quest" />
 
-        <Button
+        <ImageView
             android:id="@+id/bt_answer2"
             android:layout_width="0dp"
             android:layout_height="55dp"
@@ -119,20 +113,15 @@
             android:layout_marginEnd="40dp"
             android:layout_marginRight="40dp"
             android:background="@drawable/test_chrctr_answerbg"
-            android:fontFamily="@font/font_notosanskr_regular"
             android:gravity="left|center_vertical"
-            android:includeFontPadding="false"
-            android:lineSpacingExtra="-2sp"
             android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
-            android:text="@{viewModel.text_2}"
-            android:textColor="@color/white"
-            android:textSize="14sp"
             app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bt_answer1" />
+<!--        android:text="@{viewModel.text_2}"-->
 
-        <Button
+        <ImageView
             android:id="@+id/bt_answer3"
             android:layout_width="0dp"
             android:layout_height="55dp"
@@ -142,19 +131,69 @@
             android:layout_marginEnd="40dp"
             android:layout_marginRight="40dp"
             android:background="@drawable/test_chrctr_answerbg"
-            android:fontFamily="@font/font_notosanskr_regular"
             android:gravity="left|center_vertical"
-
-            android:includeFontPadding="false"
-            android:lineSpacingExtra="-2sp"
             android:onClick="@{(v)-> viewModel.OnClicked_Select(v)}"
-            android:text="@{viewModel.text_3}"
-            android:textColor="@color/white"
-            android:textSize="14sp"
             app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bt_answer2" />
+
+        <TextView
+            android:id="@+id/textView_b1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="left|center_vertical"
+            android:lineSpacingExtra="-2sp"
+            android:text="@{viewModel.text_1}"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bt_answer1"
+            app:layout_constraintEnd_toEndOf="@+id/bt_answer1"
+            app:layout_constraintStart_toStartOf="@+id/bt_answer1"
+            app:layout_constraintTop_toTopOf="@+id/bt_answer1" />
+
+        <TextView
+            android:id="@+id/textView_b2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="left|center_vertical"
+            android:lineSpacingExtra="-2sp"
+            android:text="@{viewModel.text_2}"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bt_answer2"
+            app:layout_constraintEnd_toEndOf="@+id/bt_answer2"
+            app:layout_constraintStart_toStartOf="@+id/bt_answer2"
+            app:layout_constraintTop_toTopOf="@+id/bt_answer2" />
+
+        <TextView
+            android:id="@+id/textView_b3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/font_notosanskr_regular"
+            android:gravity="left|center_vertical"
+            android:lineSpacingExtra="-2sp"
+            android:text="@{viewModel.text_3}"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bt_answer3"
+            app:layout_constraintEnd_toEndOf="@+id/bt_answer3"
+            app:layout_constraintStart_toStartOf="@+id/bt_answer3"
+            app:layout_constraintTop_toTopOf="@+id/bt_answer3" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview"
@@ -274,6 +313,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout10" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
